@@ -3,7 +3,7 @@ import React, { MouseEvent, useCallback } from "react";
 import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../types";
 import { Badge, Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip } from "@firecms/ui";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
-import { getEntityFromCache } from "../../util/entity_cache";
+import { entityCacheKey, getEntityFromCache } from "../../util/entity_cache";
 import { getLocalChangesBackup } from "../../util";
 import { getChanges } from "../../form/EntityForm";
 
@@ -82,7 +82,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
     const collapsedActions = actions.filter(a => a.collapsed || a.collapsed === undefined);
     const uncollapsedActions = actions.filter(a => a.collapsed === false);
     const enableLocalChangesBackup = collection ? getLocalChangesBackup(collection) : false;
-    const cachedData = enableLocalChangesBackup ? getEntityFromCache(fullPath + "/" + entity.id) : undefined;
+    const cachedData = enableLocalChangesBackup ? getEntityFromCache(entityCacheKey(fullPath, entity.id)) : undefined;
     const hasDraft = (() => {
         if (!cachedData || typeof cachedData !== "object" || Object.keys(cachedData).length === 0) return false;
         const realChanges = getChanges(cachedData as any, (entity?.values ?? {}) as any);

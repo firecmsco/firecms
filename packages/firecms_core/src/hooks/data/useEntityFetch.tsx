@@ -3,6 +3,7 @@ import { Entity, EntityCollection, FireCMSContext, User } from "../../types";
 import { useDataSource } from "./useDataSource";
 import { useNavigationController } from "../useNavigationController";
 import { useFireCMSContext } from "../useFireCMSContext";
+import { entityCacheKey } from "../../util/entity_cache";
 
 /**
  * @group Hooks and utilities
@@ -101,7 +102,7 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
                     console.error(e);
                 }
             }
-            CACHE[`${path}/${entityId}`] = updatedEntity;
+            CACHE[entityCacheKey(path, entityId)] = updatedEntity;
             setEntity(updatedEntity);
             setDataLoading(false);
             setDataLoadingError(undefined);
@@ -114,8 +115,8 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
             setDataLoadingError(error);
         };
 
-        if (entityId && useCache && CACHE[`${path}/${entityId}`]) {
-            setEntity(CACHE[`${path}/${entityId}`]);
+        if (entityId && useCache && CACHE[entityCacheKey(path, entityId)]) {
+            setEntity(CACHE[entityCacheKey(path, entityId)]);
             setDataLoading(false);
             setDataLoadingError(undefined);
             // eslint-disable-next-line @typescript-eslint/no-empty-function

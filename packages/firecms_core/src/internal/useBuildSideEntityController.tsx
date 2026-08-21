@@ -281,11 +281,17 @@ const propsToSidePanel = (props: EntitySidePanelProps,
     locationSearch: string
 ): SideDialogPanelProps => {
 
-    const collectionPath = removeInitialAndTrailingSlashes(props.path);
+    // The URL is the ESCAPED representation of the chain — it is what `buildSidePanelsFromUrl`
+    // and `FireCMSRoute` parse back on reload, on a deep link, and on every pathname change.
+    // `props.path` is the RAW datasource path, so a parent entity id containing "/" reads back
+    // there as extra collection/entity hops and resolves to a different entity entirely.
+    // `fullIdPath` carries the same chain with its ids already escaped, which is what it is
+    // threaded alongside `path` for.
+    const urlChain = removeInitialAndTrailingSlashes(props.fullIdPath ?? props.path);
 
     const urlPath = props.entityId
-        ? buildUrlCollectionPath(`${collectionPath}/${encodeEntityId(props.entityId)}${props.selectedTab ? "/" + props.selectedTab : ""}${locationSearch}#${SIDE_URL_HASH}`)
-        : buildUrlCollectionPath(`${collectionPath}${locationSearch}#${NEW_URL_HASH}`);
+        ? buildUrlCollectionPath(`${urlChain}/${encodeEntityId(props.entityId)}${props.selectedTab ? "/" + props.selectedTab : ""}${locationSearch}#${SIDE_URL_HASH}`)
+        : buildUrlCollectionPath(`${urlChain}${locationSearch}#${NEW_URL_HASH}`);
 
     const resolvedPanelProps: EntitySidePanelProps<any> = {
         ...props,
@@ -294,10 +300,12 @@ const propsToSidePanel = (props: EntitySidePanelProps,
 
     const entityViewWidth = getEntityViewWidth(props, smallLayout, customizationController, authController);
     return {
-        key: `${props.path}/${props.entityId}`,
+        // Built from the escaped chain so that two different chains which happen to flatten
+        // to the same raw string are still two different panels.
+        key: `${urlChain}/${props.entityId ? encodeEntityId(props.entityId) : ""}`,
         component: undefined, // Lazy render in SideDialogs for better performance
         urlPath: urlPath,
-        parentUrlPath: buildUrlCollectionPath(collectionPath),
+        parentUrlPath: buildUrlCollectionPath(urlChain),
         width: entityViewWidth,
         onClose: props.onClose,
         additional: resolvedPanelProps

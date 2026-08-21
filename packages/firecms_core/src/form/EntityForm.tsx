@@ -48,6 +48,7 @@ import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { FormEntry, FormLayout, LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
 import { ValidationError } from "yup";
 import {
+    entityCacheKey,
     flattenKeys,
     getEntityFromCache,
     removeEntityFromCache,
@@ -317,7 +318,7 @@ export function EntityForm<M extends Record<string, any>>({
     const baseInitialValues = useMemo(() => getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs), [authController, collection, path, status, entity, customizationController.propertyConfigs]);
 
     const localChangesDataRaw = useMemo(() => entityId
-        ? getEntityFromCache(path + "/" + entityId)
+        ? getEntityFromCache(entityCacheKey(path, entityId))
         : getEntityFromCache(path + "#new"), [entityId, path]);
 
     const [localChangesCleared, setLocalChangesCleared] = useState<boolean>(false);
@@ -396,7 +397,7 @@ export function EntityForm<M extends Record<string, any>>({
             onValuesModified?.(false, initialValues as M);
         },
         onValuesChangeDeferred: (values: M, controller: FormexController<M>) => {
-            const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
+            const key = (status === "new" || status === "copy") ? path + "#new" : entityCacheKey(path, entityId);
             if (controller.dirty && localChangesBackup !== false) {
                 const touchedValues = removeEmptyContainers(extractTouchedValues(values, controller.touched));
                 if (touchedValues && Object.keys(touchedValues).length > 0) {
@@ -477,8 +478,8 @@ export function EntityForm<M extends Record<string, any>>({
             removeEntityFromMemoryCache(path + "#new");
             removeEntityFromCache(path + "#new");
         } else {
-            removeEntityFromMemoryCache(path + "/" + entityId);
-            removeEntityFromCache(path + "/" + entityId);
+            removeEntityFromMemoryCache(entityCacheKey(path, entityId));
+            removeEntityFromCache(entityCacheKey(path, entityId));
         }
     }
 
@@ -944,7 +945,7 @@ export function EntityForm<M extends Record<string, any>>({
 
                             {manualApplyLocalChanges && hasLocalChanges &&
                                 <LocalChangesMenu
-                                    cacheKey={status === "new" || status === "copy" ? path + "#new" : path + "/" + entityId}
+                                    cacheKey={status === "new" || status === "copy" ? path + "#new" : entityCacheKey(path, entityId)}
                                     properties={resolvedCollection.properties}
                                     cachedData={localChangesDataRaw as Partial<M>}
                                     formex={formex}

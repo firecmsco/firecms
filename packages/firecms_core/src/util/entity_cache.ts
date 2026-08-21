@@ -1,5 +1,23 @@
 import { EntityReference, GeoPoint, Vector } from "../types";
 import { isObject, isPlainObject } from "./objects";
+import { encodeEntityId } from "./navigation_utils";
+
+/**
+ * Key identifying one entity in a cache.
+ *
+ * The id is escaped so that a `(path, entityId)` pair maps to exactly one key. Without it
+ * `("a", "b/c")` and `("a/b", "c")` both flatten to `"a/b/c"`, and one entity's cached
+ * values are served for the other.
+ *
+ * `encodeEntityId` is the identity for any id without "/", "?", "#" or "%", so this changes
+ * no key in an app whose ids cannot contain them.
+ */
+export function entityCacheKey(path: string | undefined, entityId: string | undefined): string {
+    // Either part may be undefined at a call site that used to build the key by string
+    // concatenation; both are stringified exactly as `path + "/" + entityId` did, so such a
+    // caller keeps the key it had.
+    return `${path}/${entityId === undefined ? entityId : encodeEntityId(entityId)}`;
+}
 
 // Define a unique prefix for entity keys in localStorage to avoid key collisions
 const LOCAL_STORAGE_PREFIX = "entity_cache::";

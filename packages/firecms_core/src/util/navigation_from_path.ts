@@ -147,7 +147,12 @@ export function getNavigationEntriesFromPath(props: {
                             path: newPath,
                             collections: collection.subcollections,
                             currentFullPath: fullPath,
-                            currentFullIdPath: fullIdPath,
+                            // The entity id is a hop in the id chain exactly as it is in the
+                            // other two. Without it a nested `fullIdPath` was
+                            // "products/locales" rather than "products/pid/locales", so any
+                            // URL built from it pointed at a collection that does not exist.
+                            // Escaped, because `fullIdPath` is URL-facing.
+                            currentFullIdPath: fullIdPath + "/" + encodedEntityId,
                             currentFullUrlPath: fullUrlPath,
                             currentPathSegments: entitySegments,
                             contextEntityViews: props.contextEntityViews

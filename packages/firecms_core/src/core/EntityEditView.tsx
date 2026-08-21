@@ -29,7 +29,7 @@ import {
     useLargeLayout
 } from "../hooks";
 import { CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typography, Menu, MenuItem, ExpandMoreIcon } from "@firecms/ui";
-import { getEntityFromMemoryCache } from "../util/entity_cache";
+import { entityCacheKey, getEntityFromMemoryCache } from "../util/entity_cache";
 import { EntityForm, EntityFormProps } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
@@ -118,7 +118,7 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
     });
 
     const initialDirtyValues = entityId
-        ? getEntityFromMemoryCache(props.path + "/" + entityId)
+        ? getEntityFromMemoryCache(entityCacheKey(props.path, entityId))
         : getEntityFromMemoryCache(props.path + "#new");
 
     const authController = useAuthController();

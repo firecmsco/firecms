@@ -84,6 +84,7 @@ export const copyEntityAction: EntityAction = {
                 context,
                 fullPath,
                 pathSegments,
+                fullIdPath,
                 highlightEntity,
                 unhighlightEntity,
                 openEntityMode
@@ -104,14 +105,17 @@ export const copyEntityAction: EntityAction = {
         const resolvedPathSegments = collection?.collectionGroup
             ? undefined
             : (pathSegments ?? entity.pathSegments);
-        const fullIdPath = collection?.collectionGroup ? collection.id : (fullPath ?? collection?.id ?? entity.path);
+        // `fullIdPath` is the ESCAPED chain and is what becomes the URL; `fullPath` is the raw
+        // datasource path, whose parent ids may contain "/". Using the latter here wrote a URL
+        // that read back as a different entity. Mirrors editEntityAction.
+        const newFullIdPath = collection?.collectionGroup ? collection.id : (fullIdPath ?? collection?.id);
         navigateToEntity({
             openEntityMode,
             collection,
             entityId: entity.id,
             path,
             pathSegments: resolvedPathSegments,
-            fullIdPath,
+            fullIdPath: newFullIdPath,
             copy: true,
             sideEntityController: context.sideEntityController,
             onClose: () => unhighlightEntity?.(entity),

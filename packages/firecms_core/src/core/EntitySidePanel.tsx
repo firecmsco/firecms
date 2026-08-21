@@ -8,7 +8,7 @@ import { EntityEditView, OnUpdateParams } from "./EntityEditView";
 import { useSideDialogContext } from "./SideDialogs";
 import { CloseIcon, IconButton, OpenInFullIcon } from "@firecms/ui";
 import { useLocation, useNavigate } from "react-router-dom";
-import { saveEntityToMemoryCache } from "../util/entity_cache";
+import { entityCacheKey, saveEntityToMemoryCache } from "../util/entity_cache";
 
 /**
  * This is the component in charge of rendering the side dialog used
@@ -138,7 +138,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                                 className="self-center"
                                 size={"smallest"}
                                 onClick={() => {
-                                    const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
+                                    const key = (status === "new" || status === "copy") ? path + "#new" : entityCacheKey(path, entityId);
                                     saveEntityToMemoryCache(key, values);
                                     if (entityId)
                                         navigate(location.pathname + location.search);

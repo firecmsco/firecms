@@ -7,6 +7,7 @@ import { Skeleton } from "@firecms/ui";
 import { ErrorBoundary, ErrorView } from "../../components";
 import { EntityPreview, EntityPreviewContainer } from "../../components/EntityPreview";
 import { jsonStringifyReplacer } from "../../util/objects";
+import { entityCacheKey } from "../../util/entity_cache";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;
@@ -108,10 +109,10 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({
     });
 
     if (entity) {
-        referencesCache.set(reference.pathWithId, entity);
+        referencesCache.set(entityCacheKey(reference.path, reference.id), entity);
     }
 
-    const usedEntity = entity ?? referencesCache.get(reference.pathWithId);
+    const usedEntity = entity ?? referencesCache.get(entityCacheKey(reference.path, reference.id));
 
     let body: React.ReactNode;
 

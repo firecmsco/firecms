@@ -90,6 +90,7 @@ import { useSelectionController } from "./useSelectionController";
 import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions";
 import { addRecentId, getRecentIds } from "./utils";
 import { useScrollRestoration } from "../common/useScrollRestoration";
+import { entityCacheKey } from "../../util/entity_cache";
 
 const DEFAULT_ENTITY_OPEN_MODE: "side_panel" | "full_screen" = "side_panel";
 
@@ -693,7 +694,7 @@ export const EntityCollectionView = React.memo(
                                 {collectionsWithPath.map((reference) => {
                                     return (
                                         <ReferencePreview
-                                            key={reference.path + "/" + reference.id}
+                                            key={entityCacheKey(reference.path, reference.id)}
                                             reference={reference}
                                             size={"small"} />
                                     );

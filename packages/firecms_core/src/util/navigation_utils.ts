@@ -444,6 +444,13 @@ export function navigateToEntity({
         });
 
     } else {
+        // A URL must be built from the ESCAPED chain. `fullIdPath` is that chain; `path` is
+        // the raw datasource one, and falling back to it is only safe while no id in it
+        // contains "/". When the segments show that it does, the resulting URL would address
+        // a different entity, so say so instead of navigating somewhere wrong in silence.
+        if (!fullIdPath && pathSegments?.some(segment => segment.includes("/"))) {
+            console.warn(`navigateToEntity: no "fullIdPath" was given and "${path}" contains an entity id with a "/", so no unambiguous URL can be built for it. The link will point at a different location. Pass "fullIdPath" — the escaped chain — alongside "path".`);
+        }
         let to = navigation.buildUrlCollectionPath(entityId ? `${fullIdPath ?? path}/${encodeEntityId(entityId)}` : fullIdPath ?? path);
         if (entityId && selectedTab) {
             to += `/${selectedTab}`;

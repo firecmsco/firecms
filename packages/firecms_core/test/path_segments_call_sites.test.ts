@@ -72,7 +72,7 @@ function callPattern(name: string): RegExp {
  * pass nothing, so that adding one is a visible, deliberate change rather than a silent
  * regression back to guessing.
  */
-const POSITIONAL: { call: string, withoutSegments: string[] }[] = [
+const POSITIONAL: { call: string, regex?: string, withoutSegments: string[] }[] = [
     {
         // `resolveCollectionPathIds` under another name: the function whose guessing at
         // entity-id boundaries produced the reported warnings. Every caller in the data path
@@ -88,7 +88,11 @@ const POSITIONAL: { call: string, withoutSegments: string[] }[] = [
         // Seven reference fields resolving a `property.path` — a collection path from the
         // property's configuration, with no entity chain behind it — the reference dialog,
         // and two Firestore admin explorer views handed a raw Firestore path.
-        call: ".getCollection",
+        // Matched on its receivers rather than a bare `.getCollection(`: unrelated APIs use
+        // that name too (the MCP server has its own collections client), and a guard that
+        // fires on them teaches people to edit the expectations rather than the code.
+        call: "navigation.getCollection",
+        regex: "navigation(?:Controller)?\\.getCollection\\s*\\(",
         withoutSegments: [
             "datatalk/src/components/QueryTableResults.tsx",
             "firebase_admin/src/DocumentPanel.tsx",
@@ -188,10 +192,12 @@ describe("pathSegments is never dropped at a call site", () => {
         expect(sites.length).toBeGreaterThan(30);
     });
 
-    it.each(POSITIONAL)("$call is only called without segments where it has none", ({ call, withoutSegments }) => {
+    it.each(POSITIONAL)("$call is only called without segments where it has none", ({ call, regex, withoutSegments }) => {
         // The files whose argument list does not mention segments, named rather than counted,
         // so a new offender shows up in the diff instead of as an off-by-one.
-        const pattern = new RegExp(`${call.replace(/[.*+?^${}()|[\]\]\\]/g, "\\$&")}\\s*\\(`, "g");
+        const pattern = regex
+            ? new RegExp(regex, "g")
+            : new RegExp(`${call.replace(/[.*+?^${}()|[\]\]\\]/g, "\\$&")}\\s*\\(`, "g");
         const found: string[] = [];
 
         for (const file of files) {
