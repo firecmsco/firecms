@@ -1,0 +1,137 @@
+<svg
+        id="main_logo"
+        width="222px"
+        height="59px"
+        data-name="main logo"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        viewBox="0 0 221.12 58.79"
+      >
+        <defs>
+          <style>
+            .fb4c34e4-aef8-4b52-bfb3-0c838410aa6d {
+              fill: #fff;
+            }
+            .\31 8f52624-535e-43df-b491-e56a1b5a427f {
+              fill: #fff;
+            }
+            .\33 a6bef6a-318c-44db-8db6-8b4236d009b1 {
+              mask: url(#250d65b1-d79a-46be-9730-1c613f254e22);
+            }
+          </style>
+          <mask
+            id="250d65b1-d79a-46be-9730-1c613f254e22"
+            x="0"
+            y="0"
+            width="58.79"
+            height="58.79"
+            maskUnits="userSpaceOnUse"
+          >
+            <g transform="translate(0 0)">
+              <g id="0b3af8f8-8447-4ea0-803d-421dc63f1aff" data-name="mask-2">
+                <polygon
+                  id="7a5d948d-a3fc-483d-b2e2-bed25a00a67d"
+                  data-name="path-1"
+                  class="fb4c34e4-aef8-4b52-bfb3-0c838410aa6d"
+                  points="29.39 0 0 0 0 58.79 29.39 58.79 58.79 58.79 58.79 0 29.39 0"
+                />
+              </g>
+            </g>
+          </mask>
+        </defs>
+        <title>holition_logo_dark</title>
+        <g id="eb6e6202-35d6-4eb6-9c55-39528cf7c89e" data-name="01.Home">
+          <g
+            id="fa32c6b6-3e67-4d9a-bec2-648ee2e859f5"
+            data-name="01.01.01_landing_page"
+          >
+            <g
+              id="9d2c00a5-2026-4c59-9614-4f004783463b"
+              data-name="top navigation"
+            >
+              <g
+                id="fa0f2475-cbb9-4889-9cca-d596cc88eec3"
+                data-name="holition icon"
+              >
+                <path
+                  id="0303e172-6996-4cc0-abfa-494f22517469"
+                  data-name="Fill-1"
+                  class="18f52624-535e-43df-b491-e56a1b5a427f"
+                  d="M72.68,19.65a.57.57,0,0,1,.56-.56H76a.55.55,0,0,1,.55.56v7.8h9.61v-7.8a.55.55,0,0,1,.55-.56H89.4a.57.57,0,0,1,.56.56V39.14a.57.57,0,0,1-.56.56H86.69a.55.55,0,0,1-.55-.56V31H76.53v8.13a.55.55,0,0,1-.55.56H73.24a.57.57,0,0,1-.56-.56Z"
+                  transform="translate(0 0)"
+                />
+                <path
+                  id="814a7fee-b81d-4080-b33f-d5f07e205087"
+                  data-name="Fill-3"
+                  class="18f52624-535e-43df-b491-e56a1b5a427f"
+                  d="M105.42,36.17a6.78,6.78,0,1,0-6.74-6.75,6.8,6.8,0,0,0,6.74,6.75m0-17.38A10.6,10.6,0,1,1,94.85,29.42a10.58,10.58,0,0,1,10.57-10.63"
+                  transform="translate(0 0)"
+                />
+                <path
+                  id="eb3d07df-f8e3-4af8-bc98-f28e180e0b69"
+                  data-name="Fill-5"
+                  class="18f52624-535e-43df-b491-e56a1b5a427f"
+                  d="M121.35,19.65a.56.56,0,0,1,.56-.56h2.71a.57.57,0,0,1,.56.56V36.17h7.51a.55.55,0,0,1,.56.56v2.41a.55.55,0,0,1-.56.56H121.91a.56.56,0,0,1-.56-.56Z"
+                  transform="translate(0 0)"
+                />
+                <path
+                  id="acdaa3f5-8713-4145-9286-955563f57fbc"
+                  data-name="Fill-7"
+                  class="18f52624-535e-43df-b491-e56a1b5a427f"
+                  d="M139,19.65a.58.58,0,0,1,.56-.56h2.74a.57.57,0,0,1,.56.56V39.14a.57.57,0,0,1-.56.56h-2.74a.58.58,0,0,1-.56-.56Z"
+                  transform="translate(0 0)"
+                />
+                <path
+                  id="8c966982-84c1-4766-832a-7bd02b8929d8"
+                  data-name="Fill-9"
+                  class="18f52624-535e-43df-b491-e56a1b5a427f"
+                  d="M153.51,22.62H149a.55.55,0,0,1-.56-.56V19.65a.55.55,0,0,1,.56-.56h12.86a.55.55,0,0,1,.56.56v2.41a.55.55,0,0,1-.56.56h-4.5V39.14a.59.59,0,0,1-.56.56h-2.74a.59.59,0,0,1-.56-.56Z"
+                  transform="translate(0 0)"
+                />
+                <path
+                  id="be65512f-31fd-4aca-877d-41ea2f34ae3e"
+                  data-name="Fill-11"
+                  class="18f52624-535e-43df-b491-e56a1b5a427f"
+                  d="M168,19.65a.57.57,0,0,1,.56-.56h2.74a.58.58,0,0,1,.56.56V39.14a.58.58,0,0,1-.56.56h-2.74a.57.57,0,0,1-.56-.56Z"
+                  transform="translate(0 0)"
+                />
+                <path
+                  id="a84c39fd-aae0-429a-a55f-0a684dfdd2ed"
+                  data-name="Fill-13"
+                  class="18f52624-535e-43df-b491-e56a1b5a427f"
+                  d="M188,36.17a6.78,6.78,0,1,0-6.74-6.75A6.8,6.8,0,0,0,188,36.17m0-17.38a10.6,10.6,0,1,1-10.57,10.63A10.59,10.59,0,0,1,188,18.79"
+                  transform="translate(0 0)"
+                />
+                <path
+                  id="1c80e30c-c458-4d94-b453-e338e9b07969"
+                  data-name="Fill-15"
+                  class="18f52624-535e-43df-b491-e56a1b5a427f"
+                  d="M203.72,19.32a.55.55,0,0,1,.56-.53H205l12.25,13h0V19.65a.56.56,0,0,1,.56-.56h2.71a.57.57,0,0,1,.56.56V39.46a.55.55,0,0,1-.56.53h-.7L207.55,26.48h0V39.14a.56.56,0,0,1-.56.56h-2.68a.57.57,0,0,1-.56-.56Z"
+                  transform="translate(0 0)"
+                />
+                <g
+                  id="d78284f9-c3a8-4d6e-a47e-96a3c878144f"
+                  data-name="Group-19"
+                >
+                  <g class="3a6bef6a-318c-44db-8db6-8b4236d009b1">
+                    <path
+                      id="981e7d5a-3c54-44b9-9f00-ce842e5a5723"
+                      data-name="Fill-17"
+                      class="18f52624-535e-43df-b491-e56a1b5a427f"
+                      d="M29.39,56.9A27.51,27.51,0,1,1,56.9,29.39,27.54,27.54,0,0,1,29.39,56.9m0-56.9a29.4,29.4,0,1,0,29.4,29.39A29.43,29.43,0,0,0,29.39,0"
+                      transform="translate(0 0)"
+                    />
+                  </g>
+                </g>
+                <path
+                  id="516ecc85-873e-49b8-b4a9-1c4fbe0d08dc"
+                  data-name="Fill-20"
+                  class="18f52624-535e-43df-b491-e56a1b5a427f"
+                  d="M37.89,41V25.63l5.79-3.34V37.66ZM24.32,43V37.78l2.15-1.24v-4.7l3.85,2.23V29.92l-3.85-2.23V17.4L24,16l5.35-3.09,13.42,7.75-5.36,3.09L34.11,21.8,30.31,24l3.82,2.17v17l-4.76,2.75ZM15.06,22.24,22.7,26.6V41.91l-7.64-4.25Zm7.64-2.68v4.85L16,20.6l4.26-2.46ZM13.17,20V38.75l16.2,9.35,16.2-9.35V20l-16.2-9.35Z"
+                  transform="translate(0 0)"
+                />
+              </g>
+            </g>
+          </g>
+        </g>
+      </svg>
