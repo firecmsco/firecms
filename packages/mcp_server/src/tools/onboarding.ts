@@ -20,10 +20,32 @@ function formatError(error: any): string {
             "The signed-in Google account cannot access this project. Check the project ID, or sign in with an account that has access.",
         "google-token-expired":
             "The Google session has expired. Use firecms_logout then firecms_login to sign in again.",
+        "delegated-firebase-app-initialization-failed":
+            "FireCMS could not open the project with its service account. If the underlying error is " +
+            "auth/configuration-not-found, Firebase Authentication is not enabled on the project — " +
+            "enable it in the Firebase console and retry.",
     };
 
     const hint = code && hints[code] ? ` — ${hints[code]}` : "";
     return `${message}${hint}`;
+}
+
+
+/**
+ * Firebase Authentication has to be switched on by hand in the Firebase console.
+ *
+ * There is no API for it — the web onboarding sends the user to the console and
+ * polls until it appears, and this server has no better option. Connecting a project
+ * without it fails deep inside the backend with "Unable to initialize delegated
+ * Firebase app", because creating the project's first admin user needs Auth; the
+ * underlying cause, `auth/configuration-not-found`, is not visible in that message.
+ */
+function authNotEnabledMessage(projectId: string): string {
+    return `Firebase Authentication is not enabled on "${projectId}", and connecting requires it: ` +
+        `FireCMS creates your admin user in the project's own Firebase Auth.\n\n` +
+        `It cannot be enabled through an API — turn it on once in the console:\n` +
+        `  https://console.firebase.google.com/project/${projectId}/authentication\n\n` +
+        `Click "Get started", then run this tool again. Nothing has been changed in the project.`;
 }
 
 /**
@@ -190,9 +212,11 @@ export function registerOnboardingTools(server: McpServer, api: FireCMSApiClient
                 "It creates a delegated service account in the project with the permissions " +
                 "FireCMS needs, registers the signed-in user as an admin, and creates the FireCMS " +
                 "project on the free plan.\n\n" +
-                "Prerequisites: Firebase and Firestore must already be enabled — check with " +
-                "list_firebase_projects or get_project_setup_status first. Fails if the project is " +
-                "already connected.\n\n" +
+                "Prerequisites: Firebase, Firestore AND Firebase Authentication must already be " +
+                "enabled — check with list_firebase_projects or get_project_setup_status first. " +
+                "Authentication in particular cannot be enabled through any API and has to be " +
+                "switched on once in the Firebase console. Fails if the project is already " +
+                "connected.\n\n" +
                 "After this succeeds, use infer_collections_from_data or setup_all_collections to " +
                 "populate the CMS from the project's existing Firestore data.",
             inputSchema: {
@@ -203,6 +227,20 @@ export function registerOnboardingTools(server: McpServer, api: FireCMSApiClient
         },
         async ({ projectId, creationType }) => {
             try {
+                // Checked up front: without it the backend fails after eight retries
+                // with a message that does not mention Authentication at all.
+                try {
+                    const status = await api.getProjectSetupStatus(projectId);
+                    if (status && status.authEnabled === false) {
+                        return {
+                            content: [{ type: "text" as const, text: authNotEnabledMessage(projectId) }],
+                            isError: true,
+                        };
+                    }
+                } catch {
+                    // Status is advisory; if it cannot be read, let the connect speak.
+                }
+
                 const result = await api.connectProject(projectId, creationType ?? "existing");
                 return {
                     content: [{
