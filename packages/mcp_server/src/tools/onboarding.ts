@@ -248,7 +248,10 @@ export function registerOnboardingTools(server: McpServer, api: FireCMSApiClient
                         text: `Project "${projectId}" is now connected to FireCMS Cloud.\n\n` +
                             `${JSON.stringify(result, null, 2)}\n\n` +
                             `Next: run setup_all_collections to infer collections from the existing ` +
-                            `Firestore data, or create them yourself with save_collection_schema.`,
+                            `Firestore data, or create them yourself with save_collection_schema.\n\n` +
+                            `Note: the project's service account was just created, and its permissions ` +
+                            `take a moment to propagate. A data call made immediately may fail with ` +
+                            `PERMISSION_DENIED — if it does, simply try again.`,
                     }],
                 };
             } catch (error: any) {

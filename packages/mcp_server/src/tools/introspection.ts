@@ -33,7 +33,18 @@ function inferSerializedType(value: any) {
 
 function formatError(error: any): string {
     const data = error.response?.data;
-    return data?.message ?? data?.error ?? error.message;
+    const message = data?.message ?? data?.error ?? error.message ?? "";
+
+    // A project connected moments ago answers PERMISSION_DENIED until its delegated
+    // service account's roles finish propagating in IAM — usually well under a
+    // minute. The backend surfaces this as a generic internal-error, so without
+    // this the agent has no way to tell a transient state from a real misconfiguration.
+    if (/PERMISSION_DENIED|Missing or insufficient permissions/i.test(String(message))) {
+        return `${message}\n\nIf this project was connected in the last minute, its service ` +
+            `account's permissions are probably still propagating — wait a moment and try again. ` +
+            `Otherwise check that the signed-in account still has access to the project.`;
+    }
+    return message;
 }
 
 /**
