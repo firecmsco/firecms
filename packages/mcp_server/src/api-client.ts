@@ -262,6 +262,24 @@ export class FireCMSApiClient {
     }
 
     /**
+     * Add FireCMS's access rule to the project's Firestore and Storage security rules.
+     *
+     * FireCMS Cloud reads the customer's Firestore from the browser with the signed-in
+     * user's own token, so it needs a rule granting access to users carrying the
+     * `fireCMSUser` claim. Without it the CMS shows "Missing Firestore Security Rules"
+     * and no collection can be opened.
+     *
+     * The backend injects the rule into the existing ruleset rather than replacing it,
+     * and skips projects that already have it, so this is safe to call more than once.
+     */
+    async applySecurityRules(projectId: string): Promise<any> {
+        return this.request({
+            method: "PATCH",
+            url: `/projects/${projectId}/firestore_security_rules`,
+        });
+    }
+
+    /**
      * Create the FireCMS web app in the client's Firebase project.
      */
     async createWebApp(projectId: string): Promise<any> {

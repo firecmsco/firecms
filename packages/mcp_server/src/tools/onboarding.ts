@@ -223,9 +223,11 @@ export function registerOnboardingTools(server: McpServer, api: FireCMSApiClient
                 projectId: z.string().describe("The Firebase project ID to connect"),
                 creationType: z.enum(["existing", "new"]).optional()
                     .describe("'existing' (default) for a project that already has data; 'new' for a freshly created one"),
+                applySecurityRules: z.boolean().optional()
+                    .describe("Add FireCMS's Firestore and Storage access rule as part of connecting (default true). The CMS cannot open any collection without it."),
             },
         },
-        async ({ projectId, creationType }) => {
+        async ({ projectId, creationType, applySecurityRules }) => {
             try {
                 // Checked up front: without it the backend fails after eight retries
                 // with a message that does not mention Authentication at all.
@@ -242,11 +244,37 @@ export function registerOnboardingTools(server: McpServer, api: FireCMSApiClient
                 }
 
                 const result = await api.connectProject(projectId, creationType ?? "existing");
+
+                // The web creation flow applies the access rule as one of its steps, so
+                // a project onboarded there works the moment it is opened. Nothing
+                // downstream here would catch a missing rule: these tools read through
+                // the backend's delegated service account, which bypasses security
+                // rules entirely, so the CMS would be broken for the human while every
+                // tool reported success.
+                let rulesNote: string;
+                if (applySecurityRules === false) {
+                    rulesNote = `Security rules were NOT applied, because applySecurityRules was false. ` +
+                        `Opening a collection in the CMS will fail with "Missing Firestore Security Rules" ` +
+                        `until you run apply_firestore_security_rules.`;
+                } else {
+                    try {
+                        await api.applySecurityRules(projectId);
+                        rulesNote = `FireCMS's access rule was added to the project's Firestore and Storage ` +
+                            `security rules, so the CMS can read the data.`;
+                    } catch (rulesError: any) {
+                        rulesNote = `The project is connected, but adding the security rules failed: ` +
+                            `${formatError(rulesError)}\n` +
+                            `Run apply_firestore_security_rules to retry — until it succeeds, opening a ` +
+                            `collection in the CMS fails with "Missing Firestore Security Rules".`;
+                    }
+                }
+
                 return {
                     content: [{
                         type: "text" as const,
                         text: `Project "${projectId}" is now connected to FireCMS Cloud.\n\n` +
                             `${JSON.stringify(result, null, 2)}\n\n` +
+                            `${rulesNote}\n\n` +
                             `Next: run setup_all_collections to infer collections from the existing ` +
                             `Firestore data, or create them yourself with save_collection_schema.\n\n` +
                             `Note: the project's service account was just created, and its permissions ` +
@@ -257,6 +285,51 @@ export function registerOnboardingTools(server: McpServer, api: FireCMSApiClient
             } catch (error: any) {
                 return {
                     content: [{ type: "text" as const, text: `Error connecting project: ${formatError(error)}` }],
+                    isError: true,
+                };
+            }
+        }
+    );
+
+    server.registerTool(
+        "apply_firestore_security_rules",
+        {
+            description:
+                "Add FireCMS's access rule to a project's Firestore and Storage security rules.\n\n" +
+                "FireCMS Cloud reads the customer's Firestore from the browser using the signed-in " +
+                "user's own token, so it needs a rule granting access to users carrying the " +
+                "`fireCMSUser` claim:\n" +
+                "    match /{document=**} { allow read, write: if request.auth.token.fireCMSUser; }\n\n" +
+                "Without it the CMS shows \"Missing Firestore Security Rules\" and no collection can " +
+                "be opened — even though the tools here keep working, because they read through the " +
+                "backend's service account, which bypasses security rules.\n\n" +
+                "The rule is injected into the existing ruleset rather than replacing it, and " +
+                "projects that already have it are left alone, so this is safe to run again.\n\n" +
+                "connect_project_to_firecms already does this; use this tool for projects connected " +
+                "earlier, or to retry after a failure.",
+            inputSchema: {
+                projectId: z.string().describe("The Firebase project ID"),
+            },
+        },
+        async ({ projectId }) => {
+            try {
+                await api.applySecurityRules(projectId);
+                return {
+                    content: [{
+                        type: "text" as const,
+                        text: `FireCMS's access rule is in place for "${projectId}", on every Firestore ` +
+                            `database in the project and on Storage. Any rules that were already there ` +
+                            `were kept. Reload the CMS and the collections will open.`,
+                    }],
+                };
+            } catch (error: any) {
+                return {
+                    content: [{
+                        type: "text" as const,
+                        text: `Error applying security rules: ${formatError(error)}\n\n` +
+                            `You can add the rule by hand instead, at ` +
+                            `https://console.firebase.google.com/project/${projectId}/firestore/rules`,
+                    }],
                     isError: true,
                 };
             }

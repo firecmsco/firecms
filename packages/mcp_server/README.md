@@ -49,9 +49,16 @@ The typical first session. Everything here is driven by the Google account you l
 2. get_project_setup_status      → check one project in detail (optional)
 3. enable_project_apis           → only if apisEnabled is false
 4. enable_firestore              → only if firestoreEnabled is false (location is permanent)
-5. connect_project_to_firecms    → creates the service account, registers you as admin
+5. connect_project_to_firecms    → service account, admin user, and the security rules
 6. setup_all_collections         → infer every root collection from the existing data
 ```
+
+Firebase Authentication must be enabled on the project before step 5 — it is the one
+prerequisite with no API, so turn it on in the Firebase console. Step 5 then adds
+FireCMS's access rule to the project's Firestore and Storage rules; without it the CMS
+reports "Missing Firestore Security Rules" and opens nothing, and no tool here would
+notice, because they all read through the backend's service account, which bypasses
+security rules.
 
 Step 6 is where an existing project becomes a working CMS: FireCMS samples the documents at each root collection, infers the property types, and uses an LLM to pick display names, a singular name, an icon and a navigation group.
 
@@ -87,7 +94,8 @@ Step 6 is where an existing project becomes a working CMS: FireCMS samples the d
 | `list_firestore_locations` | Locations available for a new Firestore database |
 | `enable_project_apis` | Enable the Google Cloud APIs FireCMS requires |
 | `enable_firestore` | Create the default Firestore database (location is permanent) |
-| `connect_project_to_firecms` | Connect an existing Firebase project to FireCMS Cloud |
+| `connect_project_to_firecms` | Connect an existing Firebase project, and apply the security rules it needs |
+| `apply_firestore_security_rules` | Add FireCMS's access rule to Firestore and Storage (idempotent) |
 | `create_firecms_webapp` | Retry web app creation if it failed during connect |
 
 ### Projects & Root Collections
