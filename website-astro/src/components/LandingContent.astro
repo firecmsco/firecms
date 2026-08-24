@@ -19,7 +19,7 @@ const tp = useTranslatedPath(lang as any);
 
         <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
             <h1 class="mb-8 text-5xl sm:text-6xl font-extrabold tracking-tight leading-none md:text-6xl lg:text-6xl text-white font-sans">
-                {t('hero.title.1')}<br/> {t('hero.title.2')} <span class="text-orange-500 subtle-shimmer">Firebase</span>
+                <Fragment set:html={t('hero.title.html')} />
             </h1>
             <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-64">
                 {t('hero.subtitle.1')}<br/>

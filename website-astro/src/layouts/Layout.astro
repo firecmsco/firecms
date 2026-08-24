@@ -18,6 +18,10 @@ export interface Props {
     lang?: string;
     ogImage?: string;
     ogType?: string;
+    /** Set to false for pages that exist only in English (blog posts, comparisons,
+     *  keyword landing pages). Emitting hreflang alternates for them points Google
+     *  at /es/…, /de/… URLs that are never built and return 404. */
+    localized?: boolean;
 }
 
 import { ClientRouter } from "astro:transitions";
@@ -36,7 +40,8 @@ const {
     faqItems,
     lang = "en",
     ogImage,
-    ogType = "website"
+    ogType = "website",
+    localized = true
 } = Astro.props;
 
 const resolvedOgImage = ogImage ?? "https://firecms.co/img/teaser.png";
@@ -56,12 +61,14 @@ const canonical = canonicalPath === "/" ? canonicalBase : `${canonicalBase}${can
 
 // Build hreflang alternate URLs for all supported languages
 const supportedLangs = Object.keys(languages) as Array<keyof typeof languages>;
-const hreflangLinks = supportedLangs.map(code => ({
-    lang: code,
-    href: code === 'en'
-        ? `${canonicalBase}${unlocalizedPath}`
-        : `${canonicalBase}/${code}${unlocalizedPath}`
-}));
+const hreflangLinks = localized
+    ? supportedLangs.map(code => ({
+        lang: code,
+        href: code === 'en'
+            ? `${canonicalBase}${unlocalizedPath}`
+            : `${canonicalBase}/${code}${unlocalizedPath}`
+    }))
+    : [];
 
 // Generate breadcrumb structured data
 const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
@@ -111,7 +118,9 @@ const faqSchema = faqItems && faqItems.length > 0 ? {
     {hreflangLinks.map(link => (
         <link rel="alternate" hreflang={link.lang} href={link.href} />
     ))}
-    <link rel="alternate" hreflang="x-default" href={`${canonicalBase}${unlocalizedPath}`} />
+    {localized && (
+        <link rel="alternate" hreflang="x-default" href={`${canonicalBase}${unlocalizedPath}`} />
+    )}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 

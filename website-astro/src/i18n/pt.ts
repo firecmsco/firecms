@@ -1,6 +1,5 @@
 export const pt = {
-  'hero.title.1': 'O Framework CMS Headless',
-  'hero.title.2': 'para',
+  'hero.title.html': 'O CMS e GUI Open-Source<br/> para <span class="text-orange-500 subtle-shimmer">Firebase</span>',
   'hero.subtitle.1': 'Crie painéis de administração e aplicações de back-office poderosas em minutos.',
   'hero.subtitle.2': 'Entre no ar instantaneamente com nosso',
   'hero.subtitle.3': 'CMS Headless Cloud',

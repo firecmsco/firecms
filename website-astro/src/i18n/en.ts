@@ -1,7 +1,6 @@
 export const en = {
-  'hero.title.1': 'The Open-Source GUI',
-  'hero.title.2': 'Framework for',
-  'hero.subtitle.1': 'Your visual GUI to manage Firebase data, build admin panels, and ship back-office apps in minutes.',
+  'hero.title.html': 'The Open-Source<br/> <span class="text-orange-500 subtle-shimmer">Firebase</span> CMS &amp; GUI Framework',
+  'hero.subtitle.1': 'The Firebase CMS and visual GUI to manage your Firestore data, build admin panels, and ship back-office apps in minutes.',
   'hero.subtitle.2': 'Go live instantly with our',
   'hero.subtitle.3': 'Hosted Headless CMS Cloud',
   'hero.subtitle.4': 'or self-host our',
@@ -89,9 +88,9 @@ export const en = {
   'cta.cloud': 'Try FireCMS Cloud',
   'cta.docs': 'View Documentation',
   
-  'seo.title': 'Firebase GUI & Admin Panel | Firestore CMS | FireCMS',
-  'seo.description': 'FireCMS is an open-source Firebase GUI, admin panel, and Firestore CMS to browse, edit, and manage your database visually. Go live instantly with our managed Cloud, or self-host for full control.',
-  'seo.keywords': 'Firebase GUI, Firestore GUI, Firebase database GUI, Firebase Admin Panel, Firestore admin panel, headless CMS, Firebase CMS, Firestore CMS, React admin panel, no-code backend, AI-powered CMS, visual schema builder, data management, back-office application, content management system, Firestore admin, Firebase back office, database UI',
+  'seo.title': 'Firebase CMS & Firestore GUI | Admin Panel — FireCMS',
+  'seo.description': 'FireCMS is the open-source Firebase CMS and Firestore CMS: manage your data in a visual admin panel. Go live with managed Cloud, or self-host for full control.',
+  'seo.keywords': 'Firebase CMS, Firestore CMS, headless CMS for Firebase, Firebase headless CMS, CMS for Firebase, Firebase GUI, Firestore GUI, Firebase admin panel, Firestore admin panel, Firebase database GUI, React admin panel, open source Firebase CMS, no-code backend, visual schema builder, back-office application, Firestore admin, Firebase back office, database UI',
 
   'pricing.title': 'Flexible Pricing for Every Need',
   'pricing.subtitle': 'Start free with our open-source Community version, try the managed Cloud, or go PRO for advanced self-hosted features.',
