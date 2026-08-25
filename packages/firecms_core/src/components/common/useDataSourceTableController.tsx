@@ -194,7 +194,14 @@ export function useDataSourceTableController<M extends Record<string, any> = any
 
     useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
 
-    const collectionScroll = scrollRestoration?.getCollectionScroll(fullPath, filterValues);
+    // Keyed by `resolvedPath`, not `fullPath`, so the read agrees with the two writes below
+    // and in `onScroll`. What the cache holds is a slice of a dataset plus the offset into
+    // it, and the dataset is identified by what the datasource was actually queried with:
+    // `resolvedPath` + filters. Reading with the unresolved `fullPath` meant that for every
+    // collection reached through an id alias, or a subcollection whose parent ids need
+    // resolving, the entry was written under one key and looked up under another, so scroll
+    // restoration silently did nothing there.
+    const collectionScroll = scrollRestoration?.getCollectionScroll(resolvedPath, filterValues);
     const initialItemCount = collectionScroll?.data.length || pageSize;
 
     useEffect(() => {
