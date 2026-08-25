@@ -1,11 +1,23 @@
 export const it = {
+  'showcase.section.title': 'Dal tuo database a un CMS funzionante',
+  'showcase.section.subtitle': 'Quattro passaggi, e solo uno richiede davvero lavoro da parte tua.',
+
+  'showcase.item1.title': 'Puntalo sui tuoi dati',
+  'showcase.item1.desc': 'FireCMS campiona i documenti già presenti nelle tue collection Firestore, deduce i tipi di campo e genera tabelle e form a partire da questi. Anche i valori degli enum possono essere dedotti dai dati. <b>Nessuna migrazione, nessuna ristrutturazione.</b>',
+
+  'showcase.item2.title': 'Oppure lascia che lo configuri un agente',
+  'showcase.item2.desc': 'FireCMS include un <b>server MCP</b>. Collega Claude o qualsiasi client MCP e tutta la configurazione avviene nella conversazione: collegare il progetto Firebase, applicare le regole di sicurezza, dedurre tutte le collection, definire gli schemi e invitare utenti. Dentro l\'applicazione, <b>DataTalk</b> offre al tuo team lo stesso accesso ai dati in linguaggio naturale.',
+
+  'showcase.item3.title': 'Il tuo team lavora in un\'interfaccia vera',
+  'showcase.item3.desc': 'Gli editor hanno una vista collection veloce come un foglio di calcolo, con modifica inline, filtri, ordinamento e un editor di contenuti in stile Notion — più permessi per collection, così ognuno tocca solo ciò che deve.',
+
+  'showcase.item4.title': 'Lo estendi in React',
+  'showcase.item4.desc': 'Quando il form generato non basta, qualsiasi componente React può diventare un campo o una vista intera. Esegui la tua logica su <code>onSave</code> e <code>onDelete</code>. <b>Nessuna scatola nera.</b>',
+
+  'showcase.mcp.cta': 'Leggi la documentazione MCP',
+  'showcase.mcp.install': 'npx @firecms/mcp-server',
   'hero.title.html': 'Il CMS e GUI Open-Source<br/> per <span class="text-orange-500 subtle-shimmer">Firebase</span>',
   'hero.subtitle.1': 'Crea potenti pannelli admin e applicazioni back-office in pochi minuti.',
-  'hero.subtitle.2': 'Lancia subito con il nostro',
-  'hero.subtitle.3': 'CMS Headless Cloud gestito',
-  'hero.subtitle.4': 'oppure ospita il nostro',
-  'hero.subtitle.5': 'framework open-source',
-  'hero.subtitle.6': 'per il controllo totale.',
   'hero.cta.start': 'Inizia gratis',
   'hero.cta.explore': 'Esplora Self-Hosted',
 
@@ -663,28 +675,11 @@ export const it = {
   'why.cta.start': "Inizia gratis",
   'why.cta.explore': "Esplora Self-Hosted",
 
-  'showcase.section.title': 'Tutto ciò di cui hai bisogno per gestire i tuoi dati',
-  'showcase.section.subtitle': 'Funzionalità chiave per un\'esperienza CMS veloce e flessibile',
 
-  'showcase.item1.title': 'Editing dei Dati',
-  'showcase.item1.desc': 'Gestisci le tue collezioni con un\'interfaccia intuitiva a foglio di calcolo. Modifica voci in linea, ordina e filtra i dati in tempo reale, e crea contenuti strutturati con il nostro potente editor stile Notion.',
 
-  'showcase.item2.title': 'DataTalk: Ricerca con AI',
-  'showcase.item2.desc': '<b>Cerca e conversa</b> con i tuoi dati usando il <b>linguaggio naturale</b>. Filtra le collezioni istantaneamente, genera query complesse o esegui aggiornamenti in massa con comandi semplici.',
 
-  'showcase.item3.title': 'Schema Builder',
-  'showcase.item3.desc': 'Progetta i tuoi modelli di dati visualmente con il nostro potente editor di schema, o lascia che FireCMS inferisca automaticamente gli schemi dai tuoi dati esistenti. Scegli tra oltre 20 tipi di campo con validazione avanzata.',
 
-  'showcase.item4.title': 'Integrazione Semplice',
-  'showcase.item4.desc': 'Inizia in pochi minuti con la piattaforma gestita FireCMS Cloud, o ospita il nostro framework open-source con supporto TypeScript completo.',
 
-  'showcase.integration.npm.title': 'Installazione NPM Semplice',
-  'showcase.integration.npm.desc': 'Aggiungi FireCMS al tuo progetto con un singolo comando',
-  'showcase.integration.cloud.title': 'O usa FireCMS Cloud',
-  'showcase.integration.cloud.desc': 'Nessuna configurazione. Connetti il tuo progetto Firebase e inizia a gestire i tuoi dati istantaneamente.',
-  'showcase.integration.cloud.cta': 'Inizia',
-  'showcase.integration.ts.title': 'Supporto TypeScript Completo',
-  'showcase.integration.ts.desc': 'Costruito con TypeScript dal primo giorno per la migliore esperienza di sviluppo e type safety.',
 
   'usage_examples.f1': 'Personalizza ogni aspetto dell\'interfaccia del CMS',
   'usage_examples.f2': 'Crea campi ed editor personalizzati con React',

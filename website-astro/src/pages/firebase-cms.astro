@@ -4,8 +4,9 @@
 // English only — see `localized={false}` on the Layout below.
 import Layout from "../layouts/Layout.astro";
 import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
-import ProductShot from "../components/partials/ProductShot.astro";
-import FirestoreAdminDemo from "../components/FirestoreAdminDemo.tsx";
+import EntityTabsDemo from "../components/EntityTabsDemo.tsx";
+import ReferenceTableDemo from "../components/ReferenceTableDemo.tsx";
+import ProductsCollectionDemo from "../components/ProductsCollectionDemo.tsx";
 
 const title = "Firebase CMS — The Open-Source CMS for Firebase & Firestore | FireCMS";
 const description = "FireCMS is an open-source Firebase CMS: a real content management system on top of Firestore, Firebase Auth and Storage. Auto-generate collections from existing data, run it in the cloud or self-host it.";
@@ -90,8 +91,8 @@ const faqItems = [
                 <!-- The product, doing the thing the page is about. -->
                 <div class="rise rise-4 mt-16 sm:mt-20">
                     <div class="overflow-x-auto rounded-xl">
-                        <div class="min-w-[900px]">
-                            <FirestoreAdminDemo client:visible />
+                        <div class="min-w-[880px]">
+                            <ProductsCollectionDemo client:visible />
                         </div>
                     </div>
                     <p class="mt-4 text-center text-sm text-surface-500">
@@ -230,27 +231,20 @@ const faqItems = [
                         </dl>
                     </div>
                     <div class="order-1 lg:order-2">
-                        <ProductShot
-                            class="mx-auto w-full max-w-md"
-                            src="/img/landing/custom-view.webp"
-                            width={1100}
-                            height={1285}
-                            alt="A product document open in FireCMS with Product, Custom preview, Secondary form and Locales tabs, showing a fully custom React preview of the entity"
-                            caption="A custom React view mounted as a tab on the entity, beside the generated form."
-                        />
+                        <EntityTabsDemo client:visible />
+                        <p class="mt-3 text-sm text-surface-500">
+                            A custom React view mounted as a tab on the entity, beside the generated form.
+                        </p>
                     </div>
                 </div>
 
                 <!-- Block 2 — the surrounding services -->
                 <div class="mt-24 grid items-center gap-12 lg:grid-cols-2 lg:gap-16 sm:mt-32">
                     <div>
-                        <ProductShot
-                            src="/img/landing/collection-table.webp"
-                            width={1900}
-                            height={776}
-                            alt="A Users collection in FireCMS showing referenced products, image previews from Firebase Storage, email and phone columns, and a custom row action"
-                            caption="References resolve to real records, Storage files preview inline, and row actions run your own code."
-                        />
+                        <ReferenceTableDemo client:visible />
+                        <p class="mt-3 text-sm text-surface-500">
+                            References resolve to real records, Storage files preview inline, and row actions run your own code.
+                        </p>
                     </div>
                     <div>
                         <h3 class="text-2xl font-semibold tracking-[-0.02em] text-white">

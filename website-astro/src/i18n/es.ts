@@ -1,11 +1,23 @@
 export const es = {
+  'showcase.section.title': 'De tu base de datos a un CMS funcionando',
+  'showcase.section.subtitle': 'Cuatro pasos, y solo uno de ellos es trabajo que tengas que hacer tú.',
+
+  'showcase.item1.title': 'Apúntalo a tus datos',
+  'showcase.item1.desc': 'FireCMS analiza los documentos que ya existen en tus colecciones de Firestore, deduce los tipos de campo y genera las tablas y formularios a partir de ellos. Los valores de los enums también se pueden inferir de los datos. <b>Sin migración, sin reestructurar nada.</b>',
+
+  'showcase.item2.title': 'O deja que lo configure un agente',
+  'showcase.item2.desc': 'FireCMS incluye un <b>servidor MCP</b>. Conecta Claude o cualquier cliente MCP y toda la configuración ocurre en la conversación: conectar el proyecto de Firebase, aplicar las reglas de seguridad, inferir todas las colecciones, definir esquemas e invitar usuarios. Dentro de la aplicación, <b>DataTalk</b> da a tu equipo ese mismo acceso a sus datos en lenguaje natural.',
+
+  'showcase.item3.title': 'Tu equipo edita en una interfaz real',
+  'showcase.item3.desc': 'Los editores obtienen una vista de colección tan rápida como una hoja de cálculo, con edición en línea, filtros, ordenación y un editor de contenido estilo Notion — además de permisos por colección, para que cada persona toque solo lo que le corresponde.',
+
+  'showcase.item4.title': 'Lo extiendes en React',
+  'showcase.item4.desc': 'Cuando el formulario generado no basta, cualquier componente de React puede convertirse en un campo o en una vista completa. Ejecuta tu propia lógica en <code>onSave</code> y <code>onDelete</code>. <b>Sin cajas negras.</b>',
+
+  'showcase.mcp.cta': 'Ver la documentación de MCP',
+  'showcase.mcp.install': 'npx @firecms/mcp-server',
   'hero.title.html': 'El CMS y GUI Open-Source<br/> para <span class="text-orange-500 subtle-shimmer">Firebase</span>',
   'hero.subtitle.1': 'Construye potentes paneles de administración y aplicaciones de back-office en minutos.',
-  'hero.subtitle.2': 'Lanza tu aplicación al instante con nuestro',
-  'hero.subtitle.3': 'CMS Headless Cloud',
-  'hero.subtitle.4': 'o autoaloja nuestro',
-  'hero.subtitle.5': 'framework de código abierto',
-  'hero.subtitle.6': 'para tener control total.',
   'hero.cta.start': 'Empezar gratis',
   'hero.cta.explore': 'Explora la versión autohospedada',
 
@@ -166,28 +178,11 @@ export const es = {
   'seo.pricing.title': 'Precios FireCMS - Opciones Cloud y Autoalojadas',
   'seo.pricing.description': 'Explora nuestros planes: Community (gratis), Cloud o licencia PRO.',
 
-  'showcase.section.title': 'Todo lo que necesitas para gestionar tus datos',
-  'showcase.section.subtitle': 'Funcionalidades clave para una experiencia CMS rápida y flexible',
 
-  'showcase.item1.title': 'Edición de Datos',
-  'showcase.item1.desc': 'Gestiona tus colecciones con una interfaz intuitiva tipo hoja de cálculo. Edita entradas en línea, ordena y filtra datos en tiempo real, y crea contenido estructurado con nuestro potente editor estilo Notion.',
 
-  'showcase.item2.title': 'DataTalk: Búsqueda con IA',
-  'showcase.item2.desc': '<b>Busca y habla</b> con tus datos usando <b>lenguaje natural</b>. Filtra colecciones al instante, genera consultas complejas o realiza actualizaciones masivas con comandos simples.',
 
-  'showcase.item3.title': 'Constructor de Esquemas',
-  'showcase.item3.desc': 'Diseña tus modelos de datos visualmente con nuestro potente editor de esquemas, o deja que FireCMS infiera automáticamente los esquemas de tus datos existentes. Elige entre más de 20 tipos de campo con validación avanzada.',
 
-  'showcase.item4.title': 'Integración Sencilla',
-  'showcase.item4.desc': 'Empieza en minutos con la plataforma gestionada de FireCMS Cloud, o auto-aloja nuestro framework open-source con soporte completo de TypeScript.',
 
-  'showcase.integration.npm.title': 'Instalación sencilla con NPM',
-  'showcase.integration.npm.desc': 'Añade FireCMS a tu proyecto con un único comando',
-  'showcase.integration.cloud.title': 'O usa FireCMS Cloud',
-  'showcase.integration.cloud.desc': 'Sin configuración. Conecta tu proyecto de Firebase y empieza a gestionar tus datos al instante.',
-  'showcase.integration.cloud.cta': 'Comenzar',
-  'showcase.integration.ts.title': 'Soporte Completo de TypeScript',
-  'showcase.integration.ts.desc': 'Construido con TypeScript desde el primer día para la mejor experiencia de desarrollo y seguridad de tipos.',
 
   'features.title': 'Una experiencia potente e intuitiva para todo tu equipo',
   'features.subtitle': 'Desde el usuario final hasta el desarrollador, FireCMS está diseñado para hacer que la creación y gestión de aplicaciones de back-office sea una experiencia fluida.',

@@ -129,6 +129,22 @@ function PropertyTypeOption({
 }
 
 export function SchemaEditorDemo() {
+    // This demo renders its icons as Material Icons ligatures, so the font has to
+    // be present wherever it is mounted. Loading it here keeps the component
+    // self-contained — it previously relied on a loader that lived only in the
+    // homepage showcase, which left the icons as raw words ("code", "add") on
+    // every other page that used it.
+    useEffect(() => {
+        const HREF = "https://fonts.googleapis.com/icon?family=Material+Icons";
+        if (document.querySelector(`link[href="${HREF}"]`)) return;
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = HREF;
+        link.media = "print";
+        link.onload = () => { link.media = "all"; };
+        document.head.appendChild(link);
+    }, []);
+
     const [showDialog, setShowDialog] = useState(true);
     const [scrollPosition, setScrollPosition] = useState(0);
 
