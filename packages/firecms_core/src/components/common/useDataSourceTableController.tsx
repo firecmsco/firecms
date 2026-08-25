@@ -195,10 +195,15 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
 
     const collectionScroll = scrollRestoration?.getCollectionScroll(fullPath, filterValues);
-    const initialItemCount = collectionScroll?.data.length ?? pageSize;
+    const initialItemCount = collectionScroll?.data.length || pageSize;
 
     useEffect(() => {
-        if (scrollRestoration) {
+        // Only re-seed an entry we actually have something to restore for. Writing an empty
+        // `data` array here poisoned the cache: this is a module level Map that outlives the
+        // mount, so the next mount of the same collection read `data.length === 0` back as the
+        // initial item count and called the datasource with `limit: 0`. Custom datasources
+        // treat that as falsy and drop the limit altogether, loading the whole collection.
+        if (scrollRestoration && rawData.length > 0) {
             scrollRestoration.updateCollectionScroll({
                 fullPath: resolvedPath,
                 scrollOffset: collectionScroll?.scrollOffset ?? 0,
