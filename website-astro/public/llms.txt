@@ -1252,6 +1252,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 
 ## Firebase Setup: Firestore, Auth & Storage
 
+
 FireCMS talks to **your own Firebase project** — it never proxies or copies your data.
 That means the CMS can only do what your Firebase project lets it do, so a few things
 need to be switched on before the admin panel becomes useful.
@@ -1267,6 +1268,8 @@ This page covers the four pieces FireCMS actually depends on, and what each one 
 
 Firebase's own docs cover each service in general; everything below is specific to
 running FireCMS against it.
+
+<FirebaseSetupChecklist client:visible />
 
 ### Firestore
 
@@ -1331,8 +1334,6 @@ documents in the Firebase console, a rule is almost always the reason.
 In your project settings, create a **Web app**. Firebase gives you a configuration
 object — that object is what you pass to FireCMS.
 
-![Creating a Firebase web app in the project settings](/img/firebase_setup_app.png)
-
 :::tip[Firebase Hosting]
 You can link the web app to **Firebase Hosting** at the same time, which makes deploying
 your CMS a one-command affair. You can also create the Hosting site later and link it
@@ -1351,8 +1352,6 @@ rejects sign-ins from domains it does not know. Add that URL to the authorised d
 in the Firebase console, or run the dev server on `http://localhost:5173` and authorise
 that instead.
 :::
-
-![Enabling sign-in providers in Firebase Authentication](/img/firebase_setup_auth.png)
 
 ### Storage
 

@@ -8,6 +8,7 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
 import ProductsCollectionDemo from "../components/ProductsCollectionDemo.tsx";
 import McpSessionDemo from "../components/McpSessionDemo.tsx";
 import CustomFieldDemo from "../components/CustomFieldDemo.tsx";
+import RolePermissionsDemo from "../components/RolePermissionsDemo.tsx";
 
 const title = "Firebase Admin Panel for Firestore & Storage | FireCMS";
 const description = "A production-ready Firebase admin panel over your own project. Manage Firestore collections, Storage files and Auth users with real roles and permissions — hosted, or self-hosted and MIT-licensed.";
@@ -159,6 +160,26 @@ const faqItems = [
                         </dd>
                     </div>
                 </dl>
+            </div>
+        </section>
+
+        <!-- ========================= PERMISSIONS ======================== -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                        One deployment, three panels
+                    </h2>
+                    <p class="mt-6 text-lg leading-8 text-surface-400">
+                        This is the thing the Firebase console cannot do at all: everyone who can
+                        open it sees everything. In FireCMS the role decides which collections
+                        exist, which actions are available and which fields are writable — so the
+                        same deployment is a different tool for each person who signs in.
+                    </p>
+                </div>
+                <div class="mt-14">
+                    <RolePermissionsDemo client:visible />
+                </div>
             </div>
         </section>
 

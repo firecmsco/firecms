@@ -8,6 +8,7 @@ import SectionBackgroundAccents from "../components/SectionBackgroundAccents.ast
 import FirestoreAdminDemo from "../components/FirestoreAdminDemo.tsx";
 import ReferenceTableDemo from "../components/ReferenceTableDemo.tsx";
 import SidePanelPreviewDemo from "../components/SidePanelPreviewDemo.tsx";
+import QueryFilterDemo from "../components/QueryFilterDemo.tsx";
 
 const title = "Firestore GUI — A Firebase Database Client | FireCMS";
 const description = "A real GUI client for Firestore: browse collections as tables, filter and sort, follow references and edit documents inline. Runs against your own Firebase project — hosted or self-hosted.";
@@ -154,6 +155,25 @@ const faqItems = [
                         </dd>
                     </div>
                 </dl>
+            </div>
+        </section>
+
+        <!-- =========================== QUERYING ========================= -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                        Ask a question across a collection
+                    </h2>
+                    <p class="mt-6 text-lg leading-8 text-surface-400">
+                        <em class="not-italic text-surface-300">Which available products cost more than €100?</em>
+                        In the console that is a script. Here it is three clicks, and the result
+                        count updates as the query narrows.
+                    </p>
+                </div>
+                <div class="mt-14">
+                    <QueryFilterDemo client:visible />
+                </div>
             </div>
         </section>
 
