@@ -1,4 +1,4 @@
-# FireCMS Cloud - The Ultimate Firebase Admin Panel and Headless CMS
+# FireCMS Cloud — Managed Firebase Admin Panel
 
 
 :::tip

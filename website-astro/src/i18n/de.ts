@@ -231,9 +231,9 @@ export const de = {
   'usage_examples.f1': 'Passen Sie jeden Aspekt der CMS-UI an',
   'usage_examples.f2': 'Erstellen Sie benutzerdefinierte Felder und Editoren mit React',
 
-  'seo.features.title': 'FireCMS Features — Visueller Schema-Builder, KI-Autofill, Import/Export & Mehr',
+  'seo.features.title': 'FireCMS Features — Schema-Builder, KI & Import/Export',
   'seo.features.description': 'Entdecken Sie die FireCMS-Funktionen: visueller Schema-Editor, KI-Content-Generierung, Datenimport/-export, rollenbasierte Berechtigungen, Echtzeit-Updates und 20+ Feldtypen für Ihr Firebase Admin-Panel.',
-  'seo.developers.title': 'FireCMS für Entwickler — Open-Source React-Framework für Firebase Admin-Panels',
+  'seo.developers.title': 'React-Framework für Firebase Admin-Panels | FireCMS',
   'seo.developers.description': 'Erstellen Sie leistungsstarke Firebase Admin-Panels und interne Tools mit React und TypeScript. Schema-as-Code, benutzerdefinierte Ansichten, Geschäftslogik-Callbacks und 20+ vorgefertigte Feldtypen.',
 
   'developers.hero.title': 'Das Back-Office-Framework,<br/> das Entwickler wirklich mögen',
@@ -295,7 +295,7 @@ export const de = {
   'developers.ready.docs.desc': 'Tauchen Sie in das Open-Source-Framework ein. Perfekt für Agenturen, Custom Builds und vollständige Kontrolle.',
   'developers.ready.docs.cta': 'Dokumentation lesen',
 
-  'seo.startups.title': 'FireCMS für Startups — Ihr Firebase Admin-Panel in Minuten starten',
+  'seo.startups.title': 'Firebase Admin-Panel für Startups | FireCMS',
   'seo.startups.description': 'Bringen Sie das Firebase Admin-Panel Ihres Startups in Minuten von der Datenbank in die Produktion. Schemas automatisch ableiten, nicht-technische Teams stärken und von Cloud zu Self-Hosted skalieren.',
 
   'startups.hero.title': "Schnell bewegen, klug skalieren",
@@ -357,7 +357,7 @@ export const de = {
   'startups.cta.trial': "Kostenlose Testphase starten",
   'startups.cta.sales': "Vertrieb kontaktieren",
 
-  'seo.agencies.title': 'FireCMS für Agenturen — White-Label Firebase CMS für Kundenprojekte',
+  'seo.agencies.title': 'White-Label Firebase CMS für Agenturen | FireCMS',
   'seo.agencies.description': 'Erstellen und liefern Sie White-Label Firebase Admin-Panels für Ihre Kunden in Tagen statt Wochen. Wiederverwendbare Komponenten, individuelles Branding und flexibles Cloud- oder Self-Hosted-Deployment.',
 
   'agencies.hero.title': "Außergewöhnliche Kundenprojekte schneller liefern",
@@ -426,7 +426,7 @@ export const de = {
   'agencies.cta.primary': "FireCMS Cloud testen",
   'agencies.cta.secondary': "Dokumentation ansehen",
 
-  'seo.about.title': 'Über FireCMS — Das Open-Source Firebase CMS & Admin-Panel Team',
+  'seo.about.title': 'Über FireCMS — Das Open-Source Firebase CMS Team',
   'seo.about.description': 'Lernen Sie das Team hinter FireCMS kennen. Vom Entwickler-Nebenprojekt zur Plattform, der Microsoft und IKEA bei der Verwaltung von Firebase- und Firestore-Daten vertrauen.',
 
   'about.hero.title': "Unsere Mission",
@@ -547,7 +547,7 @@ export const de = {
 
   'contact.social.title': "Folgen Sie uns in den sozialen Medien",
 
-  'seo.security.title': 'FireCMS Sicherheit — Kein Datenzugriff, Volle Datensouveränität',
+  'seo.security.title': 'FireCMS Sicherheit — Volle Datensouveränität',
   'seo.security.description': 'FireCMS speichert oder greift niemals auf Ihre Daten zu. Ihre Inhalte bleiben in Ihrem eigenen Firebase- oder MongoDB-Projekt – mit Enterprise-Grade-Sicherheit, DSGVO-Bereitschaft und ohne Vendor Lock-in.',
 
   'security.hero.title': "Vertrauen durch Transparenz",
@@ -618,7 +618,7 @@ export const de = {
   'security.cta.demo': "Demo ausprobieren",
   'security.cta.register': "Für FireCMS Cloud registrieren",
 
-  'seo.ui.title': '@firecms/ui — Kostenlose Open-Source React-Komponentenbibliothek für Admin-Panels',
+  'seo.ui.title': '@firecms/ui — Open-Source React-Komponenten',
   'seo.ui.description': 'Entdecken Sie die @firecms/ui-Komponentenbibliothek: Buttons, Dialoge, Tabellen, Formulare und mehr. Schöne, zugängliche React-Komponenten mit Tailwind CSS für Admin-Panels und interne Tools.',
   'ui.hero.title': "Schön bauen, schnell bauen",
   'ui.hero.subtitle': "Eine umfassende Sammlung von <b>schönen, zugänglichen React-Komponenten</b> für moderne Web-Anwendungen.",
@@ -687,10 +687,10 @@ export const de = {
   'why.cta.start': "Kostenlos starten",
   'why.cta.explore': "Self-Hosted erkunden",
 
-  'seo.pro.title': 'FireCMS PRO — Selbst-gehostetes Firebase CMS mit Schema-Editor & Benutzerverwaltung',
+  'seo.pro.title': 'FireCMS PRO — Selbst-gehostetes Firebase CMS',
   'seo.pro.description': 'Deployen Sie ein Premium Self-Hosted Firestore CMS und Admin-Panel. Visueller Schema-Editor, Datenimport/-export, Benutzerverwaltung, individuelles Branding und Priority-Support.',
 
   'nav.home': 'Startseite',
-  'seo.blog.title': 'FireCMS Blog — Firebase-Tutorials, CMS-Anleitungen & Produkt-Updates',
+  'seo.blog.title': 'FireCMS Blog — Firebase-Tutorials & CMS-Guides',
   'seo.blog.description': 'Erfahren Sie, wie Sie Firebase Admin-Panels erstellen, Firestore-Daten verwalten und das Beste aus FireCMS herausholen. Tutorials, Anleitungen, Vergleiche und technische Artikel.',
 };

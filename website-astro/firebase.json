@@ -21,6 +21,19 @@
     ],
     "headers": [
       {
+        "source": "/llms.txt",
+        "headers": [
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600, must-revalidate"
+          }
+        ]
+      },
+      {
         "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|ico|woff|woff2|ttf|otf|eot|mp4|webm|avif)",
         "headers": [
           {

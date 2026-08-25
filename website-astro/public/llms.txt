@@ -77,7 +77,7 @@ Ready to dive in?
   * **💻 Start the Self-Hosted Quickstart:** Follow our [**Self-Hosting guide**](/docs/self) to get your project running locally with `npx`.
   * **📚 Learn about Collections:** Understand the core concept of how FireCMS maps [**Collections**](/docs/collections) to your database.
 
-## FireCMS Cloud - The Ultimate Firebase Admin Panel and Headless CMS
+## FireCMS Cloud — Managed Firebase Admin Panel
 
 
 :::tip

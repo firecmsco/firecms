@@ -228,9 +228,9 @@ export const en = {
   'usage_examples.f1': 'Customize every aspect of the CMS UI',
   'usage_examples.f2': 'Build custom fields and editors with React',
 
-  'seo.features.title': 'FireCMS Features — Visual Schema Builder, AI Autofill, Import/Export & More',
+  'seo.features.title': 'FireCMS Features — Schema Builder, AI & Import/Export',
   'seo.features.description': 'Explore FireCMS features: visual schema editor, AI content generation, data import/export, role-based permissions, real-time updates, and 20+ field types for your Firebase admin panel.',
-  'seo.developers.title': 'FireCMS for Developers — Open-Source React Framework for Firebase Admin Panels',
+  'seo.developers.title': 'React Framework for Firebase Admin Panels | FireCMS',
   'seo.developers.description': 'Build powerful Firebase admin panels and internal tools with React and TypeScript. Schema-as-code, custom views, business logic callbacks, and 20+ pre-built field types.',
 
   'developers.hero.title': 'The Back-Office Framework<br/> Developers Actually Like',
@@ -291,7 +291,7 @@ export const en = {
   'developers.ready.docs.title': 'Explore the Docs',
   'developers.ready.docs.desc': 'Dive into the open-source framework. Perfect for agencies, custom builds, and full control.',
   'developers.ready.docs.cta': 'Read the Docs',
-  'seo.startups.title': "FireCMS for Startups — Launch Your Firebase Admin Panel in Minutes",
+  'seo.startups.title': 'Firebase Admin Panel for Startups | FireCMS',
   'seo.startups.description': "Get your startup's Firebase admin panel from database to production in minutes. Auto-infer schemas, empower non-technical teams, and scale from Cloud to self-hosted.",
 
   'startups.hero.title': "Move Fast, Scale Smart",
@@ -352,7 +352,7 @@ export const en = {
   'startups.cta.title': "Ready to accelerate your startup?",
   'startups.cta.trial': "Start Your Free Trial",
   'startups.cta.sales': "Contact Sales",
-  'seo.agencies.title': "FireCMS for Agencies — White-Label Firebase CMS for Client Projects",
+  'seo.agencies.title': 'White-Label Firebase CMS for Agencies | FireCMS',
   'seo.agencies.description': "Build and deliver white-label Firebase admin panels for your clients in days, not weeks. Reusable components, custom branding, and flexible Cloud or self-hosted deployment.",
 
   'agencies.hero.title': "Deliver Exceptional Client Projects, Faster",
@@ -420,7 +420,7 @@ export const en = {
   'agencies.cta.title': "Ready to build something amazing?",
   'agencies.cta.primary': "Try FireCMS Cloud",
   'agencies.cta.secondary': "View Documentation",
-  'seo.about.title': "About FireCMS — The Open-Source Firebase CMS & Admin Panel Team",
+  'seo.about.title': 'About FireCMS — The Open-Source Firebase CMS Team',
   'seo.about.description': "Meet the team behind FireCMS. From a developer side-project to a platform trusted by Microsoft and IKEA for managing Firebase and Firestore data.",
 
   'about.hero.title': "Our Mission",
@@ -612,13 +612,13 @@ export const en = {
   'security.cta.demo': "Try the Demo",
   'security.cta.register': "Register for FireCMS Cloud",
 
-  'seo.ui.title': "@firecms/ui — Free Open-Source React Component Library for Admin Panels",
+  'seo.ui.title': '@firecms/ui — Open-Source React Component Library',
   'seo.ui.description': "Browse the @firecms/ui component library: buttons, dialogs, tables, forms, and more. Beautiful, accessible React components built with Tailwind CSS for admin panels and internal tools.",
   'ui.hero.title': "Build Beautifully, Build Fast",
   'ui.hero.subtitle': "A comprehensive collection of <b>beautiful, accessible React components</b> built for modern web applications.",
   'ui.loading': "Loading UI Components...",
 
-  'seo.why.title': "Why Choose FireCMS? — Firebase Admin Panel with Full Data Ownership",
+  'seo.why.title': 'Why FireCMS — Firebase Admin Panel You Fully Own',
   'seo.why.description': "See why developers and teams choose FireCMS over Retool, Strapi, and the Firebase Console. Open-source, React-extensible, and your data never leaves your infrastructure.",
 
   'why.hero.badge': "Speed, flexibility, and data ownership",
@@ -687,7 +687,7 @@ export const en = {
   'cookie.decline': 'Decline',
   'cookie.accept': 'Accept',
 
-  'seo.pro.title': 'FireCMS PRO — Self-Hosted Firebase CMS with Schema Editor & User Management',
+  'seo.pro.title': 'FireCMS PRO — Self-Hosted Firebase CMS & Schema Editor',
   'seo.pro.description': 'Deploy a premium self-hosted Firestore CMS and admin panel. Visual schema editor, data import/export, user management, custom branding, and priority support.',
   'pro.hero.badge': 'Enterprise-grade self-hosted CMS',
   'pro.hero.title': 'Unlock the Full Power of FireCMS Self-Hosted',
@@ -695,6 +695,6 @@ export const en = {
   'pro.hero.cta.buy': 'Buy License Now',
   'pro.hero.cta.docs': 'Read PRO Docs',
 
-  'seo.blog.title': 'FireCMS Blog — Firebase Tutorials, CMS Guides & Product Updates',
+  'seo.blog.title': 'FireCMS Blog — Firebase Tutorials & CMS Guides',
   'seo.blog.description': 'Learn how to build Firebase admin panels, manage Firestore data, and get the most out of FireCMS. Tutorials, guides, comparisons, and engineering deep dives.',
 };
