@@ -1,10 +1,12 @@
 ---
 // src/pages/firestore-cms.astro
-// Dedicated landing page for the "Firestore CMS" keyword cluster.
+// Landing page for the "Firestore CMS" keyword cluster.
 // Deliberately scoped to the Firestore *data model* so it does not duplicate
 // /firebase-cms, which covers the broader Firebase stack.
 import Layout from "../layouts/Layout.astro";
 import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+import ProductShot from "../components/partials/ProductShot.astro";
+import { SchemaEditorDemo } from "../components/SchemaEditorDemo.tsx";
 
 const title = "Firestore CMS — Manage Your Firestore Data Visually | FireCMS";
 const description = "A Firestore CMS that generates itself from your existing collections. Subcollections, references, arrays and maps become real editing forms — with filters, import/export and role-based access.";
@@ -45,6 +47,18 @@ const faqItems = [
         answer: "Entirely. The content never leaves your Firestore instance — FireCMS reads and writes it in place under your own security rules, so there is nothing to migrate if you stop using it."
     }
 ];
+
+// Firestore type → the control the CMS generates for it.
+const mapping = [
+    ["Collection", "A table view with filtering, sorting and inline editing"],
+    ["Subcollection", "Nested, editable from inside the parent document"],
+    ["DocumentReference", "A searchable picker over the referenced collection"],
+    ["Map", "A grouped set of typed subfields"],
+    ["Array", "Reorderable repeatable entries of any field type"],
+    ["Timestamp", "Date and time pickers"],
+    ["String (long)", "Markdown or a Notion-style rich text editor"],
+    ["Storage path", "An upload field writing to Firebase Storage"]
+];
 ---
 
 <Layout
@@ -56,148 +70,238 @@ const faqItems = [
         localized={false}
 >
     <main>
-        <!-- Hero -->
-        <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
-            <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
-            <div class="pointer-events-none absolute inset-0 -z-10">
-                <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
-            </div>
+        <!-- ============================ HERO ============================ -->
+        <section class="relative isolate overflow-hidden bg-linear-to-b from-black via-surface-950 to-black pt-28 pb-20 sm:pt-36 sm:pb-28">
+            <SectionBackgroundAccents blob={{ position: "top", size: "lg", opacity: 60 }}/>
 
-            <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
-                <div class="inline-flex items-center py-1.5 px-3 mb-6 sm:mb-7 text-sm rounded-full bg-surface-800/40 text-surface-400 ring-1 ring-inset ring-white/10 mx-auto" role="status">
-                    <span class="text-sm font-medium">No migration · No data structure restrictions</span>
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-3xl text-center">
+                    <h1 class="rise rise-1 text-balance text-4xl font-extrabold leading-[1.05] tracking-[-0.035em] text-white sm:text-6xl sm:leading-[1.03] sm:tracking-[-0.04em] lg:text-7xl">
+                        A <span class="text-orange-500 subtle-shimmer">Firestore</span> CMS<br class="hidden sm:inline"/>
+                        that builds itself
+                    </h1>
+                    <p class="rise rise-2 mx-auto mt-7 max-w-2xl text-lg leading-8 text-surface-300 sm:text-xl">
+                        Point FireCMS at a Cloud Firestore collection and it reads the documents
+                        already there, infers the field types, and generates the tables, forms
+                        and validation your team needs to edit them.
+                    </p>
+                    <div class="rise rise-3 mt-10 flex flex-wrap items-center justify-center gap-4">
+                        <a href="https://app.firecms.co"
+                           data-track
+                           id="firestore-cms-start"
+                           class="btn-glow inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-primary-dark">
+                            Connect your Firestore
+                        </a>
+                        <a href="/docs"
+                           class="inline-flex items-center gap-2 rounded-md border border-surface-700 bg-surface-900/50 px-6 py-3 text-base font-semibold text-white transition-colors duration-200 hover:bg-surface-800">
+                            Read the docs
+                        </a>
+                    </div>
                 </div>
-                <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
-                    A <span class="text-orange-500 subtle-shimmer">Firestore</span> CMS<br/> that builds itself
-                </h1>
-                <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
-                    Point FireCMS at a Cloud Firestore collection and it infers the schema from the documents
-                    already there — then generates the tables, forms and validation your team needs to edit them.
-                </p>
-                <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
-                    <a href="https://app.firecms.co"
-                       data-track
-                       id="firestore-cms-start"
-                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
-                        Connect Your Firestore
-                    </a>
-                    <a href="/docs" class="inline-flex items-center gap-x-2 rounded-md border border-surface-700 bg-surface-900/50 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-surface-800 transition-all duration-200 ease-in-out">
-                        Read the Docs
-                    </a>
+
+                <!-- Schema inference, happening. The demo fills a fixed-height frame —
+                     it sizes to its container rather than to its content. -->
+                <div class="rise rise-4 mt-16 sm:mt-20">
+                    <div class="relative h-[520px] overflow-hidden rounded-xl border border-surface-800 bg-surface-950 sm:h-[600px]">
+                        <SchemaEditorDemo client:visible />
+                    </div>
+                    <p class="mt-4 text-center text-sm text-surface-500">
+                        The visual schema editor — field types inferred from existing documents, then refined.
+                    </p>
                 </div>
             </div>
         </section>
 
-        <!-- Definition -->
-        <section class="bg-black py-16 sm:py-24">
-            <div class="mx-auto max-w-3xl px-6 lg:px-8">
-                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">What is a Firestore CMS?</h2>
-                <p class="text-lg leading-8 text-surface-300 mb-5">
-                    A <strong class="text-white">Firestore CMS</strong> is a content management layer that edits
-                    Cloud Firestore documents in place. Your collections stay where they are; the CMS supplies the
-                    thing Firestore deliberately leaves out — a structured, permissioned, human-friendly way to
+        <!-- ======================== DEFINITION ========================== -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+              <div class="max-w-3xl">
+                <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                    What is a Firestore CMS?
+                </h2>
+                <p class="mt-8 text-xl leading-9 text-surface-200">
+                    A <strong class="font-semibold text-white">Firestore CMS</strong> is a content
+                    management layer that edits Cloud Firestore documents in place. Your
+                    collections stay where they are; the CMS supplies the thing Firestore
+                    deliberately leaves out — a structured, permissioned, human-friendly way to
                     change the data.
                 </p>
-                <p class="text-lg leading-8 text-surface-400">
-                    The hard part is not rendering a table. It is mapping Firestore's document model — nested maps,
-                    arrays, references, subcollections, timestamps, geopoints — onto controls a non-developer can
-                    use without corrupting anything.
-                </p>
+                <div class="mt-10 border-l border-primary/60 pl-6">
+                    <p class="text-lg leading-8 text-surface-400">
+                        The hard part is not rendering a table. It is mapping Firestore's document
+                        model — nested maps, arrays, references, subcollections, timestamps — onto
+                        controls a non-developer can use without corrupting anything.
+                    </p>
+                </div>
+              </div>
             </div>
         </section>
 
-        <!-- Data model mapping -->
-        <section class="bg-black py-16 sm:py-24">
-            <div class="mx-auto max-w-5xl px-6 lg:px-8">
-                <div class="mx-auto max-w-2xl text-center mb-14">
-                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Your Firestore model, mapped</h2>
-                    <p class="mt-4 text-lg leading-8 text-surface-400">Every Firestore type gets a control that makes sense for it.</p>
+        <!-- ===================== DATA MODEL MAPPING ==================== -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <SectionBackgroundAccents topLine={true}/>
+            <div class="mx-auto max-w-7xl px-6 pt-24 sm:pt-32 lg:px-8">
+                <div class="max-w-2xl">
+                    <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                        Your Firestore model, mapped
+                    </h2>
+                    <p class="mt-5 text-lg leading-8 text-surface-400">
+                        Every Firestore type gets a control that makes sense for it — including the
+                        two that usually break admin tools, references and subcollections.
+                    </p>
                 </div>
-                <div class="overflow-x-auto rounded-2xl ring-1 ring-inset ring-surface-800">
-                    <table class="w-full text-left text-surface-300">
-                        <thead class="bg-surface-900/70 text-white">
-                            <tr>
-                                <th scope="col" class="px-6 py-4 font-semibold">Firestore</th>
-                                <th scope="col" class="px-6 py-4 font-semibold">In the CMS</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-surface-800">
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white">Collection</th><td class="px-6 py-4">A table view with filtering, sorting and inline editing</td></tr>
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white">Subcollection</th><td class="px-6 py-4">Nested, editable from inside the parent document</td></tr>
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white"><code>DocumentReference</code></th><td class="px-6 py-4">A searchable picker over the referenced collection</td></tr>
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white">Map</th><td class="px-6 py-4">A grouped set of typed subfields</td></tr>
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white">Array</th><td class="px-6 py-4">Reorderable repeatable entries of any field type</td></tr>
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white"><code>Timestamp</code></th><td class="px-6 py-4">Date and time pickers</td></tr>
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white">String (long)</th><td class="px-6 py-4">Markdown or a Notion-style rich text editor</td></tr>
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white">Storage path</th><td class="px-6 py-4">An upload field writing to Firebase Storage</td></tr>
-                        </tbody>
-                    </table>
+
+                <div class="mt-14 grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+                    <div class="overflow-x-auto rounded-xl border border-surface-800 self-start">
+                        <table class="w-full min-w-[420px] border-collapse text-left">
+                            <caption class="sr-only">Firestore types and their generated controls</caption>
+                            <thead>
+                                <tr class="bg-surface-900/70">
+                                    <th scope="col" class="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-surface-500">Firestore</th>
+                                    <th scope="col" class="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-surface-500">In the CMS</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-surface-800">
+                                {mapping.map(([type, control]) => (
+                                    <tr>
+                                        <th scope="row" class="whitespace-nowrap px-5 py-3.5 font-medium text-white">{type}</th>
+                                        <td class="px-5 py-3.5 text-surface-400">{control}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <ProductShot
+                        src="/img/landing/collection-table.webp"
+                        width={1900}
+                        height={776}
+                        alt="A Firestore Users collection in FireCMS: referenced product documents resolved to titles and thumbnails, Storage image previews, and a custom row action"
+                        caption="References resolved to the real documents, not pasted paths — and Storage files previewed in the row."
+                        class="self-start"
+                    />
                 </div>
             </div>
         </section>
 
-        <!-- Beyond editing -->
-        <section class="bg-black py-16 sm:py-24">
+        <!-- ==================== EDITING WITH PREVIEW =================== -->
+        <section class="bg-black pb-24 sm:pb-32">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <div class="mx-auto max-w-2xl text-center mb-14">
-                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">More than a data browser</h2>
-                </div>
-                <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-2">Schema inference</h3>
-                        <p class="text-surface-400">Existing documents are sampled to guess field types, so a legacy collection is usable immediately — then refined in the visual editor or in TypeScript.</p>
-                    </div>
-                    <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-2">Validation</h3>
-                        <p class="text-surface-400">Required fields, min/max, regex — enforced in the form before anything reaches Firestore.</p>
-                    </div>
-                    <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-2">Real-time</h3>
-                        <p class="text-surface-400">Firestore listeners keep the views live, so two editors working the same collection see each other's changes.</p>
-                    </div>
-                    <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-2">Import and export</h3>
-                        <p class="text-surface-400">Bulk-load a collection or pull it back out, instead of writing another one-off migration script.</p>
-                    </div>
-                    <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-2">Permissions</h3>
-                        <p class="text-surface-400">Roles and per-collection create/edit/delete rules on top of Firebase Auth, resolvable per user or per document.</p>
-                    </div>
-                    <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-2">Text search</h3>
-                        <p class="text-surface-400">Firestore has no native full-text search — plug in an external index and search from the same table view.</p>
+                <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
+                    <ProductShot
+                        src="/img/landing/side-panel-editing.webp"
+                        width={1800}
+                        height={1125}
+                        alt="A blog entry open in the FireCMS side panel: a header image upload field and a block content editor on the left, with a live rendered preview of the post on the right"
+                        caption="A document open in the side panel, with a live preview of how it will render."
+                    />
+                    <div>
+                        <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                            Edit without leaving the list
+                        </h2>
+                        <p class="mt-5 text-lg leading-8 text-surface-400">
+                            Documents open in a side panel over the collection, so editors keep their
+                            place. Block content, file uploads and a live preview of the result all
+                            sit in the same view.
+                        </p>
+                        <dl class="mt-8 space-y-5 border-t border-surface-800 pt-8">
+                            <div>
+                                <dt class="font-medium text-white">Real-time</dt>
+                                <dd class="mt-1 text-surface-400">Firestore listeners keep the views live, so two editors on one collection see each other's changes.</dd>
+                            </div>
+                            <div>
+                                <dt class="font-medium text-white">Validation</dt>
+                                <dd class="mt-1 text-surface-400">Required, min/max and regex rules are enforced in the form, before anything reaches Firestore.</dd>
+                            </div>
+                        </dl>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- FAQ -->
-        <section class="bg-black py-16 sm:py-24">
-            <div class="mx-auto max-w-3xl px-6 lg:px-8">
-                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-12 text-center">Firestore CMS FAQ</h2>
-                <dl class="space-y-8">
+        <!-- =================== BEYOND A DATA BROWSER =================== -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <SectionBackgroundAccents topLine={true}/>
+            <div class="mx-auto max-w-7xl px-6 pt-24 sm:pt-32 lg:px-8">
+                <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                    More than a data browser
+                </h2>
+                <dl class="mt-12 max-w-4xl grid gap-x-14 gap-y-9 border-t border-surface-800 pt-10 sm:grid-cols-2">
+                    <div>
+                        <dt class="font-semibold text-white">Schema inference</dt>
+                        <dd class="mt-2 leading-7 text-surface-400">Existing documents are sampled to guess field types, so a legacy collection is usable immediately — then refined visually or in TypeScript.</dd>
+                    </div>
+                    <div>
+                        <dt class="font-semibold text-white">Import and export</dt>
+                        <dd class="mt-2 leading-7 text-surface-400">Bulk-load a collection or pull it back out, instead of writing another one-off migration script.</dd>
+                    </div>
+                    <div>
+                        <dt class="font-semibold text-white">Permissions</dt>
+                        <dd class="mt-2 leading-7 text-surface-400">Roles and per-collection create / edit / delete rules on top of Firebase Auth, resolvable per user or per document.</dd>
+                    </div>
+                    <div>
+                        <dt class="font-semibold text-white">Text search</dt>
+                        <dd class="mt-2 leading-7 text-surface-400">Firestore has no native full-text search — plug in an external index and search from the same table view.</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- ============================= FAQ =========================== -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <SectionBackgroundAccents topLine={true}/>
+            <div class="mx-auto max-w-7xl px-6 pt-24 sm:pt-32 lg:px-8">
+                <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                    Firestore CMS FAQ
+                </h2>
+                <dl class="mt-12 max-w-3xl divide-y divide-surface-800 border-t border-surface-800">
                     {faqItems.map(item => (
-                        <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                            <dt class="text-xl font-semibold text-white mb-3">{item.question}</dt>
-                            <dd class="text-surface-400 leading-7">{item.answer}</dd>
+                        <div class="py-7">
+                            <dt class="text-lg font-semibold leading-7 text-white">{item.question}</dt>
+                            <dd class="mt-3 leading-7 text-surface-400">{item.answer}</dd>
                         </div>
                     ))}
                 </dl>
             </div>
         </section>
 
-        <!-- Related -->
-        <section class="bg-black pb-24">
-            <div class="mx-auto max-w-3xl px-6 lg:px-8 text-center">
-                <h2 class="text-2xl font-medium tracking-tight text-white mb-6">Keep reading</h2>
-                <ul class="flex flex-wrap justify-center gap-x-6 gap-y-3 text-surface-300">
-                    <li><a href="/firebase-cms" class="text-primary hover:underline">Firebase CMS</a></li>
-                    <li><a href="/compare/firecms-vs-firebase-console" class="text-primary hover:underline">vs Firebase Console</a></li>
-                    <li><a href="/compare/firecms-vs-supabase" class="text-primary hover:underline">vs Supabase</a></li>
-                    <li><a href="/developers" class="text-primary hover:underline">For developers</a></li>
-                    <li><a href="/features" class="text-primary hover:underline">All features</a></li>
+        <!-- =========================== RELATED ========================= -->
+        <section class="bg-black pb-28">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.12em] text-surface-500">Keep reading</h2>
+                <ul class="mt-6 flex flex-wrap gap-x-7 gap-y-3">
+                    <li><a href="/firebase-cms" class="text-primary underline-offset-4 hover:underline">Firebase CMS</a></li>
+                    <li><a href="/compare/firecms-vs-firebase-console" class="text-primary underline-offset-4 hover:underline">vs Firebase Console</a></li>
+                    <li><a href="/compare/firecms-vs-supabase" class="text-primary underline-offset-4 hover:underline">vs Supabase</a></li>
+                    <li><a href="/developers" class="text-primary underline-offset-4 hover:underline">For developers</a></li>
+                    <li><a href="/features" class="text-primary underline-offset-4 hover:underline">All features</a></li>
                 </ul>
             </div>
         </section>
     </main>
 </Layout>
+
+<style>
+    @media (prefers-reduced-motion: no-preference) {
+        .rise {
+            animation: rise 900ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+        .rise-1 { animation-delay: 40ms; }
+        .rise-2 { animation-delay: 140ms; }
+        .rise-3 { animation-delay: 230ms; }
+        .rise-4 { animation-delay: 320ms; animation-duration: 1100ms; }
+    }
+
+    @keyframes rise {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+            filter: blur(8px);
+        }
+        to {
+            opacity: 1;
+            transform: none;
+            filter: blur(0);
+        }
+    }
+</style>

@@ -1,9 +1,11 @@
 ---
 // src/pages/firebase-cms.astro
-// Dedicated landing page for the "Firebase CMS" keyword cluster.
+// Landing page for the "Firebase CMS" keyword cluster.
 // English only — see `localized={false}` on the Layout below.
 import Layout from "../layouts/Layout.astro";
 import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+import ProductShot from "../components/partials/ProductShot.astro";
+import FirestoreAdminDemo from "../components/FirestoreAdminDemo.tsx";
 
 const title = "Firebase CMS — The Open-Source CMS for Firebase & Firestore | FireCMS";
 const description = "FireCMS is an open-source Firebase CMS: a real content management system on top of Firestore, Firebase Auth and Storage. Auto-generate collections from existing data, run it in the cloud or self-host it.";
@@ -56,180 +58,326 @@ const faqItems = [
         localized={false}
 >
     <main>
-        <!-- Hero -->
-        <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
-            <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
-            <div class="pointer-events-none absolute inset-0 -z-10">
-                <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
-            </div>
+        <!-- ============================ HERO ============================ -->
+        <section class="relative isolate overflow-hidden bg-linear-to-b from-black via-surface-950 to-black pt-28 pb-20 sm:pt-36 sm:pb-28">
+            <SectionBackgroundAccents blob={{ position: "top", size: "lg", opacity: 60 }}/>
 
-            <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
-                <div class="inline-flex items-center py-1.5 px-3 mb-6 sm:mb-7 text-sm rounded-full bg-surface-800/40 text-surface-400 ring-1 ring-inset ring-white/10 mx-auto" role="status">
-                    <span class="text-sm font-medium">Open source · MIT licensed · Your data stays yours</span>
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-3xl text-center">
+                    <h1 class="rise rise-1 text-balance text-4xl font-extrabold leading-[1.05] tracking-[-0.035em] text-white sm:text-6xl sm:leading-[1.03] sm:tracking-[-0.04em] lg:text-7xl">
+                        The open-source<br class="hidden sm:inline"/>
+                        <span class="text-orange-500 subtle-shimmer">Firebase</span> CMS
+                    </h1>
+                    <p class="rise rise-2 mx-auto mt-7 max-w-2xl text-lg leading-8 text-surface-300 sm:text-xl">
+                        A real content management system on top of the Firebase project you
+                        already have. Your Firestore documents, your Storage files, your Auth
+                        users — edited in place, never copied anywhere.
+                    </p>
+                    <div class="rise rise-3 mt-10 flex flex-wrap items-center justify-center gap-4">
+                        <a href="https://app.firecms.co"
+                           data-track
+                           id="firebase-cms-start"
+                           class="btn-glow inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-primary-dark">
+                            Start for free
+                        </a>
+                        <a href="/developers"
+                           class="inline-flex items-center gap-2 rounded-md border border-surface-700 bg-surface-900/50 px-6 py-3 text-base font-semibold text-white transition-colors duration-200 hover:bg-surface-800">
+                            Self-host it
+                        </a>
+                    </div>
                 </div>
-                <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
-                    The Open-Source <span class="text-orange-500 subtle-shimmer">Firebase</span> CMS
-                </h1>
-                <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
-                    FireCMS turns your existing Firebase project into a real content management system.
-                    It reads and writes your own Firestore data, your own Storage files and your own Auth
-                    users — no migration, no copies, no lock-in.
-                </p>
-                <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
-                    <a href="https://app.firecms.co"
-                       data-track
-                       id="firebase-cms-start"
-                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
-                        Start for Free
-                    </a>
-                    <a href="/developers"
-                       class="inline-flex items-center gap-x-2 rounded-md border border-surface-700 bg-surface-900/50 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-surface-800 transition-all duration-200 ease-in-out">
-                        Self-Host It
-                    </a>
-                </div>
-            </div>
-        </section>
 
-        <!-- Definition: the snippet-friendly answer -->
-        <section class="bg-black py-16 sm:py-24">
-            <div class="mx-auto max-w-3xl px-6 lg:px-8">
-                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">What is a Firebase CMS?</h2>
-                <p class="text-lg leading-8 text-surface-300 mb-5">
-                    A <strong class="text-white">Firebase CMS</strong> is a content management system that
-                    stores its content in <em>your</em> Firebase project rather than in a vendor's database.
-                    Editors get structured forms, validation and permissions; your application keeps reading
-                    the same Firestore collections it always did.
-                </p>
-                <p class="text-lg leading-8 text-surface-400">
-                    That is the difference between a Firebase CMS and a conventional headless CMS. A headless
-                    CMS such as Contentful or Strapi owns the content and hands it back over an API, which
-                    means a second database, a sync problem and a migration. A Firebase CMS sits on top of the
-                    database you already have.
-                </p>
-            </div>
-        </section>
-
-        <!-- Console comparison -->
-        <section class="bg-black py-16 sm:py-24">
-            <div class="mx-auto max-w-5xl px-6 lg:px-8">
-                <div class="mx-auto max-w-2xl text-center mb-14">
-                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Why the Firebase Console is not a CMS</h2>
-                    <p class="mt-4 text-lg leading-8 text-surface-400">
-                        The console is an excellent operations tool for developers. It was never meant to be
-                        handed to the people who write your content.
+                <!-- The product, doing the thing the page is about. -->
+                <div class="rise rise-4 mt-16 sm:mt-20">
+                    <div class="overflow-x-auto rounded-xl">
+                        <div class="min-w-[900px]">
+                            <FirestoreAdminDemo client:visible />
+                        </div>
+                    </div>
+                    <p class="mt-4 text-center text-sm text-surface-500">
+                        FireCMS editing a Firestore <code class="text-surface-400">products</code> collection — the same
+                        documents your app reads.
                     </p>
                 </div>
-                <div class="overflow-x-auto rounded-2xl ring-1 ring-inset ring-surface-800">
-                    <table class="w-full text-left text-surface-300">
-                        <thead class="bg-surface-900/70 text-white">
-                            <tr>
-                                <th scope="col" class="px-6 py-4 font-semibold">&nbsp;</th>
-                                <th scope="col" class="px-6 py-4 font-semibold">Firebase Console</th>
-                                <th scope="col" class="px-6 py-4 font-semibold">FireCMS</th>
+            </div>
+        </section>
+
+        <!-- ======================== DEFINITION ========================== -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                        What is a Firebase CMS?
+                    </h2>
+                    <p class="mt-8 text-xl leading-9 text-surface-200">
+                        A <strong class="font-semibold text-white">Firebase CMS</strong> is a content
+                        management system that stores its content in <em>your</em> Firebase project
+                        rather than in a vendor's database. Editors get structured forms, validation
+                        and permissions; your application keeps reading the same Firestore
+                        collections it always did.
+                    </p>
+
+                    <div class="mt-10 border-l border-primary/60 pl-6">
+                        <p class="text-lg leading-8 text-surface-400">
+                            That is the difference between a Firebase CMS and a conventional headless
+                            CMS. Contentful or Strapi <em>own</em> the content and hand it back over an
+                            API — a second database, a sync problem, a migration. A Firebase CMS sits
+                            on top of the database you already have.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== CONSOLE COMPARISON ===================== -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="max-w-2xl">
+                    <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                        Why the Firebase Console is not a CMS
+                    </h2>
+                    <p class="mt-5 text-lg leading-8 text-surface-400">
+                        The console is an excellent operations tool for developers. It was never
+                        meant to be handed to the people who write your content.
+                    </p>
+                </div>
+
+                <div class="mt-12 max-w-4xl overflow-x-auto rounded-xl border border-surface-800">
+                    <table class="w-full min-w-[640px] border-collapse text-left">
+                        <caption class="sr-only">Firebase Console compared with FireCMS</caption>
+                        <thead>
+                            <tr class="bg-surface-900/70">
+                                <th scope="col" class="px-6 py-4 text-xs font-semibold uppercase tracking-[0.1em] text-surface-500">Task</th>
+                                <th scope="col" class="px-6 py-4 text-xs font-semibold uppercase tracking-[0.1em] text-surface-500">Firebase Console</th>
+                                <th scope="col" class="px-6 py-4 text-xs font-semibold uppercase tracking-[0.1em] text-white">FireCMS</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-surface-800">
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white">Data entry</th><td class="px-6 py-4">Raw JSON-ish field editor</td><td class="px-6 py-4">Typed forms, 20+ field types, validation</td></tr>
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white">Rich text</th><td class="px-6 py-4">Plain strings</td><td class="px-6 py-4">Notion-style editor, markdown</td></tr>
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white">Files</th><td class="px-6 py-4">Separate Storage tab, manual URLs</td><td class="px-6 py-4">Upload fields wired to Firebase Storage</td></tr>
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white">References</th><td class="px-6 py-4">Copy and paste document paths</td><td class="px-6 py-4">Searchable reference pickers</td></tr>
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white">Non-technical access</th><td class="px-6 py-4">Full project access or nothing</td><td class="px-6 py-4">Per-collection roles and permissions</td></tr>
-                            <tr><th scope="row" class="px-6 py-4 font-medium text-white">Custom logic</th><td class="px-6 py-4">None</td><td class="px-6 py-4"><code>onSave</code> / <code>onDelete</code> callbacks, custom React views</td></tr>
+                            <tr>
+                                <th scope="row" class="px-6 py-4 font-medium text-white">Data entry</th>
+                                <td class="px-6 py-4 text-surface-500">Raw key/value editor</td>
+                                <td class="px-6 py-4 text-surface-200">Typed forms, 20+ field types, validation</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="px-6 py-4 font-medium text-white">Rich text</th>
+                                <td class="px-6 py-4 text-surface-500">Plain strings</td>
+                                <td class="px-6 py-4 text-surface-200">Notion-style editor, markdown</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="px-6 py-4 font-medium text-white">Files</th>
+                                <td class="px-6 py-4 text-surface-500">Separate Storage tab, manual URLs</td>
+                                <td class="px-6 py-4 text-surface-200">Upload fields wired to Firebase Storage</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="px-6 py-4 font-medium text-white">References</th>
+                                <td class="px-6 py-4 text-surface-500">Copy and paste document paths</td>
+                                <td class="px-6 py-4 text-surface-200">Searchable reference pickers</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="px-6 py-4 font-medium text-white">Non-technical access</th>
+                                <td class="px-6 py-4 text-surface-500">Full project access, or nothing</td>
+                                <td class="px-6 py-4 text-surface-200">Per-collection roles and permissions</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="px-6 py-4 font-medium text-white">Custom logic</th>
+                                <td class="px-6 py-4 text-surface-500">None</td>
+                                <td class="px-6 py-4 text-surface-200"><code>onSave</code> / <code>onDelete</code> callbacks, custom views</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-                <p class="mt-8 text-center text-surface-400">
-                    A deeper breakdown lives in
-                    <a href="/compare/firecms-vs-firebase-console" class="text-primary hover:underline">FireCMS vs the Firebase Console</a>.
+
+                <p class="mt-6 text-surface-400">
+                    Longer breakdown:
+                    <a href="/compare/firecms-vs-firebase-console" class="text-primary underline-offset-4 hover:underline">FireCMS vs the Firebase Console</a>.
                 </p>
             </div>
         </section>
 
-        <!-- What you get across the Firebase stack -->
-        <section class="bg-black py-16 sm:py-24">
+        <!-- ================== ACROSS THE FIREBASE STACK ================= -->
+        <section class="relative bg-black pb-8">
+            <SectionBackgroundAccents topLine={true}/>
+            <div class="mx-auto max-w-7xl px-6 pt-24 sm:pt-32 lg:px-8">
+                <div class="max-w-2xl">
+                    <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                        A CMS across the whole Firebase stack
+                    </h2>
+                    <p class="mt-5 text-lg leading-8 text-surface-400">
+                        Not just Firestore documents — the services around them too.
+                    </p>
+                </div>
+
+                <!-- Block 1 — extensibility -->
+                <div class="mt-20 grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+                    <div class="order-2 lg:order-1">
+                        <h3 class="text-2xl font-semibold tracking-[-0.02em] text-white">
+                            React, all the way down
+                        </h3>
+                        <p class="mt-5 text-lg leading-8 text-surface-400">
+                            When the generated form is not enough, you are not stuck. Any React
+                            component can become a form field, and whole custom views can be added
+                            as tabs on a document or as new entries in the navigation.
+                        </p>
+                        <dl class="mt-8 space-y-5 border-t border-surface-800 pt-8">
+                            <div>
+                                <dt class="font-medium text-white">Cloud Functions</dt>
+                                <dd class="mt-1 text-surface-400">Trigger your own logic from the CMS with <code>onSave</code> and <code>onDelete</code>.</dd>
+                            </div>
+                            <div>
+                                <dt class="font-medium text-white">Security rules</dt>
+                                <dd class="mt-1 text-surface-400">FireCMS talks to Firestore as the signed-in user, so the rules you wrote keep applying.</dd>
+                            </div>
+                        </dl>
+                    </div>
+                    <div class="order-1 lg:order-2">
+                        <ProductShot
+                            class="mx-auto w-full max-w-md"
+                            src="/img/landing/custom-view.webp"
+                            width={1100}
+                            height={1285}
+                            alt="A product document open in FireCMS with Product, Custom preview, Secondary form and Locales tabs, showing a fully custom React preview of the entity"
+                            caption="A custom React view mounted as a tab on the entity, beside the generated form."
+                        />
+                    </div>
+                </div>
+
+                <!-- Block 2 — the surrounding services -->
+                <div class="mt-24 grid items-center gap-12 lg:grid-cols-2 lg:gap-16 sm:mt-32">
+                    <div>
+                        <ProductShot
+                            src="/img/landing/collection-table.webp"
+                            width={1900}
+                            height={776}
+                            alt="A Users collection in FireCMS showing referenced products, image previews from Firebase Storage, email and phone columns, and a custom row action"
+                            caption="References resolve to real records, Storage files preview inline, and row actions run your own code."
+                        />
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold tracking-[-0.02em] text-white">
+                            Storage and Auth, already wired
+                        </h3>
+                        <p class="mt-5 text-lg leading-8 text-surface-400">
+                            Image and file fields upload straight to your Storage bucket and preview
+                            in the table. Editors sign in through Firebase Authentication, and what
+                            each of them can see is decided per collection.
+                        </p>
+                        <dl class="mt-8 space-y-5 border-t border-surface-800 pt-8">
+                            <div>
+                                <dt class="font-medium text-white">Firebase Storage</dt>
+                                <dd class="mt-1 text-surface-400">Upload fields with previews and generated paths.</dd>
+                            </div>
+                            <div>
+                                <dt class="font-medium text-white">Firebase Auth</dt>
+                                <dd class="mt-1 text-surface-400">Roles and per-collection create / edit / delete permissions, resolvable per user or per document.</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== CLOUD OR SELF-HOST ==================== -->
+        <section class="bg-black py-24 sm:py-32">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <div class="mx-auto max-w-2xl text-center mb-14">
-                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">A CMS across the whole Firebase stack</h2>
-                    <p class="mt-4 text-lg leading-8 text-surface-400">Not just Firestore documents.</p>
-                </div>
-                <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-2">Cloud Firestore</h3>
-                        <p class="text-surface-400">Collections, subcollections, references, arrays and maps — generated from the documents you already have. See the <a href="/firestore-cms" class="text-primary hover:underline">Firestore CMS</a> details.</p>
+                <h2 class="max-w-2xl text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                    Hosted, or hosted by you
+                </h2>
+
+                <div class="mt-12 max-w-4xl grid gap-px overflow-hidden rounded-xl border border-surface-800 bg-surface-800 md:grid-cols-2">
+                    <div class="bg-surface-900/60 p-8">
+                        <h3 class="text-xl font-semibold text-white">FireCMS Cloud</h3>
+                        <p class="mt-3 text-surface-400">
+                            Connect your Firebase project and have a working CMS in minutes.
+                            Automatic updates, custom React views still supported, free trial.
+                        </p>
+                        <a href="https://app.firecms.co"
+                           data-track
+                           id="firebase-cms-cloud"
+                           class="mt-6 inline-flex items-center gap-1.5 font-semibold text-primary underline-offset-4 hover:underline">
+                            Start building
+                            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </a>
                     </div>
-                    <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-2">Firebase Storage</h3>
-                        <p class="text-surface-400">Image and file fields that upload straight to your Storage bucket, with previews and generated paths.</p>
-                    </div>
-                    <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-2">Firebase Auth</h3>
-                        <p class="text-surface-400">Sign-in for your editors, plus roles and per-collection permissions resolved per user or per document.</p>
-                    </div>
-                    <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-2">Cloud Functions</h3>
-                        <p class="text-surface-400">Trigger your own business logic from the CMS with <code>onSave</code> and <code>onDelete</code> callbacks.</p>
-                    </div>
-                    <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-2">Security rules</h3>
-                        <p class="text-surface-400">FireCMS talks to Firestore as your signed-in user, so the rules you already wrote keep applying.</p>
-                    </div>
-                    <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-2">React, all the way down</h3>
-                        <p class="text-surface-400">Custom fields, custom views and your own components — see the <a href="/developers" class="text-primary hover:underline">developer docs</a>.</p>
+                    <div class="bg-surface-950/60 p-8">
+                        <h3 class="text-xl font-semibold text-white">Self-hosted</h3>
+                        <p class="mt-3 text-surface-400">
+                            MIT-licensed source deployed in your own infrastructure, with custom
+                            auth, SSO and whatever compliance story you need.
+                        </p>
+                        <a href="/pro"
+                           class="mt-6 inline-flex items-center gap-1.5 font-semibold text-primary underline-offset-4 hover:underline">
+                            See self-hosted options
+                            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Cloud vs self-hosted -->
-        <section class="bg-black py-16 sm:py-24">
-            <div class="mx-auto max-w-5xl px-6 lg:px-8">
-                <div class="mx-auto max-w-2xl text-center mb-14">
-                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Hosted, or hosted by you</h2>
-                </div>
-                <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-                    <div class="rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-3">FireCMS Cloud</h3>
-                        <p class="text-surface-400 mb-4">Connect your Firebase project and get a working CMS in minutes. Automatic updates, custom React views still supported, free trial.</p>
-                        <a href="https://app.firecms.co" data-track id="firebase-cms-cloud" class="text-primary hover:underline font-semibold">Start building →</a>
-                    </div>
-                    <div class="rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800">
-                        <h3 class="text-xl font-semibold text-white mb-3">Self-hosted</h3>
-                        <p class="text-surface-400 mb-4">MIT-licensed source, deployed in your own infrastructure, with custom auth, SSO and whatever compliance story you need.</p>
-                        <a href="/pro" class="text-primary hover:underline font-semibold">See self-hosted options →</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ -->
-        <section class="bg-black py-16 sm:py-24">
-            <div class="mx-auto max-w-3xl px-6 lg:px-8">
-                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-12 text-center">Firebase CMS FAQ</h2>
-                <dl class="space-y-8">
+        <!-- ============================= FAQ =========================== -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <SectionBackgroundAccents topLine={true}/>
+            <div class="mx-auto max-w-7xl px-6 pt-24 sm:pt-32 lg:px-8">
+                <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                    Firebase CMS FAQ
+                </h2>
+                <dl class="mt-12 max-w-3xl divide-y divide-surface-800 border-t border-surface-800">
                     {faqItems.map(item => (
-                        <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                            <dt class="text-xl font-semibold text-white mb-3">{item.question}</dt>
-                            <dd class="text-surface-400 leading-7">{item.answer}</dd>
+                        <div class="py-7">
+                            <dt class="text-lg font-semibold leading-7 text-white">{item.question}</dt>
+                            <dd class="mt-3 leading-7 text-surface-400">{item.answer}</dd>
                         </div>
                     ))}
                 </dl>
             </div>
         </section>
 
-        <!-- Related -->
-        <section class="bg-black pb-24">
-            <div class="mx-auto max-w-3xl px-6 lg:px-8 text-center">
-                <h2 class="text-2xl font-medium tracking-tight text-white mb-6">Keep reading</h2>
-                <ul class="flex flex-wrap justify-center gap-x-6 gap-y-3 text-surface-300">
-                    <li><a href="/firestore-cms" class="text-primary hover:underline">Firestore CMS</a></li>
-                    <li><a href="/compare/firecms-vs-firebase-console" class="text-primary hover:underline">vs Firebase Console</a></li>
-                    <li><a href="/compare/firecms-vs-strapi" class="text-primary hover:underline">vs Strapi</a></li>
-                    <li><a href="/compare/firecms-vs-contentful" class="text-primary hover:underline">vs Contentful</a></li>
-                    <li><a href="/blog/unlocking_power_firebase_cms" class="text-primary hover:underline">Unlocking the power of a Firebase CMS</a></li>
-                    <li><a href="/pricing" class="text-primary hover:underline">Pricing</a></li>
+        <!-- =========================== RELATED ========================= -->
+        <section class="bg-black pb-28">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.12em] text-surface-500">Keep reading</h2>
+                <ul class="mt-6 flex flex-wrap gap-x-7 gap-y-3">
+                    <li><a href="/firestore-cms" class="text-primary underline-offset-4 hover:underline">Firestore CMS</a></li>
+                    <li><a href="/compare/firecms-vs-firebase-console" class="text-primary underline-offset-4 hover:underline">vs Firebase Console</a></li>
+                    <li><a href="/compare/firecms-vs-strapi" class="text-primary underline-offset-4 hover:underline">vs Strapi</a></li>
+                    <li><a href="/compare/firecms-vs-contentful" class="text-primary underline-offset-4 hover:underline">vs Contentful</a></li>
+                    <li><a href="/blog/can_you_self_host_firebase" class="text-primary underline-offset-4 hover:underline">Can you self-host Firebase?</a></li>
+                    <li><a href="/pricing" class="text-primary underline-offset-4 hover:underline">Pricing</a></li>
                 </ul>
             </div>
         </section>
     </main>
 </Layout>
+
+<style>
+    /* One authored moment: the hero settles in sequence on load.
+       Default state is fully visible — the animation is opt-in, so nothing
+       depends on it running. */
+    @media (prefers-reduced-motion: no-preference) {
+        .rise {
+            animation: rise 900ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+        .rise-1 { animation-delay: 40ms; }
+        .rise-2 { animation-delay: 140ms; }
+        .rise-3 { animation-delay: 230ms; }
+        .rise-4 { animation-delay: 340ms; animation-duration: 1100ms; }
+    }
+
+    @keyframes rise {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+            filter: blur(8px);
+        }
+        to {
+            opacity: 1;
+            transform: none;
+            filter: blur(0);
+        }
+    }
+
+    code {
+        font-family: var(--font-mono, ui-monospace, monospace);
+        font-size: 0.875em;
+    }
+</style>
