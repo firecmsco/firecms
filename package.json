@@ -55,5 +55,29 @@
   "dependencies": {
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "js-yaml@^3.0.0": "3.15.1",
+      "js-yaml@^4.0.0": "4.3.1",
+      "brace-expansion@^1.0.0": "1.1.18",
+      "brace-expansion@^2.0.0": "2.1.4",
+      "brace-expansion@^5.0.0": "5.0.7",
+      "undici@^6.0.0": "6.28.0",
+      "ip-address": "10.3.1",
+      "axios": "1.18.1",
+      "fast-uri": "3.1.5",
+      "postcss": "8.5.23",
+      "dompurify": "3.4.13",
+      "hono": "4.12.34",
+      "nanoid@^3.0.0": "3.3.18",
+      "tar": "7.5.18",
+      "protobufjs": "7.6.5",
+      "shell-quote": "1.9.0",
+      "linkify-it": "5.0.2",
+      "svgo": "4.0.2",
+      "nx": "22.7.7",
+      "sharp": "0.35.0"
+    }
   }
 }
