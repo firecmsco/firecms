@@ -100,6 +100,10 @@ export default defineConfig({
                             slug: "docs/self"
                         },
                         {
+                            label: "Firebase Setup", translations: { es: "Configuración de Firebase", de: "Firebase-Einrichtung", fr: "Configuration de Firebase" , it: "Configurazione di Firebase", pt: "Configuração do Firebase" },
+                            slug: "docs/firebase_setup"
+                        },
+                        {
                             label: "Next.js Integration", translations: { es: "Integración con Next.js", de: "Next.js-Integration", fr: "Intégration avec Next.js" , it: "Integrazione Next.js", pt: "Integração Next.js" },
                             slug: "docs/pro/nextjs",
                             badge: {

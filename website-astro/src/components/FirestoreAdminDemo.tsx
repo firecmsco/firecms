@@ -289,7 +289,9 @@ export default function FirestoreAdminDemo() {
             <div className="w-[450px] flex flex-col shrink-0 relative overflow-hidden">
                 <div className="p-4 border-b border-[#2c2d30] transition-opacity duration-300">
                     <div className="flex items-center gap-2 mb-1">
-                        <h2 className="text-xl font-medium tracking-tight text-white">{selectedDoc}</h2>
+                        {/* Not a heading: this is a document ID inside a demo, and an <h2> here would
+                            put it in the page outline ahead of the real sections. */}
+                        <div className="text-xl font-medium tracking-tight text-white">{selectedDoc}</div>
                         <button className="text-[#8a8a8e]">{icons.external}</button>
                     </div>
                     <div className="text-[12px] text-[#8a8a8e]">products/{selectedDoc}</div>

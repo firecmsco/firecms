@@ -1,12 +1,11 @@
 ---
-title: App Check
+title: "Firebase App Check (self-hosted)"
 slug: it/docs/pro/app_check
-description: Integra Firebase App Check con FireCMS per proteggere il tuo backend dagli abusi usando i provider reCAPTCHA.
+description: "Attiva Firebase App Check in un'app FireCMS self-hosted con la prop appCheck e un provider reCAPTCHA."
 ---
+FireCMS self-hosted può imporre Firebase App Check su ogni richiesta che il tuo pannello admin invia a Firestore e Storage, così solo il tuo CMS può leggere o scrivere i tuoi dati, e non una chiave API copiata o uno script estratto dal tuo bundle.
 
-Puoi integrare Firebase App Check con la tua app per proteggere le risorse del tuo backend dagli abusi, come frodi di fatturazione o phishing. Firebase App Check funziona insieme ad altri servizi Firebase, come Firebase Authentication, per aiutare a proteggere le risorse del backend.
-
-FireCMS fornisce un modo semplice per integrare Firebase App Check con la tua app.
+App Check è un servizio Firebase. Questa pagina spiega come integrarlo in FireCMS; per sapere cosa fa App Check e quali provider di attestazione esistono, consulta [la documentazione App Check di Firebase](https://firebase.google.com/docs/app-check).
 
 :::important
 Ricorda di aggiungere il dominio dove distribuirai la tua app all'elenco dei domini consentiti nella configurazione del provider AppCheck.

@@ -2,6 +2,8 @@
 slug: firebase_functions_monorepo
 title: Firebase Functions Monorepo Deployments That Work
 description: Solve E404 and TypeScript errors when deploying Firebase Functions from monorepos with this comprehensive guide.
+seoTitle: "Fix E404 & TS6059 Deploying Firebase Functions in a Monorepo"
+seoDescription: "Deploying Firebase Functions from a pnpm or Yarn monorepo fails with E404 Not Found or TS6059. Here is the predeploy.js tarball approach that fixes both, with the full working script."
 pubDate: 2025-04-12
 image: /img/blog/ai5J1ncw3p0.webp
 authors: francesco

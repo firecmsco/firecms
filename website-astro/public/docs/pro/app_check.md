@@ -1,10 +1,7 @@
-# App Check
+# Firebase App Check (Self-Hosted)
+Self-hosted FireCMS can enforce Firebase App Check on every request your admin panel makes to Firestore and Storage, so only your own CMS can read or write your data — not a copied API key, and not a script lifted out of your bundle.
 
-You can integrate Firebase App Check with your app to protect your backend resources from abuse, such as billing fraud
-or phishing. Firebase App Check works alongside other Firebase services, such as Firebase Authentication,
-to help secure your backend resources.
-
-FireCMS provides a simple way to integrate Firebase App Check with your app.
+App Check itself is a Firebase service. This page covers wiring it into FireCMS; for what App Check does and which attestation providers exist, see [Firebase's own App Check documentation](https://firebase.google.com/docs/app-check).
 
 :::important
 Remember to add the domain where you will be deploying your app to the list of allowed domains in AppCheck provider

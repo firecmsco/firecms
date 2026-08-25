@@ -1,0 +1,302 @@
+---
+// src/pages/firebase-admin-panel.astro
+// Landing page for the "Firebase admin panel" / "admin UI" keyword cluster.
+// Search Console shows firecms.co ranking 6.5–10.8 for these on the *homepage*,
+// which is a generalist competing against specialists. English only.
+import Layout from "../layouts/Layout.astro";
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+import ProductsCollectionDemo from "../components/ProductsCollectionDemo.tsx";
+import McpSessionDemo from "../components/McpSessionDemo.tsx";
+import CustomFieldDemo from "../components/CustomFieldDemo.tsx";
+
+const title = "Firebase Admin Panel for Firestore & Storage | FireCMS";
+const description = "A production-ready Firebase admin panel over your own project. Manage Firestore collections, Storage files and Auth users with real roles and permissions — hosted, or self-hosted and MIT-licensed.";
+const keywords = "Firebase admin panel, Firebase admin UI, admin panel for Firebase, Firestore admin panel, Firebase back office, Firebase backend dashboard, CMS admin panel, Firebase admin tool, Firestore admin UI";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Firebase Admin Panel", url: "https://firecms.co/firebase-admin-panel" }
+];
+
+// Taken from the questions that actually appear in Search Console for this
+// cluster — several of which already rank in the top 4 with no page to land on.
+const faqItems = [
+    {
+        question: "What is a Firebase admin panel?",
+        answer: "A Firebase admin panel is an internal interface over your own Firebase project: Firestore documents, Firebase Storage files and Firebase Auth users, presented as tables and forms your team can safely use. It is not the Firebase console — the console is built for developers debugging a project, while an admin panel is built for the people who work with the data every day, with per-collection permissions and validated forms."
+    },
+    {
+        question: "Firebase CMS vs building a custom admin panel — which should I choose?",
+        answer: "Building your own gives you total control and costs weeks up front, then keeps costing every time the data model changes: new field types, new validation, file uploads, permissions, pagination, search. FireCMS gives you that layer on day one and stays extensible — any React component can become a form field, and you can add entirely new views. The usual answer is to start with FireCMS and drop to custom code only where the defaults genuinely do not fit."
+    },
+    {
+        question: "Can one admin panel manage Firestore collections and Storage files together?",
+        answer: "Yes. FireCMS treats Firebase Storage as a first-class field type, so an image, video or file property on a Firestore document uploads to your bucket and renders as a preview inside the same form. Editors never touch two tools, and the files stay in your own bucket."
+    },
+    {
+        question: "How do roles and permissions work?",
+        answer: "FireCMS builds on Firebase Authentication. You define roles and per-collection create, edit and delete permissions, and can resolve them dynamically per user or per document — so a marketing editor, a support agent and an admin each see a different panel from the same deployment."
+    },
+    {
+        question: "Do I have to migrate my data?",
+        answer: "No. FireCMS reads the documents already in your Firestore collections and infers a schema from them, so an existing project gets a working panel without an import step. Your data never leaves your Firebase project, and nothing is copied to FireCMS."
+    },
+    {
+        question: "Is there an open-source Firebase admin panel?",
+        answer: "FireCMS is MIT licensed. You can self-host the framework in your own infrastructure with full source access, or use the managed FireCMS Cloud if you would rather not run it. Both support custom React fields and custom views."
+    },
+    {
+        question: "How long does it take to get a Firebase admin panel running?",
+        answer: "Connecting a Firebase project to FireCMS Cloud and generating collections from existing data takes a few minutes. Self-hosting adds the time to scaffold and deploy the app — see the Firebase setup guide for the Firestore, Auth and Storage configuration it expects."
+    }
+];
+---
+
+<Layout
+        title={title}
+        description={description}
+        keywords={keywords}
+        breadcrumbs={breadcrumbs}
+        faqItems={faqItems}
+        localized={false}
+>
+    <main>
+        <!-- ============================ HERO ============================ -->
+        <section class="relative isolate overflow-hidden bg-linear-to-b from-black via-surface-950 to-black pt-28 pb-20 sm:pt-36 sm:pb-28">
+            <SectionBackgroundAccents blob={{ position: "top", size: "lg", opacity: 60 }}/>
+
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-3xl text-center">
+                    <h1 class="rise rise-1 text-balance text-4xl font-extrabold leading-[1.05] tracking-[-0.035em] text-white sm:text-6xl sm:leading-[1.03] sm:tracking-[-0.04em] lg:text-7xl">
+                        Your <span class="text-orange-500 subtle-shimmer">Firebase</span><br class="hidden sm:inline"/>
+                        admin panel
+                    </h1>
+                    <p class="rise rise-2 mx-auto mt-7 max-w-2xl text-lg leading-8 text-surface-300 sm:text-xl">
+                        Firestore collections, Storage files and Auth users in one interface
+                        your whole team can use — with roles, validation and permissions the
+                        Firebase console was never meant to provide.
+                    </p>
+                    <div class="rise rise-3 mt-10 flex flex-wrap items-center justify-center gap-4">
+                        <a href="https://app.firecms.co"
+                           data-track
+                           id="admin-panel-start"
+                           class="btn-glow inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-primary-dark">
+                            Build yours free
+                        </a>
+                        <a href="/blog/build_firebase_admin_panel"
+                           class="inline-flex items-center gap-2 rounded-md border border-surface-700 bg-surface-900/50 px-6 py-3 text-base font-semibold text-white transition-colors duration-200 hover:bg-surface-800">
+                            Compare the approaches
+                        </a>
+                    </div>
+                </div>
+
+                <div class="rise rise-4 mt-16 sm:mt-20">
+                    <div class="overflow-x-auto rounded-xl">
+                        <div class="min-w-[880px]">
+                            <ProductsCollectionDemo client:visible />
+                        </div>
+                    </div>
+                    <p class="mt-4 text-center text-sm text-surface-500">
+                        An admin panel over a live Firestore <code class="text-surface-400">products</code> collection —
+                        your documents, your bucket, your auth.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================= DEFINITION ========================= -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                        The console is not an admin panel
+                    </h2>
+                    <div class="mt-8 space-y-6 text-lg leading-8 text-surface-400">
+                        <p>
+                            The Firebase console is a developer tool. It shows raw documents,
+                            it has no concept of your data model, and it gives every person who
+                            can open it the same total access. Handing it to a content editor or
+                            a support agent means handing them a production database with no
+                            guard rails.
+                        </p>
+                        <p>
+                            An admin panel is the opposite: it knows a <code class="text-surface-300">price</code>
+                            is a number in euros, that <code class="text-surface-300">category</code> is one of six
+                            values, and that support can read orders but not delete them. FireCMS
+                            builds that layer directly on the Firebase project you already have —
+                            no export, no sync, no second copy of the truth.
+                        </p>
+                    </div>
+                </div>
+
+                <dl class="mt-16 grid max-w-4xl gap-x-12 gap-y-10 sm:grid-cols-2">
+                    <div class="border-l border-surface-800 pl-6">
+                        <dt class="text-base font-semibold text-white">Typed fields, not JSON</dt>
+                        <dd class="mt-2 leading-7 text-surface-400">
+                            Dates, enums, references, markdown, arrays and maps get real editors
+                            with validation, instead of a raw document blob.
+                        </dd>
+                    </div>
+                    <div class="border-l border-surface-800 pl-6">
+                        <dt class="text-base font-semibold text-white">Storage in the same form</dt>
+                        <dd class="mt-2 leading-7 text-surface-400">
+                            Image, video and file properties upload straight to your Firebase
+                            Storage bucket and preview inline.
+                        </dd>
+                    </div>
+                    <div class="border-l border-surface-800 pl-6">
+                        <dt class="text-base font-semibold text-white">Per-collection permissions</dt>
+                        <dd class="mt-2 leading-7 text-surface-400">
+                            Roles resolved per user or per document, so one deployment serves
+                            editors, support and admins differently.
+                        </dd>
+                    </div>
+                    <div class="border-l border-surface-800 pl-6">
+                        <dt class="text-base font-semibold text-white">Nothing leaves your project</dt>
+                        <dd class="mt-2 leading-7 text-surface-400">
+                            FireCMS runs against your Firestore instance under your own security
+                            rules. There is no migration to adopt it and none to leave it.
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- ===================== SET IT UP WITH AN AGENT ================ -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                        Or let an agent build it
+                    </h2>
+                    <p class="mt-6 text-lg leading-8 text-surface-400">
+                        FireCMS ships an MCP server, so Claude or any MCP client can list your
+                        Firebase projects, connect one, read the shape of its collections and
+                        generate the whole panel — without you opening a config file.
+                    </p>
+                </div>
+            </div>
+            <div class="mt-14 overflow-x-auto">
+                <div class="mx-auto min-w-[900px] max-w-7xl px-6 lg:px-8">
+                    <McpSessionDemo client:visible />
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================== EXTEND =========================== -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                        Where the defaults stop, React starts
+                    </h2>
+                    <p class="mt-6 text-lg leading-8 text-surface-400">
+                        The reason teams abandon generic admin tools is the one field the tool
+                        cannot represent. In FireCMS any React component can be a form field, and
+                        any React view can be a page in the navigation — so the panel bends to
+                        your domain instead of the other way round.
+                    </p>
+                </div>
+            </div>
+            <div class="mt-14">
+                <CustomFieldDemo client:visible />
+            </div>
+        </section>
+
+        <!-- ===================== CLOUD OR SELF-HOST ==================== -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <h2 class="max-w-2xl text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                    Hosted, or hosted by you
+                </h2>
+
+                <div class="mt-12 max-w-4xl grid gap-px overflow-hidden rounded-xl border border-surface-800 bg-surface-800 md:grid-cols-2">
+                    <div class="bg-surface-900/60 p-8">
+                        <h3 class="text-xl font-semibold text-white">FireCMS Cloud</h3>
+                        <p class="mt-3 text-surface-400">
+                            Connect your Firebase project and have a working admin panel in
+                            minutes. Automatic updates, custom React views still supported.
+                        </p>
+                        <a href="https://app.firecms.co"
+                           data-track
+                           id="admin-panel-cloud"
+                           class="mt-6 inline-flex items-center gap-1.5 font-semibold text-primary underline-offset-4 hover:underline">
+                            Start building
+                            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                    <div class="bg-surface-950/60 p-8">
+                        <h3 class="text-xl font-semibold text-white">Self-hosted</h3>
+                        <p class="mt-3 text-surface-400">
+                            MIT-licensed source in your own infrastructure, with custom auth, SSO
+                            and whatever compliance story you need.
+                        </p>
+                        <a href="/docs/firebase_setup"
+                           class="mt-6 inline-flex items-center gap-1.5 font-semibold text-primary underline-offset-4 hover:underline">
+                            Set up your Firebase project
+                            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= FAQ =========================== -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <SectionBackgroundAccents topLine={true}/>
+            <div class="mx-auto max-w-7xl px-6 pt-24 sm:pt-32 lg:px-8">
+                <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                    Firebase admin panel FAQ
+                </h2>
+                <dl class="mt-12 max-w-3xl divide-y divide-surface-800 border-t border-surface-800">
+                    {faqItems.map(item => (
+                        <div class="py-7">
+                            <dt class="text-lg font-semibold leading-7 text-white">{item.question}</dt>
+                            <dd class="mt-3 leading-7 text-surface-400">{item.answer}</dd>
+                        </div>
+                    ))}
+                </dl>
+            </div>
+        </section>
+
+        <!-- =========================== RELATED ========================= -->
+        <section class="bg-black pb-28">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.12em] text-surface-500">Keep reading</h2>
+                <ul class="mt-6 flex flex-wrap gap-x-7 gap-y-3">
+                    <li><a href="/blog/build_firebase_admin_panel" class="text-primary underline-offset-4 hover:underline">How to build one, step by step</a></li>
+                    <li><a href="/firestore-gui" class="text-primary underline-offset-4 hover:underline">Firestore GUI</a></li>
+                    <li><a href="/firebase-cms" class="text-primary underline-offset-4 hover:underline">Firebase CMS</a></li>
+                    <li><a href="/compare/firecms-vs-firebase-console" class="text-primary underline-offset-4 hover:underline">vs Firebase Console</a></li>
+                    <li><a href="/compare/firecms-vs-retool" class="text-primary underline-offset-4 hover:underline">vs Retool</a></li>
+                    <li><a href="/docs/firebase_setup" class="text-primary underline-offset-4 hover:underline">Firebase setup guide</a></li>
+                    <li><a href="/pricing" class="text-primary underline-offset-4 hover:underline">Pricing</a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    /* One authored moment: the hero settles in sequence on load. Default state is
+       fully visible, so nothing depends on the animation running. */
+    @media (prefers-reduced-motion: no-preference) {
+        .rise {
+            animation: rise 900ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+        .rise-1 { animation-delay: 40ms; }
+        .rise-2 { animation-delay: 140ms; }
+        .rise-3 { animation-delay: 230ms; }
+        .rise-4 { animation-delay: 340ms; animation-duration: 1100ms; }
+    }
+
+    @keyframes rise {
+        from { opacity: 0; transform: translateY(16px); filter: blur(8px); }
+        to   { opacity: 1; transform: none; filter: blur(0); }
+    }
+
+    code {
+        font-family: var(--font-mono, ui-monospace, monospace);
+        font-size: 0.875em;
+    }
+</style>

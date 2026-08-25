@@ -2,6 +2,8 @@
 slug: unlocking_power_firebase_cms
 title: "Firebase: The Ultimate Backend for Your CMS"
 description: Discover why Firebase is the ultimate backend choice for modern content management systems.
+seoTitle: "Firebase as a CMS Backend: vs Strapi, Contentful & Sanity"
+seoDescription: "Firestore, Firebase Auth and Storage already give you most of a CMS. A direct comparison with Strapi, Contentful and Sanity on cost, real-time sync, scaling and vendor lock-in."
 pubDate: 2024-11-13
 image: /img/blog/firebase-logo-standard.svg
 authors: marian

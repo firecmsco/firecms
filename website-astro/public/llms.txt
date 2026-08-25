@@ -401,13 +401,10 @@ FireCMS Cloud projects can only be deployed to FireCMS Cloud.
 If you need a self-hosted version of FireCMS, you can use the PRO plan, or use the community version.
 Since the APIs are the same for all versions, you can easily switch between them.
 
-## App Check: Securing your Admin Panel
+## Firebase App Check in FireCMS Cloud
+FireCMS Cloud can enforce Firebase App Check on every request your admin panel makes to Firestore and Storage, so only your own CMS can read or write your data — not a copied API key, and not a script lifted out of your bundle.
 
-You can integrate Firebase App Check with your app to protect your backend resources from abuse, such as billing fraud
-or phishing. Firebase App Check works alongside other Firebase services, such as Firebase Authentication,
-to help secure your backend resources.
-
-FireCMS provides a simple way to integrate Firebase App Check with your app.
+App Check itself is a Firebase service. This page covers wiring it into FireCMS; for what App Check does and which attestation providers exist, see [Firebase's own App Check documentation](https://firebase.google.com/docs/app-check).
 
 :::important
 Remember to add the domain `app.firecms.co` to the list of allowed domains in AppCheck provider configuration.
@@ -1252,6 +1249,146 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     </React.StrictMode>
 )
 ```
+
+## Firebase Setup: Firestore, Auth & Storage
+
+FireCMS talks to **your own Firebase project** — it never proxies or copies your data.
+That means the CMS can only do what your Firebase project lets it do, so a few things
+need to be switched on before the admin panel becomes useful.
+
+This page covers the four pieces FireCMS actually depends on, and what each one unlocks:
+
+| Firebase service | What FireCMS uses it for |
+|---|---|
+| **Firestore** | Every collection, document and form in the CMS |
+| **Web app config** | The credentials object you pass to the CMS |
+| **Authentication** | Who can open the panel, and their role |
+| **Storage** | File, image and video fields |
+
+Firebase's own docs cover each service in general; everything below is specific to
+running FireCMS against it.
+
+### Firestore
+
+Enable **Firestore** in your project. FireCMS reads your existing documents to infer
+collection schemas, so if you already have data, you already have a CMS — there is no
+import step.
+
+:::important
+A default Firestore project ships with rules that deny all reads and writes. Until you
+change them, FireCMS will connect but every collection will look empty.
+:::
+
+The simplest rule set that lets an authenticated editor work is:
+
+```js
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```
+
+That is fine for a private back-office, but rules should match your domain. A more
+realistic set — public product reads, authenticated writes, and users restricted to
+their own document — looks like this:
+
+```js
+rules_version = '2';
+service cloud.firestore {
+
+    // everything is private by default
+    match /{document=**} {
+      allow read: if false;
+      allow write: if false;
+    }
+
+    match /databases/{database}/documents {
+        // anyone may read products; only signed-in users may write
+        match /products/{id=**} {
+          allow read: if true;
+          allow write: if request.auth != null;
+        }
+    }
+
+    // users may only touch their own user document
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+}
+```
+
+:::tip
+Rules are enforced per collection. If a collection shows up empty in FireCMS but has
+documents in the Firebase console, a rule is almost always the reason.
+:::
+
+### Web app
+
+In your project settings, create a **Web app**. Firebase gives you a configuration
+object — that object is what you pass to FireCMS.
+
+![Creating a Firebase web app in the project settings](/img/firebase_setup_app.png)
+
+:::tip[Firebase Hosting]
+You can link the web app to **Firebase Hosting** at the same time, which makes deploying
+your CMS a one-command affair. You can also create the Hosting site later and link it
+to an existing web app.
+:::
+
+### Authentication
+
+Enable **Authentication** so users can get past the login screen. FireCMS builds its
+roles and per-collection permissions on top of Firebase Auth, so this is also where
+access control starts.
+
+:::important
+Vite serves the dev server at `http://127.0.0.1:5173` by default, and Firebase Auth
+rejects sign-ins from domains it does not know. Add that URL to the authorised domains
+in the Firebase console, or run the dev server on `http://localhost:5173` and authorise
+that instead.
+:::
+
+![Enabling sign-in providers in Firebase Authentication](/img/firebase_setup_auth.png)
+
+### Storage
+
+Enable **Firebase Storage** if you want to use the CMS file, image or video fields.
+FireCMS writes uploads to the project's default bucket.
+
+:::note[CORS]
+Downloads from Storage can fail with a CORS error depending on your bucket
+configuration. Create a `cors.json`:
+
+```json
+[
+  {
+    "origin": ["*"],
+    "method": ["GET"],
+    "maxAgeSeconds": 3600
+  }
+]
+```
+
+and apply it with:
+
+```bash
+gsutil cors set cors.json gs://<your-cloud-storage-bucket>
+```
+
+Narrow `origin` to your own domains before going to production.
+:::
+
+### Next steps
+
+With Firestore, Auth and Storage in place, your Firebase project is ready:
+
+- [Self-hosted quickstart](/docs/self) — scaffold and run the CMS locally
+- [FireCMS Cloud quickstart](/docs/cloud/quickstart) — connect the project and skip the hosting
+- [Firebase App Check](/docs/cloud/app_check) — lock the panel down once it is live
 
 ## Quickstart + Next.JS frontend
 
@@ -2977,13 +3114,10 @@ yarn run build
 and then serve the **dist** folder with your favorite static hosting provider.
 
 
-## App Check
+## Firebase App Check (Self-Hosted)
+Self-hosted FireCMS can enforce Firebase App Check on every request your admin panel makes to Firestore and Storage, so only your own CMS can read or write your data — not a copied API key, and not a script lifted out of your bundle.
 
-You can integrate Firebase App Check with your app to protect your backend resources from abuse, such as billing fraud
-or phishing. Firebase App Check works alongside other Firebase services, such as Firebase Authentication,
-to help secure your backend resources.
-
-FireCMS provides a simple way to integrate Firebase App Check with your app.
+App Check itself is a Firebase service. This page covers wiring it into FireCMS; for what App Check does and which attestation providers exist, see [Firebase's own App Check documentation](https://firebase.google.com/docs/app-check).
 
 :::important
 Remember to add the domain where you will be deploying your app to the list of allowed domains in AppCheck provider

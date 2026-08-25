@@ -7,7 +7,12 @@ import { getAuthor } from '../utils/authors';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage, authors, image } = Astro.props;
+const { title, description, seoTitle, seoDescription, pubDate, updatedDate, heroImage, authors, image } = Astro.props;
+
+// The <title> and meta description are what compete in the SERP; the H1 and the
+// BlogPosting headline stay the article's own title.
+const metaTitle = seoTitle ?? title;
+const metaDescription = seoDescription ?? description;
 const author = authors ? getAuthor(authors) : null;
 
 // Generate breadcrumbs for blog posts
@@ -57,8 +62,8 @@ const articleSchema = {
 ---
 
 <Layout
-	title={title}
-	description={description}
+	title={metaTitle}
+	description={metaDescription}
 	breadcrumbs={breadcrumbs}
 	ogImage={ogImageUrl}
 	ogType="article"

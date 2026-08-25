@@ -3,6 +3,8 @@
 slug: firestore_pipelines
 title: "Firestore Pipeline Operations: What They Are and Why They Matter"
 description: Explore Firestore's new Pipeline Operations API for Enterprise Edition—aggregation with grouping, array unnesting, post-aggregation filtering, and index-free queries.
+seoTitle: "Firestore Pipelines Tested: Enterprise vs Standard"
+seoDescription: "I ran Firestore's new Pipeline Operations against a live Enterprise instance: grouping, array unnesting, post-aggregation filtering and index-free queries. What works, what does not, and how Enterprise Edition differs from Standard."
 pubDate: 2026-02-10
 image: /img/blog/pipeline.webp
 authors: francesco

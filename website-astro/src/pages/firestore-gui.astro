@@ -1,0 +1,293 @@
+---
+// src/pages/firestore-gui.astro
+// Landing page for the "Firestore GUI" / "Firebase GUI" / "Firestore GUI client"
+// cluster. These queries are database-client intent — browse, query, edit — which
+// is a different frame from the CMS pages. English only.
+import Layout from "../layouts/Layout.astro";
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+import FirestoreAdminDemo from "../components/FirestoreAdminDemo.tsx";
+import ReferenceTableDemo from "../components/ReferenceTableDemo.tsx";
+import SidePanelPreviewDemo from "../components/SidePanelPreviewDemo.tsx";
+
+const title = "Firestore GUI — A Firebase Database Client | FireCMS";
+const description = "A real GUI client for Firestore: browse collections as tables, filter and sort, follow references and edit documents inline. Runs against your own Firebase project — hosted or self-hosted.";
+const keywords = "Firestore GUI, Firebase GUI, Firestore GUI client, Firebase admin UI, Firestore client, Firebase database GUI, Firestore data browser, Firestore viewer, Firestore editor, Firebase data client";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Firestore GUI", url: "https://firecms.co/firestore-gui" }
+];
+
+const faqItems = [
+    {
+        question: "What is a Firestore GUI?",
+        answer: "A Firestore GUI is a graphical client for a Firestore database — the equivalent of what TablePlus or pgAdmin are for SQL. It shows collections as sortable, filterable tables rather than one document at a time, lets you edit values in place, and follows references between documents instead of making you copy IDs around."
+    },
+    {
+        question: "Is the Firebase console a Firestore GUI?",
+        answer: "Only barely. The console is a document inspector: it shows one document at a time, has no typed fields, no cross-collection filtering and no notion of your data model. It is a good debugging tool and a poor daily driver. A Firestore GUI adds the table view, filters, typed editors and permissions that make the data workable."
+    },
+    {
+        question: "Can I filter and sort Firestore data in the GUI?",
+        answer: "Yes. FireCMS gives every collection a table with per-column filtering and sorting, plus text search where you have it configured. Queries respect your Firestore indexes, so what you can filter in the GUI is what your database can actually serve."
+    },
+    {
+        question: "Can I edit Firestore documents directly?",
+        answer: "Yes — inline in the table for simple values, or in a side panel for the full document. Each property gets an editor matched to its type: dates, enums, references, arrays, maps, markdown and file uploads, all with validation before the write reaches Firestore."
+    },
+    {
+        question: "Does it work with subcollections and references?",
+        answer: "Both are first-class. Subcollections are navigable from the parent document, and a reference property renders as the referenced document rather than a raw path, so you can jump between related records without leaving the GUI."
+    },
+    {
+        question: "Is there a free Firestore GUI client?",
+        answer: "FireCMS is MIT licensed and free to self-host, and FireCMS Cloud has a free tier you can connect a Firebase project to. Either way it reads your existing collections and infers the schema, so you do not configure anything up front."
+    },
+    {
+        question: "Is my data safe in a third-party Firestore GUI?",
+        answer: "FireCMS connects directly to your Firebase project using your own credentials and security rules — nothing is proxied through or stored on FireCMS servers. Self-hosting removes the third party entirely, since the client runs in your own infrastructure."
+    }
+];
+---
+
+<Layout
+        title={title}
+        description={description}
+        keywords={keywords}
+        breadcrumbs={breadcrumbs}
+        faqItems={faqItems}
+        localized={false}
+>
+    <main>
+        <!-- ============================ HERO ============================ -->
+        <section class="relative isolate overflow-hidden bg-linear-to-b from-black via-surface-950 to-black pt-28 pb-20 sm:pt-36 sm:pb-28">
+            <SectionBackgroundAccents blob={{ position: "top", size: "lg", opacity: 60 }}/>
+
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-3xl text-center">
+                    <h1 class="rise rise-1 text-balance text-4xl font-extrabold leading-[1.05] tracking-[-0.035em] text-white sm:text-6xl sm:leading-[1.03] sm:tracking-[-0.04em] lg:text-7xl">
+                        A real GUI for<br class="hidden sm:inline"/>
+                        <span class="text-orange-500 subtle-shimmer">Firestore</span>
+                    </h1>
+                    <p class="rise rise-2 mx-auto mt-7 max-w-2xl text-lg leading-8 text-surface-300 sm:text-xl">
+                        Your collections as tables you can filter, sort and edit — not one
+                        document at a time. Connected straight to your own Firebase project.
+                    </p>
+                    <div class="rise rise-3 mt-10 flex flex-wrap items-center justify-center gap-4">
+                        <a href="https://app.firecms.co"
+                           data-track
+                           id="firestore-gui-start"
+                           class="btn-glow inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-primary-dark">
+                            Open your data
+                        </a>
+                        <a href="/docs/firebase_setup"
+                           class="inline-flex items-center gap-2 rounded-md border border-surface-700 bg-surface-900/50 px-6 py-3 text-base font-semibold text-white transition-colors duration-200 hover:bg-surface-800">
+                            Self-host it
+                        </a>
+                    </div>
+                </div>
+
+                <div class="rise rise-4 mt-16 sm:mt-20">
+                    <div class="overflow-x-auto rounded-xl">
+                        <div class="min-w-[880px]">
+                            <FirestoreAdminDemo client:visible />
+                        </div>
+                    </div>
+                    <p class="mt-4 text-center text-sm text-surface-500">
+                        Browsing a Firestore database — the documents your app already reads,
+                        under your own security rules.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================= THE PROBLEM ======================== -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                        Firestore has no client. That is the problem.
+                    </h2>
+                    <div class="mt-8 space-y-6 text-lg leading-8 text-surface-400">
+                        <p>
+                            Every other database has a GUI worth using. Postgres has pgAdmin and
+                            TablePlus; MongoDB has Compass. Firestore has a console panel that
+                            shows you one document at a time, with every value as an untyped
+                            string, and no way to ask a question across a collection.
+                        </p>
+                        <p>
+                            So the work leaks into scripts: a quick Node file to find the orders
+                            from last Tuesday, another to fix a field someone typo'd, another to
+                            export a CSV for the finance team. FireCMS replaces those with a
+                            client that understands the shape of your data.
+                        </p>
+                    </div>
+                </div>
+
+                <dl class="mt-16 grid max-w-4xl gap-x-12 gap-y-10 sm:grid-cols-2">
+                    <div class="border-l border-surface-800 pl-6">
+                        <dt class="text-base font-semibold text-white">Collections as tables</dt>
+                        <dd class="mt-2 leading-7 text-surface-400">
+                            Sortable, filterable columns with the field types your documents
+                            actually use — not a tree of expandable blobs.
+                        </dd>
+                    </div>
+                    <div class="border-l border-surface-800 pl-6">
+                        <dt class="text-base font-semibold text-white">Inline editing</dt>
+                        <dd class="mt-2 leading-7 text-surface-400">
+                            Change a value in the cell, or open the whole document in a side
+                            panel. Validation runs before the write.
+                        </dd>
+                    </div>
+                    <div class="border-l border-surface-800 pl-6">
+                        <dt class="text-base font-semibold text-white">Subcollections and references</dt>
+                        <dd class="mt-2 leading-7 text-surface-400">
+                            Navigate into subcollections from the parent, and jump through
+                            references without copying document IDs.
+                        </dd>
+                    </div>
+                    <div class="border-l border-surface-800 pl-6">
+                        <dt class="text-base font-semibold text-white">Import and export</dt>
+                        <dd class="mt-2 leading-7 text-surface-400">
+                            CSV and JSON in and out, so the one-off script for the finance team
+                            stops being a recurring task.
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- ========================= REFERENCES ========================= -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                        References that resolve
+                    </h2>
+                    <p class="mt-6 text-lg leading-8 text-surface-400">
+                        A Firestore reference is a path. In the console that is all you see. Here
+                        it renders as the document it points at, and picking a new one is a search
+                        across the target collection rather than a copy-paste of an ID.
+                    </p>
+                </div>
+                <div class="mt-14 overflow-x-auto rounded-xl">
+                    <div class="min-w-[860px]">
+                        <ReferenceTableDemo client:visible />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================== EDITING =========================== -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                        Edit without losing your place
+                    </h2>
+                    <p class="mt-6 text-lg leading-8 text-surface-400">
+                        Open a document in a side panel, change it, and the table behind you stays
+                        exactly where it was — same filters, same scroll position, same query. It
+                        is the difference between a browser and a tool.
+                    </p>
+                </div>
+                <div class="mt-14 overflow-x-auto rounded-xl">
+                    <div class="min-w-[860px]">
+                        <SidePanelPreviewDemo client:visible />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== CLOUD OR SELF-HOST ==================== -->
+        <section class="bg-black py-24 sm:py-32">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <h2 class="max-w-2xl text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                    Hosted, or hosted by you
+                </h2>
+
+                <div class="mt-12 max-w-4xl grid gap-px overflow-hidden rounded-xl border border-surface-800 bg-surface-800 md:grid-cols-2">
+                    <div class="bg-surface-900/60 p-8">
+                        <h3 class="text-xl font-semibold text-white">FireCMS Cloud</h3>
+                        <p class="mt-3 text-surface-400">
+                            Connect a Firebase project and browse it in minutes. Free tier, and
+                            your data never leaves your own project.
+                        </p>
+                        <a href="https://app.firecms.co"
+                           data-track
+                           id="firestore-gui-cloud"
+                           class="mt-6 inline-flex items-center gap-1.5 font-semibold text-primary underline-offset-4 hover:underline">
+                            Connect a project
+                            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                    <div class="bg-surface-950/60 p-8">
+                        <h3 class="text-xl font-semibold text-white">Self-hosted</h3>
+                        <p class="mt-3 text-surface-400">
+                            MIT-licensed and running in your own infrastructure, so no third party
+                            ever sits between the client and your database.
+                        </p>
+                        <a href="/docs/firebase_setup"
+                           class="mt-6 inline-flex items-center gap-1.5 font-semibold text-primary underline-offset-4 hover:underline">
+                            Set up your Firebase project
+                            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= FAQ =========================== -->
+        <section class="relative bg-black pb-24 sm:pb-32">
+            <SectionBackgroundAccents topLine={true}/>
+            <div class="mx-auto max-w-7xl px-6 pt-24 sm:pt-32 lg:px-8">
+                <h2 class="text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                    Firestore GUI FAQ
+                </h2>
+                <dl class="mt-12 max-w-3xl divide-y divide-surface-800 border-t border-surface-800">
+                    {faqItems.map(item => (
+                        <div class="py-7">
+                            <dt class="text-lg font-semibold leading-7 text-white">{item.question}</dt>
+                            <dd class="mt-3 leading-7 text-surface-400">{item.answer}</dd>
+                        </div>
+                    ))}
+                </dl>
+            </div>
+        </section>
+
+        <!-- =========================== RELATED ========================= -->
+        <section class="bg-black pb-28">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.12em] text-surface-500">Keep reading</h2>
+                <ul class="mt-6 flex flex-wrap gap-x-7 gap-y-3">
+                    <li><a href="/firestore-cms" class="text-primary underline-offset-4 hover:underline">Firestore CMS</a></li>
+                    <li><a href="/firebase-admin-panel" class="text-primary underline-offset-4 hover:underline">Firebase admin panel</a></li>
+                    <li><a href="/firebase-cms" class="text-primary underline-offset-4 hover:underline">Firebase CMS</a></li>
+                    <li><a href="/compare/firecms-vs-firebase-console" class="text-primary underline-offset-4 hover:underline">vs Firebase Console</a></li>
+                    <li><a href="/blog/firestore_pipelines" class="text-primary underline-offset-4 hover:underline">Firestore pipelines, tested</a></li>
+                    <li><a href="/docs/firebase_setup" class="text-primary underline-offset-4 hover:underline">Firebase setup guide</a></li>
+                    <li><a href="/pricing" class="text-primary underline-offset-4 hover:underline">Pricing</a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    /* One authored moment: the hero settles in sequence on load. Default state is
+       fully visible, so nothing depends on the animation running. */
+    @media (prefers-reduced-motion: no-preference) {
+        .rise {
+            animation: rise 900ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+        .rise-1 { animation-delay: 40ms; }
+        .rise-2 { animation-delay: 140ms; }
+        .rise-3 { animation-delay: 230ms; }
+        .rise-4 { animation-delay: 340ms; animation-duration: 1100ms; }
+    }
+
+    @keyframes rise {
+        from { opacity: 0; transform: translateY(16px); filter: blur(8px); }
+        to   { opacity: 1; transform: none; filter: blur(0); }
+    }
+</style>

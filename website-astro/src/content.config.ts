@@ -11,6 +11,11 @@ const blog = defineCollection({
 		z.object({
 			title: z.string(),
 			description: z.string(),
+			// SERP overrides. `title` doubles as the article H1, so optimising it for
+			// search would rewrite the headline. These let the <title> and meta
+			// description target the query without touching the article itself.
+			seoTitle: z.string().max(60).optional(),
+			seoDescription: z.string().optional(),
 			// Transform string to Date object
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),

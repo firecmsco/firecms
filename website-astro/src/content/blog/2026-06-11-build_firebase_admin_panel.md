@@ -330,5 +330,6 @@ FireCMS gives you the best of both worlds: a production-ready admin panel in min
 **Ready to try it?**
 
 - 🚀 [Start with FireCMS Cloud](https://app.firecms.co) — free trial, no credit card
+- 🔎 [See what a Firebase admin panel looks like](/firebase-admin-panel) — the product, running
 - 📖 [Read the self-hosted docs](https://firecms.co/docs) — MIT licensed, full control
 - 💬 [Join our Discord](https://discord.gg/fxy7xsQm3m) — get help from the community

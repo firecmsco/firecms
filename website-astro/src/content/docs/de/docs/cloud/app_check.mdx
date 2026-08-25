@@ -1,12 +1,11 @@
 ---
-title: "App Check: Ihr Admin-Panel absichern"
+title: "Firebase App Check in FireCMS Cloud"
 slug: de/docs/cloud/app_check
-description: "Sichern Sie Ihr Firebase Admin-Panel und Ihre internen Tools mit Firebase App Check. Schützen Sie Ihr CMS vor Missbrauch und unbefugtem Zugriff."
+description: "Erzwinge Firebase App Check in deinem FireCMS-Cloud-Panel, damit nur dein CMS auf deine Firestore-Daten zugreift."
 ---
+FireCMS Cloud kann Firebase App Check bei jeder Anfrage erzwingen, die dein Admin-Panel an Firestore und Storage stellt, sodass nur dein eigenes CMS deine Daten lesen oder schreiben kann — kein kopierter API-Schlüssel und kein aus deinem Bundle extrahiertes Skript.
 
-Sie können Firebase App Check in Ihre Anwendung integrieren, um Ihre Backend-Ressourcen vor Missbrauch zu schützen, z. B. vor Abrechnungsbetrug oder Phishing. Firebase App Check funktioniert zusammen mit anderen Firebase-Diensten wie Firebase Authentication, um Ihre Backend-Ressourcen zu sichern.
-
-FireCMS bietet eine einfache Möglichkeit, Firebase App Check in Ihre Anwendung zu integrieren.
+App Check ist ein Firebase-Dienst. Diese Seite beschreibt die Einbindung in FireCMS; was App Check leistet und welche Attestierungsanbieter es gibt, steht in [Firebases eigener App-Check-Dokumentation](https://firebase.google.com/docs/app-check).
 
 :::important
 Denken Sie daran, die Domain `app.firecms.co` zur Liste der erlaubten Domains in der AppCheck-Anbieter-Konfiguration hinzuzufügen.
