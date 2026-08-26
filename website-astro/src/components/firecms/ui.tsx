@@ -374,3 +374,41 @@ export function BooleanSwitch({ on, className }: { on: boolean; className?: stri
         </span>
     );
 }
+
+/**
+ * TextField carrying a floating label — the shape every string property takes in
+ * the entity form. packages/ui/src/components/TextField.tsx: at size "large" the
+ * input is min-h-[64px] with pt-8 pb-2 and the label sits at top-1.
+ */
+export function TextFieldWithLabel({
+    label, value, icon, caret, className
+}: {
+    label: string;
+    value: React.ReactNode;
+    /** The property type icon the form shows beside the label. */
+    icon?: { icon: string; color: string };
+    caret?: boolean;
+    className?: string;
+}) {
+    return (
+        <div className={cls("rounded-lg relative max-w-full min-h-[64px]", fieldBackgroundMixin, className)}>
+            <div className="pointer-events-none absolute top-1 left-0 px-3 pt-1 text-text-secondary dark:text-text-secondary-dark">
+                {/* LabelWithIcon — align-middle inline-flex items-center my-0.5 gap-2 */}
+                <div className="align-middle inline-flex items-center my-0.5 gap-2">
+                    {icon && (
+                        <span className="h-4 w-4 flex items-center justify-center rounded-full text-white shrink-0"
+                              style={{ background: icon.color }}>
+                            <Icon icon={icon.icon} size={11}/>
+                        </span>
+                    )}
+                    <span className="text-start font-medium text-sm">{label}</span>
+                </div>
+            </div>
+            <div className={cls("w-full bg-transparent leading-normal px-3 rounded-lg min-h-[64px] pt-8 pb-2",
+                "text-text-primary dark:text-text-primary-dark")}>
+                {value}
+                {caret && <span className="caret ml-px inline-block w-px h-[1.05em] align-[-0.15em] bg-primary"/>}
+            </div>
+        </div>
+    );
+}

@@ -1,22 +1,39 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
+import {
+    BooleanSwitch, Chip, Icon, PROPERTY_CONFIGS, TextFieldWithLabel, cls,
+    defaultBorderMixin, useMaterialIcons
+} from "./firecms/ui";
 
 /**
- * A document open in the side panel over its collection: the form on the left,
- * a live preview of the rendered result on the right. The title is edited in
- * the form and the preview follows it, which is the whole point of the panel.
+ * Editing a document in the side panel, over the collection it belongs to.
+ *
+ * Transcribed from packages/firecms_core/src/core: SideDialogs.tsx (the panel
+ * itself) and EntityEditView.tsx (an h-14 top bar carrying the tabs, then the
+ * form centred in a max-w-4xl column). Field labels follow LabelWithIcon and the
+ * inputs follow TextField at size "large" — min-h-[64px], pt-8 pb-2, label at
+ * top-1.
+ *
+ * There is no side-by-side "preview" pane in the product; an earlier version of
+ * this demo invented one. The point here is what the panel actually does: the
+ * collection keeps its place underneath while you edit.
  *
  * Autoplay only — no pointer events.
  */
 
 const TITLES = [
-    "Post about sunglasses",
-    "Summer lookbook 2026",
-    "How we pick our fabrics"
+    "Aviator RB 3025",
+    "Aviator Classic Gold",
+    "Aviator RB 3025 — 58 mm"
 ];
 
-const BODY =
-    "Sunglasses are a form of protective eyewear designed to prevent bright sunlight and high-energy visible light from damaging the eyes.";
+/** Rows of the collection sitting behind the panel. */
+const BEHIND = [
+    { name: "Baseball Cap", cat: { label: "Clothing man", bg: "rgb(102, 102, 102)", fg: "rgb(255, 255, 255)" }, on: true },
+    { name: "Conceal invisible shelf", cat: { label: "Home storage", bg: "rgb(204, 204, 204)", fg: "rgb(4, 4, 4)" }, on: true },
+    { name: "Aviator RB 3025", cat: { label: "Sunglasses", bg: "rgb(255, 220, 229)", fg: "rgb(76, 12, 28)" }, on: true },
+    { name: "Wine decanter", cat: { label: "Serveware", bg: "rgb(139, 70, 255)", fg: "rgb(255, 255, 255)" }, on: false }
+];
 
 export default function SidePanelPreviewDemo({ height = 470 }: { height?: number | string }) {
     const { ref, inView } = useInView<HTMLDivElement>();
@@ -24,6 +41,7 @@ export default function SidePanelPreviewDemo({ height = 470 }: { height?: number
     const [typed, setTyped] = useState(TITLES[0]);
     const [phase, setPhase] = useState<"settled" | "clearing" | "typing">("settled");
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    useMaterialIcons();
 
     useEffect(() => {
         if (timer.current) clearTimeout(timer.current);
@@ -46,93 +64,90 @@ export default function SidePanelPreviewDemo({ height = 470 }: { height?: number
                 setPhase("settled");
             }
         }
-
-        return () => {
-            if (timer.current) clearTimeout(timer.current);
-        };
+        return () => { if (timer.current) clearTimeout(timer.current); };
     }, [phase, typed, index, inView]);
 
     const showCaret = phase !== "settled";
 
     return (
-        <div
-            ref={ref}
-            className="relative flex w-full select-none overflow-hidden rounded-2xl border border-surface-800 bg-[#0c0e12] font-sans text-[13px]"
-            style={{ height }}
-            aria-label="A blog entry open in the FireCMS side panel, with the form on the left and a live preview of the rendered post on the right"
-        >
+        <div ref={ref}
+             className="relative flex w-full select-none overflow-hidden rounded-2xl border border-surface-800 bg-surface-950"
+             style={{ height }}
+             aria-label="A product open in the FireCMS side panel while its collection stays in place underneath">
+
             {/* The collection, still there underneath */}
-            <div className="hidden w-[86px] shrink-0 flex-col gap-2 border-r border-surface-800 bg-surface-950/70 p-3 opacity-45 sm:flex" aria-hidden="true">
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-surface-600">Blog</span>
-                {[0, 1, 2, 3, 4, 5].map(i => (
-                    <span key={i} className="h-3.5 rounded bg-surface-800"/>
+            <div className="flex min-w-0 flex-1 flex-col" aria-hidden="true">
+                <div className={cls("flex h-12 shrink-0 items-center gap-6 border-b px-4",
+                    "text-xs uppercase font-semibold bg-surface-50 dark:bg-surface-900",
+                    "text-text-secondary dark:text-text-secondary-dark", defaultBorderMixin)}>
+                    <span className="w-[150px]">Name</span>
+                    <span className="w-[130px]">Category</span>
+                    <span className="w-[80px]">Available</span>
+                </div>
+                {BEHIND.map(r => (
+                    <div key={r.name}
+                         className={cls("flex shrink-0 items-center gap-6 border-b px-4 text-sm",
+                             "bg-white dark:bg-surface-950 text-text-primary dark:text-text-primary-dark",
+                             defaultBorderMixin)}
+                         style={{ height: 88 }}>
+                        <span className="w-[150px] truncate">{r.name}</span>
+                        <span className="w-[130px]">
+                            <Chip size={"medium"} colorScheme={{ color: r.cat.bg, text: r.cat.fg }}>{r.cat.label}</Chip>
+                        </span>
+                        <span className="w-[80px]"><BooleanSwitch on={r.on}/></span>
+                    </div>
                 ))}
             </div>
 
-            {/* The panel */}
-            <div className="flex min-w-0 flex-1 flex-col">
-                <div className="flex shrink-0 items-center justify-between border-b border-surface-800 px-4 py-2.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-[0.13em] text-surface-500">Blog entry</span>
-                    <span className="text-[11px] font-semibold uppercase tracking-[0.13em] text-primary">Preview</span>
-                </div>
+            {/* The side panel, over it */}
+            <div className={cls(
+                "absolute right-0 top-0 h-full w-full max-w-[560px] shadow-[0_0_60px_-10px_rgba(0,0,0,0.8)]",
+                "transform flex flex-col bg-white dark:bg-surface-900")}>
 
-                <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-2">
-                    {/* Form */}
-                    <div className="min-h-0 space-y-3.5 overflow-hidden border-surface-800 p-4 lg:border-r">
-                        <div>
-                            <span className="mb-1.5 block text-[11px] uppercase tracking-wider text-surface-500">Title</span>
-                            <div className="rounded-lg border border-surface-700 bg-surface-900/60 px-3 py-2 text-surface-100">
-                                <span className="break-words">{typed}</span>
-                                {showCaret && <span className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] bg-primary"/>}
-                            </div>
-                        </div>
-
-                        <div>
-                            <span className="mb-1.5 block text-[11px] uppercase tracking-wider text-surface-500">Header image</span>
-                            <div className="flex items-center gap-3 rounded-lg border border-dashed border-surface-700 bg-surface-900/40 p-2.5">
-                                <span
-                                    className="h-11 w-11 shrink-0 rounded ring-1 ring-inset ring-white/10"
-                                    style={{ background: "linear-gradient(140deg, hsl(186 46% 44%), hsl(206 40% 24%))" }}
-                                    aria-hidden="true"
-                                />
-                                <span className="text-[12px] leading-4 text-surface-500">
-                                    Drop a file, or click to select one
-                                </span>
-                            </div>
-                        </div>
-
-                        <div>
-                            <span className="mb-1.5 block text-[11px] uppercase tracking-wider text-surface-500">Content</span>
-                            <div className="space-y-1.5 rounded-lg border border-surface-700 bg-surface-900/50 p-2.5">
-                                <span className="inline-block rounded bg-emerald-500/15 px-2 py-0.5 text-[10.5px] font-medium text-emerald-400">
-                                    Text block
-                                </span>
-                                <p className="line-clamp-2 text-[12px] leading-5 text-surface-400">{BODY}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Live preview */}
-                    <div className="hidden min-h-0 flex-col overflow-hidden bg-surface-950/60 lg:flex">
-                        <div
-                            className="h-[38%] w-full shrink-0"
-                            style={{ background: "linear-gradient(140deg, hsl(186 46% 44%), hsl(206 40% 24%))" }}
-                            aria-hidden="true"
-                        />
-                        <div className="min-h-0 p-4">
-                            <h4 className="min-h-[1.3em] text-[17px] font-bold leading-tight text-white">
-                                {typed}
-                            </h4>
-                            <p className="mt-2.5 line-clamp-4 text-[12px] leading-5 text-surface-400">{BODY}</p>
-                        </div>
+                {/* EntityEditView top bar */}
+                <div className={cls("h-14 items-center overflow-hidden w-full border-b pl-2 pr-2 flex gap-2",
+                    "bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                    <span className="rounded-full inline-flex items-center justify-center w-10 h-10 p-2 text-surface-accent-600 dark:text-surface-accent-300">
+                        <Icon icon={"close"}/>
+                    </span>
+                    <div className={"flex-grow"}/>
+                    {/* Tabs, secondary mode */}
+                    <div className="inline-flex items-center">
+                        <span className="inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm font-medium border-b-2 border-transparent -mb-px text-surface-500">
+                            <Icon icon={"code"} size={"small"}/>
+                        </span>
+                        <span className="inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm font-medium border-b-2 border-b-primary text-primary -mb-px min-w-[120px]">
+                            Product
+                        </span>
                     </div>
                 </div>
 
-                <div className="flex shrink-0 items-center justify-end gap-3 border-t border-surface-800 px-4 py-2.5">
-                    <span className="text-[12px] font-medium text-surface-500">Discard</span>
-                    <span className="rounded-md bg-primary px-3.5 py-1.5 text-[12px] font-semibold text-white">Save</span>
+                {/* The form */}
+                <div className="flex-1 flex flex-row w-full overflow-hidden justify-center">
+                    <div className="relative flex flex-col w-full h-fit px-4 py-6 gap-4 max-w-4xl">
+                        <TextFieldWithLabel
+                            label={"Name"}
+                            icon={{ icon: PROPERTY_CONFIGS.text_field.icon, color: PROPERTY_CONFIGS.text_field.color }}
+                            value={typed || " "}
+                            caret={showCaret}/>
+                        <TextFieldWithLabel
+                            label={"Brand"}
+                            icon={{ icon: PROPERTY_CONFIGS.text_field.icon, color: PROPERTY_CONFIGS.text_field.color }}
+                            value={"Ray-Ban"}/>
+                        <TextFieldWithLabel
+                            label={"Price"}
+                            icon={{ icon: PROPERTY_CONFIGS.number_input.icon, color: PROPERTY_CONFIGS.number_input.color }}
+                            value={"115"}/>
+                    </div>
                 </div>
             </div>
+
+            <style>{`
+                @media (prefers-reduced-motion: no-preference) {
+                    .caret { animation: sp-caret 1s steps(1, end) infinite; }
+                }
+                @keyframes sp-caret { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+            `}</style>
         </div>
     );
 }
