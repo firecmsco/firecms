@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
+import { Icon, useMaterialIcons } from "./firecms/ui";
 
 /**
  * Beat 2 of the homepage showcase: "or let an agent set it up".
@@ -51,22 +52,14 @@ const SCRIPT: Line[] = [
 /** Index of the tool call that creates the collections. */
 const SETUP_STEP = 3;
 
-const ICONS: Record<string, React.ReactNode> = {
-    cart: <><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.4 12h11L21 7H6"/></>,
-    receipt: <><path d="M5 3v18l2.5-1.6L10 21l2.5-1.6L15 21l2.5-1.6L20 21V3z"/><path d="M9 8h7M9 12h7"/></>,
-    person: <><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></>,
-    tag: <><path d="M3 3h8l10 10-8 8L3 11z"/><circle cx="7.5" cy="7.5" r="1.5"/></>,
-    star: <polygon points="12 2 15.1 8.3 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.3"/>,
-    page: <><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 17h6"/></>
-};
 
 const COLLECTIONS = [
-    { id: "products", name: "Products", icon: "cart", props: 14, docs: "256" },
-    { id: "orders", name: "Orders", icon: "receipt", props: 9, docs: "1,204" },
+    { id: "products", name: "Products", icon: "shopping_cart", props: 14, docs: "256" },
+    { id: "orders", name: "Orders", icon: "receipt_long", props: 9, docs: "1,204" },
     { id: "users", name: "Users", icon: "person", props: 7, docs: "392" },
-    { id: "categories", name: "Categories", icon: "tag", props: 4, docs: "18" },
+    { id: "categories", name: "Categories", icon: "sell", props: 4, docs: "18" },
     { id: "reviews", name: "Reviews", icon: "star", props: 6, docs: "874" },
-    { id: "pages", name: "Pages", icon: "page", props: 5, docs: "12" }
+    { id: "pages", name: "Pages", icon: "insert_drive_file", props: 5, docs: "12" }
 ];
 
 const CHEVRON = (
@@ -85,6 +78,7 @@ const CHECK = (
 
 export default function McpSessionDemo({ height = 520 }: { height?: number | string }) {
     const { ref, inView } = useInView<HTMLDivElement>();
+    useMaterialIcons();
     const [step, setStep] = useState(0);
     const [subStep, setSubStep] = useState(0);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -140,7 +134,7 @@ export default function McpSessionDemo({ height = 520 }: { height?: number | str
     return (
         <div
             ref={ref}
-            className="flex w-full select-none overflow-hidden rounded-2xl border border-surface-800 bg-[#0c0e12] font-sans text-[13px] text-surface-300"
+            className="flex w-full select-none overflow-hidden rounded-2xl border border-surface-800 bg-surface-950 font-sans text-sm text-surface-300"
             style={{ height }}
             aria-label="An AI assistant setting up FireCMS over MCP, beside the project it builds"
         >
@@ -165,10 +159,10 @@ export default function McpSessionDemo({ height = 520 }: { height?: number | str
                                 <div key={entry.name} className="flex gap-3">
                                     <span className="mt-[5px] shrink-0 text-primary">{CHEVRON}</span>
                                     <div className="min-w-0">
-                                        <code className="font-mono text-[12.5px] text-surface-100">{entry.name}</code>
+                                        <code className="font-mono text-xs text-surface-100">{entry.name}</code>
                                         <div className="mt-1 space-y-1">
                                             {entry.results.slice(0, visible).map(r => (
-                                                <div key={r} className="flex items-center gap-2 text-[12.5px] text-surface-500">
+                                                <div key={r} className="flex items-center gap-2 text-xs text-surface-500">
                                                     <span className="h-px w-3 bg-surface-700"/>
                                                     {r}
                                                 </div>
@@ -199,10 +193,10 @@ export default function McpSessionDemo({ height = 520 }: { height?: number | str
                         <ellipse cx="292" cy="291.5" rx="173" ry="173.5" fill="#FF3773"/>
                         <path d="M465 291.5C465 268.847 460.525 246.416 451.831 225.487C443.137 204.558 430.394 185.542 414.329 169.524C398.265 153.506 379.194 140.8 358.204 132.131C337.215 123.462 314.719 119 292 119C269.281 119 246.785 123.462 225.796 132.131C204.806 140.8 185.735 153.506 169.671 169.524C153.606 185.542 140.863 204.558 132.169 225.487C123.475 246.416 119 268.847 119 291.5L292 291.5H465Z" fill="#FFA400"/>
                     </svg>
-                    <span className="font-mono text-[12px] text-surface-300">my-shop-prod</span>
+                    <span className="font-mono text-xs text-surface-300">my-shop-prod</span>
                     <span
                         className={
-                            "ml-auto rounded-full px-2 py-0.5 text-[10.5px] font-medium transition-colors duration-500 " +
+                            "ml-auto rounded-full px-2 py-0.5 text-[11px] font-medium transition-colors duration-500 " +
                             (connected ? "bg-emerald-500/15 text-emerald-400" : "bg-surface-800 text-surface-500")
                         }
                     >
@@ -218,7 +212,7 @@ export default function McpSessionDemo({ height = 520 }: { height?: number | str
 
                     {shown === 0 && (
                         <div className="flex h-[70%] items-center justify-center rounded-xl border border-dashed border-surface-800">
-                            <span className="text-[12.5px] text-surface-600">
+                            <span className="text-xs text-surface-600">
                                 {connected ? "Inferring collections from live data…" : "Waiting for the agent"}
                             </span>
                         </div>
@@ -232,13 +226,11 @@ export default function McpSessionDemo({ height = 520 }: { height?: number | str
                                 style={{ animation: "cfd-land 420ms cubic-bezier(0.16,1,0.3,1) backwards", animationDelay: `${(i % 3) * 90}ms` }}
                             >
                                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                                        {ICONS[c.icon]}
-                                    </svg>
+                                    <Icon icon={c.icon} size={"small"}/>
                                 </span>
                                 <span className="min-w-0 flex-1">
-                                    <span className="block truncate text-[13px] text-surface-100">{c.name}</span>
-                                    <span className="block truncate font-mono text-[10.5px] text-surface-600">
+                                    <span className="block truncate text-sm text-surface-100">{c.name}</span>
+                                    <span className="block truncate font-mono text-[11px] text-surface-600">
                                         {c.props} properties · {c.docs} docs
                                     </span>
                                 </span>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
+import { Chip, Icon, PropertyConfigBadge, Typography, useMaterialIcons } from "./firecms/ui";
 
 /**
  * Beat 4 of the homepage showcase: "you extend it in React".
@@ -231,6 +232,7 @@ function BarcelonaMap() {
 
 export default function CustomFieldDemo({ height = 520 }: { height?: number | string }) {
     const { ref, inView } = useInView<HTMLDivElement>();
+    useMaterialIcons();
     const [step, setStep] = useState(0);
     const [revealed, setRevealed] = useState(STEPS[0].parts.length);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -256,33 +258,39 @@ export default function CustomFieldDemo({ height = 520 }: { height?: number | st
     }, [revealed, step, current.parts.length, inView]);
 
     const cardBase =
-        "flex flex-col overflow-hidden rounded-2xl border border-surface-800 bg-[#0c0e12] " +
+        "flex flex-col overflow-hidden rounded-2xl border border-surface-800 bg-surface-950 " +
         "shadow-[0_30px_70px_-30px_rgba(0,0,0,0.95)]";
 
     return (
         <div
             ref={ref}
-            className="relative w-full select-none font-sans text-[13px]"
+            className="relative w-full select-none font-sans text-sm"
             style={{ height }}
             aria-label="Two custom FireCMS fields: an anatomical body-part picker and a location map, both supplied by the developer"
         >
             {/* Card 1 — body parts */}
             <div className={cardBase + " absolute left-0 top-0 z-10 w-[660px]"} style={{ height: "calc(100% - 44px)" }}>
                 <div className="flex shrink-0 items-center gap-2 border-b border-surface-800 py-3 pl-4 pr-12">
-                    <span className="text-[11px] font-medium uppercase tracking-wider text-surface-500">Body parts</span>
-                    <span className="rounded bg-orange-500/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide text-orange-400">custom</span>
-                    <span className="text-[11px] text-surface-600">MedicalMotion</span>
+                    {/* LabelWithIcon — align-middle inline-flex items-center my-0.5 gap-2 */}
+                    <div className="align-middle inline-flex items-center my-0.5 gap-2">
+                        <PropertyConfigBadge config={"multi_select"} className={"h-6 w-6"}/>
+                        <span className="text-start font-medium text-sm text-text-primary dark:text-text-primary-dark">
+                            Body parts
+                        </span>
+                    </div>
+                    <Chip size={"smallest"}>custom</Chip>
+                    <Typography variant={"caption"} color={"disabled"}>MedicalMotion</Typography>
                 </div>
 
                 <div className="flex min-h-0 flex-1 gap-3 py-4 pl-4 pr-12">
                     <div className="flex shrink-0 items-stretch gap-2 rounded-xl border border-surface-800 bg-surface-900/60 p-2">
                         <div className="flex flex-col items-center">
                             <BodyView view="front" src="/img/body_front_c.webp" selected={selected}/>
-                            <span className="mt-1 text-[9.5px] uppercase tracking-wider text-surface-600">Front</span>
+                            <span className="mt-1 text-[10px] uppercase tracking-wider text-surface-600">Front</span>
                         </div>
                         <div className="flex flex-col items-center">
                             <BodyView view="back" src="/img/body_back_c.webp" selected={selected}/>
-                            <span className="mt-1 text-[9.5px] uppercase tracking-wider text-surface-600">Back</span>
+                            <span className="mt-1 text-[10px] uppercase tracking-wider text-surface-600">Back</span>
                         </div>
                     </div>
 
@@ -307,7 +315,7 @@ export default function CustomFieldDemo({ height = 520 }: { height?: number | st
                     </div>
                 </div>
 
-                <code className="shrink-0 overflow-x-auto whitespace-pre border-t border-surface-800 py-3 pl-4 pr-12 font-mono text-[11.5px]">
+                <code className="shrink-0 overflow-x-auto whitespace-pre border-t border-surface-800 py-3 pl-4 pr-12 font-mono text-[11px]">
                     <span className="text-sky-300">bodyParts</span>
                     <span className="text-surface-400">: [</span>
                     <span className="text-emerald-300">{selected.map(p => `"${p}"`).join(", ")}</span>
@@ -321,8 +329,13 @@ export default function CustomFieldDemo({ height = 520 }: { height?: number | st
                 style={{ left: "620px", height: "calc(100% - 44px)" }}
             >
                 <div className="flex shrink-0 items-center gap-2 border-b border-surface-800 px-4 py-3">
-                    <span className="text-[11px] font-medium uppercase tracking-wider text-surface-500">Location</span>
-                    <span className="rounded bg-orange-500/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide text-orange-400">custom</span>
+                    <div className="align-middle inline-flex items-center my-0.5 gap-2">
+                        <PropertyConfigBadge config={"geopoint"} className={"h-6 w-6"}/>
+                        <span className="text-start font-medium text-sm text-text-primary dark:text-text-primary-dark">
+                            Location
+                        </span>
+                    </div>
+                    <Chip size={"smallest"}>custom</Chip>
                 </div>
 
                 <div className="relative min-h-0 flex-1 overflow-hidden">
@@ -346,14 +359,14 @@ export default function CustomFieldDemo({ height = 520 }: { height?: number | st
 
                     {/* Readout, kept left so the bleed never eats it */}
                     <div className="absolute bottom-3 left-3 flex items-center gap-3 rounded-lg bg-black/75 px-3 py-2 backdrop-blur-sm">
-                        <span className="text-[12.5px] text-surface-100">{current.place}</span>
-                        <span className="font-mono text-[11.5px] tabular-nums text-surface-400">
+                        <span className="text-xs text-surface-100">{current.place}</span>
+                        <span className="font-mono text-[11px] tabular-nums text-surface-400">
                             {current.lat.toFixed(4)}, {current.lon.toFixed(4)}
                         </span>
                     </div>
                 </div>
 
-                <code className="shrink-0 overflow-x-auto whitespace-pre border-t border-surface-800 px-4 py-3 font-mono text-[11.5px]">
+                <code className="shrink-0 overflow-x-auto whitespace-pre border-t border-surface-800 px-4 py-3 font-mono text-[11px]">
                     <span className="text-sky-300">location</span>
                     <span className="text-surface-400">: {"{ "}</span>
                     <span className="text-sky-300">lat</span>
