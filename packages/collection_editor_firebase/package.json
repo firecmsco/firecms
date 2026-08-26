@@ -31,7 +31,8 @@
   "dependencies": {
     "@firecms/collection_editor": "workspace:^3.4.0",
     "@firecms/core": "workspace:^3.4.0",
-    "@firecms/firebase": "workspace:^3.4.0"
+    "@firecms/firebase": "workspace:^3.4.0",
+    "@firecms/schema_inference": "workspace:^3.4.0"
   },
   "peerDependencies": {
     "firebase": "^10.12.2 || ^11.0.0 || ^12.0.0",

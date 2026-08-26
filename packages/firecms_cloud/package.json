@@ -45,6 +45,7 @@
     "@firecms/firebase_admin": "workspace:^3.4.0",
     "@firecms/formex": "workspace:^3.4.0",
     "@firecms/schema_inference": "workspace:^3.4.0",
+    "@firecms/ui": "workspace:^3.4.0",
     "@firecms/user_management": "workspace:^3.4.0",
     "react-router": "^6.30.2",
     "react-router-dom": "^6.30.2"
