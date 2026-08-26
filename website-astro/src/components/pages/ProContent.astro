@@ -58,8 +58,8 @@ const tp = useTranslatedPath(lang as any);
             </div>
 
             <!-- Feature 1 -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-16 border-b border-surface-800 animate-on-scroll fade-in-up">
-                <div class="lg:col-span-5 space-y-6">
+            <div class="py-16 border-b border-surface-800 animate-on-scroll fade-in-up">
+                <div class="max-w-3xl space-y-5">
                     <div class="h-10 w-10 rounded-lg bg-yellow-400/10 flex items-center justify-center text-yellow-400">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 21l8.904-4.473L21 9l-3.482-3.482-7.705 7.705zm0 0L3 9h4.125m2.778 0H14m-2.677 3.323L9 18.125" />
@@ -70,21 +70,20 @@ const tp = useTranslatedPath(lang as any);
                         Design and modify database models dynamically inside a visual editor. Let FireCMS automatically infer schema structures directly from your existing collections, and publish schemas instantly with no code deployments needed.
                     </p>
                 </div>
-                <div class="lg:col-span-7">
-                    <div class="relative">
-                        <SchemaEditorDemo client:visible />
+                <!-- Full width: every one of these demos is a two-panel product view
+                     that goes cramped below about 900px. -->
+                <div class="mt-10 overflow-x-auto rounded-2xl">
+                    <div class="min-w-[1000px]">
+                        <div class="h-[780px] overflow-hidden rounded-2xl border border-surface-800 bg-surface-950">
+                            <SchemaEditorDemo client:visible />
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Feature 2 -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-16 border-b border-surface-800 animate-on-scroll fade-in-up delay-100">
-                <div class="lg:col-span-7 order-last lg:order-first">
-                    <div class="relative">
-                        <RolePermissionsDemo client:visible height={560} />
-                    </div>
-                </div>
-                <div class="lg:col-span-5 space-y-6">
+            <div class="py-16 border-b border-surface-800 animate-on-scroll fade-in-up delay-100">
+                <div class="max-w-3xl space-y-5">
                     <div class="h-10 w-10 rounded-lg bg-yellow-400/10 flex items-center justify-center text-yellow-400">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0110.089 21c-2.316 0-4.48-.69-6.3-1.872v-.109A4.125 4.125 0 018.125 15c1.472 0 2.822.384 4.01 1.058m1.785-3.07C14.417 12.083 14.7 11.07 14.7 10c0-2.315-1.042-4.385-2.7-5.748M14.7 10a4.7 4.7 0 01-9.4 0M10 20a1 1 0 010-2v-1.05M3 18.75V21" />
@@ -95,11 +94,18 @@ const tp = useTranslatedPath(lang as any);
                         Control who can access, edit, or delete collections with fine-grained permissions. Establish role-based access control (RBAC) rules visually and manage all team members in a secure dashboard.
                     </p>
                 </div>
+                <!-- Full width: every one of these demos is a two-panel product view
+                     that goes cramped below about 900px. -->
+                <div class="mt-10 overflow-x-auto rounded-2xl">
+                    <div class="min-w-[1000px]">
+                        <RolePermissionsDemo client:visible />
+                    </div>
+                </div>
             </div>
 
             <!-- Feature 3 -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-16 border-b border-surface-800 animate-on-scroll fade-in-up">
-                <div class="lg:col-span-5 space-y-6">
+            <div class="py-16 border-b border-surface-800 animate-on-scroll fade-in-up">
+                <div class="max-w-3xl space-y-5">
                     <div class="h-10 w-10 rounded-lg bg-yellow-400/10 flex items-center justify-center text-yellow-400">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
@@ -110,21 +116,18 @@ const tp = useTranslatedPath(lang as any);
                         Say goodbye to custom database migration scripts. Bulk-upload datasets from CSV, JSON, or Excel sheets. Map CSV columns to complex properties (like references, array fields, or nested maps) with live validation.
                     </p>
                 </div>
-                <div class="lg:col-span-7">
-                    <div class="relative">
+                <!-- Full width: every one of these demos is a two-panel product view
+                     that goes cramped below about 900px. -->
+                <div class="mt-10 overflow-x-auto rounded-2xl">
+                    <div class="min-w-[900px]">
                         <ImportMappingDemo client:visible />
                     </div>
                 </div>
             </div>
 
             <!-- Feature 4 -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-16 border-b border-surface-800 animate-on-scroll fade-in-up delay-100">
-                <div class="lg:col-span-7 order-last lg:order-first">
-                    <div class="relative">
-                        <EntityHistoryDemo client:visible />
-                    </div>
-                </div>
-                <div class="lg:col-span-5 space-y-6">
+            <div class="py-16 animate-on-scroll fade-in-up delay-100">
+                <div class="max-w-3xl space-y-5">
                     <div class="h-10 w-10 rounded-lg bg-yellow-400/10 flex items-center justify-center text-yellow-400">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
@@ -134,6 +137,13 @@ const tp = useTranslatedPath(lang as any);
                     <p class="text-surface-400 leading-relaxed">
                         Track every write operation to your Firestore database. Know exactly who made changes, what values were modified, and revert to previous versions easily using standard document histories.
                     </p>
+                </div>
+                <!-- Full width: every one of these demos is a two-panel product view
+                     that goes cramped below about 900px. -->
+                <div class="mt-10 overflow-x-auto rounded-2xl">
+                    <div class="min-w-[900px]">
+                        <EntityHistoryDemo client:visible />
+                    </div>
                 </div>
             </div>
         </div>
