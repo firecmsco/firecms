@@ -5,8 +5,30 @@
     {
       "name": "website-astro",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "preview", "--prefix", "website-astro", "--", "--port", "4877"],
+      "runtimeArgs": [
+        "run",
+        "preview",
+        "--prefix",
+        "website-astro",
+        "--",
+        "--port",
+        "4877"
+      ],
       "port": 4877
+    },
+    {
+      "name": "saas",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev:staging",
+        "--prefix",
+        "saas",
+        "--",
+        "--port",
+        "5211"
+      ],
+      "port": 5211
     }
   ]
 }

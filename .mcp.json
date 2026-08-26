@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "firecms": {
+      "command": "node",
+      "args": ["packages/mcp_server/dist/cli.js"]
+    }
+  }
+}
