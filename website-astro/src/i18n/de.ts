@@ -693,4 +693,9 @@ export const de = {
   'nav.home': 'Startseite',
   'seo.blog.title': 'FireCMS Blog — Firebase-Tutorials & CMS-Guides',
   'seo.blog.description': 'Erfahren Sie, wie Sie Firebase Admin-Panels erstellen, Firestore-Daten verwalten und das Beste aus FireCMS herausholen. Tutorials, Anleitungen, Vergleiche und technische Artikel.',
+
+  'docs.cta.title': 'Teste es mit deinen eigenen Daten',
+  'docs.cta.body': 'Verbinde ein Firebase-Projekt und FireCMS erstellt ein Admin-Panel aus deinen Firestore-Collections. Kostenlos starten, ohne Kreditkarte.',
+  'docs.cta.button': 'FireCMS Cloud öffnen',
+  'docs.cta.quickstart': 'Oder folge dem 5-Minuten-Schnellstart',
 };

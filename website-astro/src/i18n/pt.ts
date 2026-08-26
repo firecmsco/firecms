@@ -596,4 +596,9 @@ export const pt = {
   'seo.blog.description': 'Aprenda a construir painéis admin Firebase, gerenciar dados no Firestore e aproveitar ao máximo o FireCMS. Tutoriais, guias, comparações e artigos técnicos aprofundados.',
   'seo.pro.title': 'FireCMS PRO — CMS Firebase Self-Hosted',
   'seo.pro.description': 'Faça deploy de um CMS Firestore e painel admin premium e self-hosted. Editor visual de schema, importação/exportação de dados, gestão de usuários, branding personalizado e suporte prioritário.',
+
+  'docs.cta.title': 'Teste com os seus próprios dados',
+  'docs.cta.body': 'Ligue um projeto Firebase e o FireCMS cria um painel de administração a partir das suas coleções do Firestore. Gratuito para começar, sem cartão de crédito.',
+  'docs.cta.button': 'Abrir o FireCMS Cloud',
+  'docs.cta.quickstart': 'Ou siga o guia rápido de 5 minutos',
 };

@@ -690,5 +690,9 @@ export const it = {
 
   'seo.pro.title': 'FireCMS PRO — CMS Firebase self-hosted',
   'seo.pro.description': 'Distribuisci un CMS Firestore premium e self-hosted con pannello admin. Editor schema visuale, importazione/esportazione dati, gestione utenti, branding personalizzato e supporto prioritario.',
-};
 
+  'docs.cta.title': 'Provalo sui tuoi dati',
+  'docs.cta.body': 'Collega un progetto Firebase e FireCMS crea un pannello di amministrazione dalle tue collection Firestore. Gratis per iniziare, senza carta di credito.',
+  'docs.cta.button': 'Apri FireCMS Cloud',
+  'docs.cta.quickstart': 'Oppure segui la guida rapida di 5 minuti',
+};

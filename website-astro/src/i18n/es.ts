@@ -696,4 +696,9 @@ export const es = {
   'seo.pro.description': 'Desbloquea funcionalidades avanzadas con FireCMS PRO: editor visual de esquemas, gestión de usuarios y roles, importación/exportación avanzada y soporte prioritario para tu CMS Firebase autoalojado.',
   'seo.blog.title': 'Blog FireCMS — Tutoriales Firebase y Guías CMS',
   'seo.blog.description': 'Aprende a crear paneles admin Firebase, gestionar datos Firestore y sacar el máximo partido a FireCMS. Tutoriales, guías, comparativas y artículos técnicos.',
+
+  'docs.cta.title': 'Pruébalo con tus propios datos',
+  'docs.cta.body': 'Conecta un proyecto de Firebase y FireCMS crea un panel de administración a partir de tus colecciones de Firestore. Gratis para empezar, sin tarjeta de crédito.',
+  'docs.cta.button': 'Abrir FireCMS Cloud',
+  'docs.cta.quickstart': 'O sigue la guía rápida de 5 minutos',
 };

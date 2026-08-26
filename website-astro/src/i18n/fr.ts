@@ -689,4 +689,9 @@ export const fr = {
   'nav.home': 'Accueil',
   'seo.blog.title': 'Blog FireCMS — Tutoriels Firebase & Guides CMS',
   'seo.blog.description': 'Apprenez à créer des panels admin Firebase, gérer vos données Firestore et tirer le meilleur parti de FireCMS. Tutoriels, guides, comparatifs et articles techniques.',
+
+  'docs.cta.title': 'Essayez-le avec vos propres données',
+  'docs.cta.body': "Connectez un projet Firebase et FireCMS génère un panneau d'administration à partir de vos collections Firestore. Gratuit au démarrage, sans carte bancaire.",
+  'docs.cta.button': 'Ouvrir FireCMS Cloud',
+  'docs.cta.quickstart': 'Ou suivez le guide de démarrage en 5 minutes',
 };

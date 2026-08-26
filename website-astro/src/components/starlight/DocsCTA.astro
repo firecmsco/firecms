@@ -1,0 +1,153 @@
+---
+import Icon from "../Icon.astro";
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+// `ref` lands in the auto-fired `go_to_app` event label (see scripts/enhance-app-links.js),
+// so clicks from this block can be told apart from the header button in GA4.
+const appHref = "https://app.firecms.co/?ref=docs_cta";
+const quickstartHref = translatePath("/docs/cloud/quickstart/");
+---
+
+<aside class="docs-cta print:hidden" data-pagefind-ignore>
+    <div class="docs-cta__text">
+        <h2 class="docs-cta__title">{t("docs.cta.title")}</h2>
+        <p class="docs-cta__body">{t("docs.cta.body")}</p>
+    </div>
+    <div class="docs-cta__actions">
+        <a class="docs-cta__button"
+           href={appHref}
+           target="_blank"
+           rel="noopener noreferrer">
+            {t("docs.cta.button")}
+            <Icon name="arrow-right" class="docs-cta__icon"/>
+        </a>
+        <a class="docs-cta__secondary" href={quickstartHref}>
+            {t("docs.cta.quickstart")}
+        </a>
+    </div>
+</aside>
+
+<style>
+    .docs-cta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem 2rem;
+        max-width: 60rem;
+        margin: 4rem auto 3rem;
+        padding: 1.75rem 1.75rem;
+        border: 1px solid var(--sl-color-gray-5);
+        border-radius: 0.75rem;
+        background:
+            linear-gradient(120deg,
+                color-mix(in oklab, var(--color-primary) 16%, transparent),
+                transparent 62%),
+            var(--sl-color-gray-6);
+    }
+
+    .docs-cta__text {
+        flex: 1 1 22rem;
+        min-width: 0;
+    }
+
+    .docs-cta__title {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+        line-height: 1.25;
+        color: var(--sl-color-white);
+        text-wrap: balance;
+    }
+
+    .docs-cta__body {
+        margin: 0.5rem 0 0;
+        font-size: 0.9375rem;
+        line-height: 1.55;
+        color: var(--sl-color-gray-3);
+        max-width: 46ch;
+    }
+
+    .docs-cta__actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+        flex-shrink: 0;
+    }
+
+    .docs-cta__button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.7rem 1.35rem;
+        border-radius: 0.375rem;
+        background: var(--color-primary);
+        color: #fff;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+        box-shadow: 0 1px 2px rgb(0 0 0 / 0.16);
+        transition: background-color 200ms ease, transform 200ms ease;
+    }
+
+    .docs-cta__button:hover {
+        background: var(--color-primary-dark);
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+    .docs-cta__button:focus-visible {
+        outline: 2px solid var(--color-primary-light);
+        outline-offset: 3px;
+    }
+
+    .docs-cta__icon {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .docs-cta__secondary {
+        font-size: 0.8125rem;
+        color: var(--sl-color-gray-3);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+    }
+
+    .docs-cta__secondary:hover,
+    .docs-cta__secondary:focus-visible {
+        color: var(--sl-color-white);
+        border-bottom-color: currentColor;
+    }
+
+    @media (max-width: 50rem) {
+        .docs-cta {
+            margin: 3rem auto 2rem;
+            padding: 1.5rem 1.25rem;
+        }
+
+        .docs-cta__actions {
+            width: 100%;
+        }
+
+        .docs-cta__button {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .docs-cta__button {
+            transition: none;
+        }
+
+        .docs-cta__button:hover {
+            transform: none;
+        }
+    }
+</style>
