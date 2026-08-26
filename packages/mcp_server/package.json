@@ -1,6 +1,6 @@
 {
   "name": "@firecms/mcp-server",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "publishConfig": {
     "access": "public"
   },
@@ -19,8 +19,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@firecms/cli": "workspace:^3.3.0",
-    "@firecms/schema_inference": "workspace:^3.3.0",
+    "@firecms/cli": "workspace:^3.4.0",
+    "@firecms/schema_inference": "workspace:^3.4.0",
     "@modelcontextprotocol/sdk": "^1.12.1",
     "axios": "^1.16.1",
     "zod": "^3.24.0"

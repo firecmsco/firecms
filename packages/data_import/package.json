@@ -1,17 +1,17 @@
 {
   "name": "@firecms/data_import",
   "type": "module",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "access": "public",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "workspace:^3.3.0",
-    "@firecms/formex": "workspace:^3.3.0",
-    "@firecms/schema_inference": "workspace:^3.3.0",
-    "@firecms/ui": "workspace:^3.3.0",
+    "@firecms/core": "workspace:^3.4.0",
+    "@firecms/formex": "workspace:^3.4.0",
+    "@firecms/schema_inference": "workspace:^3.4.0",
+    "@firecms/ui": "workspace:^3.4.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
   },
   "peerDependencies": {

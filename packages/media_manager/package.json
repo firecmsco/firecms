@@ -1,7 +1,7 @@
 {
   "name": "@firecms/media_manager",
   "type": "module",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "publishConfig": {
     "access": "public"
   },
@@ -27,9 +27,9 @@
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "workspace:^3.3.0",
-    "@firecms/formex": "workspace:^3.3.0",
-    "@firecms/ui": "workspace:^3.3.0"
+    "@firecms/core": "workspace:^3.4.0",
+    "@firecms/formex": "workspace:^3.4.0",
+    "@firecms/ui": "workspace:^3.4.0"
   },
   "peerDependencies": {
     "react": ">=18.3.1 || >=19.0.0",

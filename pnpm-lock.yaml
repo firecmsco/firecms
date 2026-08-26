@@ -555,7 +555,7 @@ importers:
         version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/datatalk':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/entity_history':
         specifier: ^3.3.0
         version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
@@ -766,25 +766,25 @@ importers:
   packages/collection_editor:
     dependencies:
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/data_export':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_export
       '@firecms/data_import':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_import
       '@firecms/data_import_export':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_import_export
       '@firecms/formex':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../formex
       '@firecms/schema_inference':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../schema_inference
       '@firecms/ui':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../ui
       json5:
         specifier: ^2.2.3
@@ -839,13 +839,13 @@ importers:
   packages/collection_editor_firebase:
     dependencies:
       '@firecms/collection_editor':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../collection_editor
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/firebase':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firebase_firecms
       firebase:
         specifier: ^10.12.2 || ^11.0.0 || ^12.0.0
@@ -882,7 +882,7 @@ importers:
   packages/create_firecms_app:
     dependencies:
       '@firecms/cli':
-        specifier: workspace:^3.1.0
+        specifier: workspace:^3.4.0
         version: link:../cli
     devDependencies:
       '@types/node':
@@ -898,10 +898,10 @@ importers:
   packages/data_enhancement:
     dependencies:
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/ui':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../ui
       firebase:
         specifier: ^10.12.2 || ^11.0.0 || ^12.0.0
@@ -959,16 +959,16 @@ importers:
   packages/data_export:
     dependencies:
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/formex':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../formex
       '@firecms/schema_inference':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../schema_inference
       '@firecms/ui':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../ui
       react:
         specifier: '>=18.3.1 || >=19.0.0'
@@ -1026,16 +1026,16 @@ importers:
   packages/data_import:
     dependencies:
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/formex':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../formex
       '@firecms/schema_inference':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../schema_inference
       '@firecms/ui':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../ui
       react:
         specifier: '>=18.3.1 || >=19.0.0'
@@ -1096,13 +1096,13 @@ importers:
   packages/data_import_export:
     dependencies:
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/data_export':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_export
       '@firecms/data_import':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_import
       react:
         specifier: '>=18.3.1 || >=19.0.0'
@@ -1154,31 +1154,31 @@ importers:
   packages/datatalk:
     dependencies:
       '@firecms/collection_editor_firebase':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../collection_editor_firebase
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/data_export':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_export
       '@firecms/data_import':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_import
       '@firecms/data_import_export':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_import_export
       '@firecms/firebase':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firebase_firecms
       '@firecms/formex':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../formex
       '@firecms/schema_inference':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../schema_inference
       '@firecms/ui':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../ui
       '@monaco-editor/react':
         specifier: ^4.7.0
@@ -1212,13 +1212,13 @@ importers:
   packages/entity_history:
     dependencies:
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/formex':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../formex
       '@firecms/ui':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../ui
       react:
         specifier: '>=18.3.1 || >=19.0.0'
@@ -1282,13 +1282,13 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2(react@19.2.7)
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/formex':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../formex
       '@firecms/ui':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../ui
       firebase:
         specifier: ^10.12.2 || ^11.0.0 || ^12.0.0
@@ -1343,28 +1343,28 @@ importers:
   packages/firebase_firecms:
     dependencies:
       '@firecms/collection_editor':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../collection_editor
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/data_enhancement':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_enhancement
       '@firecms/data_export':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_export
       '@firecms/data_import':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_import
       '@firecms/data_import_export':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_import_export
       '@firecms/schema_inference':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../schema_inference
       '@firecms/ui':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../ui
       firebase:
         specifier: ^10.12.2 || ^11.0.0 || ^12.0.0
@@ -1410,7 +1410,7 @@ importers:
   packages/firecms:
     dependencies:
       '@firecms/cli':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../cli
     devDependencies:
       '@types/node':
@@ -1426,46 +1426,46 @@ importers:
   packages/firecms_cloud:
     dependencies:
       '@firecms/cli':
-        specifier: workspace:^3.1.0
+        specifier: workspace:^3.4.0
         version: link:../cli
       '@firecms/collection_editor':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../collection_editor
       '@firecms/collection_editor_firebase':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../collection_editor_firebase
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/data_enhancement':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_enhancement
       '@firecms/data_export':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_export
       '@firecms/data_import':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../data_import
       '@firecms/datatalk':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../datatalk
       '@firecms/entity_history':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../entity_history
       '@firecms/firebase':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firebase_firecms
       '@firecms/firebase_admin':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firebase_admin
       '@firecms/formex':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../formex
       '@firecms/schema_inference':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../schema_inference
       '@firecms/user_management':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../user_management
       firebase:
         specifier: ^12.9.0
@@ -1517,10 +1517,10 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0(@dnd-kit/core@6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
       '@firecms/formex':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../formex
       '@firecms/ui':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../ui
       '@floating-ui/dom':
         specifier: ^1.7.4
@@ -1786,10 +1786,10 @@ importers:
   packages/mcp_server:
     dependencies:
       '@firecms/cli':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../cli
       '@firecms/schema_inference':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../schema_inference
       '@modelcontextprotocol/sdk':
         specifier: ^1.12.1
@@ -1811,13 +1811,13 @@ importers:
   packages/media_manager:
     dependencies:
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/formex':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../formex
       '@firecms/ui':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../ui
       react:
         specifier: '>=18.3.1 || >=19.0.0'
@@ -2020,13 +2020,13 @@ importers:
   packages/user_management:
     dependencies:
       '@firecms/core':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../firecms_core
       '@firecms/formex':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../formex
       '@firecms/ui':
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.4.0
         version: link:../ui
       date-fns:
         specifier: ^3.6.0
@@ -7378,6 +7378,7 @@ packages:
   eslint@9.39.4:
     resolution: {integrity: sha512-XoMjdBOwe/esVgEvLmNsD3IRHkm7fbKIUGvrleloJXUZgDHig2IPWNniv+GwjyJXzuNqVjlr5+4yVUZjycJwfQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -13861,7 +13862,7 @@ snapshots:
       '@firecms/data_enhancement': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/datatalk': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/datatalk': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/entity_history': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/firebase_admin': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
@@ -14195,37 +14196,7 @@ snapshots:
       - supports-color
       - vite
 
-  '@firecms/datatalk@3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
-    dependencies:
-      '@firecms/collection_editor_firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@monaco-editor/react': 4.7.0(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      react: 19.2.7
-      react-dom: 19.2.7(react@19.2.7)
-    transitivePeerDependencies:
-      - '@firebase/app'
-      - '@react-native-async-storage/async-storage'
-      - '@types/react'
-      - '@types/react-dom'
-      - csstype
-      - debug
-      - firebase
-      - monaco-editor
-      - react-native
-      - react-router
-      - react-router-dom
-      - supports-color
-      - typesense
-      - vite
-
-  '@firecms/datatalk@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/datatalk@3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@firecms/collection_editor_firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))

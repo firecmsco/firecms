@@ -1,6 +1,6 @@
 {
   "name": "@firecms/datatalk",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "Talk to your Firestore data",
   "type": "module",
   "main": "dist/index.cjs",
@@ -30,15 +30,15 @@
     "react-dom": ">=18.3.1 || >=19.0.0"
   },
   "dependencies": {
-    "@firecms/collection_editor_firebase": "workspace:^3.3.0",
-    "@firecms/core": "workspace:^3.3.0",
-    "@firecms/data_export": "workspace:^3.3.0",
-    "@firecms/data_import": "workspace:^3.3.0",
-    "@firecms/data_import_export": "workspace:^3.3.0",
-    "@firecms/firebase": "workspace:^3.3.0",
-    "@firecms/formex": "workspace:^3.3.0",
-    "@firecms/schema_inference": "workspace:^3.3.0",
-    "@firecms/ui": "workspace:^3.3.0",
+    "@firecms/collection_editor_firebase": "workspace:^3.4.0",
+    "@firecms/core": "workspace:^3.4.0",
+    "@firecms/data_export": "workspace:^3.4.0",
+    "@firecms/data_import": "workspace:^3.4.0",
+    "@firecms/data_import_export": "workspace:^3.4.0",
+    "@firecms/firebase": "workspace:^3.4.0",
+    "@firecms/formex": "workspace:^3.4.0",
+    "@firecms/schema_inference": "workspace:^3.4.0",
+    "@firecms/ui": "workspace:^3.4.0",
     "@monaco-editor/react": "^4.7.0"
   },
   "devDependencies": {
