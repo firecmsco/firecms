@@ -45,14 +45,13 @@ const targetDirPath = findSpecificParentDir(__dirname, "cli");
 
 export type Template = "cloud" | "next-pro" | "pro" | "community" | "astro";
 export type InitOptions = Partial<{
-    // skipPrompts: boolean;
+    /** Set by `--yes`: take every answer from the flags and defaults. */
+    skipPrompts: boolean;
     git: boolean;
     dir_name: string;
 
     targetDirectory: string;
     templateDirectory: string;
-
-    // skipInstall: boolean;
 
     authToken?: string;
     firebaseProjectId?: string;
@@ -178,18 +177,34 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
         template,
         debug: args["--debug"] || false,
         firebaseProjectId: args["--projectId"],
+        skipPrompts: args["--yes"] || false,
         env
     };
 }
 
 async function promptForMissingOptions(options: InitOptions): Promise<InitOptions> {
     const defaultName = "my-cms";
-    // if (options.skipPrompts) {
-    //     return {
-    //         ...options,
-    //         dir_name: options.dir_name || defaultName,
-    //     };
-    // }
+
+    if (options.skipPrompts) {
+        // Every answer has to come from the flags, so anything still missing is
+        // an error rather than something to guess at — silently scaffolding a
+        // project against the wrong Firebase project is worse than stopping.
+        if (!options.template) {
+            console.log("%s %s", chalk.red.bold("ERROR"),
+                "--yes needs the template as a flag: --cloud, --pro, --next-pro, --community or --astro");
+            process.exit(1);
+        }
+        if (options.template === "cloud" && !options.firebaseProjectId) {
+            console.log("%s %s", chalk.red.bold("ERROR"),
+                "--yes with --cloud needs --projectId <your-firebase-project-id>");
+            process.exit(1);
+        }
+        return {
+            ...options,
+            dir_name: options.dir_name || defaultName,
+            git: options.git || false
+        };
+    }
 
     const questions = [];
 
@@ -385,7 +400,9 @@ export async function createProject(options: InitOptions) {
         "./templates/" + templateFolder
     );
     options.templateDirectory = templateDir;
-    console.log("DEBUG - templateDir resolved to:", templateDir);
+    if (options.debug) {
+        console.log("Template directory:", templateDir);
+    }
 
     try {
         await access(templateDir, fs.constants.R_OK);
