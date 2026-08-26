@@ -305,6 +305,24 @@ const faqSchema = faqItems && faqItems.length > 0 ? {
                 var segments = pathname.split('/').filter(Boolean);
                 var currentLang = knownLangs.indexOf(segments[0]) !== -1 ? segments[0] : 'en';
 
+                // Never redirect away from an explicitly localised URL.
+                //
+                // Googlebot renders this page with an empty document.referrer and
+                // navigator.languages === ['en-US', 'en'], and it has no stored
+                // preference. Without this guard every /es/, /de/, /fr/, /it/ and
+                // /pt/ marketing URL ran location.replace() straight to the English
+                // equivalent while Google was rendering it, so Google filed all 65 of
+                // them as "Page with redirect" and dropped them from the index. The
+                // localised *docs* are unaffected because Starlight pages don't use
+                // this layout — which is exactly why 1,115 of those are indexed and
+                // only 14 marketing URLs are.
+                //
+                // Auto-detection now runs only on the default-locale (English) URLs.
+                // That is also what Google asks for: redirect from the generic
+                // version towards a language, never away from a language-specific
+                // URL a user or a search engine deliberately asked for.
+                if (currentLang !== 'en') return;
+
                 // Compute the unlocalized path (strip any lang prefix)
                 var unlocalizedPath = knownLangs.indexOf(segments[0]) !== -1
                     ? '/' + segments.slice(1).join('/')

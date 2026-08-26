@@ -51,6 +51,24 @@ const dataTalkExchanges = [
                 <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48 animate-on-scroll fade-in-up delay-100">
                     {t('features.subtitle')}
                 </p>
+                <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 animate-on-scroll fade-in-up delay-100">
+                    <a href="https://app.firecms.co"
+                       data-track
+                       id="features-hero-start-building"
+                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
+                        {t('hero.cta.start')}
+                        <Icon name="arrow-right" class="text-white h-5 w-5"/>
+                    </a>
+                    <a href="https://demo.firecms.co"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       data-track
+                       id="features-hero-demo"
+                       class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+                        {t('features.cta.demo')}
+                        <Icon name="arrow-right" class="text-white h-4 w-4"/>
+                    </a>
+                </div>
             </div>
             <SectionBackgroundAccents bottomLine={true}/>
         </section>
@@ -224,19 +242,25 @@ const dataTalkExchanges = [
         <section class="bg-black py-24 sm:py-32">
             <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
                 <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">{t('features.cta.title')}</h2>
-                <div class="flex items-center justify-center gap-x-6">
-                    <a href="https://demo.firecms.co"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
-                        {t('features.cta.demo')}
-                        <Icon name="arrow-right" class="text-white h-5 w-5"/>
-                    </a>
+                <!-- The primary (glowing) button goes to the app, not the demo:
+                     the demo is a read-only sandbox and cannot convert. -->
+                <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
                     <a href="https://app.firecms.co"
                        target="_blank"
                        rel="noopener noreferrer"
-                       class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+                       data-track
+                       id="features-cta-try-cloud"
+                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
                         {t('features.cta.cloud')}
+                        <Icon name="arrow-right" class="text-white h-5 w-5"/>
+                    </a>
+                    <a href="https://demo.firecms.co"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       data-track
+                       id="features-cta-demo"
+                       class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+                        {t('features.cta.demo')}
                         <Icon name="arrow-right" class="text-white h-4 w-4"/>
                     </a>
                 </div>
