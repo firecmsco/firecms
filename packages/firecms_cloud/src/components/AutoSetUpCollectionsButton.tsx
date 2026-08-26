@@ -1,7 +1,7 @@
 import React from "react";
 import { AIIcon, ConfirmationDialog, useSnackbarController, useTranslation } from "@firecms/core";
 import { LoadingButton, Typography } from "@firecms/ui";
-import { ProjectsApi, RootCollectionInfo } from "../api/projects";
+import { InitialCollectionsSetupDiagnostics, ProjectsApi, RootCollectionInfo } from "../api/projects";
 import { useCollectionsConfigController } from "@firecms/collection_editor";
 import { CollectionSetupSelectionDialog } from "./CollectionSetupSelectionDialog";
 
@@ -22,8 +22,9 @@ export function AutoSetUpCollectionsButton({
     projectId: string;
     onClick?: () => void;
     onSuccess?: () => void;
-    onNoCollections?: () => void;
-    onError?: () => void;
+    /** Receives why the list came back empty - notably `listingFailed`. */
+    onNoCollections?: (diagnostics?: InitialCollectionsSetupDiagnostics) => void;
+    onError?: (error: Error) => void;
     askConfirmation?: boolean;
     small?: boolean;
     suggestions?: RootCollectionInfo[];
@@ -50,11 +51,12 @@ export function AutoSetUpCollectionsButton({
             message: t("setting_up_collections"),
             type: "info"
         });
-        projectsApi.initialCollectionsSetup(projectId)
+        let diagnostics: InitialCollectionsSetupDiagnostics | undefined;
+        projectsApi.initialCollectionsSetup(projectId, (d) => { diagnostics = d; })
             .then((collections) => {
                 console.log("Collections set up", collections);
                 if (!collections || collections.length === 0) {
-                    onNoCollections?.();
+                    onNoCollections?.(diagnostics);
                     snackbarController.open({
                         message: t("no_collections_found_to_setup"),
                         type: "info"
@@ -68,7 +70,7 @@ export function AutoSetUpCollectionsButton({
                 }
             })
             .catch((error) => {
-                onError?.();
+                onError?.(error instanceof Error ? error : new Error(String(error)));
                 console.error("Error setting up collections", error);
                 snackbarController.open({
                     message: t("error_setting_up_collections"),
@@ -110,8 +112,8 @@ export function AutoSetUpCollectionsButton({
                     onSuccess?.();
                     setSetupRequested(false);
                 }}
-                onError={() => {
-                    onError?.();
+                onError={(error) => {
+                    onError?.(error);
                 }}
             />
             : <ConfirmationDialog

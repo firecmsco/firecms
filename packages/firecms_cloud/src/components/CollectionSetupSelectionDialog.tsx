@@ -28,7 +28,7 @@ export function CollectionSetupSelectionDialog({
     projectsApi: ProjectsApi;
     projectId: string;
     onSuccess?: () => void;
-    onError?: () => void;
+    onError?: (error: Error) => void;
 }) {
     const { t } = useTranslation();
     const snackbarController = useSnackbarController();
@@ -100,7 +100,7 @@ export function CollectionSetupSelectionDialog({
                 message: t("error_setting_up_collections"),
                 type: "error"
             });
-            onError?.();
+            onError?.(error instanceof Error ? error : new Error(String(error)));
         } finally {
             setLoading(false);
         }

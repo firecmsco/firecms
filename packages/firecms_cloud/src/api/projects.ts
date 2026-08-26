@@ -2,6 +2,23 @@ import { ApiError, FireCMSCloudUserWithRoles, SubscriptionType } from "../types"
 import { handleApiResponse } from "./common";
 import { EntityCollection } from "@firecms/core";
 
+/**
+ * Why an initial collections setup returned the list it did.
+ *
+ * `collections: []` on its own is ambiguous: the backend answers 200 with an
+ * empty list both when the project genuinely has no root collections and when
+ * listing them failed after all retries (a 403 while IAM permissions propagate
+ * is an expected cause). `listingFailed` separates the two.
+ */
+export type InitialCollectionsSetupDiagnostics = {
+    /** Firestore database the root collections were listed from. */
+    databaseId?: string;
+    /** Root collections seen before schema inference. */
+    rootCollectionsFound?: number;
+    /** True when the listing itself failed, rather than finding nothing. */
+    listingFailed?: boolean;
+};
+
 export type ProjectsApi = ReturnType<typeof buildProjectsApi>;
 
 export type RootCollectionInfo = {
@@ -383,7 +400,17 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         return `${host}/projects/${projectId}/app_config/${revisionId}/${await getBackendAuthToken()}/remoteEntry.js`;
     }
 
-    async function initialCollectionsSetup(projectId: string): Promise<EntityCollection[]> {
+    /**
+     * @param onDiagnostics optional; receives why the returned list looks the way
+     * it does. An empty list is ambiguous on its own - the backend answers 200
+     * with `collections: []` both when the project genuinely has no root
+     * collections and when listing them failed outright - so callers that report
+     * the outcome to a user or to analytics should read `listingFailed`.
+     */
+    async function initialCollectionsSetup(
+        projectId: string,
+        onDiagnostics?: (diagnostics: InitialCollectionsSetupDiagnostics) => void
+    ): Promise<EntityCollection[]> {
         const firebaseAccessToken = await getBackendAuthToken();
         return fetch(`${host}/projects/${projectId}/initial_setup`,
             {
@@ -392,7 +419,14 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 body: JSON.stringify({ projectId })
             })
             .then(async (res) => {
-                const data = await handleApiResponse<{ collections: EntityCollection[] }>(res, projectId);
+                const data = await handleApiResponse<{
+                    collections: EntityCollection[]
+                } & InitialCollectionsSetupDiagnostics>(res, projectId);
+                onDiagnostics?.({
+                    databaseId: data.databaseId,
+                    rootCollectionsFound: data.rootCollectionsFound,
+                    listingFailed: data.listingFailed
+                });
                 return data.collections;
             });
     }
