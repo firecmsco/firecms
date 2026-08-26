@@ -1,4 +1,5 @@
 ---
+import Icon from "../Icon.astro";
 import SectionBackgroundAccents from "../SectionBackgroundAccents.astro";
 import ScreenshotsMarquee from "../ScreenshotsMarquee.astro";
 import ClientLogos from "../ClientLogos.astro";
@@ -159,42 +160,42 @@ const spreadsheetIcon = `<svg class="h-10 w-10 mb-4 text-primary" fill="none" vi
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div class="flex items-start space-x-4 rounded-lg bg-surface-900/50 p-4 ring-1 ring-inset ring-surface-800 p-8">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg" alt="Firebase/MongoDB Native" class="h-6 w-6 filter invert mt-1"/>
+                    <Icon name="database" class="text-white h-6 w-6 mt-1" label="Firebase/MongoDB Native"/>
                     <div>
                         <h3 class="font-semibold text-white">{t('startups.features.f1.title')}</h3>
                         <p class="text-sm text-surface-400">{t('startups.features.f1.desc')}</p>
                     </div>
                 </div>
                 <div class="flex items-start space-x-4 rounded-lg bg-surface-900/50 p-4 ring-1 ring-inset ring-surface-800 p-8">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cloud-off.svg" alt="Zero Server Management" class="h-6 w-6 filter invert mt-1"/>
+                    <Icon name="cloud-off" class="text-white h-6 w-6 mt-1" label="Zero Server Management"/>
                     <div>
                         <h3 class="font-semibold text-white">{t('startups.features.f2.title')}</h3>
                         <p class="text-sm text-surface-400">{t('startups.features.f2.desc')}</p>
                     </div>
                 </div>
                 <div class="flex items-start space-x-4 rounded-lg bg-surface-900/50 p-4 ring-1 ring-inset ring-surface-800 p-8">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/edit.svg" alt="Schema Editor & Inference" class="h-6 w-6 filter invert mt-1"/>
+                    <Icon name="edit" class="text-white h-6 w-6 mt-1" label="Schema Editor & Inference"/>
                     <div>
                         <h3 class="font-semibold text-white">{t('startups.features.f3.title')}</h3>
                         <p class="text-sm text-surface-400">{t('startups.features.f3.desc')}</p>
                     </div>
                 </div>
                 <div class="flex items-start space-x-4 rounded-lg bg-surface-900/50 p-4 ring-1 ring-inset ring-surface-800 p-8">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-input.svg" alt="Powerful Editing Tools" class="h-6 w-6 filter invert mt-1"/>
+                    <Icon name="file-input" class="text-white h-6 w-6 mt-1" label="Powerful Editing Tools"/>
                     <div>
                         <h3 class="font-semibold text-white">{t('startups.features.f4.title')}</h3>
                         <p class="text-sm text-surface-400">{t('startups.features.f4.desc')}</p>
                     </div>
                 </div>
                 <div class="flex items-start space-x-4 rounded-lg bg-surface-900/50 p-4 ring-1 ring-inset ring-surface-800 p-8">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg" alt="Role-Based Access Control" class="h-6 w-6 filter invert mt-1"/>
+                    <Icon name="shield-check" class="text-white h-6 w-6 mt-1" label="Role-Based Access Control"/>
                     <div>
                         <h3 class="font-semibold text-white">{t('startups.features.f5.title')}</h3>
                         <p class="text-sm text-surface-400">{t('startups.features.f5.desc')}</p>
                     </div>
                 </div>
                 <div class="flex items-start space-x-4 rounded-lg bg-surface-900/50 p-4 ring-1 ring-inset ring-surface-800 p-8">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/puzzle.svg" alt="Flexible Customization" class="h-6 w-6 filter invert mt-1"/>
+                    <Icon name="puzzle" class="text-white h-6 w-6 mt-1" label="Flexible Customization"/>
                     <div>
                         <h3 class="font-semibold text-white">{t('startups.features.f6.title')}</h3>
                         <p class="text-sm text-surface-400">{t('startups.features.f6.desc')}</p>
@@ -297,14 +298,12 @@ const spreadsheetIcon = `<svg class="h-10 w-10 mb-4 text-primary" fill="none" vi
                    rel="noopener noreferrer"
                    class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
                     {t('startups.cta.trial')}
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                         class="h-5 w-5 text-white filter invert"/>
+                    <Icon name="arrow-right" class="text-white h-5 w-5"/>
                 </a>
                 <a href="/contact"
                    class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
                     {t('startups.cta.sales')}
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                         class="h-4 w-4 text-white filter invert"/>
+                    <Icon name="arrow-right" class="text-white h-4 w-4"/>
                 </a>
             </div>
         </div>

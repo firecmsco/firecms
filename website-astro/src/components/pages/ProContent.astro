@@ -1,4 +1,9 @@
 ---
+import ImportMappingDemo from "../ImportMappingDemo.tsx";
+import { SchemaEditorDemo } from "../SchemaEditorDemo.tsx";
+import RolePermissionsDemo from "../RolePermissionsDemo.tsx";
+import EntityHistoryDemo from "../EntityHistoryDemo.tsx";
+import Icon from "../Icon.astro";
 // src/components/pages/ProContent.astro
 import SectionBackgroundAccents from "../SectionBackgroundAccents.astro";
 import { useTranslatedPath } from "../../i18n/utils";
@@ -66,8 +71,8 @@ const tp = useTranslatedPath(lang as any);
                     </p>
                 </div>
                 <div class="lg:col-span-7">
-                    <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900/50 p-2">
-                        <img src="/img/toleroo_recipe.webp" alt="Visual Schema Builder" class="rounded-xl w-full shadow-2xl" />
+                    <div class="relative">
+                        <SchemaEditorDemo client:visible />
                     </div>
                 </div>
             </div>
@@ -75,8 +80,8 @@ const tp = useTranslatedPath(lang as any);
             <!-- Feature 2 -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-16 border-b border-surface-800 animate-on-scroll fade-in-up delay-100">
                 <div class="lg:col-span-7 order-last lg:order-first">
-                    <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900/50 p-2">
-                        <img src="/img/prime_um.png" alt="User Management UI" class="rounded-xl w-full shadow-2xl" />
+                    <div class="relative">
+                        <RolePermissionsDemo client:visible height={560} />
                     </div>
                 </div>
                 <div class="lg:col-span-5 space-y-6">
@@ -106,8 +111,8 @@ const tp = useTranslatedPath(lang as any);
                     </p>
                 </div>
                 <div class="lg:col-span-7">
-                    <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900/50 p-2">
-                        <img src="/img/import_mapping.webp" alt="Import Data Visual Mapping" class="rounded-xl w-full shadow-2xl" />
+                    <div class="relative">
+                        <ImportMappingDemo client:visible />
                     </div>
                 </div>
             </div>
@@ -115,8 +120,8 @@ const tp = useTranslatedPath(lang as any);
             <!-- Feature 4 -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-16 border-b border-surface-800 animate-on-scroll fade-in-up delay-100">
                 <div class="lg:col-span-7 order-last lg:order-first">
-                    <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900/50 p-2">
-                        <img src="/img/history.png" alt="Entity History & Audit Trail" class="rounded-xl w-full shadow-2xl" />
+                    <div class="relative">
+                        <EntityHistoryDemo client:visible />
                     </div>
                 </div>
                 <div class="lg:col-span-5 space-y-6">
@@ -240,14 +245,12 @@ const tp = useTranslatedPath(lang as any);
                 <a href="https://app.firecms.co/subscriptions" target="_blank" rel="noopener noreferrer"
                    class="inline-flex items-center gap-x-2 rounded-md bg-yellow-400 px-6 py-3 text-base font-semibold text-black shadow-sm hover:bg-yellow-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-400 transition-all duration-200 ease-in-out btn-glow">
                     Buy PRO License
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                         class="h-5 w-5 text-black"/>
+                    <Icon name="arrow-right" class="text-white h-5 w-5 text-black"/>
                 </a>
                 <a href={tp("/pricing")}
                    class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
                     Compare Plans
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                         class="h-4 w-4 text-white filter invert"/>
+                    <Icon name="arrow-right" class="text-white h-4 w-4"/>
                 </a>
             </div>
         </div>

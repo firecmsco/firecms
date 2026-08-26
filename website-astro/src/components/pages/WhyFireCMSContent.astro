@@ -1,4 +1,6 @@
 ---
+import ProductsCollectionDemo from "../ProductsCollectionDemo.tsx";
+import Icon from "../Icon.astro";
 // src/components/pages/WhyFireCMSContent.astro
 import SectionBackgroundAccents from "../SectionBackgroundAccents.astro";
 
@@ -25,6 +27,18 @@ const { lang, t } = Astro.props;
             <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
                 {t('why.hero.subtitle')}
             </p>
+
+            <!-- The page argued for the product without ever showing it. -->
+            <div class="mt-14 text-left">
+                <div class="overflow-x-auto rounded-xl">
+                    <div class="min-w-[880px]">
+                        <ProductsCollectionDemo client:visible />
+                    </div>
+                </div>
+                <p class="mt-4 text-center text-sm text-surface-500">
+                    FireCMS editing a Firestore collection — your documents, your project.
+                </p>
+            </div>
         </div>
     </section>
 
@@ -37,27 +51,27 @@ const { lang, t } = Astro.props;
             </div>
             <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 <a href={lang === 'en' ? "/developers" : `/${lang}/developers`} class="relative block overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800 hover:bg-surface-900 transition-colors">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <Icon name="code" class="text-white h-8 w-8 mb-4"/>
                     <h3 class="text-xl font-semibold text-white mb-2">{t('why.explore.developers.title')}</h3>
                     <p class="text-surface-400">{t('why.explore.developers.desc')}</p>
                 </a>
                 <a href={lang === 'en' ? "/startups" : `/${lang}/startups`} class="relative block overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800 hover:bg-surface-900 transition-colors">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <Icon name="rocket" class="text-white h-8 w-8 mb-4"/>
                     <h3 class="text-xl font-semibold text-white mb-2">{t('why.explore.startups.title')}</h3>
                     <p class="text-surface-400">{t('why.explore.startups.desc')}</p>
                 </a>
                 <a href={lang === 'en' ? "/agencies" : `/${lang}/agencies`} class="relative block overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800 hover:bg-surface-900 transition-colors">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/briefcase.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <Icon name="briefcase" class="text-white h-8 w-8 mb-4"/>
                     <h3 class="text-xl font-semibold text-white mb-2">{t('why.explore.agencies.title')}</h3>
                     <p class="text-surface-400">{t('why.explore.agencies.desc')}</p>
                 </a>
                 <a href={lang === 'en' ? "/security" : `/${lang}/security`} class="relative block overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800 hover:bg-surface-900 transition-colors">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <Icon name="shield" class="text-white h-8 w-8 mb-4"/>
                     <h3 class="text-xl font-semibold text-white mb-2">{t('why.explore.security.title')}</h3>
                     <p class="text-surface-400">{t('why.explore.security.desc')}</p>
                 </a>
                 <a href={lang === 'en' ? "/ui" : `/${lang}/ui`} class="relative block overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800 hover:bg-surface-900 transition-colors">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/palette.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <Icon name="palette" class="text-white h-8 w-8 mb-4"/>
                     <h3 class="text-xl font-semibold text-white mb-2">{t('why.explore.ui.title')}</h3>
                     <p class="text-surface-400">{t('why.explore.ui.desc')}</p>
                 </a>
@@ -113,32 +127,32 @@ const { lang, t } = Astro.props;
             </div>
             <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/zap.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <Icon name="zap" class="text-white h-8 w-8 mb-4"/>
                     <h3 class="text-xl font-semibold text-white mb-2">{t('why.different.f1.title')}</h3>
                     <p class="text-surface-400">{t('why.different.f1.desc')}</p>
                 </div>
                 <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/puzzle.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <Icon name="puzzle" class="text-white h-8 w-8 mb-4"/>
                     <h3 class="text-xl font-semibold text-white mb-2">{t('why.different.f2.title')}</h3>
                     <p class="text-surface-400">{t('why.different.f2.desc')}</p>
                 </div>
                 <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/lock.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <Icon name="lock" class="text-white h-8 w-8 mb-4"/>
                     <h3 class="text-xl font-semibold text-white mb-2">{t('why.different.f3.title')}</h3>
                     <p class="text-surface-400">{t('why.different.f3.desc')}</p>
                 </div>
                 <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/sparkles.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <Icon name="sparkles" class="text-white h-8 w-8 mb-4"/>
                     <h3 class="text-xl font-semibold text-white mb-2">{t('why.different.f4.title')}</h3>
                     <p class="text-surface-400">{t('why.different.f4.desc')}</p>
                 </div>
                 <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cloud-cog.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <Icon name="cloud-cog" class="text-white h-8 w-8 mb-4"/>
                     <h3 class="text-xl font-semibold text-white mb-2">{t('why.different.f5.title')}</h3>
                     <p class="text-surface-400">{t('why.different.f5.desc')}</p>
                 </div>
                 <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-code.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <Icon name="file-code" class="text-white h-8 w-8 mb-4"/>
                     <h3 class="text-xl font-semibold text-white mb-2">{t('why.different.f6.title')}</h3>
                     <p class="text-surface-400">{t('why.different.f6.desc')}</p>
                 </div>
@@ -182,11 +196,11 @@ const { lang, t } = Astro.props;
             <div class="flex items-center justify-center gap-x-6">
                 <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
                     {t('why.cta.start')}
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
+                    <Icon name="arrow-right" class="text-white h-5 w-5"/>
                 </a>
                 <a href={lang === 'en' ? "/developers" : `/${lang}/developers`} class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
                     {t('why.cta.explore')}
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 text-white filter invert" />
+                    <Icon name="arrow-right" class="text-white h-4 w-4"/>
                 </a>
             </div>
         </div>

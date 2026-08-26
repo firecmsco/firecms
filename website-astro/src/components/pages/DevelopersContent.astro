@@ -1,4 +1,5 @@
 ---
+import Icon from "../Icon.astro";
 import { CodeBlock } from "../CodeBlock";
 import { DataTalkDemo } from "../DataTalkDemo";
 import ClientLogos from "../ClientLogos.astro";
@@ -80,9 +81,7 @@ const tp = useTranslatedPath(lang as any);
                                 <span class="text-surface-300">{t('developers.paths.cloud.f3')}</span></li>
                         </ul>
                         <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer"
-                           class="inline-flex items-center justify-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">{t('developers.paths.cloud.cta')} <img
-                                    src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                                    class="h-5 w-5 text-white filter invert"/></a>
+                           class="inline-flex items-center justify-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">{t('developers.paths.cloud.cta')} <Icon name="arrow-right" class="text-white h-5 w-5"/></a>
                     </div>
                     <div class="relative flex flex-col rounded-2xl bg-surface-900/50 p-16 ring-1 ring-inset ring-surface-800">
                         <h3 class="text-2xl font-medium text-white mb-2">{t('developers.paths.self.title')}</h3>
@@ -112,9 +111,7 @@ const tp = useTranslatedPath(lang as any);
                                 <span class="text-surface-300">{t('developers.paths.self.f3')}</span></li>
                         </ul>
                         <a href={tp("/docs")} rel="noopener noreferrer"
-                           class="inline-flex items-center justify-center gap-x-2 rounded-md border border-surface-700 bg-surface-800 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-surface-700 transition-all duration-200 ease-in-out">{t('developers.paths.self.cta')} <img
-                                    src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                                    class="h-5 w-5 text-white filter invert"/></a>
+                           class="inline-flex items-center justify-center gap-x-2 rounded-md border border-surface-700 bg-surface-800 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-surface-700 transition-all duration-200 ease-in-out">{t('developers.paths.self.cta')} <Icon name="arrow-right" class="text-white h-5 w-5"/></a>
                     </div>
                 </div>
             </div>
@@ -446,16 +443,13 @@ console.log("Updated \${users.size} users");`
                         <h3 class="text-2xl font-medium text-white mb-4">{t('developers.ready.cloud.title')}</h3>
                         <p class="text-surface-300 text-lg mb-6 flex-grow">{t('developers.ready.cloud.desc')}</p>
                         <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer"
-                           class="inline-flex items-center justify-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow w-full sm:w-auto">{t('developers.ready.cloud.cta')} <img
-                                    src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                                    class="h-5 w-5 text-white filter invert"/></a>
+                           class="inline-flex items-center justify-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow w-full sm:w-auto">{t('developers.ready.cloud.cta')} <Icon name="arrow-right" class="text-white h-5 w-5"/></a>
                     </div>
                     <div class="flex flex-col items-center text-center rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800">
                         <h3 class="text-2xl font-medium text-white mb-4">{t('developers.ready.docs.title')}</h3>
                         <p class="text-surface-300 text-lg mb-6 flex-grow">{t('developers.ready.docs.desc')}</p>
                         <a href={tp("/docs")} rel="noopener noreferrer"
-                           class="inline-flex items-center justify-center gap-x-2 rounded-md border border-surface-700 bg-surface-800 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-surface-700 transition-all duration-200 ease-in-out w-full sm:w-auto">{t('developers.ready.docs.cta')} <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg"
-                                          alt="" class="h-5 w-5 text-white filter invert"/></a>
+                           class="inline-flex items-center justify-center gap-x-2 rounded-md border border-surface-700 bg-surface-800 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-surface-700 transition-all duration-200 ease-in-out w-full sm:w-auto">{t('developers.ready.docs.cta')} <Icon name="arrow-right" class="text-white h-5 w-5"/></a>
                     </div>
                 </div>
             </div>

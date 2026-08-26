@@ -1,4 +1,5 @@
 ---
+import Icon from "./Icon.astro";
 import SectionBackgroundAccents from "./SectionBackgroundAccents.astro";
 
 // Code is defined in frontmatter so whitespace is preserved exactly
@@ -52,7 +53,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
             admin UI, forms, database schema, REST &amp; GraphQL APIs, and TypeScript types.
         </p>
         <div class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-surface-700 bg-surface-900/60 text-surface-300 text-sm font-medium">
-            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/zap.svg" alt="" class="h-4 w-4 filter invert opacity-60"/>
+            <Icon name="zap" class="text-white h-4 w-4 opacity-60"/>
             Code as Truth
         </div>
     </div>
@@ -145,7 +146,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
             {/* CMS Table */}
             <div class="rounded-xl overflow-hidden ring-1 ring-surface-800 bg-surface-950 hover:ring-primary/30 transition-all duration-300">
                 <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/table-2.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                    <Icon name="table-2" class="text-white h-3.5 w-3.5 opacity-50"/>
                     <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">CMS Table</span>
                     <span class="ml-auto inline-flex items-center gap-1 text-[10px] font-medium text-green-400 bg-green-950/60 border border-green-800/50 px-1.5 py-0.5 rounded-full">
                         <span class="w-1 h-1 rounded-full bg-green-400 inline-block"></span>Live
@@ -155,11 +156,11 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
                     <span class="text-xs text-white font-medium">Products <span class="text-surface-500 font-normal ml-1">3 rows</span></span>
                     <div class="flex items-center gap-2">
                         <div class="h-6 bg-surface-900 border border-surface-800 rounded px-2 flex items-center gap-1">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/search.svg" alt="" class="h-3 w-3 filter invert opacity-30"/>
+                            <Icon name="search" class="text-white h-3 w-3 opacity-30"/>
                             <span class="text-[10px] text-surface-600">Search</span>
                         </div>
                         <div class="w-6 h-6 rounded flex items-center justify-center border border-surface-800 bg-surface-900">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/plus.svg" alt="" class="h-3 w-3 filter invert opacity-50"/>
+                            <Icon name="plus" class="text-white h-3 w-3 opacity-50"/>
                         </div>
                     </div>
                 </div>
@@ -194,7 +195,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
             {/* Entity Form */}
             <div class="rounded-xl overflow-hidden ring-1 ring-surface-800 bg-surface-950 hover:ring-primary/30 transition-all duration-300">
                 <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-panel-left.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                    <Icon name="layout-panel-left" class="text-white h-3.5 w-3.5 opacity-50"/>
                     <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">Entity Form</span>
                 </div>
                 <div class="p-4 space-y-3">
@@ -206,7 +207,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
                         <label class="text-[10px] font-semibold text-surface-500 uppercase tracking-wider">Category</label>
                         <div class="rounded-md bg-surface-900 border border-surface-700 px-3 py-2 flex items-center justify-between">
                             <span class="rounded px-1.5 py-0.5 text-[10px] font-medium bg-blue-950 text-blue-300">Electronics</span>
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/chevron-down.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-30"/>
+                            <Icon name="chevron-down" class="text-white h-3.5 w-3.5 opacity-30"/>
                         </div>
                     </div>
                     <div class="space-y-1">
@@ -269,7 +270,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
                             { icon: "git-branch",        label: "GraphQL" },
                         ].map(item => (
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-surface-800 bg-surface-900/60 text-surface-400 text-[11px]">
-                                <img src={`https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${item.icon}.svg`} alt="" class="h-3 w-3 filter invert opacity-50"/>
+                                <Icon name={item.icon} class="text-white h-3 w-3 opacity-50"/>
                                 {item.label}
                             </span>
                         ))}
@@ -285,7 +286,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
             {/* DB Schema */}
             <div class="rounded-xl overflow-hidden ring-1 ring-surface-800 bg-surface-950 hover:ring-primary/30 transition-all duration-300">
                 <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                    <Icon name="database" class="text-white h-3.5 w-3.5 opacity-50"/>
                     <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">DB Schema</span>
                     <img src="https://www.postgresql.org/media/img/about/press/elephant.png" class="h-3 opacity-35 grayscale filter brightness-200 ml-auto" alt="postgres"/>
                 </div>
@@ -305,7 +306,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
             {/* REST API */}
             <div class="rounded-xl overflow-hidden ring-1 ring-surface-800 bg-surface-950 hover:ring-primary/30 transition-all duration-300">
                 <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/globe.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                    <Icon name="globe" class="text-white h-3.5 w-3.5 opacity-50"/>
                     <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">REST API</span>
                 </div>
                 <div class="divide-y divide-surface-800/50">
@@ -327,7 +328,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
             {/* GraphQL */}
             <div class="rounded-xl overflow-hidden ring-1 ring-surface-800 bg-surface-950 hover:ring-primary/30 transition-all duration-300">
                 <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/git-branch.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                    <Icon name="git-branch" class="text-white h-3.5 w-3.5 opacity-50"/>
                     <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">GraphQL</span>
                     <span class="ml-auto text-[10px] font-bold text-pink-400 font-mono">GQL</span>
                 </div>

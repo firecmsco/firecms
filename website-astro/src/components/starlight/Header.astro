@@ -1,4 +1,5 @@
 ---
+import Icon from "../Icon.astro";
 import config from "virtual:starlight/user-config";
 // @ts-ignore
 import LanguageSelect from "virtual:starlight/components/LanguageSelect";
@@ -47,11 +48,7 @@ const t = useTranslations(lang);
                 transition:name="start-building-button"
         >
             {t("nav.cta.start")}
-            <img
-                    src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg"
-                    alt=""
-                    class="h-4 w-4 text-white filter invert"
-            />
+            <Icon name="arrow-right" class="text-white h-4 w-4"/>
         </a>
 
     </div>

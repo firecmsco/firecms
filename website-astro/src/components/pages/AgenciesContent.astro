@@ -1,4 +1,5 @@
 ---
+import Icon from "../Icon.astro";
 // src/components/pages/AgenciesContent.astro
 import ClientLogos from "../ClientLogos.astro";
 import SectionBackgroundAccents from "../SectionBackgroundAccents.astro";
@@ -62,8 +63,7 @@ const { lang, t } = Astro.props;
                     </div>
                     <div class="flex items-start gap-4 mb-6">
                         <div class="h-10 w-10 rounded-lg bg-green-500/15 flex items-center justify-center">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/bolt.svg" alt="Speed"
-                                 class="h-6 w-6 filter invert opacity-80"/>
+                            <Icon name="bolt" class="text-white h-6 w-6 opacity-80" label="Speed"/>
                         </div>
                         <div>
                             <h3 class="text-xl font-semibold text-white mb-1">{t('agencies.accelerate.f1.title')}</h3>
@@ -72,8 +72,7 @@ const { lang, t } = Astro.props;
                     </div>
                     <div class="flex items-start gap-4 mb-6">
                         <div class="h-10 w-10 rounded-lg bg-indigo-500/15 flex items-center justify-center">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/sliders-horizontal.svg"
-                                 alt="Customization" class="h-6 w-6 filter invert opacity-80"/>
+                            <Icon name="sliders-horizontal" class="text-white h-6 w-6 opacity-80" label="Customization"/>
                         </div>
                         <div>
                             <h3 class="text-xl font-semibold text-white mb-1">{t('agencies.accelerate.f2.title')}</h3>
@@ -82,8 +81,7 @@ const { lang, t } = Astro.props;
                     </div>
                     <div class="flex items-start gap-4">
                         <div class="h-10 w-10 rounded-lg bg-purple-500/15 flex items-center justify-center">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/users.svg"
-                                 alt="Empower" class="h-6 w-6 filter invert opacity-80"/>
+                            <Icon name="users" class="text-white h-6 w-6 opacity-80" label="Empower"/>
                         </div>
                         <div>
                             <h3 class="text-xl font-semibold text-white mb-1">{t('agencies.accelerate.f3.title')}</h3>
@@ -130,8 +128,7 @@ const { lang, t } = Astro.props;
                 <div>
                     <div class="flex items-center mb-4">
                         <div class="h-10 w-10 mr-3 rounded-lg bg-primary/20 flex items-center justify-center">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/settings-2.svg"
-                                 alt="Customize" class="h-6 w-6 filter invert opacity-80"/>
+                            <Icon name="settings-2" class="text-white h-6 w-6 opacity-80" label="Customize"/>
                         </div>
                         <h3 class="m-0 text-3xl font-bold text-white">
                             {t('agencies.customize.title')}
@@ -162,8 +159,7 @@ const { lang, t } = Astro.props;
                 <div class="p-8 rounded-lg ring-1 ring-inset ring-surface-800 bg-surface-900/50">
                     <div class="flex items-start space-x-3">
                         <div class="h-8 w-8 rounded-md bg-surface-800 flex items-center justify-center flex-shrink-0">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/puzzle.svg"
-                                 alt="Reusable" class="h-4 w-4 filter invert opacity-80"/>
+                            <Icon name="puzzle" class="text-white h-4 w-4 opacity-80" label="Reusable"/>
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold mb-1 text-white">{t('agencies.features.f1.title')}</h3>
@@ -174,8 +170,7 @@ const { lang, t } = Astro.props;
                 <div class="p-8 rounded-lg ring-1 ring-inset ring-surface-800 bg-surface-900/50">
                     <div class="flex items-start space-x-3">
                         <div class="h-8 w-8 rounded-md bg-surface-800 flex items-center justify-center flex-shrink-0">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/palette.svg"
-                                 alt="White label" class="h-4 w-4 filter invert opacity-80"/>
+                            <Icon name="palette" class="text-white h-4 w-4 opacity-80" label="White label"/>
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold mb-1 text-white">{t('agencies.features.f2.title')}</h3>
@@ -186,8 +181,7 @@ const { lang, t } = Astro.props;
                 <div class="p-8 rounded-lg ring-1 ring-inset ring-surface-800 bg-surface-900/50">
                     <div class="flex items-start space-x-3">
                         <div class="h-8 w-8 rounded-md bg-surface-800 flex items-center justify-center flex-shrink-0">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg"
-                                 alt="Permissions" class="h-4 w-4 filter invert opacity-80"/>
+                            <Icon name="shield-check" class="text-white h-4 w-4 opacity-80" label="Permissions"/>
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold mb-1 text-white">{t('agencies.features.f3.title')}</h3>
@@ -198,8 +192,7 @@ const { lang, t } = Astro.props;
                 <div class="p-8 rounded-lg ring-1 ring-inset ring-surface-800 bg-surface-900/50">
                     <div class="flex items-start space-x-3">
                         <div class="h-8 w-8 rounded-md bg-surface-800 flex items-center justify-center flex-shrink-0">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
-                                 alt="Deployment" class="h-4 w-4 filter invert opacity-80"/>
+                            <Icon name="rocket" class="text-white h-4 w-4 opacity-80" label="Deployment"/>
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold mb-1 text-white">{t('agencies.features.f4.title')}</h3>
@@ -210,8 +203,7 @@ const { lang, t } = Astro.props;
                 <div class="p-8 rounded-lg ring-1 ring-inset ring-surface-800 bg-surface-900/50">
                     <div class="flex items-start space-x-3">
                         <div class="h-8 w-8 rounded-md bg-surface-800 flex items-center justify-center flex-shrink-0">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cloud.svg" alt="Cloud"
-                                 class="h-4 w-4 filter invert opacity-80"/>
+                            <Icon name="cloud" class="text-white h-4 w-4 opacity-80" label="Cloud"/>
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold mb-1 text-white">{t('agencies.features.f5.title')}</h3>
@@ -222,8 +214,7 @@ const { lang, t } = Astro.props;
                 <div class="p-8 rounded-lg ring-1 ring-inset ring-surface-800 bg-surface-900/50">
                     <div class="flex items-start space-x-3">
                         <div class="h-8 w-8 rounded-md bg-surface-800 flex items-center justify-center flex-shrink-0">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code-2.svg"
-                                 alt="Developer friendly" class="h-4 w-4 filter invert opacity-80"/>
+                            <Icon name="code-2" class="text-white h-4 w-4 opacity-80" label="Developer friendly"/>
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold mb-1 text-white">{t('agencies.features.f6.title')}</h3>
@@ -272,9 +263,7 @@ const { lang, t } = Astro.props;
                     <div class="relative z-10">
                         <div class="flex items-center mb-4">
                             <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 mr-4 flex-shrink-0">
-                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shopping-cart.svg"
-                                     alt="E-commerce Icon"
-                                     class="w-6 h-6 filter invert opacity-80"/>
+                                <Icon name="shopping-cart" class="text-white w-6 h-6 opacity-80" label="E-commerce Icon"/>
                             </div>
                             <h3 class="text-xl font-semibold text-white">{t('agencies.leverage.c1.title')}</h3>
                         </div>
@@ -283,9 +272,7 @@ const { lang, t } = Astro.props;
                             <p class="text-sm text-white" set:html={t('agencies.leverage.c1.solution')}></p>
                         </div>
                         <div class="mt-auto pt-4 border-t border-surface-800 flex items-start">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
-                                 alt="Checkmark"
-                                 class="w-4 h-4 mr-2 filter invert opacity-80 flex-shrink-0 mt-0.5"/>
+                            <Icon name="check-circle" class="text-white w-4 h-4 mr-2 opacity-80 flex-shrink-0 mt-0.5" label="Checkmark"/>
                             <span class="text-sm font-medium text-white" set:html={t('agencies.leverage.c1.result')}>
                             </span>
                         </div>
@@ -301,9 +288,7 @@ const { lang, t } = Astro.props;
                     <div class="relative z-10">
                         <div class="flex items-center mb-4">
                             <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 mr-4 flex-shrink-0">
-                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/settings-2.svg"
-                                     alt="SaaS Platform Icon"
-                                     class="w-6 h-6 filter invert opacity-80"/>
+                                <Icon name="settings-2" class="text-white w-6 h-6 opacity-80" label="SaaS Platform Icon"/>
                             </div>
                             <h3 class="text-xl font-semibold text-white">{t('agencies.leverage.c2.title')}</h3>
                         </div>
@@ -312,9 +297,7 @@ const { lang, t } = Astro.props;
                             <p class="text-sm text-white" set:html={t('agencies.leverage.c2.solution')}></p>
                         </div>
                         <div class="mt-auto pt-4 border-t border-surface-800 flex items-start">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
-                                 alt="Checkmark"
-                                 class="w-4 h-4 mr-2 filter invert opacity-80 flex-shrink-0 mt-0.5"/>
+                            <Icon name="check-circle" class="text-white w-4 h-4 mr-2 opacity-80 flex-shrink-0 mt-0.5" label="Checkmark"/>
                             <span class="text-sm font-medium text-white" set:html={t('agencies.leverage.c2.result')}>
                             </span>
                         </div>
@@ -330,9 +313,7 @@ const { lang, t } = Astro.props;
                     <div class="relative z-10">
                         <div class="flex items-center mb-4">
                             <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 mr-4 flex-shrink-0">
-                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-template.svg"
-                                     alt="Content Marketing Icon"
-                                     class="w-6 h-6 filter invert opacity-80"/>
+                                <Icon name="layout-template" class="text-white w-6 h-6 opacity-80" label="Content Marketing Icon"/>
                             </div>
                             <h3 class="text-xl font-semibold text-white">{t('agencies.leverage.c3.title')}</h3>
                         </div>
@@ -341,9 +322,7 @@ const { lang, t } = Astro.props;
                             <p class="text-sm text-white" set:html={t('agencies.leverage.c3.solution')}></p>
                         </div>
                         <div class="mt-auto pt-4 border-t border-surface-800 flex items-start">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
-                                 alt="Checkmark"
-                                 class="w-4 h-4 mr-2 filter invert opacity-80 flex-shrink-0 mt-0.5"/>
+                            <Icon name="check-circle" class="text-white w-4 h-4 mr-2 opacity-80 flex-shrink-0 mt-0.5" label="Checkmark"/>
                             <span class="text-sm font-medium text-white" set:html={t('agencies.leverage.c3.result')}>
                             </span>
                         </div>
@@ -359,9 +338,7 @@ const { lang, t } = Astro.props;
                     <div class="relative z-10">
                         <div class="flex items-center mb-4">
                             <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 mr-4 flex-shrink-0">
-                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/briefcase.svg"
-                                     alt="Service Business Icon"
-                                     class="w-6 h-6 filter invert opacity-80"/>
+                                <Icon name="briefcase" class="text-white w-6 h-6 opacity-80" label="Service Business Icon"/>
                             </div>
                             <h3 class="text-xl font-semibold text-white">{t('agencies.leverage.c4.title')}</h3>
                         </div>
@@ -370,9 +347,7 @@ const { lang, t } = Astro.props;
                             <p class="text-sm text-white" set:html={t('agencies.leverage.c4.solution')}></p>
                         </div>
                         <div class="mt-auto pt-4 border-t border-surface-800 flex items-start">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
-                                 alt="Checkmark"
-                                 class="w-4 h-4 mr-2 filter invert opacity-80 flex-shrink-0 mt-0.5"/>
+                            <Icon name="check-circle" class="text-white w-4 h-4 mr-2 opacity-80 flex-shrink-0 mt-0.5" label="Checkmark"/>
                             <span class="text-sm font-medium text-white" set:html={t('agencies.leverage.c4.result')}>
                             </span>
                         </div>
@@ -393,14 +368,12 @@ const { lang, t } = Astro.props;
                 <a href="https://app.firecms.co"
                    class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
                     {t('agencies.cta.primary')}
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                         class="h-5 w-5 text-white filter invert"/>
+                    <Icon name="arrow-right" class="text-white h-5 w-5"/>
                 </a>
                 <a href="/developers"
                    class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
                     {t('agencies.cta.secondary')}
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                         class="h-4 w-4 text-white filter invert"/>
+                    <Icon name="arrow-right" class="text-white h-4 w-4"/>
                 </a>
             </div>
         </div>

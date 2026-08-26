@@ -1,4 +1,5 @@
 ---
+import Icon from "./Icon.astro";
 import Layout from "../layouts/Layout.astro";
 import ScrollSyncShowcase from "./ScrollSyncShowcase.astro";
 
@@ -29,8 +30,7 @@ const tp = useTranslatedPath(lang as any);
                    id="hero-start-building"
                    class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
                     {t('hero.cta.start')}
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                         class="h-5 w-5 text-white filter invert"/>
+                    <Icon name="arrow-right" class="text-white h-5 w-5"/>
                 </a>
                 <a href="/developers"
                    data-track
@@ -81,17 +81,17 @@ const tp = useTranslatedPath(lang as any);
             <div class="mx-auto mt-16 max-w-7xl">
                 <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
                     <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-text.svg"
+                            icon="file-text"
                             title={t('usecases.card1.title')}
                             description={t('usecases.card1.desc')}
                     />
                     <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-dashboard.svg"
+                            icon="layout-dashboard"
                             title={t('usecases.card2.title')}
                             description={t('usecases.card2.desc')}
                     />
                     <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cog.svg"
+                            icon="cog"
                             title={t('usecases.card3.title')}
                             description={t('usecases.card3.desc')}
                     />
@@ -152,7 +152,7 @@ const tp = useTranslatedPath(lang as any);
             </div>
             <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
                 <SpotlightCard
-                        icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
+                        icon="rocket"
                         title={t('personas.startup.title')}
                         description={t('personas.startup.desc')}
                         link={{
@@ -161,7 +161,7 @@ const tp = useTranslatedPath(lang as any);
                         }}
                 />
                 <SpotlightCard
-                        icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/briefcase.svg"
+                        icon="briefcase"
                         title={t('personas.agency.title')}
                         description={t('personas.agency.desc')}
                         link={{
@@ -170,7 +170,7 @@ const tp = useTranslatedPath(lang as any);
                         }}
                 />
                 <SpotlightCard
-                        icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code.svg"
+                        icon="code"
                         title={t('personas.dev.title')}
                         description={t('personas.dev.desc')}
                         link={{
@@ -265,16 +265,14 @@ const tp = useTranslatedPath(lang as any);
                    id="cta-try-cloud"
                    class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
                     {t('cta.cloud')}
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                         class="h-5 w-5 text-white filter invert"/>
+                    <Icon name="arrow-right" class="text-white h-5 w-5"/>
                 </a>
                 <a href={tp("/docs")}
                    data-track
                    id="cta-view-docs"
                    class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
                     {t('cta.docs')}
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                         class="h-4 w-4 text-white filter invert"/>
+                    <Icon name="arrow-right" class="text-white h-4 w-4"/>
                 </a>
             </div>
         </div>

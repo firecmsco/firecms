@@ -1,0 +1,45 @@
+---
+/**
+ * Inline Lucide icon.
+ *
+ * Replaces `<img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/...">`,
+ * which cost up to 16 blocking round-trips per page and pinned nothing. Paths
+ * live in ./icons.ts; the stroke follows `currentColor`, so a text-* class now
+ * actually colours the icon (it never did on an <img>).
+ */
+import { ICONS } from "./icons";
+
+interface Props {
+    name: string;
+    class?: string;
+    /** Non-empty gives the icon an accessible name; omit it for decoration. */
+    label?: string;
+}
+
+const { name, class: klass = "", label } = Astro.props;
+
+const inner = ICONS[name as keyof typeof ICONS];
+if (!inner) {
+    throw new Error(
+        `Icon "${name}" is not in src/components/icons.ts. Add its inner markup there ` +
+        `(from lucide-static, pinned) rather than reaching for a CDN.`
+    );
+}
+
+const a11y = label
+    ? { role: "img", "aria-label": label }
+    : { "aria-hidden": "true" };
+---
+
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class={klass}
+    {...a11y}
+    set:html={inner}
+/>

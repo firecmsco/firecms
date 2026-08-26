@@ -1,4 +1,7 @@
 ---
+import ProductsCollectionDemo from "../ProductsCollectionDemo.tsx";
+import ImportMappingDemo from "../ImportMappingDemo.tsx";
+import Icon from "../Icon.astro";
 import SectionBackgroundAccents from "../SectionBackgroundAccents.astro";
 import SpotlightCard from "../SpotlightCard.astro";
 import { DataTalkDemo } from "../DataTalkDemo";
@@ -59,16 +62,12 @@ const dataTalkExchanges = [
                     <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">{t('features.data.title')}</h2>
                     <p class="mt-6 text-lg leading-8 text-surface-400">{t('features.data.desc')}</p>
                 </div>
-                <div class="mx-auto max-w-[800px] lg:max-w-[1000px]">
-                    <video
-                            class="aspect-[607/373] bg-surface-950 border border-surface-800 rounded-xl flex flex-col items-center justify-center gap-4"
-                            style="pointer-events: none;"
-                            loop
-                            autoplay
-                            muted
-                            playsinline>
-                        <source src="/img/landing_1080.webm" type="video/webm"/>
-                    </video>
+                <div class="mx-auto max-w-[1000px]">
+                    <div class="overflow-x-auto rounded-xl">
+                        <div class="min-w-[880px]">
+                            <ProductsCollectionDemo client:visible />
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -88,13 +87,11 @@ const dataTalkExchanges = [
                 </div>
                 <ul class="mt-10 mx-auto max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-4 text-surface-300 text-sm">
                     <li class="flex items-end gap-3">
-                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle-2.svg" alt=""
-                             class="h-5 w-5 filter invert mt-1"/>
+                        <Icon name="check-circle-2" class="text-white h-5 w-5 mt-1"/>
                         {t('features.schema.f1')}
                     </li>
                     <li class="flex items-end gap-3">
-                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/square-pen.svg" alt=""
-                             class="h-5 w-5 filter invert mt-1"/>
+                        <Icon name="square-pen" class="text-white h-5 w-5 mt-1"/>
                         {t('features.schema.f2')}
                     </li>
                 </ul>
@@ -110,32 +107,32 @@ const dataTalkExchanges = [
                 </div>
                 <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                     <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg"
+                            icon="shield-check"
                             title={t('features.all.permissions.title')}
                             description={t('features.all.permissions.desc')}
                     />
                     <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/folder.svg"
+                            icon="folder"
                             title={t('features.all.storage.title')}
                             description={t('features.all.storage.desc')}
                     />
                     <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/radio.svg"
+                            icon="radio"
                             title={t('features.all.realtime.title')}
                             description={t('features.all.realtime.desc')}
                     />
                     <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-dashboard.svg"
+                            icon="layout-dashboard"
                             title={t('features.all.custom.title')}
                             description={t('features.all.custom.desc')}
                     />
                     <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/clipboard-list.svg"
+                            icon="clipboard-list"
                             title={t('features.all.forms.title')}
                             description={t('features.all.forms.desc')}
                     />
                     <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/history.svg"
+                            icon="history"
                             title={t('features.all.history.title')}
                             description={t('features.all.history.desc')}
                     />
@@ -154,9 +151,8 @@ const dataTalkExchanges = [
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
                     <!-- Import/Export -->
                     <div>
-                        <div class="relative w-full h-96 bg-surface-900 rounded-2xl ring-1 ring-surface-800 flex items-center justify-center mb-6">
-                            <img src="/img/import_mapping.webp" alt="Custom Branding Example"
-                                 class="h-full w-full object-cover object-left-top"/>
+                        <div class="mb-6">
+                            <ImportMappingDemo client:visible height={384} />
                         </div>
                         <h3 class="text-2xl font-semibold text-white mb-3">{t('features.flexible.import.title')}</h3>
                         <p class="text-surface-400 leading-7">{t('features.flexible.import.desc')}</p>
@@ -234,16 +230,14 @@ const dataTalkExchanges = [
                        rel="noopener noreferrer"
                        class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
                         {t('features.cta.demo')}
-                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                             class="h-5 w-5 text-white filter invert"/>
+                        <Icon name="arrow-right" class="text-white h-5 w-5"/>
                     </a>
                     <a href="https://app.firecms.co"
                        target="_blank"
                        rel="noopener noreferrer"
                        class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
                         {t('features.cta.cloud')}
-                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
-                             class="h-4 w-4 text-white filter invert"/>
+                        <Icon name="arrow-right" class="text-white h-4 w-4"/>
                     </a>
                 </div>
             </div>
