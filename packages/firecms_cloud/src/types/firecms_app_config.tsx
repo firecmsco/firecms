@@ -16,9 +16,20 @@ import { AppCheckOptions, FirestoreIndexesBuilder, FirestoreTextSearchController
 export type FireCMSAppConfig = {
 
     /**
-     * Customization schema version. Used to detect the federation contract:
-     * - "1": React ^18.x, Firebase ^12.x, @firecms/* ^3.x
-     * - "2": (future) Next major dependency set
+     * Which federation contract this bundle was built against.
+     *
+     * - "1": React ^18.x, and `react/jsx-runtime` not shared. Anything in such a
+     *   bundle that uses the automatic JSX transform pulled a second copy of
+     *   React in with it, and the elements that copy creates have to be
+     *   translated before a React 19 host will render them — see
+     *   `legacy_elements.ts` in the SaaS app.
+     * - "2": React ^19.x, with `react/jsx-runtime` shared, so the bundle carries
+     *   no React of its own and needs no translation.
+     *
+     * Nothing reads this at runtime today; the host bridges "1" bundles
+     * unconditionally. It is here so that support can tell at a glance which
+     * contract a deployment predates, and so the host can one day skip the
+     * compat layer for bundles that declare "2".
      */
     version: "1" | "2";
 
