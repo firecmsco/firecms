@@ -78,7 +78,7 @@ importers:
         version: 16.5.0
       lerna:
         specifier: ^9.0.3
-        version: 9.0.7(@types/node@26.1.1)
+        version: 9.0.7(@types/node@26.3.0)
       npm-run-all2:
         specifier: ^6.2.6
         version: 6.2.6
@@ -92,8 +92,8 @@ importers:
   discord-bot:
     dependencies:
       '@google/genai':
-        specifier: ^1.38.0
-        version: 1.52.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))
+        specifier: ^2.18.0
+        version: 2.18.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))
       discord.js:
         specifier: ^14.18.0
         version: 14.26.4
@@ -115,31 +115,31 @@ importers:
     dependencies:
       '@firecms/collection_editor':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/core':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_enhancement':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_export':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_import':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_import_export':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/schema_inference':
         specifier: ^3.0.1
-        version: 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/ui':
         specifier: ^3.3.0
         version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/user_management':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@fontsource/jetbrains-mono':
         specifier: ^5.2.8
         version: 5.2.8
@@ -188,7 +188,7 @@ importers:
         version: 8.62.0(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.7.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       autoprefixer:
         specifier: ^10.4.22
         version: 10.5.0(postcss@8.5.23)
@@ -215,7 +215,7 @@ importers:
         version: 0.4.26(eslint@9.39.4(jiti@2.7.0))
       firebase-tools:
         specifier: ^15.25.1
-        version: 15.25.1(@types/node@26.1.1)(encoding@0.1.13)
+        version: 15.25.1(@types/node@26.3.0)(encoding@0.1.13)
       postcss:
         specifier: 8.5.23
         version: 8.5.23
@@ -227,19 +227,19 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^7.2.4
-        version: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+        version: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
       vite-plugin-svgr:
         specifier: ^4.5.0
-        version: 4.5.0(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.5.0(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
 
   examples/example_astro:
     dependencies:
       '@astrojs/node':
         specifier: ^9.5.5
-        version: 9.5.5(astro@5.18.2(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.22.4)(typescript@5.9.3)(yaml@2.9.0))
+        version: 9.5.5(astro@5.18.2(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.22.4)(typescript@5.9.3)(yaml@2.9.0))
       '@astrojs/react':
         specifier: ^4.4.0
-        version: 4.4.2(@types/node@26.1.1)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tsx@4.22.4)(yaml@2.9.0)
+        version: 4.4.2(@types/node@26.3.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tsx@4.22.4)(yaml@2.9.0)
       '@firecms/collection_editor':
         specifier: file:../../packages/collection_editor
         version: file:packages/collection_editor(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)
@@ -248,7 +248,7 @@ importers:
         version: file:packages/collection_editor_firebase(firebase@12.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@firecms/core':
         specifier: file:../../packages/firecms_core
-        version: file:packages/firecms_core(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(vite@6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: file:packages/firecms_core(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(vite@6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_enhancement':
         specifier: file:../../packages/data_enhancement
         version: file:packages/data_enhancement(firebase@12.15.0)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)
@@ -287,10 +287,10 @@ importers:
         version: 0.5.20(tailwindcss@4.3.1)
       '@tailwindcss/vite':
         specifier: ^4.1.14
-        version: 4.3.1(vite@6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.3.1(vite@6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       astro:
         specifier: ^5.14.8
-        version: 5.18.2(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.22.4)(typescript@5.9.3)(yaml@2.9.0)
+        version: 5.18.2(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.22.4)(typescript@5.9.3)(yaml@2.9.0)
       firebase:
         specifier: ^12.9.0
         version: 12.15.0
@@ -330,7 +330,7 @@ importers:
         version: 1.13.3(@firebase/app@0.15.0)
       '@firecms/cloud':
         specifier: ^3.3.0
-        version: 3.3.0(@firebase/app@0.15.0)(@types/node@26.1.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@firebase/app@0.15.0)(@types/node@26.3.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@fontsource/jetbrains-mono':
         specifier: ^5.2.8
         version: 5.2.8
@@ -361,7 +361,7 @@ importers:
         version: 19.2.3(@types/react@19.2.17)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.7.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       autoprefixer:
         specifier: ^10.4.22
         version: 10.5.0(postcss@8.5.23)
@@ -376,13 +376,13 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^7.2.4
-        version: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+        version: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
   examples/example_graph:
     dependencies:
       '@firecms/core':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/ui':
         specifier: ^3.3.0
         version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -410,7 +410,7 @@ importers:
         version: 0.5.20(tailwindcss@4.3.1)
       '@tailwindcss/vite':
         specifier: ^4.1.17
-        version: 4.3.1(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.3.1(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@types/react':
         specifier: ^19.2.3
         version: 19.2.17
@@ -419,7 +419,7 @@ importers:
         version: 19.2.3(@types/react@19.2.17)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.7.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       tailwindcss:
         specifier: ^4.1.17
         version: 4.3.1
@@ -428,7 +428,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^7.2.4
-        version: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+        version: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
   examples/example_next:
     dependencies:
@@ -537,40 +537,40 @@ importers:
         version: 3.14.1(@types/react@19.2.17)(graphql@16.14.2)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/collection_editor':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/collection_editor_firebase':
         specifier: ^3.3.0
-        version: 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/core':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_enhancement':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_export':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_import':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/datatalk':
         specifier: ^3.3.0
-        version: 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/entity_history':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex':
         specifier: ^3.0.1
         version: 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/schema_inference':
         specifier: ^3.0.1
-        version: 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/ui':
         specifier: ^3.3.0
         version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/user_management':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@fontsource/comic-neue':
         specifier: ^5.2.7
         version: 5.2.7
@@ -619,7 +619,7 @@ importers:
         version: 0.5.20(tailwindcss@4.3.1)
       '@tailwindcss/vite':
         specifier: ^4.1.17
-        version: 4.3.1(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.3.1(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@types/react':
         specifier: ^19.2.3
         version: 19.2.17
@@ -634,7 +634,7 @@ importers:
         version: 8.62.0(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.7.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       autoprefixer:
         specifier: ^10.4.22
         version: 10.5.0(postcss@8.5.23)
@@ -661,7 +661,7 @@ importers:
         version: 0.4.26(eslint@9.39.4(jiti@2.7.0))
       firebase-tools:
         specifier: ^15.25.1
-        version: 15.25.1(@types/node@26.1.1)(encoding@0.1.13)
+        version: 15.25.1(@types/node@26.3.0)(encoding@0.1.13)
       postcss:
         specifier: 8.5.23
         version: 8.5.23
@@ -673,10 +673,10 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^7.2.4
-        version: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+        version: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
       vite-plugin-svgr:
         specifier: ^4.5.0
-        version: 4.5.0(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.5.0(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
 
   packages/cli:
     dependencies:
@@ -810,7 +810,7 @@ importers:
         version: 19.2.3(@types/react@19.2.17)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.7.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       babel-plugin-react-compiler:
         specifier: ^19.0.0-beta-af1b7da-20250417
         version: 19.0.0-beta-ebf51a3-20250411
@@ -819,7 +819,7 @@ importers:
         version: 19.1.0-rc.2(eslint@9.39.4(jiti@2.7.0))
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(@types/node@26.1.1)(ts-node@10.9.2(@types/node@26.1.1)(typescript@5.9.3))
+        version: 29.7.0(@types/node@26.3.0)
       react-router:
         specifier: ^6.30.2
         version: 6.30.4(react@19.2.7)
@@ -828,13 +828,13 @@ importers:
         version: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       ts-jest:
         specifier: ^29.4.5
-        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.1.1))(typescript@5.9.3)
+        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.3.0))(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
         specifier: ^7.2.4
-        version: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+        version: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
   packages/collection_editor_firebase:
     dependencies:
@@ -933,7 +933,7 @@ importers:
         version: 19.2.3(@types/react@19.2.17)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.7.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       babel-jest:
         specifier: ^29.7.0
         version: 29.7.0(@babel/core@7.29.7)
@@ -945,16 +945,16 @@ importers:
         version: 19.1.0-rc.2(eslint@9.39.4(jiti@2.7.0))
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(@types/node@26.1.1)(ts-node@10.9.2(@types/node@26.1.1)(typescript@5.9.3))
+        version: 29.7.0(@types/node@26.3.0)
       ts-jest:
         specifier: ^29.4.5
-        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.1.1))(typescript@5.9.3)
+        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.3.0))(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
         specifier: ^7.2.4
-        version: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+        version: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
   packages/data_export:
     dependencies:
@@ -1000,7 +1000,7 @@ importers:
         version: 19.2.3(@types/react@19.2.17)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.7.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       babel-jest:
         specifier: ^29.7.0
         version: 29.7.0(@babel/core@7.29.7)
@@ -1012,16 +1012,16 @@ importers:
         version: 19.1.0-rc.2(eslint@9.39.4(jiti@2.7.0))
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(@types/node@26.1.1)(ts-node@10.9.2(@types/node@26.1.1)(typescript@5.9.3))
+        version: 29.7.0(@types/node@26.3.0)
       ts-jest:
         specifier: ^29.4.5
-        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.1.1))(typescript@5.9.3)
+        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.3.0))(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
         specifier: ^7.2.4
-        version: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+        version: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
   packages/data_import:
     dependencies:
@@ -1070,7 +1070,7 @@ importers:
         version: 19.2.3(@types/react@19.2.17)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.7.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       babel-jest:
         specifier: ^29.7.0
         version: 29.7.0(@babel/core@7.29.7)
@@ -1082,16 +1082,16 @@ importers:
         version: 19.1.0-rc.2(eslint@9.39.4(jiti@2.7.0))
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(@types/node@26.1.1)(ts-node@10.9.2(@types/node@26.1.1)(typescript@5.9.3))
+        version: 29.7.0(@types/node@26.3.0)
       ts-jest:
         specifier: ^29.4.5
-        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.1.1))(typescript@5.9.3)
+        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.3.0))(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
         specifier: ^7.2.4
-        version: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+        version: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
   packages/data_import_export:
     dependencies:
@@ -1134,22 +1134,22 @@ importers:
         version: 19.2.3(@types/react@19.2.17)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.7.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       babel-jest:
         specifier: ^29.7.0
         version: 29.7.0(@babel/core@7.29.7)
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(@types/node@26.1.1)(ts-node@10.9.2(@types/node@26.1.1)(typescript@5.9.3))
+        version: 29.7.0(@types/node@26.3.0)
       ts-jest:
         specifier: ^29.4.5
-        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.1.1))(typescript@5.9.3)
+        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.3.0))(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
         specifier: ^7.2.4
-        version: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+        version: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
   packages/datatalk:
     dependencies:
@@ -1244,7 +1244,7 @@ importers:
         version: 19.2.3(@types/react@19.2.17)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.7.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       babel-jest:
         specifier: ^29.7.0
         version: 29.7.0(@babel/core@7.29.7)
@@ -1256,16 +1256,16 @@ importers:
         version: 19.1.0-rc.2(eslint@9.39.4(jiti@2.7.0))
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(@types/node@26.1.1)(ts-node@10.9.2(@types/node@26.1.1)(typescript@5.9.3))
+        version: 29.7.0(@types/node@26.3.0)
       ts-jest:
         specifier: ^29.4.5
-        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.1.1))(typescript@5.9.3)
+        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.3.0))(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
         specifier: ^7.2.4
-        version: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+        version: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
   packages/firebase_admin:
     dependencies:
@@ -1320,7 +1320,7 @@ importers:
         version: 19.2.3(@types/react@19.2.17)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 4.7.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       babel-plugin-react-compiler:
         specifier: ^19.0.0-beta-af1b7da-20250417
         version: 19.0.0-beta-ebf51a3-20250411
@@ -1329,16 +1329,16 @@ importers:
         version: 19.1.0-rc.2(eslint@9.39.4(jiti@2.7.0))
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(@types/node@26.1.1)(ts-node@10.9.2(@types/node@26.1.1)(typescript@5.9.3))
+        version: 29.7.0(@types/node@26.3.0)
       ts-jest:
         specifier: ^29.4.5
-        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.1.1))(typescript@5.9.3)
+        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.3.0))(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
         specifier: ^7.2.4
-        version: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+        version: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
   packages/firebase_firecms:
     dependencies:
@@ -3524,8 +3524,8 @@ packages:
     resolution: {integrity: sha512-xXAQBVVrFviWz8L8yDKEqv1ziVw/gMSpYHt3IxSYRSY0fTyjis+xOrKJILj8dd8PAUHGnGiAIYuTprflkE9jsQ==}
     engines: {node: '>=18'}
 
-  '@google/genai@1.52.0':
-    resolution: {integrity: sha512-gwSvbpiN/17O9TbsqSsE/OzZcpv5Fo4RQjdngGgogtuB9RsyJ8ZHhX5KjHj1bp5N9snN2eK8LDGXSaWW2hof8Q==}
+  '@google/genai@2.18.0':
+    resolution: {integrity: sha512-uy9gWVTAZXuA/2tld0QJl/QNiGEn4QOmfX4PiRgZQmeFQRQhojpD/Gf41SPnBJmjEnT83a+h4AdU1HHYaYvVDw==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       '@modelcontextprotocol/sdk': ^1.25.2
@@ -4414,8 +4414,8 @@ packages:
   '@protobufjs/pool@1.1.0':
     resolution: {integrity: sha512-0kELaGSIDBKvcgS4zkjz1PeddatrjYcmMWOlAuAPwAeccUrPHdUqo/J6LiymHHEiJT5NrF1UVwxY14f+fy4WQw==}
 
-  '@protobufjs/utf8@1.1.1':
-    resolution: {integrity: sha512-oOAWABowe8EAbMyWKM0tYDKi8Yaox52D+HWZhAIJqQXbqe0xI/GV7FhLWqlEKreMkfDjshR5FKgi3mnle0h6Eg==}
+  '@protobufjs/utf8@1.1.2':
+    resolution: {integrity: sha512-b1UQwcEZ4yCnMCD8DAL1VlbvBJE9/IX4FTIp7BG1xYpf29SLazLSrqUkj4w7Y5y7cCVP6E5tcqqcI0xemPkHug==}
 
   '@radix-ui/number@1.1.2':
     resolution: {integrity: sha512-ceTwaxc4I5IOi97DgCotl3pqiyRGvffcc0oOsE2dQYaJOFIDsDt4VWG6xEbg1QePv9QWausCEIppud/tJ1wNig==}
@@ -5483,6 +5483,9 @@ packages:
 
   '@types/node@26.1.1':
     resolution: {integrity: sha512-nxAkRSVkN1Y0JC1W8ky/fTfkGsMmcrRsbx+3XoZE+rMOX71kLYTV7fLXpqud1GpbpP5TuffXFqfX7fH2GgZREw==}
+
+  '@types/node@26.3.0':
+    resolution: {integrity: sha512-L3fgrnchriRC2ExBflb8j4uZZURHZfQsmQeyVzhjcHW4kkwVyo8/0h1B2MVzMTrYUJYu6G7EWs14hW/L9putqw==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -7738,6 +7741,10 @@ packages:
     resolution: {integrity: sha512-5FZy72Rh8LhtjmvDrKkI+lVhrsQrVKVsItxMoDm5mNQE+xR0WVIIs+jzPSJgBvKVsLi24fZhXJIsNI0bihDzFg==}
     engines: {node: '>=18'}
 
+  gaxios@7.3.1:
+    resolution: {integrity: sha512-kB3rzJV7d9juLZh8/56QTXCwQfxyhdOMdyYk1HdQKFtF8TJTDTZQJtixWIwXdE9Jji91mC41DUNpjleo4L4eAQ==}
+    engines: {node: '>=18'}
+
   gcp-metadata@6.1.1:
     resolution: {integrity: sha512-a4tiq7E0/5fTjxPAaH4jpjkSv/uCaU2p5KC6HVGrvl0cDjA8iBZv4vv1gyzlmK0ZUKqwpOyQMKzZQe3lTit77A==}
     engines: {node: '>=14'}
@@ -7746,8 +7753,8 @@ packages:
     resolution: {integrity: sha512-zV/5HKTfCeKWnxG0Dmrw51hEWFGfcF2xiXqcA3+J90WDuP0SvoiSO5ORvcBsifmx/FoIjgQN3oNOGaQ5PhLFkg==}
     engines: {node: '>=18'}
 
-  gcp-metadata@8.1.3:
-    resolution: {integrity: sha512-ziTrzUhhpL9Zk5k0HHzgP/KIpWDJT0VMBC/ynt/QIBvTW+UUcSivQRl6VlwTf/EilDxtSWklHoRsKy1c4k+59w==}
+  gcp-metadata@8.1.4:
+    resolution: {integrity: sha512-iJ9KMsiu+xKtNRX0PmGLSaIU3bUBAyzWTyqKemKPzNPsmmsBCQYmlNg+brEbES7IHSXtdVwzBPzx1vz3FAaipw==}
     engines: {node: '>=18'}
 
   generator-function@2.0.1:
@@ -7918,12 +7925,12 @@ packages:
     resolution: {integrity: sha512-7ABviyMOlX5hIVD60YOfHw4/CxOfBhyduaYB+wbFWCWoni4N7SLcV46hrVRktuBbZjFC9ONyqamZITN7q3n32w==}
     engines: {node: '>=18'}
 
-  google-auth-library@10.7.0:
-    resolution: {integrity: sha512-QpTAbNJ36TliZLx3TTtahR8HG0hN9RllL1e3FymOvQSIKK8JmgV58H924ub2wa2DsS3ANjjP1Aw1N+Ramc8hqQ==}
-    engines: {node: '>=18'}
-
   google-auth-library@10.9.0:
     resolution: {integrity: sha512-xtvUqvINPhTaBm7nXqlYPcrMHJPm1lCNdSovxnKKhTm+4JsvQ+KGVYJViLoH9Yxu8w+T0Qv5HubzYT9BLrppJg==}
+    engines: {node: '>=18'}
+
+  google-auth-library@10.9.1:
+    resolution: {integrity: sha512-i1ydyHrqcIxXkWh/uBmVkzCvIuq5yiK2ATndIe5XxKholrG/MTYP9xGYka4sQhrbIAgGjL2B6NOE7rFaiF3fXw==}
     engines: {node: '>=18'}
 
   google-auth-library@9.15.1:
@@ -12415,6 +12422,18 @@ packages:
       utf-8-validate:
         optional: true
 
+  ws@8.21.3:
+    resolution: {integrity: sha512-201TZ/kPWxoPr/OKWjquZR1SWKXcvxdH+e1xrx89b3YbmzLMFCLfnaG1HFIgWzJOEWZ7MvpK++odZufgYR50Rw==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
   wsl-utils@0.1.0:
     resolution: {integrity: sha512-h3Fbisa2nKGPxCpm89Hk33lBLsnaGBvctQopaBSOW/uIs6FTe1ATyAnKFJrzVs9vpGdsTe73WF3V4lIsk4Gacw==}
     engines: {node: '>=18'}
@@ -12714,10 +12733,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/node@9.5.5(astro@5.18.2(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.22.4)(typescript@5.9.3)(yaml@2.9.0))':
+  '@astrojs/node@9.5.5(astro@5.18.2(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.22.4)(typescript@5.9.3)(yaml@2.9.0))':
     dependencies:
       '@astrojs/internal-helpers': 0.7.6
-      astro: 5.18.2(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.22.4)(typescript@5.9.3)(yaml@2.9.0)
+      astro: 5.18.2(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.22.4)(typescript@5.9.3)(yaml@2.9.0)
       send: 1.2.1
       server-destroy: 1.0.1
     transitivePeerDependencies:
@@ -12727,15 +12746,15 @@ snapshots:
     dependencies:
       prismjs: 1.30.0
 
-  '@astrojs/react@4.4.2(@types/node@26.1.1)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tsx@4.22.4)(yaml@2.9.0)':
+  '@astrojs/react@4.4.2(@types/node@26.3.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tsx@4.22.4)(yaml@2.9.0)':
     dependencies:
       '@types/react': 18.3.31
       '@types/react-dom': 18.3.7(@types/react@18.3.31)
-      '@vitejs/plugin-react': 4.7.0(vite@6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@vitejs/plugin-react': 4.7.0(vite@6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       ultrahtml: 1.6.0
-      vite: 6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+      vite: 6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -13104,7 +13123,7 @@ snapshots:
       '@vladfrangu/async_event_emitter': 2.4.7
       discord-api-types: 0.38.49
       tslib: 2.8.1
-      ws: 8.21.0
+      ws: 8.21.3
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -13823,7 +13842,7 @@ snapshots:
 
   '@firebase/webchannel-wrapper@1.0.6': {}
 
-  '@firecms/cli@3.3.0(@types/node@26.1.1)':
+  '@firecms/cli@3.3.0(@types/node@26.3.0)':
     dependencies:
       archiver: 7.0.1
       arg: 5.0.2
@@ -13832,7 +13851,7 @@ snapshots:
       execa: 4.1.0
       form-data: 4.0.6
       googleapis: 166.0.0
-      inquirer: 12.11.1(@types/node@26.1.1)
+      inquirer: 12.11.1(@types/node@26.3.0)
       json5: 2.2.3
       listr: 0.14.3
       ncp: 2.0.0
@@ -13840,7 +13859,7 @@ snapshots:
       open: 10.2.0
       ora: 8.2.0
       pump: 3.0.4
-      ws: 8.21.1
+      ws: 8.21.3
     transitivePeerDependencies:
       - '@types/node'
       - bare-abort-controller
@@ -13853,22 +13872,22 @@ snapshots:
       - zen-observable
       - zenObservable
 
-  '@firecms/cloud@3.3.0(@firebase/app@0.15.0)(@types/node@26.1.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/cloud@3.3.0(@firebase/app@0.15.0)(@types/node@26.3.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      '@firecms/cli': 3.3.0(@types/node@26.1.1)
-      '@firecms/collection_editor': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/collection_editor_firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_enhancement': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/datatalk': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/entity_history': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/firebase_admin': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/cli': 3.3.0(@types/node@26.3.0)
+      '@firecms/collection_editor': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/collection_editor_firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_enhancement': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/datatalk': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/entity_history': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/firebase_admin': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/user_management': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/user_management': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       firebase: 12.15.0
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
@@ -13918,6 +13937,29 @@ snapshots:
       - supports-color
       - vite
 
+  '@firecms/collection_editor@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+    dependencies:
+      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      json5: 2.2.3
+      prism-react-renderer: 2.4.1(react@19.2.7)
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      react-router: 6.30.4(react@19.2.7)
+      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - debug
+      - react-native
+      - supports-color
+      - vite
+
   '@firecms/collection_editor@file:packages/collection_editor(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@firecms/core': link:packages/firecms_core
@@ -13939,6 +13981,28 @@ snapshots:
       '@firecms/collection_editor': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      firebase: 12.15.0
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+    transitivePeerDependencies:
+      - '@firebase/app'
+      - '@react-native-async-storage/async-storage'
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - debug
+      - react-native
+      - react-router
+      - react-router-dom
+      - supports-color
+      - typesense
+      - vite
+
+  '@firecms/collection_editor_firebase@3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+    dependencies:
+      '@firecms/collection_editor': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       firebase: 12.15.0
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
@@ -14027,7 +14091,69 @@ snapshots:
       - supports-color
       - vite
 
-  '@firecms/core@file:packages/firecms_core(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(vite@6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/core@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+    dependencies:
+      '@dnd-kit/core': 6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@dnd-kit/modifiers': 9.0.0(@dnd-kit/core@6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
+      '@dnd-kit/sortable': 10.0.0(@dnd-kit/core@6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
+      '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@floating-ui/dom': 1.7.6
+      '@radix-ui/react-portal': 1.1.12(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@radix-ui/react-slot': 1.3.0(@types/react@19.2.17)(react@19.2.7)
+      clsx: 2.1.1
+      compressorjs: 1.3.0
+      date-fns: 3.6.0
+      fuse.js: 7.4.2
+      history: 5.3.0
+      i18next: 23.16.8
+      json-logic-js: 2.0.5
+      markdown-it: 14.2.0
+      markdown-it-ins: 4.0.0
+      markdown-it-mark: 4.0.0
+      markdown-it-task-lists: 2.1.1
+      notistack: 3.0.2(csstype@3.2.3)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      object-hash: 3.0.0
+      prism-react-renderer: 2.4.1(react@19.2.7)
+      prosemirror-commands: 1.7.1
+      prosemirror-dropcursor: 1.8.2
+      prosemirror-example-setup: 1.2.3
+      prosemirror-gapcursor: 1.4.1
+      prosemirror-history: 1.5.0
+      prosemirror-inputrules: 1.5.1
+      prosemirror-keymap: 1.2.3
+      prosemirror-markdown: 1.13.4
+      prosemirror-model: 1.25.9
+      prosemirror-schema-basic: 1.2.4
+      prosemirror-schema-list: 1.5.1
+      prosemirror-state: 1.4.4
+      prosemirror-tables: 1.8.5
+      prosemirror-transform: 1.12.0
+      prosemirror-view: 1.41.9
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      react-dropzone: 14.4.1(react@19.2.7)
+      react-fast-compare: 3.2.2
+      react-i18next: 14.1.3(i18next@23.16.8)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-image-crop: 11.1.2(react@19.2.7)
+      react-markdown: 9.1.0(@types/react@19.2.17)(react@19.2.7)
+      react-moveable: 0.56.0
+      react-router: 6.30.4(react@19.2.7)
+      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-transition-group: 4.4.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-use-measure: 2.1.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-window: 1.8.11(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      vite-plugin-static-copy: 3.1.4(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      yup: 1.7.1
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - react-native
+      - supports-color
+      - vite
+
+  '@firecms/core@file:packages/firecms_core(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(vite@6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@dnd-kit/core': 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@dnd-kit/modifiers': 9.0.0(@dnd-kit/core@6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
@@ -14079,7 +14205,7 @@ snapshots:
       react-transition-group: 4.4.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-use-measure: 2.1.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-window: 1.8.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vite-plugin-static-copy: 4.1.1(vite@6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      vite-plugin-static-copy: 4.1.1(vite@6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       yup: 1.7.1
     transitivePeerDependencies:
       - '@types/react'
@@ -14093,6 +14219,22 @@ snapshots:
   '@firecms/data_enhancement@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      firebase: 12.15.0
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      react-router: 6.30.4(react@19.2.7)
+      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - react-native
+      - supports-color
+      - vite
+
+  '@firecms/data_enhancement@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+    dependencies:
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       firebase: 12.15.0
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
@@ -14121,6 +14263,25 @@ snapshots:
       '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      react-router: 6.30.4(react@19.2.7)
+      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - debug
+      - react-native
+      - supports-color
+      - vite
+
+  '@firecms/data_export@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+    dependencies:
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
@@ -14166,6 +14327,26 @@ snapshots:
       - supports-color
       - vite
 
+  '@firecms/data_import@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+    dependencies:
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      react-router: 6.30.4(react@19.2.7)
+      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      xlsx: https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - debug
+      - react-native
+      - supports-color
+      - vite
+
   '@firecms/data_import@file:packages/data_import(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@firecms/core': link:packages/firecms_core
@@ -14196,16 +14377,34 @@ snapshots:
       - supports-color
       - vite
 
-  '@firecms/datatalk@3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/data_import_export@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      '@firecms/collection_editor_firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      react-router: 6.30.4(react@19.2.7)
+      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - debug
+      - react-native
+      - supports-color
+      - vite
+
+  '@firecms/datatalk@3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+    dependencies:
+      '@firecms/collection_editor_firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@monaco-editor/react': 4.7.0(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react: 19.2.7
@@ -14226,9 +14425,9 @@ snapshots:
       - typesense
       - vite
 
-  '@firecms/entity_history@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/entity_history@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react: 19.2.7
@@ -14272,6 +14471,35 @@ snapshots:
       - supports-color
       - vite
 
+  '@firecms/firebase@3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+    dependencies:
+      '@firebase/auth': 1.13.3(@firebase/app@0.15.0)
+      '@firecms/collection_editor': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_enhancement': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      firebase: 12.15.0
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      react-router: 6.30.4(react@19.2.7)
+      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+    optionalDependencies:
+      typesense: 1.8.2(@babel/runtime@7.29.7)
+    transitivePeerDependencies:
+      - '@firebase/app'
+      - '@react-native-async-storage/async-storage'
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - debug
+      - react-native
+      - supports-color
+      - vite
+
   '@firecms/firebase@file:packages/firebase_firecms(firebase@12.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typesense@1.8.2(@babel/runtime@7.29.7))':
     dependencies:
       '@firecms/collection_editor': link:packages/collection_editor
@@ -14290,13 +14518,13 @@ snapshots:
     optionalDependencies:
       typesense: 1.8.2(@babel/runtime@7.29.7)
 
-  '@firecms/firebase_admin@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/firebase_admin@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@dnd-kit/core': 6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@dnd-kit/modifiers': 9.0.0(@dnd-kit/core@6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
       '@dnd-kit/sortable': 10.0.0(@dnd-kit/core@6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
       '@dnd-kit/utilities': 3.2.2(react@19.2.7)
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react: 19.2.7
@@ -14322,6 +14550,15 @@ snapshots:
     dependencies:
       axios: 1.18.1(supports-color@7.2.0)
       vite-plugin-static-copy: 3.1.4(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+    transitivePeerDependencies:
+      - debug
+      - supports-color
+      - vite
+
+  '@firecms/schema_inference@3.3.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+    dependencies:
+      axios: 1.18.1(supports-color@7.2.0)
+      vite-plugin-static-copy: 3.1.4(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
     transitivePeerDependencies:
       - debug
       - supports-color
@@ -14411,6 +14648,24 @@ snapshots:
       - supports-color
       - vite
 
+  '@firecms/user_management@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+    dependencies:
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      date-fns: 3.6.0
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - react-native
+      - react-router
+      - react-router-dom
+      - supports-color
+      - vite
+
   '@firecms/user_management@file:packages/user_management(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@firecms/core': link:packages/firecms_core
@@ -14461,7 +14716,7 @@ snapshots:
     dependencies:
       '@googleapis/sqladmin': 37.0.0
       gaxios: 7.1.5
-      google-auth-library: 10.9.0
+      google-auth-library: 10.9.1
       p-throttle: 8.1.0
     transitivePeerDependencies:
       - supports-color
@@ -14487,7 +14742,7 @@ snapshots:
       '@opentelemetry/semantic-conventions': 1.39.0
       arrify: 2.0.1
       extend: 3.0.2
-      google-auth-library: 10.9.0
+      google-auth-library: 10.9.1
       google-gax: 5.0.8
       google-logging-utils: 1.1.3
       heap-js: 2.7.1
@@ -14498,12 +14753,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@google/genai@1.52.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))':
+  '@google/genai@2.18.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))':
     dependencies:
-      google-auth-library: 10.7.0
+      google-auth-library: 10.9.1
       p-retry: 4.6.2
       protobufjs: 7.6.5
-      ws: 8.21.0
+      ws: 8.21.3
     optionalDependencies:
       '@modelcontextprotocol/sdk': 1.29.0(zod@4.4.3)
     transitivePeerDependencies:
@@ -14686,12 +14941,29 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.1.1
 
+  '@inquirer/checkbox@4.3.2(@types/node@26.3.0)':
+    dependencies:
+      '@inquirer/ansi': 1.0.2
+      '@inquirer/core': 10.3.2(@types/node@26.3.0)
+      '@inquirer/figures': 1.0.15
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
+      yoctocolors-cjs: 2.1.3
+    optionalDependencies:
+      '@types/node': 26.3.0
+
   '@inquirer/confirm@5.1.21(@types/node@26.1.1)':
     dependencies:
       '@inquirer/core': 10.3.2(@types/node@26.1.1)
       '@inquirer/type': 3.0.10(@types/node@26.1.1)
     optionalDependencies:
       '@types/node': 26.1.1
+
+  '@inquirer/confirm@5.1.21(@types/node@26.3.0)':
+    dependencies:
+      '@inquirer/core': 10.3.2(@types/node@26.3.0)
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
+    optionalDependencies:
+      '@types/node': 26.3.0
 
   '@inquirer/core@10.3.2(@types/node@26.1.1)':
     dependencies:
@@ -14706,6 +14978,19 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.1.1
 
+  '@inquirer/core@10.3.2(@types/node@26.3.0)':
+    dependencies:
+      '@inquirer/ansi': 1.0.2
+      '@inquirer/figures': 1.0.15
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
+      cli-width: 4.1.0
+      mute-stream: 2.0.0
+      signal-exit: 4.1.0
+      wrap-ansi: 6.2.0
+      yoctocolors-cjs: 2.1.3
+    optionalDependencies:
+      '@types/node': 26.3.0
+
   '@inquirer/editor@4.2.23(@types/node@26.1.1)':
     dependencies:
       '@inquirer/core': 10.3.2(@types/node@26.1.1)
@@ -14713,6 +14998,14 @@ snapshots:
       '@inquirer/type': 3.0.10(@types/node@26.1.1)
     optionalDependencies:
       '@types/node': 26.1.1
+
+  '@inquirer/editor@4.2.23(@types/node@26.3.0)':
+    dependencies:
+      '@inquirer/core': 10.3.2(@types/node@26.3.0)
+      '@inquirer/external-editor': 1.0.3(@types/node@26.3.0)
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
+    optionalDependencies:
+      '@types/node': 26.3.0
 
   '@inquirer/expand@4.0.23(@types/node@26.1.1)':
     dependencies:
@@ -14722,12 +15015,27 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.1.1
 
+  '@inquirer/expand@4.0.23(@types/node@26.3.0)':
+    dependencies:
+      '@inquirer/core': 10.3.2(@types/node@26.3.0)
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
+      yoctocolors-cjs: 2.1.3
+    optionalDependencies:
+      '@types/node': 26.3.0
+
   '@inquirer/external-editor@1.0.3(@types/node@26.1.1)':
     dependencies:
       chardet: 2.2.0
       iconv-lite: 0.7.2
     optionalDependencies:
       '@types/node': 26.1.1
+
+  '@inquirer/external-editor@1.0.3(@types/node@26.3.0)':
+    dependencies:
+      chardet: 2.2.0
+      iconv-lite: 0.7.2
+    optionalDependencies:
+      '@types/node': 26.3.0
 
   '@inquirer/figures@1.0.15': {}
 
@@ -14738,12 +15046,26 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.1.1
 
+  '@inquirer/input@4.3.1(@types/node@26.3.0)':
+    dependencies:
+      '@inquirer/core': 10.3.2(@types/node@26.3.0)
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
+    optionalDependencies:
+      '@types/node': 26.3.0
+
   '@inquirer/number@3.0.23(@types/node@26.1.1)':
     dependencies:
       '@inquirer/core': 10.3.2(@types/node@26.1.1)
       '@inquirer/type': 3.0.10(@types/node@26.1.1)
     optionalDependencies:
       '@types/node': 26.1.1
+
+  '@inquirer/number@3.0.23(@types/node@26.3.0)':
+    dependencies:
+      '@inquirer/core': 10.3.2(@types/node@26.3.0)
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
+    optionalDependencies:
+      '@types/node': 26.3.0
 
   '@inquirer/password@4.0.23(@types/node@26.1.1)':
     dependencies:
@@ -14752,6 +15074,14 @@ snapshots:
       '@inquirer/type': 3.0.10(@types/node@26.1.1)
     optionalDependencies:
       '@types/node': 26.1.1
+
+  '@inquirer/password@4.0.23(@types/node@26.3.0)':
+    dependencies:
+      '@inquirer/ansi': 1.0.2
+      '@inquirer/core': 10.3.2(@types/node@26.3.0)
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
+    optionalDependencies:
+      '@types/node': 26.3.0
 
   '@inquirer/prompts@7.10.1(@types/node@26.1.1)':
     dependencies:
@@ -14768,6 +15098,21 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.1.1
 
+  '@inquirer/prompts@7.10.1(@types/node@26.3.0)':
+    dependencies:
+      '@inquirer/checkbox': 4.3.2(@types/node@26.3.0)
+      '@inquirer/confirm': 5.1.21(@types/node@26.3.0)
+      '@inquirer/editor': 4.2.23(@types/node@26.3.0)
+      '@inquirer/expand': 4.0.23(@types/node@26.3.0)
+      '@inquirer/input': 4.3.1(@types/node@26.3.0)
+      '@inquirer/number': 3.0.23(@types/node@26.3.0)
+      '@inquirer/password': 4.0.23(@types/node@26.3.0)
+      '@inquirer/rawlist': 4.1.11(@types/node@26.3.0)
+      '@inquirer/search': 3.2.2(@types/node@26.3.0)
+      '@inquirer/select': 4.4.2(@types/node@26.3.0)
+    optionalDependencies:
+      '@types/node': 26.3.0
+
   '@inquirer/rawlist@4.1.11(@types/node@26.1.1)':
     dependencies:
       '@inquirer/core': 10.3.2(@types/node@26.1.1)
@@ -14775,6 +15120,14 @@ snapshots:
       yoctocolors-cjs: 2.1.3
     optionalDependencies:
       '@types/node': 26.1.1
+
+  '@inquirer/rawlist@4.1.11(@types/node@26.3.0)':
+    dependencies:
+      '@inquirer/core': 10.3.2(@types/node@26.3.0)
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
+      yoctocolors-cjs: 2.1.3
+    optionalDependencies:
+      '@types/node': 26.3.0
 
   '@inquirer/search@3.2.2(@types/node@26.1.1)':
     dependencies:
@@ -14784,6 +15137,15 @@ snapshots:
       yoctocolors-cjs: 2.1.3
     optionalDependencies:
       '@types/node': 26.1.1
+
+  '@inquirer/search@3.2.2(@types/node@26.3.0)':
+    dependencies:
+      '@inquirer/core': 10.3.2(@types/node@26.3.0)
+      '@inquirer/figures': 1.0.15
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
+      yoctocolors-cjs: 2.1.3
+    optionalDependencies:
+      '@types/node': 26.3.0
 
   '@inquirer/select@4.4.2(@types/node@26.1.1)':
     dependencies:
@@ -14795,9 +15157,23 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.1.1
 
+  '@inquirer/select@4.4.2(@types/node@26.3.0)':
+    dependencies:
+      '@inquirer/ansi': 1.0.2
+      '@inquirer/core': 10.3.2(@types/node@26.3.0)
+      '@inquirer/figures': 1.0.15
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
+      yoctocolors-cjs: 2.1.3
+    optionalDependencies:
+      '@types/node': 26.3.0
+
   '@inquirer/type@3.0.10(@types/node@26.1.1)':
     optionalDependencies:
       '@types/node': 26.1.1
+
+  '@inquirer/type@3.0.10(@types/node@26.3.0)':
+    optionalDependencies:
+      '@types/node': 26.3.0
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -15535,7 +15911,7 @@ snapshots:
 
   '@protobufjs/pool@1.1.0': {}
 
-  '@protobufjs/utf8@1.1.1': {}
+  '@protobufjs/utf8@1.1.2': {}
 
   '@radix-ui/number@1.1.2': {}
 
@@ -16932,19 +17308,19 @@ snapshots:
       postcss-selector-parser: 6.0.10
       tailwindcss: 4.3.1
 
-  '@tailwindcss/vite@4.3.1(vite@6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@tailwindcss/vite@4.3.1(vite@6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@tailwindcss/node': 4.3.1
       '@tailwindcss/oxide': 4.3.1
       tailwindcss: 4.3.1
-      vite: 6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+      vite: 6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
-  '@tailwindcss/vite@4.3.1(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@tailwindcss/vite@4.3.1(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@tailwindcss/node': 4.3.1
       '@tailwindcss/oxide': 4.3.1
       tailwindcss: 4.3.1
-      vite: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+      vite: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
   '@testing-library/dom@10.4.1':
     dependencies:
@@ -17105,6 +17481,11 @@ snapshots:
   '@types/node@26.1.1':
     dependencies:
       undici-types: 8.3.0
+
+  '@types/node@26.3.0':
+    dependencies:
+      undici-types: 8.3.0
+    optional: true
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -17323,7 +17704,7 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.12.2':
     optional: true
 
-  '@vitejs/plugin-react@4.7.0(vite@6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@vitejs/plugin-react@4.7.0(vite@6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@babel/core': 7.29.7
       '@babel/plugin-transform-react-jsx-self': 7.29.7(@babel/core@7.29.7)
@@ -17331,7 +17712,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.27
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+      vite: 6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -17344,6 +17725,18 @@ snapshots:
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
       vite: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+    transitivePeerDependencies:
+      - supports-color
+
+  '@vitejs/plugin-react@4.7.0(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+    dependencies:
+      '@babel/core': 7.29.7
+      '@babel/plugin-transform-react-jsx-self': 7.29.7(@babel/core@7.29.7)
+      '@babel/plugin-transform-react-jsx-source': 7.29.7(@babel/core@7.29.7)
+      '@rolldown/pluginutils': 1.0.0-beta.27
+      '@types/babel__core': 7.20.5
+      react-refresh: 0.17.0
+      vite: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -17643,7 +18036,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  astro@5.18.2(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.22.4)(typescript@5.9.3)(yaml@2.9.0):
+  astro@5.18.2(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.22.4)(typescript@5.9.3)(yaml@2.9.0):
     dependencies:
       '@astrojs/compiler': 2.13.1
       '@astrojs/internal-helpers': 0.7.6
@@ -17700,8 +18093,8 @@ snapshots:
       unist-util-visit: 5.1.0
       unstorage: 1.17.5
       vfile: 6.0.3
-      vite: 6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
-      vitefu: 1.1.3(vite@6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      vite: 6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+      vitefu: 1.1.3(vite@6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       xxhash-wasm: 1.1.0
       yargs-parser: 21.1.1
       yocto-spinner: 0.2.3
@@ -18510,6 +18903,21 @@ snapshots:
       exit: 0.1.2
       graceful-fs: 4.2.11
       jest-config: 29.7.0(@types/node@26.1.1)(ts-node@10.9.2(@types/node@26.1.1)(typescript@5.9.3))
+      jest-util: 29.7.0
+      prompts: 2.4.2
+    transitivePeerDependencies:
+      - '@types/node'
+      - babel-plugin-macros
+      - supports-color
+      - ts-node
+
+  create-jest@29.7.0(@types/node@26.3.0):
+    dependencies:
+      '@jest/types': 29.6.3
+      chalk: 4.1.2
+      exit: 0.1.2
+      graceful-fs: 4.2.11
+      jest-config: 29.7.0(@types/node@26.3.0)
       jest-util: 29.7.0
       prompts: 2.4.2
     transitivePeerDependencies:
@@ -19740,14 +20148,14 @@ snapshots:
       locate-path: 6.0.0
       path-exists: 4.0.0
 
-  firebase-tools@15.25.1(@types/node@26.1.1)(encoding@0.1.13):
+  firebase-tools@15.25.1(@types/node@26.3.0)(encoding@0.1.13):
     dependencies:
       '@apphosting/common': 0.0.8
       '@electric-sql/pglite': 0.3.16
       '@electric-sql/pglite-tools': 0.2.21(@electric-sql/pglite@0.3.16)
       '@google-cloud/cloud-sql-connector': 1.11.3
       '@google-cloud/pubsub': 5.3.1
-      '@inquirer/prompts': 7.10.1(@types/node@26.1.1)
+      '@inquirer/prompts': 7.10.1(@types/node@26.3.0)
       '@modelcontextprotocol/sdk': 1.29.0(zod@4.4.3)
       abort-controller: 3.0.0
       ajv: 8.20.0
@@ -19982,6 +20390,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  gaxios@7.3.1:
+    dependencies:
+      extend: 3.0.2
+      https-proxy-agent: 7.0.6
+      node-fetch: 3.3.2
+    transitivePeerDependencies:
+      - supports-color
+
   gcp-metadata@6.1.1(encoding@0.1.13):
     dependencies:
       gaxios: 6.7.1(encoding@0.1.13)
@@ -19993,13 +20409,13 @@ snapshots:
 
   gcp-metadata@8.1.2:
     dependencies:
-      gaxios: 7.1.5
+      gaxios: 7.3.1
       google-logging-utils: 1.1.3
       json-bigint: 1.0.0
     transitivePeerDependencies:
       - supports-color
 
-  gcp-metadata@8.1.3:
+  gcp-metadata@8.1.4:
     dependencies:
       gaxios: 7.1.3
       google-logging-utils: 1.1.3
@@ -20196,15 +20612,15 @@ snapshots:
     dependencies:
       base64-js: 1.5.1
       ecdsa-sig-formatter: 1.0.11
-      gaxios: 7.1.5
-      gcp-metadata: 8.1.3
+      gaxios: 7.3.1
+      gcp-metadata: 8.1.4
       google-logging-utils: 1.1.3
       gtoken: 8.0.0
       jws: 4.0.1
     transitivePeerDependencies:
       - supports-color
 
-  google-auth-library@10.7.0:
+  google-auth-library@10.9.0:
     dependencies:
       base64-js: 1.5.1
       ecdsa-sig-formatter: 1.0.11
@@ -20215,11 +20631,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  google-auth-library@10.9.0:
+  google-auth-library@10.9.1:
     dependencies:
       base64-js: 1.5.1
       ecdsa-sig-formatter: 1.0.11
-      gaxios: 7.1.5
+      gaxios: 7.3.1
       gcp-metadata: 8.1.2
       google-logging-utils: 1.1.3
       jws: 4.0.1
@@ -20271,7 +20687,7 @@ snapshots:
 
   googleapis@166.0.0:
     dependencies:
-      google-auth-library: 10.9.0
+      google-auth-library: 10.9.1
       googleapis-common: 8.0.2
     transitivePeerDependencies:
       - supports-color
@@ -20306,7 +20722,7 @@ snapshots:
 
   gtoken@8.0.0:
     dependencies:
-      gaxios: 7.1.5
+      gaxios: 7.3.1
       jws: 4.0.1
     transitivePeerDependencies:
       - supports-color
@@ -20664,17 +21080,29 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.1.1
 
-  inquirer@12.9.6(@types/node@26.1.1):
+  inquirer@12.11.1(@types/node@26.3.0):
     dependencies:
       '@inquirer/ansi': 1.0.2
-      '@inquirer/core': 10.3.2(@types/node@26.1.1)
-      '@inquirer/prompts': 7.10.1(@types/node@26.1.1)
-      '@inquirer/type': 3.0.10(@types/node@26.1.1)
+      '@inquirer/core': 10.3.2(@types/node@26.3.0)
+      '@inquirer/prompts': 7.10.1(@types/node@26.3.0)
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
       mute-stream: 2.0.0
       run-async: 4.0.6
       rxjs: 7.8.2
     optionalDependencies:
-      '@types/node': 26.1.1
+      '@types/node': 26.3.0
+
+  inquirer@12.9.6(@types/node@26.3.0):
+    dependencies:
+      '@inquirer/ansi': 1.0.2
+      '@inquirer/core': 10.3.2(@types/node@26.3.0)
+      '@inquirer/prompts': 7.10.1(@types/node@26.3.0)
+      '@inquirer/type': 3.0.10(@types/node@26.3.0)
+      mute-stream: 2.0.0
+      run-async: 4.0.6
+      rxjs: 7.8.2
+    optionalDependencies:
+      '@types/node': 26.3.0
 
   install-artifact-from-github@1.7.0:
     optional: true
@@ -21067,6 +21495,25 @@ snapshots:
       - supports-color
       - ts-node
 
+  jest-cli@29.7.0(@types/node@26.3.0):
+    dependencies:
+      '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@26.1.1)(typescript@5.9.3))
+      '@jest/test-result': 29.7.0
+      '@jest/types': 29.6.3
+      chalk: 4.1.2
+      create-jest: 29.7.0(@types/node@26.3.0)
+      exit: 0.1.2
+      import-local: 3.2.0
+      jest-config: 29.7.0(@types/node@26.3.0)
+      jest-util: 29.7.0
+      jest-validate: 29.7.0
+      yargs: 17.7.3
+    transitivePeerDependencies:
+      - '@types/node'
+      - babel-plugin-macros
+      - supports-color
+      - ts-node
+
   jest-config@29.7.0(@types/node@26.1.1)(ts-node@10.9.2(@types/node@26.1.1)(typescript@5.9.3)):
     dependencies:
       '@babel/core': 7.29.7
@@ -21094,6 +21541,36 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.1.1
       ts-node: 10.9.2(@types/node@26.1.1)(typescript@5.9.3)
+    transitivePeerDependencies:
+      - babel-plugin-macros
+      - supports-color
+
+  jest-config@29.7.0(@types/node@26.3.0):
+    dependencies:
+      '@babel/core': 7.29.7
+      '@jest/test-sequencer': 29.7.0
+      '@jest/types': 29.6.3
+      babel-jest: 29.7.0(@babel/core@7.29.7)
+      chalk: 4.1.2
+      ci-info: 3.9.0
+      deepmerge: 4.3.1
+      glob: 7.2.3
+      graceful-fs: 4.2.11
+      jest-circus: 29.7.0
+      jest-environment-node: 29.7.0
+      jest-get-type: 29.6.3
+      jest-regex-util: 29.6.3
+      jest-resolve: 29.7.0
+      jest-runner: 29.7.0
+      jest-util: 29.7.0
+      jest-validate: 29.7.0
+      micromatch: 4.0.8
+      parse-json: 5.2.0
+      pretty-format: 29.7.0
+      slash: 3.0.0
+      strip-json-comments: 3.1.1
+    optionalDependencies:
+      '@types/node': 26.3.0
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
@@ -21428,6 +21905,18 @@ snapshots:
       - supports-color
       - ts-node
 
+  jest@29.7.0(@types/node@26.3.0):
+    dependencies:
+      '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@26.1.1)(typescript@5.9.3))
+      '@jest/types': 29.6.3
+      import-local: 3.2.0
+      jest-cli: 29.7.0(@types/node@26.3.0)
+    transitivePeerDependencies:
+      - '@types/node'
+      - babel-plugin-macros
+      - supports-color
+      - ts-node
+
   jiti@2.7.0: {}
 
   jju@1.4.0: {}
@@ -21471,7 +21960,7 @@ snapshots:
       whatwg-encoding: 3.1.1
       whatwg-mimetype: 4.0.0
       whatwg-url: 14.2.0
-      ws: 8.21.0
+      ws: 8.21.3
       xml-name-validator: 5.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -21596,7 +22085,7 @@ snapshots:
     dependencies:
       readable-stream: 2.3.8
 
-  lerna@9.0.7(@types/node@26.1.1):
+  lerna@9.0.7(@types/node@26.3.0):
     dependencies:
       '@npmcli/arborist': 9.1.6
       '@npmcli/package-json': 7.0.2
@@ -21627,7 +22116,7 @@ snapshots:
       import-local: 3.1.0
       ini: 1.3.8
       init-package-json: 8.2.2
-      inquirer: 12.9.6(@types/node@26.1.1)
+      inquirer: 12.9.6(@types/node@26.3.0)
       is-ci: 3.0.1
       jest-diff: 30.4.1
       js-yaml: 4.3.1
@@ -23730,7 +24219,7 @@ snapshots:
       '@protobufjs/float': 1.0.2
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
-      '@protobufjs/utf8': 1.1.1
+      '@protobufjs/utf8': 1.1.2
       '@types/node': 26.1.1
       long: 5.3.2
 
@@ -25232,6 +25721,26 @@ snapshots:
       babel-jest: 29.7.0(@babel/core@7.29.7)
       jest-util: 30.4.1
 
+  ts-jest@29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.3.0))(typescript@5.9.3):
+    dependencies:
+      bs-logger: 0.2.6
+      fast-json-stable-stringify: 2.1.0
+      handlebars: 4.7.9
+      jest: 29.7.0(@types/node@26.3.0)
+      json5: 2.2.3
+      lodash.memoize: 4.1.2
+      make-error: 1.3.6
+      semver: 7.8.5
+      type-fest: 4.41.0
+      typescript: 5.9.3
+      yargs-parser: 21.1.1
+    optionalDependencies:
+      '@babel/core': 7.29.7
+      '@jest/transform': 30.4.1
+      '@jest/types': 30.4.1
+      babel-jest: 29.7.0(@babel/core@7.29.7)
+      jest-util: 30.4.1
+
   ts-mixer@6.0.4: {}
 
   ts-node@10.9.2(@types/node@26.1.1)(typescript@5.9.3):
@@ -25672,13 +26181,21 @@ snapshots:
       tinyglobby: 0.2.17
       vite: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
-  vite-plugin-static-copy@4.1.1(vite@6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)):
+  vite-plugin-static-copy@3.1.4(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)):
     dependencies:
       chokidar: 3.6.0
       p-map: 7.0.6
       picocolors: 1.1.1
       tinyglobby: 0.2.17
-      vite: 6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+      vite: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+
+  vite-plugin-static-copy@4.1.1(vite@6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)):
+    dependencies:
+      chokidar: 3.6.0
+      p-map: 7.0.6
+      picocolors: 1.1.1
+      tinyglobby: 0.2.17
+      vite: 6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
   vite-plugin-static-copy@4.1.1(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)):
     dependencies:
@@ -25688,18 +26205,18 @@ snapshots:
       tinyglobby: 0.2.17
       vite: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
-  vite-plugin-svgr@4.5.0(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)):
+  vite-plugin-svgr@4.5.0(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)):
     dependencies:
       '@rollup/pluginutils': 5.4.0(rollup@4.62.2)
       '@svgr/core': 8.1.0(typescript@5.9.3)
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.9.3))
-      vite: 7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+      vite: 7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
     transitivePeerDependencies:
       - rollup
       - supports-color
       - typescript
 
-  vite@6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0):
+  vite@6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0):
     dependencies:
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.4)
@@ -25708,7 +26225,7 @@ snapshots:
       rollup: 4.62.2
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 26.1.1
+      '@types/node': 26.3.0
       fsevents: 2.3.3
       jiti: 2.7.0
       lightningcss: 1.32.0
@@ -25731,9 +26248,25 @@ snapshots:
       tsx: 4.22.4
       yaml: 2.9.0
 
-  vitefu@1.1.3(vite@6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)):
+  vite@7.3.5(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0):
+    dependencies:
+      esbuild: 0.27.7
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
+      postcss: 8.5.23
+      rollup: 4.62.2
+      tinyglobby: 0.2.17
     optionalDependencies:
-      vite: 6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
+      '@types/node': 26.3.0
+      fsevents: 2.3.3
+      jiti: 2.7.0
+      lightningcss: 1.32.0
+      tsx: 4.22.4
+      yaml: 2.9.0
+
+  vitefu@1.1.3(vite@6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)):
+    optionalDependencies:
+      vite: 6.4.3(@types/node@26.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0)
 
   void-elements@3.1.0: {}
 
@@ -25945,6 +26478,8 @@ snapshots:
   ws@8.21.0: {}
 
   ws@8.21.1: {}
+
+  ws@8.21.3: {}
 
   wsl-utils@0.1.0:
     dependencies:
