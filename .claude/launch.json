@@ -3,6 +3,20 @@
   "autoPort": false,
   "configurations": [
     {
+      "name": "website-astro-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "website-astro",
+        "--",
+        "--port",
+        "4878"
+      ],
+      "port": 4878
+    },
+    {
       "name": "website-astro",
       "runtimeExecutable": "npm",
       "runtimeArgs": [

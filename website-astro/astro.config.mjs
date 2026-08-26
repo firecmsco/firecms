@@ -66,6 +66,10 @@ export default defineConfig({
                             slug: "docs/cloud/app_config"
                         },
                         {
+                            label: "AI Agents (MCP)", translations: { es: "Agentes de IA (MCP)", de: "KI-Agenten (MCP)", fr: "Agents IA (MCP)" , it: "Agenti IA (MCP)", pt: "Agentes de IA (MCP)" },
+                            slug: "docs/cloud/mcp_server"
+                        },
+                        {
                             label: "Deployment", translations: { es: "Despliegue", de: "Deployment", fr: "Déploiement" , it: "Deployment", pt: "Deployment" },
                             slug: "docs/cloud/deployment"
                         },

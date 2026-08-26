@@ -1,0 +1,238 @@
+---
+title: "Connecter un agent IA à FireCMS Cloud (serveur MCP)"
+slug: fr/docs/cloud/mcp_server
+description: "Utilisez le serveur MCP de FireCMS pour que Claude, Cursor ou n'importe quel client MCP puisse parcourir et modifier vos données Firestore, créer des collections, déduire des schémas et gérer les utilisateurs."
+---
+
+FireCMS Cloud embarque un **serveur MCP**, afin que des assistants IA comme Claude Code, Claude Desktop
+ou Cursor puissent travailler directement sur votre projet : parcourir et modifier les données, créer
+et modifier des collections, déduire des schémas à partir des documents déjà présents dans votre
+Firestore, et gérer les utilisateurs.
+
+Il est publié sous le nom [`@firecms/mcp-server`](https://www.npmjs.com/package/@firecms/mcp-server)
+et s'exécute localement sur votre machine via stdio. Il dialogue avec l'API FireCMS Cloud avec votre
+propre compte : un agent ne peut donc jamais faire ce que vous ne pourriez pas faire vous-même dans
+la console.
+
+## Avant de commencer
+
+- **Node.js 18** ou une version plus récente.
+- Un **client compatible MCP** : Claude Code, Claude Desktop, Cursor, ou tout autre client
+  qui parle le Model Context Protocol.
+- Un compte **FireCMS Cloud**. La lecture est ouverte à tout membre du projet ; créer ou modifier
+  des collections, des données et des utilisateurs nécessite le rôle `admin` sur le projet.
+
+## Ajouter le serveur MCP de FireCMS
+
+Dans **Claude Code**, exécutez ceci dans votre terminal :
+
+```bash
+claude mcp add firecms -- npx -y @firecms/mcp-server
+```
+
+Pour **Claude Desktop**, **Cursor** ou tout autre client MCP, ajoutez ceci au fichier de
+configuration MCP du client :
+
+```json
+{
+  "mcpServers": {
+    "firecms": {
+      "command": "npx",
+      "args": ["-y", "@firecms/mcp-server"]
+    }
+  }
+}
+```
+
+Où se trouve ce fichier :
+
+- **Claude Desktop** : `claude_desktop_config.json`
+- **Cursor** : `.cursor/mcp.json` dans votre projet, ou `~/.cursor/mcp.json` pour tous les projets
+
+## Se connecter
+
+Redémarrez votre client, puis demandez à l'agent d'exécuter l'outil `firecms_login` :
+
+```
+Run the firecms_login tool
+```
+
+Un navigateur s'ouvre pour la connexion Google et les identifiants sont enregistrés dans
+`~/.firecms/tokens.json`, le même fichier que celui utilisé par la
+[CLI FireCMS](https://www.npmjs.com/package/@firecms/cli). Vous ne le faites qu'une fois : les
+sessions suivantes réutilisent ces jetons automatiquement.
+
+Utilisez `firecms_get_current_user` pour vérifier avec quel compte vous êtes connecté, et
+`firecms_logout` pour vous déconnecter.
+
+## Essayer
+
+Demandez à l'agent quelque chose comme :
+
+```
+List my FireCMS projects
+```
+
+```
+List the collections in my FireCMS project <votre-project-id>
+```
+
+```
+Add a "featured" boolean property to the products collection, shown after the title
+```
+
+## Intégrer un projet Firebase existant
+
+C'est la première session typique. Tout ici s'appuie sur le compte Google avec lequel vous vous
+êtes connecté :
+
+1. `list_firebase_projects` — voir quels projets vous pouvez connecter, et ce qu'il leur manque encore
+2. `get_project_setup_status` — examiner un projet en détail (facultatif)
+3. `enable_project_apis` — uniquement si `apisEnabled` vaut false
+4. `enable_firestore` — uniquement si `firestoreEnabled` vaut false (l'emplacement est définitif)
+5. `connect_project_to_firecms` — compte de service, utilisateur administrateur et règles de sécurité
+6. `setup_all_collections` — déduire toutes les collections racines à partir des données existantes
+
+:::caution
+**Firebase Authentication** doit être activé sur le projet avant l'étape 5. C'est le seul prérequis
+sans API dédiée : activez-le d'abord dans la console Firebase.
+:::
+
+L'étape 5 ajoute aussi la règle d'accès de FireCMS aux règles Firestore et Storage du projet. Sans
+elle, le CMS signale *Missing Firestore Security Rules* et n'ouvre rien. Si vous devez les réappliquer
+plus tard, `apply_firestore_security_rules` est idempotent.
+
+L'étape 6 est celle où un projet existant devient un CMS opérationnel : FireCMS échantillonne les
+documents de chaque collection racine, déduit les types de propriétés et choisit les noms d'affichage,
+un nom au singulier, une icône et un groupe de navigation.
+
+## Construire des collections à partir de données existantes
+
+| Outil | Description |
+|------|-------------|
+| `get_root_collections` | Liste les collections racines Firestore d'un projet (lecture en direct) |
+| `list_subcollections` | Liste les sous-collections d'un document, pour explorer les données imbriquées |
+| `list_databases` | Liste les bases de données Firestore (utile seulement au-delà de `(default)`) |
+| `preview_inferred_schema` | Déduit un schéma à partir d'un échantillon de documents **sans l'enregistrer** |
+| `infer_collections_from_data` 🔒 | Déduit et enregistre des collections pour les chemins choisis |
+| `setup_all_collections` 🔒 | Déduit et enregistre toutes les collections racines non encore associées |
+
+`preview_inferred_schema` est l'option non destructive : il échantillonne jusqu'à 200 documents,
+déduit les types, les énumérations et les validations, et renvoie un brouillon que vous pouvez
+modifier puis persister avec `save_collection_schema`. Il fonctionne aussi pour les sous-collections
+et pour tout chemin que les outils en masse ignorent.
+
+`infer_collections_from_data` et `setup_all_collections` écrivent le résultat directement dans le
+projet. Tous deux ignorent les chemins déjà associés à une collection : vous pouvez donc les relancer
+à mesure que votre base grandit. Ils refusent également les chemins sans documents — sans rien à
+échantillonner, un modèle inventerait un schéma à partir du seul nom du chemin.
+
+## Outils disponibles
+
+Les outils marqués 🔒 nécessitent le rôle `admin` sur le projet.
+
+### Authentification
+
+| Outil | Description |
+|------|-------------|
+| `firecms_login` | Se connecter via le navigateur (Google OAuth) |
+| `firecms_logout` | Se déconnecter |
+| `firecms_get_current_user` | Affiche l'utilisateur courant |
+
+### Mise en route
+
+| Outil | Description |
+|------|-------------|
+| `list_firebase_projects` | Projets Google Cloud accessibles, avec leur état de préparation pour FireCMS |
+| `get_project_setup_status` | État de préparation détaillé d'un projet |
+| `list_firestore_locations` | Emplacements disponibles pour une nouvelle base Firestore |
+| `enable_project_apis` | Active les API Google Cloud nécessaires à FireCMS |
+| `enable_firestore` | Crée la base Firestore par défaut (l'emplacement est définitif) |
+| `connect_project_to_firecms` | Connecte un projet Firebase existant et applique les règles de sécurité nécessaires |
+| `apply_firestore_security_rules` | Ajoute la règle d'accès FireCMS à Firestore et Storage (idempotent) |
+| `create_firecms_webapp` | Relance la création de l'application web si elle a échoué lors de la connexion |
+
+### Projets et configuration
+
+| Outil | Description |
+|------|-------------|
+| `list_projects` | Liste vos projets FireCMS Cloud |
+| `get_project_config` 🔒 | Récupère la configuration complète du projet (nom, couleurs, offre, fonctionnalités) |
+| `update_project_name` 🔒 | Renomme un projet |
+| `update_project_colors` 🔒 | Met à jour les couleurs de marque principale et secondaire |
+| `update_default_locale` 🔒 | Change la langue par défaut |
+| `toggle_text_search` 🔒 | Active ou désactive la recherche de texte locale |
+| `toggle_entity_history` 🔒 | Active ou désactive l'historique des entités |
+
+### Utilisateurs
+
+| Outil | Description |
+|------|-------------|
+| `list_users` 🔒 | Liste les utilisateurs du projet et leurs rôles |
+| `add_user` 🔒 | Invite un utilisateur |
+| `update_user_roles` 🔒 | Modifie les rôles d'un utilisateur |
+| `remove_user` 🔒 | Supprime un utilisateur |
+
+### Schémas de collections
+
+| Outil | Description |
+|------|-------------|
+| `list_collection_schemas` 🔒 | Liste tous les schémas de collection enregistrés |
+| `get_collection_schema` 🔒 | Récupère le schéma complet d'une collection |
+| `save_collection_schema` 🔒 | Crée ou remplace un schéma de collection |
+| `update_collection_schema` 🔒 | Met partiellement à jour un schéma de collection |
+| `delete_collection_schema` 🔒 | Supprime un schéma de collection (les données sont intactes) |
+| `save_property` 🔒 | Ajoute ou met à jour une propriété d'une collection |
+| `delete_property` 🔒 | Retire une propriété d'un schéma de collection |
+| `generate_collection` | Génère un schéma de collection par IA à partir d'un prompt |
+| `modify_collection` | Modifie un schéma existant par IA à partir d'un prompt |
+
+### Documents
+
+| Outil | Description |
+|------|-------------|
+| `list_documents` | Interroge les documents (filtres, tri, pagination) |
+| `get_document` | Récupère un document par son chemin |
+| `create_document` | Crée un document |
+| `update_document` | Met partiellement à jour un document |
+| `delete_document` | Supprime un document |
+| `count_documents` | Compte les documents d'une collection |
+| `export_collection` | Exporte les données d'une collection en JSON |
+| `import_documents` 🔒 | Importe des documents en masse (500 max. par appel) |
+
+## Ressources
+
+Les clients qui prennent en charge les ressources MCP peuvent aussi les lire directement :
+
+| URI | Description |
+|-----|-------------|
+| `firecms://projects/{id}/collections` | Collections Firestore de premier niveau |
+| `firecms://projects/{id}/users` | Utilisateurs du projet et rôles |
+| `firecms://projects/{id}/schemas` | Tous les schémas de collection (arbre de configuration complet) |
+| `firecms://projects/{id}/config` | Instantané de la configuration du projet |
+
+## Permissions et sécurité
+
+- L'**authentification** se fait par Google OAuth dans votre navigateur, le même flux que `firecms login` en CLI.
+- L'**autorisation** est vérifiée par projet : toute écriture exige le rôle `admin`.
+- Les **jetons** résident dans `~/.firecms/tokens.json`, partagé avec la CLI. Le jeton du backend
+  n'est conservé qu'en mémoire et abandonné à la déconnexion.
+- **Les identifiants n'atteignent jamais le modèle** : `list_projects` retire le compte de service
+  de chaque projet de sa réponse.
+
+## Dépannage
+
+**L'agent indique que vous n'êtes pas connecté.** Exécutez l'outil `firecms_login`. Si la fenêtre du
+navigateur ne s'ouvre pas, lancez `npx @firecms/mcp-server --help` dans un terminal pour confirmer
+que le paquet s'installe et démarre.
+
+**Les outils n'apparaissent pas après modification de la configuration.** Les clients MCP lisent leur
+configuration au démarrage : redémarrez complètement le client.
+
+**Une écriture échoue avec une erreur de permissions.** Le compte avec lequel vous êtes connecté a
+besoin du rôle `admin` sur ce projet. Vérifiez-le dans la section *Utilisateurs* du projet sur
+[FireCMS Cloud](https://app.firecms.co), ou demandez à un administrateur de vous l'accorder.
+
+**Aucune collection n'apparaît après la connexion d'un projet.** Vérifiez que Firebase Authentication
+est activé et que les règles de sécurité ont bien été appliquées (`apply_firestore_security_rules`),
+puis exécutez `setup_all_collections`.
