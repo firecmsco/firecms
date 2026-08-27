@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { CenteredView, Typography } from "@firecms/ui";
+import { AppliedBundles, applyPluginTranslations, createAppliedBundles } from "./plugin_translations";
 import { AuthController } from "../types";
 import { CustomizationController, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { AuthControllerContext, ModeControllerProvider } from "../contexts";
@@ -112,44 +113,33 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         authController
     });
 
-    // Inject plugin translations into the existing i18next instance.
+    // Inject plugin translations into the live i18next instance.
     //
-    // A locale given as a function is a lazily loaded bundle, so it is resolved
-    // only for the language actually in use (plus English, which every other
-    // language falls back to) and re-resolved when the language changes. Plain
-    // records are applied for every locale as before — they are already in the
-    // bundle, so there is nothing to save by deferring them.
+    // The work, and the reason repeat writes have to be suppressed, is in
+    // `applyPluginTranslations`.
+    const appliedBundles = useRef<AppliedBundles>(createAppliedBundles());
+    const appliedTo = useRef<unknown>(null);
+
     useEffect(() => {
         if (!i18n) return;
 
-        let active = true;
+        // A different instance has its own store and has been written nothing.
+        // Reset here rather than in an effect of its own, which would run after
+        // this one and wipe the record of what this pass just wrote.
+        if (appliedTo.current !== i18n) {
+            appliedTo.current = i18n;
+            appliedBundles.current = createAppliedBundles();
+        }
 
-        const applyFor = (language: string) => {
-            const wanted = new Set([language.split("-")[0], "en"]);
-            plugins?.forEach(plugin => {
-                if (!plugin.i18n) return;
-                Object.entries(plugin.i18n).forEach(([locale, translations]) => {
-                    const add = (bundle: Record<string, string>) => {
-                        if (!active) return;
-                        i18n.addResourceBundle(
-                            locale,
-                            "firecms_core",
-                            bundle,
-                            true,  // deep merge
-                            true   // overwrite
-                        );
-                    };
-                    if (typeof translations === "function") {
-                        if (!wanted.has(locale.split("-")[0])) return;
-                        translations().then(add).catch(() => {
-                            // A locale that fails to load falls back to English.
-                        });
-                    } else {
-                        add(translations);
-                    }
-                });
-            });
-        };
+        let active = true;
+        const isActive = () => active;
+        const applyFor = (language: string) => applyPluginTranslations({
+            i18n,
+            plugins,
+            language,
+            applied: appliedBundles.current,
+            isActive
+        });
 
         applyFor(i18n.language ?? "en");
         i18n.on("languageChanged", applyFor);
