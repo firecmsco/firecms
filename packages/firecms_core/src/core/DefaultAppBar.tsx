@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Link, useNavigate } from "react-router-dom";
-import { ErrorBoundary, FireCMSLogo, LanguageToggle } from "../components";
+import { ErrorBoundary, LanguageToggle } from "../components";
 import {
     Avatar,
     BrightnessMediumIcon,
@@ -20,6 +20,7 @@ import { useAuthController, useLargeLayout, useModeController, useNavigationCont
 import { User } from "../types";
 import { useApp } from "../app/useApp";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
+import { DrawerLogo } from "./DefaultDrawer";
 
 export type DefaultAppBarProps<ADDITIONAL_PROPS = object> = {
 
@@ -119,32 +120,43 @@ export const DefaultAppBar = function DefaultAppBar({
                 "flex flex-row gap-2 px-4 items-center",
                 {
                     "pl-[19rem]": drawerOpen && largeLayout,
-                    "pl-24": hasDrawer && !(drawerOpen && largeLayout),
+                    // The title has to sit at the same x whether or not a Drawer
+                    // is mounted, so the bar reserves the collapsed rail's width
+                    // in both cases. Only a pinned-open drawer moves it, in step
+                    // with the drawer itself.
+                    "pl-24": !(drawerOpen && largeLayout) && (hasDrawer || largeLayout),
                     "z-10": largeLayout,
                     "duration-100": drawerOpen && largeLayout,
                 },
                 className)}>
 
 
+            {/* Rendering DrawerLogo itself, rather than rebuilding its box here,
+                is what keeps the mark from moving when a screen with a drawer
+                follows one without: matching it by hand still left it 4px high,
+                because DrawerLogo centres a 40px box under `pt-4` instead of
+                centring in the 64px bar.
+
+                Gated on `largeLayout`, not on `lg:`: useLargeLayout resolves at
+                min-width 1025px while Tailwind's `lg:` starts at 1024px, and at
+                exactly 1024px the logo would render into a bar that had not
+                reserved room for it, landing on top of the title. */}
+            {navigation && !hasDrawer && largeLayout &&
+                <div className={"absolute left-0 top-0"}>
+                    <DrawerLogo logo={logo} />
+                </div>}
+
             {navigation && <div className="mr-2 hidden lg:block">
                 <Link
                     className="visited:text-inherit visited:dark:text-inherit block"
                     to={navigation?.basePath ?? "/"}
                 >
-                    <div className={"flex flex-row gap-4"}>
-                        {!hasDrawer && (logo
-                            ? <img src={logo}
-                                alt="Logo"
-                                className={cls("w-[32px] h-[32px] object-contain")} />
-                            : <FireCMSLogo width={"32px"} height={"32px"} />)}
-
-                        {typeof title === "string"
-                            ? <Typography variant="subtitle1"
-                                noWrap>
-                                {title}
-                            </Typography>
-                            : title}
-                    </div>
+                    {typeof title === "string"
+                        ? <Typography variant="subtitle1"
+                            noWrap>
+                            {title}
+                        </Typography>
+                        : title}
                 </Link>
             </div>}
 

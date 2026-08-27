@@ -455,6 +455,7 @@ export const hi: FireCMSTranslations = {
     not_the_admin_panel: "व्यवस्थापक पैनल पर नहीं।",
     join_our_newsletter: "हमारे न्यूज़लेटर से जुड़ें। बिना किसी स्पैम के, केवल महत्वपूर्ण अपडेट!",
     by_signing_in_you_agree_to_our: "साइन इन करके आप हमारे नियमों और शर्तों से सहमत होते हैं",
+    please_accept_the_terms_to_continue: "जारी रखने के लिए कृपया नियम और शर्तें स्वीकार करें",
     terms_and_conditions: "नियम और शर्तें",
     and_our: "और हमारी गोपनीयता नीति",
     privacy_policy: "गोपनीयता नीति",

@@ -60,11 +60,18 @@ const ButtonInner = React.memo(React.forwardRef<
         "border border-surface-accent-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark dark:border-surface-accent-600 hover:bg-surface-accent-200 hover:bg-opacity-75 hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800": variant === "outlined" && color === "text" && !disabled,
         "border border-surface-300 text-text-primary hover:bg-surface-accent-200 hover:bg-opacity-75 hover:bg-surface-accent-200/75 dark:border-surface-600 dark:text-text-primary-dark dark:hover:bg-surface-accent-800": variant === "outlined" && color === "neutral" && !disabled,
 
-        // Disabled states for all variants
-        "text-text-disabled dark:text-text-disabled-dark": disabled,
-        "border border-transparent opacity-50": variant === "text" && disabled,
-        "border border-surface-500 opacity-50": variant === "outlined" && disabled,
-        "border border-transparent bg-surface-300 dark:bg-surface-500 opacity-40 bg-surface-300/40 dark:bg-surface-500/40": variant === "filled" && disabled,
+        // Disabled states for all variants.
+        // A disabled button still has to be readable: it is often disabled
+        // precisely because the user has to do something first, and they can
+        // only decide to do it if they can read the label. So "inactive" is
+        // carried by a flat muted surface and the cursor, never by fading the
+        // label toward the background. The previous rules stacked a low-alpha
+        // text colour, a low-alpha background and `opacity-40/50`, which landed
+        // the login buttons at 3.6:1.
+        "cursor-not-allowed text-surface-600 dark:text-surface-400": disabled,
+        "border border-transparent": variant === "text" && disabled,
+        "border border-surface-300 dark:border-surface-600": variant === "outlined" && disabled,
+        "border border-transparent bg-surface-accent-100 dark:bg-surface-800": variant === "filled" && disabled,
     });
 
     const iconColorClass = (color === "neutral" || color === "text") && !disabled

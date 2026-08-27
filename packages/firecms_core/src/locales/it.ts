@@ -455,6 +455,7 @@ export const it: FireCMSTranslations = {
     not_the_admin_panel: "non sul pannello di amministrazione.",
     join_our_newsletter: "Iscriviti alla nostra newsletter. Niente spam, solo aggiornamenti importanti!",
     by_signing_in_you_agree_to_our: "Accedendo accetti i nostri",
+    please_accept_the_terms_to_continue: "Accetta i termini e le condizioni per continuare",
     terms_and_conditions: "Termini e Condizioni",
     and_our: "e la nostra",
     privacy_policy: "Informativa sulla privacy",

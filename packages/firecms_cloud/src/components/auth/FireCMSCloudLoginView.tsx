@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
     BrightnessMediumIcon,
     Checkbox,
+    cls,
     DarkModeIcon,
     IconButton,
     Label,
@@ -51,9 +52,27 @@ export function FireCMSCloudLoginView({
     const { mode, setMode } = useModeController();
 
     const [termsAccepted, setTermsAccepted] = useState(false);
+    const [termsMissing, setTermsMissing] = useState(false);
+    const termsRowRef = React.useRef<HTMLDivElement>(null);
     const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false);
     const [fadeIn, setFadeIn] = useState(false);
     const [passwordLoginSelected, setPasswordLoginSelected] = useState(false);
+
+    // The consent checkbox gates sign in, but it used to do it by disabling both
+    // buttons, so a click landed on a dead control that never said why. Roughly
+    // a third of everyone who reached this screen left without attempting any
+    // auth method, steadily, for a year. The buttons stay live now and the gate
+    // states its own requirement when it stops you.
+    const consentSatisfied = () => {
+        if (!includeTermsAndNewsLetter || termsAccepted) {
+            setTermsMissing(false);
+            return true;
+        }
+        setTermsMissing(true);
+        onAnalyticsEvent?.("terms_required_blocked");
+        termsRowRef.current?.querySelector("button")?.focus();
+        return false;
+    };
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -253,24 +272,19 @@ export function FireCMSCloudLoginView({
                 <div className={"w-full max-w-md"}>
                     {includeTermsAndNewsLetter &&
                         <div className={"mb-4"}>
-                            <div className="flex items-center space-x-2">
-                                <Checkbox
-                                    id="newsletter-checkbox"
-                                    checked={subscribeToNewsletter}
-                                    onCheckedChange={setSubscribeToNewsletter}
-                                    size="small"
-                                />
-                                <Label htmlFor="newsletter-checkbox">
-                                    <Typography variant={"caption"} color={"primary"}>
-                                        {t("join_our_newsletter")}
-                                    </Typography>
-                                </Label>
-                            </div>
-                            {!passwordLoginSelected && <div className="flex items-center space-x-2">
+                            {/* Required consent first, optional newsletter after
+                                it: the blocking checkbox used to sit second, under
+                                the one that does not gate anything. */}
+                            {!passwordLoginSelected && <div ref={termsRowRef}
+                                                           className={cls("flex items-center space-x-2 rounded-md -mx-2 px-2 py-1 transition-colors",
+                                                               termsMissing && "bg-red-50 dark:bg-red-500/10")}>
                                 <Checkbox
                                     id="terms-checkbox"
                                     checked={termsAccepted}
-                                    onCheckedChange={setTermsAccepted}
+                                    onCheckedChange={(checked) => {
+                                        setTermsAccepted(checked);
+                                        if (checked) setTermsMissing(false);
+                                    }}
                                     size="small"
                                 />
                                 <Label htmlFor="terms-checkbox">
@@ -287,11 +301,35 @@ export function FireCMSCloudLoginView({
                                     </Typography>
                                 </Label>
                             </div>}
+
+                            {termsMissing && !passwordLoginSelected &&
+                                <Typography variant={"caption"}
+                                            color={"error"}
+                                            role={"alert"}
+                                            // Typography's `error` red lands at 4.33:1 on this
+                                            // panel, just under the 4.5 this 11px text needs.
+                                            className={"mt-1 ml-2 font-medium text-red-700 dark:text-red-500"}>
+                                    {t("please_accept_the_terms_to_continue")}
+                                </Typography>}
+
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="newsletter-checkbox"
+                                    checked={subscribeToNewsletter}
+                                    onCheckedChange={setSubscribeToNewsletter}
+                                    size="small"
+                                />
+                                <Label htmlFor="newsletter-checkbox">
+                                    <Typography variant={"caption"} color={"primary"}>
+                                        {t("join_our_newsletter")}
+                                    </Typography>
+                                </Label>
+                            </div>
                         </div>}
 
                     {!passwordLoginSelected && <GoogleLoginButton
-                        disabled={!termsAccepted && includeTermsAndNewsLetter}
                         onClick={() => {
+                            if (!consentSatisfied()) return;
                             onAnalyticsEvent?.("google_attempt");
                             fireCMSBackend.googleLogin(includeGoogleAdminScopes).then((user) => {
                                 onAnalyticsEvent?.("google_success");
@@ -304,10 +342,10 @@ export function FireCMSCloudLoginView({
                         }}/>}
 
                     {!passwordLoginSelected && <LoginButton
-                        disabled={!termsAccepted && includeTermsAndNewsLetter}
                         text={t("email_password")}
                         icon={<MailIcon size={24}/>}
                         onClick={() => {
+                            if (!consentSatisfied()) return;
                             onAnalyticsEvent?.("password_method_selected");
                             setPasswordLoginSelected(true);
                         }}/>}

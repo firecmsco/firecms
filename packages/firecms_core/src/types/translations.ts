@@ -486,6 +486,7 @@ export interface FireCMSTranslations {
     not_the_admin_panel: string;
     join_our_newsletter: string;
     by_signing_in_you_agree_to_our: string;
+    please_accept_the_terms_to_continue: string;
     terms_and_conditions: string;
     and_our: string;
     privacy_policy: string;

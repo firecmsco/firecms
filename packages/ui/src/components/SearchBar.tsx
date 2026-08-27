@@ -115,7 +115,10 @@ export function SearchBar({
                     "relative flex items-center rounded-lg transition-all bg-transparent outline-none appearance-none border-none",
                     inputPaddingClass, "h-full text-current",
                     size === "small" ? "text-sm" : "",
-                    expandable ? (active ? "w-[220px]" : "w-[180px]") : "",
+                    // Not expandable means the input owns the whole bar. Without a
+                    // width it fell back to the browser default (~180px) inside a
+                    // full width shell, so focus styling wrapped part of the bar.
+                    expandable ? (active ? "w-[220px]" : "w-[180px]") : "w-full pr-10",
                     innerClassName
                 )}
             />
