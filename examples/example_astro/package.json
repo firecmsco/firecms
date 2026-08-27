@@ -11,7 +11,7 @@
         "astro": "astro"
     },
     "dependencies": {
-        "@astrojs/node": "^9.5.5",
+        "@astrojs/node": "^11.0.2",
         "@astrojs/react": "^4.4.0",
         "@firecms/collection_editor": "file:../../packages/collection_editor",
         "@firecms/collection_editor_firebase": "file:../../packages/collection_editor_firebase",
