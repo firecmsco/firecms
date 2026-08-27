@@ -46,4 +46,58 @@ describe("Button", () => {
         render(<Button ref={ref}>Ref</Button>);
         expect(ref.current).toBeInstanceOf(HTMLButtonElement);
     });
+
+    describe("disabled styling", () => {
+
+        /**
+         * Disabled used to stack three fades: a low-alpha text colour, a
+         * low-alpha background and `opacity-40`/`opacity-50` over both. The
+         * login CTAs, which are disabled until consent is given, measured
+         * 3.6:1. A disabled control still has to be readable, because it is
+         * usually disabled precisely because the user must do something first.
+         */
+        it("does not fade the label with opacity", () => {
+            for (const variant of ["filled", "outlined", "text"] as const) {
+                const { unmount } = render(<Button variant={variant} disabled>D</Button>);
+                const className = screen.getByRole("button", { name: "D" }).className;
+                expect(className).not.toContain("opacity-40");
+                expect(className).not.toContain("opacity-50");
+                unmount();
+            }
+        });
+
+        it("marks every disabled variant with a not-allowed cursor", () => {
+            for (const variant of ["filled", "outlined", "text"] as const) {
+                const { unmount } = render(<Button variant={variant} disabled>D</Button>);
+                expect(screen.getByRole("button", { name: "D" }).className)
+                    .toContain("cursor-not-allowed");
+                unmount();
+            }
+        });
+
+        it("gives a disabled filled button a solid muted surface", () => {
+            render(<Button disabled>D</Button>);
+            const className = screen.getByRole("button", { name: "D" }).className;
+            expect(className).toContain("bg-surface-accent-100");
+            // The alpha background was half of the old contrast problem.
+            expect(className).not.toContain("bg-surface-300/40");
+        });
+
+        it("keeps the enabled appearance untouched", () => {
+            render(<Button variant="filled" color="primary">E</Button>);
+            const className = screen.getByRole("button", { name: "E" }).className;
+            expect(className).toContain("bg-primary");
+            expect(className).not.toContain("cursor-not-allowed");
+        });
+
+        it("lets a caller override the disabled colours", () => {
+            // `cls` is tailwind-merge, so a call site's className wins. The
+            // login buttons relied on this and had to stop claiming colours
+            // while disabled.
+            render(<Button disabled className="text-red-500">D</Button>);
+            const className = screen.getByRole("button", { name: "D" }).className;
+            expect(className).toContain("text-red-500");
+            expect(className).not.toContain("text-surface-600");
+        });
+    });
 });
