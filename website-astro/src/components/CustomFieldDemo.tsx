@@ -16,12 +16,13 @@ import { Chip, Icon, PropertyConfigBadge, Typography, useMaterialIcons } from ".
  * repo, which is the same field MedicalMotion's therapists use. Zone
  * percentages are theirs; do not re-derive them by eye.
  *
- * The location field is a drawn map of Barcelona — the Eixample grid on its
- * real 45° bearing, the Diagonal cutting across it, Ciutadella and the coast —
- * with the pin projected from each store's actual latitude and longitude. There
- * is deliberately no map in the built-in geopoint field (it renders two number
- * inputs, because a tile provider means an API key and a network dependency),
- * which is exactly why a map is the thing you bring your own component for.
+ * The location field is a real basemap of central Madrid — a static raster
+ * built once by `scripts/build_map_image.py` and self-hosted, so the page pays
+ * no tile requests — with the pin projected onto it in Web Mercator from each
+ * store's actual latitude and longitude. There is deliberately no map in the
+ * built-in geopoint field (it renders two number inputs, because a live tile
+ * provider means an API key and a network dependency), which is exactly why a
+ * map is the thing you bring your own component for.
  *
  * Autoplay only — no pointer events.
  */
@@ -87,23 +88,30 @@ const ENUM_ENTRIES = [
     { id: "calves", label: "Calves" }
 ];
 
-/** Map viewBox, and the lat/lon window it covers. */
-const MAP_W = 340;
-const MAP_H = 270;
-const LON = [2.135, 2.200] as const;
-const LAT = [41.412, 41.374] as const;
+/**
+ * The window the map raster covers, as printed by `scripts/build_map_image.py`.
+ * The image is cropped to this box *and* to the map area's aspect ratio, so
+ * object-cover lays it over the box 1:1 and these bounds address it directly —
+ * keep the two in step if you ever re-frame the map.
+ */
+const MAP_BOUNDS = { west: -3.72784, east: -3.648458, north: 40.436788, south: 40.402727 };
 
+const mercatorY = (lat: number) => Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360));
+const NORTH_Y = mercatorY(MAP_BOUNDS.north);
+const SOUTH_Y = mercatorY(MAP_BOUNDS.south);
+
+/** Web Mercator, as a fraction of the map box — the same maths the tiles use. */
 const project = (lat: number, lon: number) => ({
-    x: ((lon - LON[0]) / (LON[1] - LON[0])) * MAP_W,
-    y: ((LAT[0] - lat) / (LAT[0] - LAT[1])) * MAP_H
+    x: (lon - MAP_BOUNDS.west) / (MAP_BOUNDS.east - MAP_BOUNDS.west),
+    y: (NORTH_Y - mercatorY(lat)) / (NORTH_Y - SOUTH_Y)
 });
 
-/** Real Barcelona neighbourhoods; the pin is projected from these. */
+/** Real Madrid neighbourhoods; the pin is projected from these. */
 const STEPS = [
-    { parts: ["chest", "triceps", "abs"], place: "Gràcia", lat: 41.4036, lon: 2.1588 },
-    { parts: ["quads", "glutes", "calves"], place: "Eixample", lat: 41.3915, lon: 2.1650 },
-    { parts: ["shoulders", "biceps", "forearms"], place: "El Born", lat: 41.3850, lon: 2.1830 },
-    { parts: ["upper_back", "lower_back"], place: "Barceloneta", lat: 41.3797, lon: 2.1925 }
+    { parts: ["chest", "triceps", "abs"], place: "Malasaña", lat: 40.4262, lon: -3.7038 },
+    { parts: ["quads", "glutes", "calves"], place: "Salamanca", lat: 40.4283, lon: -3.6795 },
+    { parts: ["shoulders", "biceps", "forearms"], place: "La Latina", lat: 40.4109, lon: -3.7095 },
+    { parts: ["upper_back", "lower_back"], place: "Chamberí", lat: 40.4327, lon: -3.6997 }
 ];
 
 /**
@@ -163,73 +171,6 @@ function BodyView({ view, src, selected }: { view: "front" | "back"; src: string
     );
 }
 
-/** Barcelona, drawn: the Eixample grid, the Diagonal, Ciutadella, the coast. */
-function BarcelonaMap() {
-    const blocks: React.ReactNode[] = [];
-    // The Eixample is a regular grid on a ~45° bearing — that regularity is the
-    // one thing that makes the city instantly recognisable, so draw it as such.
-    for (let i = -14; i <= 22; i++) {
-        blocks.push(<line key={`a${i}`} x1={i * 26} y1={-120} x2={i * 26} y2={400} stroke="#2b3138" strokeWidth="7"/>);
-    }
-    for (let j = -8; j <= 20; j++) {
-        blocks.push(<line key={`b${j}`} x1={-160} y1={j * 26} x2={480} y2={j * 26} stroke="#2b3138" strokeWidth="7"/>);
-    }
-
-    return (
-        <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} className="absolute inset-0 h-full w-full" aria-hidden="true">
-            <defs>
-                <clipPath id="cfd-map-clip">
-                    <rect width={MAP_W} height={MAP_H}/>
-                </clipPath>
-            </defs>
-
-            <g clipPath="url(#cfd-map-clip)">
-                {/* land */}
-                <rect width={MAP_W} height={MAP_H} fill="#181b1f"/>
-
-                {/* Collserola hillside, top-left */}
-                <path d="M0 0 L120 0 C86 34 44 52 0 62 Z" fill="#1a2620"/>
-
-                {/* Eixample grid, on its real bearing */}
-                <g transform={`rotate(-45 ${MAP_W / 2} ${MAP_H / 2})`} opacity="0.85">
-                    {blocks}
-                </g>
-
-                {/* Ciutadella park */}
-                <path d="M232 176 C252 168 274 176 278 194 C282 214 262 226 242 220 C226 214 220 190 232 176 Z" fill="#1d3326"/>
-
-                {/* Avinguda Diagonal — the one street that ignores the grid */}
-                <path d="M-10 44 L350 214" stroke="#3c444c" strokeWidth="9" strokeLinecap="round"/>
-                <path d="M-10 44 L350 214" stroke="#4b545e" strokeWidth="2" strokeLinecap="round"/>
-
-                {/* Gran Via */}
-                <path d="M-10 150 C90 140 200 172 350 150" stroke="#39414a" strokeWidth="7" strokeLinecap="round"/>
-
-                {/* Ronda Litoral, hugging the shore */}
-                <path d="M96 270 C150 236 214 216 300 208 L350 200" stroke="#5a4d2c" strokeWidth="6" strokeLinecap="round"/>
-
-                {/* Mediterranean */}
-                <path d="M120 270 C176 240 240 224 340 214 L340 270 Z" fill="#132a42"/>
-                <path d="M120 270 C176 240 240 224 340 214" fill="none" stroke="#20486e" strokeWidth="1.4"/>
-
-                {/* Port basin */}
-                <path d="M150 258 C176 246 200 240 224 238 L228 252 C204 254 178 262 158 268 Z" fill="#16324e"/>
-
-                {/* labels */}
-                <g fill="#7b848f" fontSize="8" fontFamily="ui-sans-serif, system-ui, sans-serif" letterSpacing="0.4">
-                    <text x="86" y="66">GRÀCIA</text>
-                    <text x="120" y="150">L'EIXAMPLE</text>
-                    <text x="228" y="166">EL BORN</text>
-                    <text x="268" y="240" fill="#4d6b8c">MEDITERRANI</text>
-                </g>
-                <g fill="#6d7681" fontSize="7" fontFamily="ui-sans-serif, system-ui, sans-serif">
-                    <text x="196" y="120" transform="rotate(25 196 120)">Av. Diagonal</text>
-                </g>
-            </g>
-        </svg>
-    );
-}
-
 export default function CustomFieldDemo({ height = 520 }: { height?: number | string }) {
     const { ref, inView } = useInView<HTMLDivElement>();
     useMaterialIcons();
@@ -269,8 +210,8 @@ export default function CustomFieldDemo({ height = 520 }: { height?: number | st
             aria-label="Two custom FireCMS fields: an anatomical body-part picker and a location map, both supplied by the developer"
         >
             {/* Card 1 — body parts */}
-            <div className={cardBase + " absolute left-0 top-0 z-10 w-[660px]"} style={{ height: "calc(100% - 44px)" }}>
-                <div className="flex shrink-0 items-center gap-2 border-b border-surface-800 py-3 pl-4 pr-12">
+            <div className={cardBase + " absolute left-0 top-0 z-10 w-[660px]"} style={{ height: "calc(100% - 68px)" }}>
+                <div className="flex shrink-0 items-center gap-2 border-b border-surface-800 py-3 pl-4 pr-24">
                     {/* LabelWithIcon — align-middle inline-flex items-center my-0.5 gap-2 */}
                     <div className="align-middle inline-flex items-center my-0.5 gap-2">
                         <PropertyConfigBadge config={"multi_select"} className={"h-6 w-6"}/>
@@ -282,7 +223,7 @@ export default function CustomFieldDemo({ height = 520 }: { height?: number | st
                     <Typography variant={"caption"} color={"disabled"}>MedicalMotion</Typography>
                 </div>
 
-                <div className="flex min-h-0 flex-1 gap-3 py-4 pl-4 pr-12">
+                <div className="flex min-h-0 flex-1 gap-3 py-4 pl-4 pr-24">
                     <div className="flex shrink-0 items-stretch gap-2 rounded-xl border border-surface-800 bg-surface-900/60 p-2">
                         <div className="flex flex-col items-center">
                             <BodyView view="front" src="/img/body_front_c.webp" selected={selected}/>
@@ -315,7 +256,7 @@ export default function CustomFieldDemo({ height = 520 }: { height?: number | st
                     </div>
                 </div>
 
-                <code className="shrink-0 overflow-x-auto whitespace-pre border-t border-surface-800 py-3 pl-4 pr-12 font-mono text-[11px]">
+                <code className="shrink-0 overflow-x-auto whitespace-pre border-t border-surface-800 py-3 pl-4 pr-24 font-mono text-[11px]">
                     <span className="text-sky-300">bodyParts</span>
                     <span className="text-surface-400">: [</span>
                     <span className="text-emerald-300">{selected.map(p => `"${p}"`).join(", ")}</span>
@@ -325,8 +266,8 @@ export default function CustomFieldDemo({ height = 520 }: { height?: number | st
 
             {/* Card 2 — location. Overlaps card 1, and runs into the bleed. */}
             <div
-                className={cardBase + " absolute top-[44px] z-20 w-[620px] ring-1 ring-white/[0.06]"}
-                style={{ left: "620px", height: "calc(100% - 44px)" }}
+                className={cardBase + " absolute top-[68px] z-20 w-[620px] ring-1 ring-white/[0.06]"}
+                style={{ left: "570px", height: "calc(100% - 68px)" }}
             >
                 <div className="flex shrink-0 items-center gap-2 border-b border-surface-800 px-4 py-3">
                     <div className="align-middle inline-flex items-center my-0.5 gap-2">
@@ -339,12 +280,22 @@ export default function CustomFieldDemo({ height = 520 }: { height?: number | st
                 </div>
 
                 <div className="relative min-h-0 flex-1 overflow-hidden">
-                    <BarcelonaMap/>
+                    <img
+                        src="/img/madrid_map.webp"
+                        width={1240}
+                        height={699}
+                        alt=""
+                        aria-hidden="true"
+                        draggable={false}
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 h-full w-full select-none object-cover"
+                    />
 
                     {/* Pin, projected from the store's coordinates */}
                     <div
                         className="absolute -translate-x-1/2 -translate-y-full transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-                        style={{ left: `${(pin.x / MAP_W) * 100}%`, top: `${(pin.y / MAP_H) * 100}%` }}
+                        style={{ left: `${pin.x * 100}%`, top: `${pin.y * 100}%` }}
                     >
                         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path
@@ -357,12 +308,17 @@ export default function CustomFieldDemo({ height = 520 }: { height?: number | st
                         </svg>
                     </div>
 
-                    {/* Readout, kept left so the bleed never eats it */}
-                    <div className="absolute bottom-3 left-3 flex items-center gap-3 rounded-lg bg-black/75 px-3 py-2 backdrop-blur-sm">
-                        <span className="text-xs text-surface-100">{current.place}</span>
-                        <span className="font-mono text-[11px] tabular-nums text-surface-400">
-                            {current.lat.toFixed(4)}, {current.lon.toFixed(4)}
+                    {/* Readout and map credit, kept left so the bleed never eats them */}
+                    <div className="absolute bottom-3 left-3 flex flex-col items-start gap-1.5">
+                        <span className="text-[9px] leading-none text-surface-500">
+                            © OpenStreetMap contributors · Esri
                         </span>
+                        <div className="flex items-center gap-3 rounded-lg bg-black/75 px-3 py-2 backdrop-blur-sm">
+                            <span className="text-xs text-surface-100">{current.place}</span>
+                            <span className="font-mono text-[11px] tabular-nums text-surface-400">
+                                {current.lat.toFixed(4)}, {current.lon.toFixed(4)}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
