@@ -14,6 +14,7 @@ export * from "./useDialogsController";
 export * from "./useSideDialogsController";
 export * from "./useSideEntityController";
 export * from "./useFireCMSContext";
+export * from "./useAnalyticsController";
 export * from "./useSnackbarController";
 export * from "./useModeController";
 export * from "./useClipboard";

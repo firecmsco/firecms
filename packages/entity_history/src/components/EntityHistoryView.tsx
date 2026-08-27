@@ -1,6 +1,7 @@
 import { buildEntityHistoryPath, buildEntityHistoryPathSegments } from "../history_path";
 import { useEffect, useRef, useState } from "react";
 import {
+    useAnalyticsController,
     ConfirmationDialog,
     Entity,
     EntityCustomViewParams,
@@ -20,6 +21,7 @@ export function EntityHistoryView({
                                       formContext
                                   }: EntityCustomViewParams) {
 
+    const analyticsController = useAnalyticsController();
     const authController = useAuthController();
     const snackbarController = useSnackbarController();
     const { t } = useTranslation();
@@ -29,6 +31,19 @@ export function EntityHistoryView({
     const historyPath = entity ? buildEntityHistoryPath(entity.path, entity.id) : undefined;
     // Paired with `historyPath`; undefined when the entity was loaded without segments.
     const historyPathSegments = entity ? buildEntityHistoryPathSegments(entity.pathSegments, entity.id) : undefined;
+
+    // Entity history had no usage instrumentation at all: the setup survey asked
+    // every new project whether to enable it, with no way to tell whether anyone
+    // ever looked at it. Fired once per entity rather than per render.
+    const loggedOpenFor = useRef<string | undefined>(undefined);
+    useEffect(() => {
+        if (!entity || loggedOpenFor.current === entity.id) return;
+        loggedOpenFor.current = entity.id;
+        analyticsController.onAnalyticsEvent?.("entity_history_opened", {
+            path: entity.path,
+            collection: collection?.name
+        });
+    }, [entity, collection?.name, analyticsController]);
 
     const [revertVersionDialog, setRevertVersionDialog] = useState<Entity | undefined>(undefined);
     const [revisions, setRevisions] = useState<Entity[]>([]);
@@ -128,6 +143,10 @@ export function EntityHistoryView({
         if (!entity) {
             throw new Error("No entity to revert");
         }
+        analyticsController.onAnalyticsEvent?.("entity_history_reverted", {
+            path: entity.path,
+            collection: collection?.name
+        });
         const revertValues = {
             ...revertVersion.values,
             __metadata: {

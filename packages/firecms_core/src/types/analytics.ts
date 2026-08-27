@@ -44,5 +44,8 @@ export type CMSAnalyticsEvent =
 
     | "card_view_entity_click"
 
+    | "entity_history_opened"
+    | "entity_history_reverted"
+
     | "unmapped_event"
     ;
