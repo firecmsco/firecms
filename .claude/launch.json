@@ -43,6 +43,20 @@
         "5211"
       ],
       "port": 5211
+    },
+    {
+      "name": "saas-preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "preview:built",
+        "--prefix",
+        "saas",
+        "--",
+        "--port",
+        "5212"
+      ],
+      "port": 5212
     }
   ]
 }

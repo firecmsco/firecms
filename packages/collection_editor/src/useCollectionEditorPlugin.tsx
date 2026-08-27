@@ -19,12 +19,6 @@ import { EditorEntityAction } from "./ui/EditorEntityAction";
 import { KanbanSetupAction } from "./ui/KanbanSetupAction";
 import { AddKanbanColumnAction } from "./ui/AddKanbanColumnAction";
 import { collectionEditorTranslationsEn } from "./locales/en";
-import { collectionEditorTranslationsEs } from "./locales/es";
-import { collectionEditorTranslationsDe } from "./locales/de";
-import { collectionEditorTranslationsFr } from "./locales/fr";
-import { collectionEditorTranslationsIt } from "./locales/it";
-import { collectionEditorTranslationsHi } from "./locales/hi";
-import { collectionEditorTranslationsPt } from "./locales/pt";
 
 export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, USER extends User = User> {
 
@@ -139,13 +133,16 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             ActionsTop: EditorEntityAction,
         },
         i18n: {
+        // Only English is bundled; the rest load when that language is selected.
+        // Seven languages of strings in every plugin bundle is dead weight for
+        // the six nobody is reading.
             en: collectionEditorTranslationsEn,
-            es: collectionEditorTranslationsEs,
-            de: collectionEditorTranslationsDe,
-            fr: collectionEditorTranslationsFr,
-            it: collectionEditorTranslationsIt,
-            hi: collectionEditorTranslationsHi,
-            pt: collectionEditorTranslationsPt
+            es: () => import("./locales/es").then((m) => m.collectionEditorTranslationsEs),
+            de: () => import("./locales/de").then((m) => m.collectionEditorTranslationsDe),
+            fr: () => import("./locales/fr").then((m) => m.collectionEditorTranslationsFr),
+            it: () => import("./locales/it").then((m) => m.collectionEditorTranslationsIt),
+            hi: () => import("./locales/hi").then((m) => m.collectionEditorTranslationsHi),
+            pt: () => import("./locales/pt").then((m) => m.collectionEditorTranslationsPt)
         }
     };
 }

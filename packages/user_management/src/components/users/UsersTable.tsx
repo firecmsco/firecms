@@ -1,13 +1,13 @@
 import { useState } from "react";
 
 import { format } from "date-fns";
-import * as locales from "date-fns/locale";
 
 import {
     defaultDateFormat,
     ConfirmationDialog, Role,
     useAuthController,
     useCustomizationController, User,
+    useDateFnsLocale,
     useSnackbarController,
     useTranslation
 } from "@firecms/core";
@@ -44,7 +44,7 @@ export function UsersTable({ onUserClicked }: {
     const snackbarController = useSnackbarController();
 
     const customizationController = useCustomizationController();
-    const dateUtilsLocale = customizationController?.locale ? locales[customizationController?.locale as keyof typeof locales] : undefined;
+    const dateUtilsLocale = useDateFnsLocale(customizationController?.locale);
     const dateFormat: string = customizationController?.dateTimeFormat ?? defaultDateFormat;
 
     const [userToBeDeleted, setUserToBeDeleted] = useState<User | undefined>(undefined);

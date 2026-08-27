@@ -15,6 +15,9 @@ import { InternalUserManagement } from "./internal_user_management";
  * NOTE: This is a work in progress and the API is not stable yet.
  * @group Core
  */
+/** The strings a plugin contributes for one locale. */
+export type PluginTranslations = Record<string, string>;
+
 export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollection = EntityCollection, COL_ACTIONS_PROPS = any, COL_ACTIONS_START__PROPS = any> = {
 
     /**
@@ -33,8 +36,14 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
      * locales, specific for this plugin.
      * Keys can be existing `FireCMSTranslations` keys, or new keys if using
      * module augmentation.
+     *
+     * A value may be the strings themselves, or a function returning a promise
+     * of them. Use the function form for locales you ship in the plugin bundle:
+     * only the active language is ever read, so importing all of them statically
+     * puts every language into the bundle of every app that mounts the plugin.
+     * Both forms are supported; a plain record keeps working unchanged.
      */
-    i18n?: Record<string, Record<string, string>>;
+    i18n?: Record<string, PluginTranslations | (() => Promise<PluginTranslations>)>;
 
     /**
      * You can use this prop to add higher order components to the CMS.

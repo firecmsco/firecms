@@ -6,12 +6,6 @@ import { entityHistoryCallbacks } from "./entity_history_callbacks";
 import { HistoryControllerProvider } from "./HistoryControllerProvider";
 import { LastEditedByFormAction } from "./components/LastEditedByPluginComponents";
 import { entityHistoryTranslationsEn } from "./locales/en";
-import { entityHistoryTranslationsEs } from "./locales/es";
-import { entityHistoryTranslationsDe } from "./locales/de";
-import { entityHistoryTranslationsFr } from "./locales/fr";
-import { entityHistoryTranslationsIt } from "./locales/it";
-import { entityHistoryTranslationsHi } from "./locales/hi";
-import { entityHistoryTranslationsPt } from "./locales/pt";
 
 /**
  * This plugin adds a history view to the entity side panel.
@@ -55,13 +49,16 @@ export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): FireCM
             modifyCollection
         },
         i18n: {
+        // Only English is bundled; the rest load when that language is selected.
+        // Seven languages of strings in every plugin bundle is dead weight for
+        // the six nobody is reading.
             en: entityHistoryTranslationsEn,
-            es: entityHistoryTranslationsEs,
-            de: entityHistoryTranslationsDe,
-            fr: entityHistoryTranslationsFr,
-            it: entityHistoryTranslationsIt,
-            hi: entityHistoryTranslationsHi,
-            pt: entityHistoryTranslationsPt
+            es: () => import("./locales/es").then((m) => m.entityHistoryTranslationsEs),
+            de: () => import("./locales/de").then((m) => m.entityHistoryTranslationsDe),
+            fr: () => import("./locales/fr").then((m) => m.entityHistoryTranslationsFr),
+            it: () => import("./locales/it").then((m) => m.entityHistoryTranslationsIt),
+            hi: () => import("./locales/hi").then((m) => m.entityHistoryTranslationsHi),
+            pt: () => import("./locales/pt").then((m) => m.entityHistoryTranslationsPt)
         }
     } satisfies FireCMSPlugin), [props]);
 }

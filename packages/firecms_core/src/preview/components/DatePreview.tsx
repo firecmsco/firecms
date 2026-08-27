@@ -1,9 +1,8 @@
 import React from "react";
 
 import { format } from "date-fns";
-import * as locales from "date-fns/locale";
 import { useCustomizationController } from "../../hooks";
-import { defaultDateFormat } from "../../util";
+import { defaultDateFormat, useDateFnsLocale } from "../../util";
 
 export interface DatePreviewProps {
     date: Date;
@@ -28,8 +27,7 @@ export function DatePreview({
 }: DatePreviewProps): React.ReactElement {
 
     const customizationController = useCustomizationController();
-    // @ts-ignore
-    const dateUtilsLocale = customizationController?.locale ? locales[customizationController?.locale] : undefined;
+    const dateUtilsLocale = useDateFnsLocale(customizationController?.locale);
 
     if (!date) {
         return <></>;

@@ -1,5 +1,11 @@
-import * as XLSX from "xlsx";
-export function getXLSXHeaders(sheet: any) {
+import type * as XLSX from "xlsx";
+
+/**
+ * `utils` is passed in rather than imported because `xlsx` is 355KB and is now
+ * loaded on demand by `convertFileToJson`. A static import here would pull it
+ * back onto the startup path through the `utils` barrel.
+ */
+export function getXLSXHeaders(sheet: any, utils: typeof XLSX.utils) {
     let header = 0; let offset = 1;
     const hdr = [];
     const o:any = {};
@@ -21,10 +27,10 @@ export function getXLSXHeaders(sheet: any) {
             r = range;
     }
     if (header > 0) offset = 0;
-    const rr = XLSX.utils.encode_row(r.s.r);
+    const rr = utils.encode_row(r.s.r);
     const cols = new Array(r.e.c - r.s.c + 1);
     for (let C = r.s.c; C <= r.e.c; ++C) {
-        cols[C] = XLSX.utils.encode_col(C);
+        cols[C] = utils.encode_col(C);
         const val = sheet[cols[C] + rr];
         switch (header) {
             case 1:
@@ -38,7 +44,7 @@ export function getXLSXHeaders(sheet: any) {
                 break;
             default:
                 if (val === undefined) continue;
-                hdr.push(XLSX.utils.format_cell(val));
+                hdr.push(utils.format_cell(val));
         }
     }
     return hdr;

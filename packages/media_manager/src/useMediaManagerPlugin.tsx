@@ -6,12 +6,6 @@ import { useMediaManagerController } from "./useMediaManagerController";
 import { MediaLibraryCard } from "./components/MediaLibraryCard";
 import { MediaLibraryView } from "./components/MediaLibraryView";
 import { mediaManagerTranslationsEn } from "./locales/en";
-import { mediaManagerTranslationsEs } from "./locales/es";
-import { mediaManagerTranslationsDe } from "./locales/de";
-import { mediaManagerTranslationsFr } from "./locales/fr";
-import { mediaManagerTranslationsIt } from "./locales/it";
-import { mediaManagerTranslationsHi } from "./locales/hi";
-import { mediaManagerTranslationsPt } from "./locales/pt";
 
 const DEFAULT_STORAGE_PATH = "media";
 const DEFAULT_COLLECTION_PATH = "media_assets";
@@ -102,13 +96,16 @@ export function useMediaManagerPlugin(props: MediaManagerPluginProps): FireCMSPl
             )
         },
         i18n: {
+        // Only English is bundled; the rest load when that language is selected.
+        // Seven languages of strings in every plugin bundle is dead weight for
+        // the six nobody is reading.
             en: mediaManagerTranslationsEn,
-            es: mediaManagerTranslationsEs,
-            de: mediaManagerTranslationsDe,
-            fr: mediaManagerTranslationsFr,
-            it: mediaManagerTranslationsIt,
-            hi: mediaManagerTranslationsHi,
-            pt: mediaManagerTranslationsPt
+            es: () => import("./locales/es").then((m) => m.mediaManagerTranslationsEs),
+            de: () => import("./locales/de").then((m) => m.mediaManagerTranslationsDe),
+            fr: () => import("./locales/fr").then((m) => m.mediaManagerTranslationsFr),
+            it: () => import("./locales/it").then((m) => m.mediaManagerTranslationsIt),
+            hi: () => import("./locales/hi").then((m) => m.mediaManagerTranslationsHi),
+            pt: () => import("./locales/pt").then((m) => m.mediaManagerTranslationsPt)
         }
     } satisfies FireCMSPlugin), []);
 }

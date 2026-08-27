@@ -112,22 +112,51 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         authController
     });
 
-    // Inject plugin translations into the existing i18next instance
+    // Inject plugin translations into the existing i18next instance.
+    //
+    // A locale given as a function is a lazily loaded bundle, so it is resolved
+    // only for the language actually in use (plus English, which every other
+    // language falls back to) and re-resolved when the language changes. Plain
+    // records are applied for every locale as before — they are already in the
+    // bundle, so there is nothing to save by deferring them.
     useEffect(() => {
         if (!i18n) return;
-        plugins?.forEach(plugin => {
-            if (plugin.i18n) {
-                Object.keys(plugin.i18n).forEach(locale => {
-                    i18n.addResourceBundle(
-                        locale,
-                        "firecms_core",
-                        plugin.i18n![locale],
-                        true,  // deep merge
-                        true   // overwrite
-                    );
+
+        let active = true;
+
+        const applyFor = (language: string) => {
+            const wanted = new Set([language.split("-")[0], "en"]);
+            plugins?.forEach(plugin => {
+                if (!plugin.i18n) return;
+                Object.entries(plugin.i18n).forEach(([locale, translations]) => {
+                    const add = (bundle: Record<string, string>) => {
+                        if (!active) return;
+                        i18n.addResourceBundle(
+                            locale,
+                            "firecms_core",
+                            bundle,
+                            true,  // deep merge
+                            true   // overwrite
+                        );
+                    };
+                    if (typeof translations === "function") {
+                        if (!wanted.has(locale.split("-")[0])) return;
+                        translations().then(add).catch(() => {
+                            // A locale that fails to load falls back to English.
+                        });
+                    } else {
+                        add(translations);
+                    }
                 });
-            }
-        });
+            });
+        };
+
+        applyFor(i18n.language ?? "en");
+        i18n.on("languageChanged", applyFor);
+        return () => {
+            active = false;
+            i18n.off("languageChanged", applyFor);
+        };
     }, [i18n, plugins]);
 
     if (accessResponse?.message) {

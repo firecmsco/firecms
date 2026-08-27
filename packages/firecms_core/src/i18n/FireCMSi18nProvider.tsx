@@ -3,15 +3,73 @@ import i18next, { i18n } from "i18next";
 import { I18nContext, I18nextProvider, initReactI18next } from "react-i18next";
 import { en } from "../locales/en";
 import { es } from "../locales/es";
-import { de } from "../locales/de";
-import { fr } from "../locales/fr";
-import { it } from "../locales/it";
-import { hi } from "../locales/hi";
-import { pt } from "../locales/pt";
-import { pl } from "../locales/pl";
 import { FireCMSTranslations } from "../types/translations";
 
 const FIRECMS_NS = "firecms_core";
+
+/**
+ * Translations that are not part of the bundle every app downloads.
+ *
+ * All eight locales used to be imported statically, which put ~305KB of strings
+ * — every language, for every user — into `@firecms/core` and therefore onto the
+ * startup path of every FireCMS app. Only the active language is ever read.
+ *
+ * `en` and `es` stay static: `en` is the fallback language and the base every
+ * unknown locale is seeded from, and both are re-exported from the package root,
+ * so a consumer may be importing them by name.
+ *
+ * The specifiers are written out rather than built from a template so bundlers
+ * can see them and emit one chunk per locale.
+ */
+const localeLoaders: Record<string, () => Promise<FireCMSTranslations>> = {
+    de: () => import("../locales/de").then((m) => m.de),
+    fr: () => import("../locales/fr").then((m) => m.fr),
+    it: () => import("../locales/it").then((m) => m.it),
+    hi: () => import("../locales/hi").then((m) => m.hi),
+    pt: () => import("../locales/pt").then((m) => m.pt),
+    pl: () => import("../locales/pl").then((m) => m.pl)
+};
+
+/**
+ * Locale bundles available synchronously: the two static ones plus anything a
+ * previous provider already fetched. `buildResources` reads this, so a rebuild
+ * triggered by a changing `translations` prop cannot overwrite a lazily loaded
+ * language with the English base it would otherwise fall back to.
+ */
+const loadedLocales: Record<string, FireCMSTranslations> = {
+    en,
+    es
+};
+
+const inFlightLocales: Record<string, Promise<void>> = {};
+
+/**
+ * Fetch a locale bundle into `loadedLocales`.
+ *
+ * Returns undefined when the bundle is already in memory or there is nothing to
+ * fetch, so callers can stay synchronous in the common case.
+ */
+function loadLocale(locale?: string): Promise<void> | undefined {
+    if (!locale) return undefined;
+    const language = locale.split("-")[0];
+    if (loadedLocales[language]) return undefined;
+    const loader = localeLoaders[language];
+    if (!loader) return undefined;
+    if (!inFlightLocales[language]) {
+        inFlightLocales[language] = loader()
+            .then((bundle) => {
+                loadedLocales[language] = bundle;
+            })
+            .catch(() => {
+                // A locale that fails to load falls back to English, which is
+                // what an unknown locale has always done.
+            })
+            .finally(() => {
+                delete inFlightLocales[language];
+            });
+    }
+    return inFlightLocales[language];
+}
 
 export const FIRECMS_LOCALE_STORAGE_KEY = "firecms_locale";
 
@@ -76,26 +134,17 @@ export function FireCMSi18nProvider({
 
         // English baseline + this provider's overrides, with anything the parent
         // already resolved layered in underneath the overrides.
-        const resources = buildResources(translations);
-        if (parentInstance) {
-            const inherited: Record<string, any> = parentInstance.services?.resourceStore?.data ?? {};
-            for (const [lang, namespaces] of Object.entries(inherited)) {
-                const bundle = (namespaces as any)?.[FIRECMS_NS];
-                if (!bundle) continue;
-                resources[lang] = {
-                    [FIRECMS_NS]: {
-                        ...bundle,
-                        ...(translations?.[lang] ?? {})
-                    }
-                };
-            }
-        }
+        const resources = buildResourcesWithParent(translations, parentInstance);
 
         let initialLocale = parentInstance?.language ?? locale;
         if (typeof window !== "undefined") {
             const stored = localStorage.getItem(FIRECMS_LOCALE_STORAGE_KEY);
             if (stored) initialLocale = stored;
         }
+
+        // Kicked off before init so the request is in flight while i18next sets
+        // itself up, rather than after it.
+        const pendingInitialLocale = loadLocale(initialLocale);
 
         instance
             .use(initReactI18next)
@@ -109,14 +158,37 @@ export function FireCMSi18nProvider({
                     // React already escapes — don't double-escape
                     escapeValue: false,
                 },
+                react: {
+                    // Locale bundles now arrive after init, and a bundle landing
+                    // in the store raises an `added` event rather than
+                    // `languageChanged`. react-i18next binds only the latter by
+                    // default, so without this a language switched from the
+                    // toggle would fetch its strings, put them in the store, and
+                    // leave the UI sitting on the English fallback.
+                    bindI18nStore: "added"
+                },
             }, () => {
-                setReady(true);
+                if (!pendingInitialLocale) {
+                    setReady(true);
+                    return;
+                }
+                // Holding the first render until the active language has arrived
+                // keeps a non-English user from seeing English strings repaint.
+                // Only locales outside the static pair wait, and only on the
+                // first mount.
+                pendingInitialLocale.then(() => {
+                    applyLoadedLocale(instance, initialLocale, translations, parentInstance);
+                    setReady(true);
+                });
             });
 
         instance.on("languageChanged", (lng) => {
             if (typeof window !== "undefined") {
                 localStorage.setItem(FIRECMS_LOCALE_STORAGE_KEY, lng);
             }
+            // Switching to a language whose bundle has not been fetched yet
+            // renders the English fallback until it lands.
+            loadLocale(lng)?.then(() => applyLoadedLocale(instance, lng, translations, parentInstance));
         });
 
         i18nRef.current = instance;
@@ -145,10 +217,16 @@ export function FireCMSi18nProvider({
         }
     }, [locale]);
 
-    // When consumer translations prop changes, update the resource bundles
+    // When consumer translations prop changes, update the resource bundles.
+    //
+    // Built through the same layering as the initial instance, parent included.
+    // Rebuilding from the bare English baseline here would overwrite whatever the
+    // host registered — a nested provider without translations of its own would
+    // reset the host's overrides to the built-in strings. That was already true;
+    // it was simply invisible until `bindI18nStore` made a store write repaint.
     useEffect(() => {
         if (!i18nRef.current) return;
-        const resources = buildResources(translations);
+        const resources = buildResourcesWithParent(translations, parentInstance);
         for (const [lang, bundle] of Object.entries(resources)) {
             i18nRef.current.addResourceBundle(
                 lang,
@@ -158,7 +236,7 @@ export function FireCMSi18nProvider({
                 true   // overwrite existing keys
             );
         }
-    }, [translations]);
+    }, [translations, parentInstance]);
 
     if (!ready || !i18nRef.current) return null;
 
@@ -170,22 +248,74 @@ export function FireCMSi18nProvider({
 }
 
 /**
+ * Push a lazily loaded locale bundle into a live i18next instance.
+ *
+ * Consumer overrides are re-applied on top, because the instance may already be
+ * holding a bundle that `buildResources` seeded from English for this language,
+ * and the real translations have to win over that seed while the overrides win
+ * over both.
+ */
+function applyLoadedLocale(
+    instance: i18n,
+    locale: string,
+    translations?: { [locale: string]: DeepPartial<FireCMSTranslations> },
+    parentInstance?: i18n
+) {
+    const language = locale.split("-")[0];
+    if (!loadedLocales[language]) return;
+    const bundle = buildResourcesWithParent(translations, parentInstance)[language]?.[FIRECMS_NS];
+    if (!bundle) return;
+    instance.addResourceBundle(
+        language,
+        FIRECMS_NS,
+        bundle,
+        true,  // deep merge
+        true   // overwrite the English seed
+    );
+}
+
+/**
+ * The full resource map for this provider: the locale bundles currently in
+ * memory, then anything the parent provider already resolved, then this
+ * provider's own overrides on top.
+ *
+ * Shared by every path that writes into the instance — initial construction, a
+ * changed `translations` prop, and a locale arriving late — so all three layer
+ * in the same order and none of them can undo another.
+ */
+function buildResourcesWithParent(
+    translations?: { [locale: string]: DeepPartial<FireCMSTranslations> },
+    parentInstance?: i18n
+): Record<string, Record<string, object>> {
+    const resources = buildResources(translations);
+    if (!parentInstance) return resources;
+
+    const inherited: Record<string, any> = parentInstance.services?.resourceStore?.data ?? {};
+    for (const [lang, namespaces] of Object.entries(inherited)) {
+        const bundle = (namespaces as any)?.[FIRECMS_NS];
+        if (!bundle) continue;
+        resources[lang] = {
+            [FIRECMS_NS]: {
+                ...(resources[lang]?.[FIRECMS_NS] ?? {}),
+                ...bundle,
+                ...(translations?.[lang] ?? {})
+            }
+        };
+    }
+    return resources;
+}
+
+/**
  * Build an i18next resources object from the English baseline plus any
  * consumer-provided overrides.
  */
 function buildResources(
     translations?: { [locale: string]: DeepPartial<FireCMSTranslations> }
 ): Record<string, Record<string, object>> {
-    const resources: Record<string, Record<string, object>> = {
-        en: { [FIRECMS_NS]: { ...en } },
-        es: { [FIRECMS_NS]: { ...es } },
-        de: { [FIRECMS_NS]: { ...de } },
-        fr: { [FIRECMS_NS]: { ...fr } },
-        it: { [FIRECMS_NS]: { ...it } },
-        hi: { [FIRECMS_NS]: { ...hi } },
-        pt: { [FIRECMS_NS]: { ...pt } },
-        pl: { [FIRECMS_NS]: { ...pl } },
-    };
+    const resources: Record<string, Record<string, object>> = {};
+    for (const [lang, bundle] of Object.entries(loadedLocales)) {
+        resources[lang] = { [FIRECMS_NS]: { ...bundle } };
+    }
 
     if (!translations) return resources;
 

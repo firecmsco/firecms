@@ -23,6 +23,15 @@ function LocaleProbe() {
     return <span data-testid="lng">{i18n.language}</span>;
 }
 
+/** Renders a key and exposes the toggle a user would click to switch language. */
+function SwitchProbe({ k, to }: { k: string, to: string }) {
+    const { t, i18n } = useTranslation();
+    return <>
+        <span data-testid="out">{t(k)}</span>
+        <button data-testid="switch" onClick={() => i18n.changeLanguage(to)}>switch</button>
+    </>;
+}
+
 const renderIn = (locale: string, ui: React.ReactNode) =>
     render(<FireCMSi18nProvider locale={locale}>{ui}</FireCMSi18nProvider>);
 
@@ -56,6 +65,27 @@ describe("FireCMS translations", () => {
             });
         }
     );
+
+    it("picks up a language switched after mount", async () => {
+        // Only English and Spanish are bundled; the rest are fetched when
+        // selected. The strings land in the i18next store through
+        // `addResourceBundle`, which raises a store event rather than
+        // `languageChanged` — react-i18next ignores those unless asked to bind
+        // them, and the UI sat on the English fallback with the German strings
+        // sitting unused in the store.
+        renderIn("en", <SwitchProbe k="save_and_close" to="de"/>);
+        await waitFor(() => expect(screen.getByTestId("out").textContent).toEqual("Save and close"));
+
+        await act(async () => {
+            screen.getByTestId("switch").click();
+        });
+
+        await waitFor(() => {
+            const out = screen.getByTestId("out").textContent;
+            expect({ isEnglish: out === "Save and close", isRawKey: out === "save_and_close" })
+                .toEqual({ isEnglish: false, isRawKey: false });
+        });
+    });
 
     it("interpolates variables", async () => {
         // Interpolation is the part most likely to break across i18next majors.

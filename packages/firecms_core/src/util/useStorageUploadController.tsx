@@ -1,4 +1,4 @@
-import Compressor from "compressorjs";
+import type CompressorType from "compressorjs";
 import equal from "react-fast-compare";
 
 import {
@@ -320,6 +320,11 @@ export async function resizeImage(
     if (imageResize?.format && imageResize.format !== "original") {
         mimeType = `image/${imageResize.format}`;
     }
+
+    // Loaded here rather than imported: compressing an image is something a
+    // small fraction of sessions ever does, and a static import put the library
+    // in `@firecms/core` for everyone.
+    const Compressor: typeof CompressorType = (await import("compressorjs")).default;
 
     return new Promise<File>((resolve, reject) => {
         new Compressor(file, {

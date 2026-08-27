@@ -1,4 +1,3 @@
-import * as XLSX from "xlsx";
 import { getXLSXHeaders } from "./file_headers";
 
 type ConversionResult = {
@@ -33,26 +32,33 @@ export function convertFileToJson(file: File): Promise<ConversionResult> {
             reader.readAsText(file);
         } else {
             console.debug("Converting Excel file to JSON", file.name);
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const data = new Uint8Array(e.target?.result as ArrayBuffer);
-                const workbook = XLSX.read(data, {
-                    type: "array",
-                    codepage: 65001,
-                    cellDates: true,
-                });
-                const worksheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[worksheetName];
-                const parsedData: Array<any> = XLSX.utils.sheet_to_json(worksheet);
-                const headers = getXLSXHeaders(worksheet);
-                const cleanedData = parsedData.map(mapJsonParse);
-                const jsonData = cleanedData.map(unflattenObject);
-                resolve({
-                    data: jsonData,
-                    propertiesOrder: headers
-                });
-            };
-            reader.readAsArrayBuffer(file);
+            // `xlsx` is 355KB and only a spreadsheet import needs it, but a
+            // static import put it on the startup path of every FireCMS app:
+            // `@firecms/cloud` reaches this module through its barrel. Loaded
+            // here instead, so the cost falls on the import flow that uses it.
+            import("xlsx").then((XLSX) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const data = new Uint8Array(e.target?.result as ArrayBuffer);
+                    const workbook = XLSX.read(data, {
+                        type: "array",
+                        codepage: 65001,
+                        cellDates: true,
+                    });
+                    const worksheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[worksheetName];
+                    const parsedData: Array<any> = XLSX.utils.sheet_to_json(worksheet);
+                    const headers = getXLSXHeaders(worksheet, XLSX.utils);
+                    const cleanedData = parsedData.map(mapJsonParse);
+                    const jsonData = cleanedData.map(unflattenObject);
+                    resolve({
+                        data: jsonData,
+                        propertiesOrder: headers
+                    });
+                };
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            }).catch(reject);
         }
     });
 }

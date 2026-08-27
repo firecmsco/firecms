@@ -6,12 +6,6 @@ import { fieldBuilder } from "./components/field_builder";
 import { FormEnhanceAction } from "./components/FormEnhanceAction";
 import { SubscriptionMessageProps } from "./types/subscriptions_message_props";
 import { dataEnhancementTranslationsEn } from "./locales/en";
-import { dataEnhancementTranslationsEs } from "./locales/es";
-import { dataEnhancementTranslationsDe } from "./locales/de";
-import { dataEnhancementTranslationsFr } from "./locales/fr";
-import { dataEnhancementTranslationsIt } from "./locales/it";
-import { dataEnhancementTranslationsHi } from "./locales/hi";
-import { dataEnhancementTranslationsPt } from "./locales/pt";
 
 const DEFAULT_API_KEY = "fcms-U9jdDii0xXWSDC34asfrf54lbkFJBfKfRWcEDEwdc4V5wDWEDF";
 
@@ -90,13 +84,16 @@ export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): Fi
             }
         },
         i18n: {
+        // Only English is bundled; the rest load when that language is selected.
+        // Seven languages of strings in every plugin bundle is dead weight for
+        // the six nobody is reading.
             en: dataEnhancementTranslationsEn,
-            es: dataEnhancementTranslationsEs,
-            de: dataEnhancementTranslationsDe,
-            fr: dataEnhancementTranslationsFr,
-            it: dataEnhancementTranslationsIt,
-            hi: dataEnhancementTranslationsHi,
-            pt: dataEnhancementTranslationsPt
+            es: () => import("./locales/es").then((m) => m.dataEnhancementTranslationsEs),
+            de: () => import("./locales/de").then((m) => m.dataEnhancementTranslationsDe),
+            fr: () => import("./locales/fr").then((m) => m.dataEnhancementTranslationsFr),
+            it: () => import("./locales/it").then((m) => m.dataEnhancementTranslationsIt),
+            hi: () => import("./locales/hi").then((m) => m.dataEnhancementTranslationsHi),
+            pt: () => import("./locales/pt").then((m) => m.dataEnhancementTranslationsPt)
         }
         // loading: configController.loading,
     };
