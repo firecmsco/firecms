@@ -448,6 +448,9 @@ export const en: FireCMSTranslations = {
     project_settings: "Project settings",
     firestore_manager: "Firestore Manager",
     manage_your_firestore_data: "Manage your Firestore data",
+    // A product name. It is a key rather than a literal so a locale that uses a
+    // different script can transliterate it; most will inherit this value.
+    datatalk: "DataTalk",
 
     // ─── FireCMS Cloud Login ──────────────────────────────────────
     build_admin_panel_in_minutes: "Build Your Firebase Admin Panel in Minutes",

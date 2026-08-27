@@ -470,6 +470,8 @@ export interface FireCMSTranslations {
     roles_menu: string;
     project_settings: string;
     firestore_manager: string;
+    /** The DataTalk product name, keyed so a locale can transliterate it. */
+    datatalk: string;
     manage_your_firestore_data: string;
 
     // ─── FireCMS Cloud Login ──────────────────────────────────────

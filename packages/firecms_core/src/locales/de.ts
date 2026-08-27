@@ -439,6 +439,7 @@ export const de: FireCMSTranslations = {
     roles_menu: "Rollen",
     project_settings: "Projekteinstellungen",
     firestore_manager: "Firestore-Manager",
+    datatalk: "DataTalk",
     manage_your_firestore_data: "Deine Firestore-Daten verwalten",
 
     // ─── FireCMS Cloud Login ──────────────────────────────────────

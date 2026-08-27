@@ -439,6 +439,7 @@ export const hi: FireCMSTranslations = {
     roles_menu: "भूमिकाएँ",
     project_settings: "परियोजना सेटिंग",
     firestore_manager: "Firestore मैनेजर",
+    datatalk: "DataTalk",
     manage_your_firestore_data: "अपने Firestore डेटा का प्रबंधन करें",
 
     // ─── FireCMS Cloud Login ──────────────────────────────────────
