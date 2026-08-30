@@ -49,7 +49,7 @@
     "yaml": "^2.8.3"
   },
   "devDependencies": {
-    "@google/genai": "^2.13.0",
+    "@google/genai": "^2.19.0",
     "@types/react-syntax-highlighter": "^15.5.13",
     "typedoc": "^0.28.20",
     "typedoc-plugin-markdown": "^4.9.0"
