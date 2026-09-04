@@ -156,7 +156,9 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
             propertyKey: props.propertyKey,
             propertyInstructions: instructions,
             values: props.context.values,
-            replaceValues: false
+            // The server returns the complete new value for the field, so it replaces rather
+            // than appends. Appending would concatenate the rewrite onto the old value.
+            replaceValues: true
         }).finally(() => setDataLoading(false));
     };
 
@@ -195,7 +197,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                                     entityId: props.context.entityId,
                                     propertyKey: props.propertyKey,
                                     values: props.context.values,
-                                    replaceValues: false
+                                    replaceValues: true
                                 }).finally(() => setDataLoading(false));
                             }}>
                             {dataLoading || loading
