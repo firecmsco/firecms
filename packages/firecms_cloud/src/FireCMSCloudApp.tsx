@@ -48,6 +48,7 @@ import {
 } from "./hooks";
 
 import { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
+import { ProjectLoadingShell } from "./ProjectLoadingShell";
 import { ApiError, FireCMSAppConfig, FireCMSBackend, FireCMSCloudUser, FireCMSCloudUserWithRoles } from "./types";
 import { RESERVED_GROUPS, resolveCollectionConfigPermissions } from "./utils";
 import { CloudErrorView, FireCMSCloudDrawer, FireCMSCloudLoginView, ProjectSettings } from "./components";
@@ -181,15 +182,12 @@ function FullLoadingView(props: {
     FireCMSAppBarComponent?: React.ComponentType<DefaultAppBarProps>,
     text?: string
 }) {
-    return <Scaffold
-        key={"project_scaffold_" + props.projectId}>
-
-        <AppBar logo={props.projectConfig?.logo}>
-            {props.FireCMSAppBarComponent &&
-                <props.FireCMSAppBarComponent title={props.projectConfig?.projectName ?? ""} />}
-        </AppBar>
-        <CircularProgressCenter text={props.text} />
-    </Scaffold>;
+    return <ProjectLoadingShell
+        projectId={props.projectId}
+        title={props.projectConfig?.projectName ?? ""}
+        logo={props.projectConfig?.logo}
+        FireCMSAppBarComponent={props.FireCMSAppBarComponent}
+        text={props.text} />;
 }
 
 export const FireCMSClient = function FireCMSClient({
@@ -211,10 +209,15 @@ export const FireCMSClient = function FireCMSClient({
     });
 
     if (userManagement.loading || (!projectConfig.clientFirebaseConfig && !projectConfig.configError)) {
-        return <FullLoadingView projectId={projectId}
-            projectConfig={projectConfig}
-            FireCMSAppBarComponent={props.FireCMSAppBarComponent}
-            text={"Client loading"} />;
+        // The provider is what tells the app bar whether this user is an admin.
+        // Without it the admin actions render as nothing here and appear a
+        // second later, shoving the rest of the bar sideways as they do.
+        return <UserManagementProvider userManagement={userManagement}>
+            <FullLoadingView projectId={projectId}
+                projectConfig={projectConfig}
+                FireCMSAppBarComponent={props.FireCMSAppBarComponent}
+                text={"Client loading"} />
+        </UserManagementProvider>;
     }
 
     return <FireCMSClientWithController
@@ -465,16 +468,16 @@ export function FireCMSClientWithController({
     }
 
     if (loadingOrErrorComponent) {
-        return <Scaffold
-            key={"project_scaffold_" + projectConfig.projectId}>
-            <AppBar
-                logo={projectConfig?.logo ?? props.logo}>
-                {props.FireCMSAppBarComponent &&
-                    <props.FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
-                        {...appConfig?.fireCMSAppBarComponentProps} />}
-            </AppBar>
-            {loadingOrErrorComponent}
-        </Scaffold>;
+        return <UserManagementProvider userManagement={userManagement}>
+            <ProjectLoadingShell
+                projectId={projectConfig.projectId}
+                title={projectConfig.projectName ?? ""}
+                logo={projectConfig?.logo ?? props.logo}
+                FireCMSAppBarComponent={props.FireCMSAppBarComponent}
+                appBarProps={appConfig?.fireCMSAppBarComponentProps}>
+                {loadingOrErrorComponent}
+            </ProjectLoadingShell>
+        </UserManagementProvider>;
     }
 
     return <SnackbarProvider>
@@ -737,16 +740,13 @@ function FireCMSAppAuthenticated({
                                 let component;
                                 if (loading) {
                                     component =
-                                        <Scaffold
-                                            key={"project_scaffold_" + projectConfig.projectId}>
-                                            <AppBar
-                                                logo={projectConfig.logo ?? logo}>
-                                                {FireCMSAppBarComponent &&
-                                                    <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
-                                                        {...appConfig?.fireCMSAppBarComponentProps} />}
-                                            </AppBar>
-                                            <CircularProgressCenter text={"Almost there"} />
-                                        </Scaffold>;
+                                        <ProjectLoadingShell
+                                            projectId={projectConfig.projectId}
+                                            title={projectConfig.projectName ?? ""}
+                                            logo={projectConfig.logo ?? logo}
+                                            FireCMSAppBarComponent={FireCMSAppBarComponent}
+                                            appBarProps={appConfig?.fireCMSAppBarComponentProps}
+                                            text={"Almost there"} />;
                                 } else {
                                     component = (
                                         <FireCMSScaffoldBody
