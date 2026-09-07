@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSnackbarController } from "@firecms/core";
-import { BuildIcon, Button, LoadingButton, Typography } from "@firecms/ui";
-import { FireCMSBackend } from "../types";
+import { BuildIcon, Button, LoadingButton, OpenInNewIcon, Typography } from "@firecms/ui";
+import { ApiError, FireCMSBackend } from "../types";
 import { useFireCMSBackend } from "../hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,11 @@ export type CloudError = {
     projectId?: string,
     data?: {
         missingPermissions?: string[],
-        errorDetails?: object
+        errorDetails?: object,
+        /** Why the delegated service account was rejected, when we could tell. */
+        reason?: string,
+        /** The service account the backend tried to use. */
+        clientEmail?: string
     }
 };
 
@@ -36,15 +40,16 @@ export function CloudErrorView({
     } = error;
 
     if (code === "service-account-missing" && projectId && fireCMSBackend) {
-        return <CloudMissingServiceAccountErrorView projectId={projectId}
-                                                    fireCMSBackend={fireCMSBackend}
-                                                    message={"Service account missing for this project. You need to link your project to a service account to use this feature."}
-                                                    onFixed={onFixed}/>;
+        return <ServiceAccountRecoveryView projectId={projectId}
+                                           fireCMSBackend={fireCMSBackend}
+                                           reason={"service-account-absent"}
+                                           onFixed={onFixed}/>;
     } else if (code === "service-account-corrupt" && projectId && fireCMSBackend) {
-        return <CloudMissingServiceAccountErrorView projectId={projectId}
-                                                    fireCMSBackend={fireCMSBackend}
-                                                    message={"The service account linked to this project is invalid. You need to link your project to a valid service account to use this feature. The user fixing the issue must have the appropriate permissions."}
-                                                    onFixed={onFixed}/>;
+        return <ServiceAccountRecoveryView projectId={projectId}
+                                           fireCMSBackend={fireCMSBackend}
+                                           reason={error.data?.reason}
+                                           clientEmail={error.data?.clientEmail}
+                                           onFixed={onFixed}/>;
     } else if (code === "user-has-to-accept-googles-terms-of-service" && projectId) {
         return <CloudNeedsToAcceptTermsErrorView projectId={projectId}
                                                  onFixed={onFixed}/>;
@@ -174,77 +179,241 @@ export function CloudErrorView({
     );
 }
 
-function CloudMissingServiceAccountErrorView({
-                                                 fireCMSBackend,
-                                                 projectId,
-                                                 onFixed,
-                                                 message
-                                             }: {
+type ServiceAccountFailureCopy = {
+    title: string,
+    description: string,
+    /**
+     * Whether recreating the account is the right remedy. Enabling Auth or a
+     * failed KMS decrypt need something else entirely, and offering a "Fix"
+     * button that cannot work is worse than offering none.
+     */
+    recreatable: boolean
+};
+
+const SERVICE_ACCOUNT_FAILURES: Record<string, ServiceAccountFailureCopy> = {
+    "service-account-absent": {
+        title: "This project is not linked to a service account",
+        description: "FireCMS needs a service account in your Google Cloud project to read and write your data on your behalf.",
+        recreatable: true
+    },
+    "service-account-deleted": {
+        title: "The FireCMS service account no longer exists",
+        description: "The service account FireCMS uses was deleted from your Google Cloud project, so we can no longer connect to it. Recreating it restores access; your data is untouched.",
+        recreatable: true
+    },
+    "service-account-key-invalid": {
+        title: "The FireCMS service account key was revoked",
+        description: "The account still exists in your Google Cloud project, but the key FireCMS holds is no longer valid. Generating a new key restores access.",
+        recreatable: true
+    },
+    "service-account-disabled": {
+        title: "The FireCMS service account is disabled",
+        description: "The service account exists in your Google Cloud project but has been disabled, so it cannot be used. Recreating it restores access.",
+        recreatable: true
+    },
+    "auth-not-configured": {
+        title: "Authentication is not enabled on this project",
+        description: "The service account works, but Firebase Authentication has never been enabled on your Google Cloud project. Enable it and then sign in again.",
+        recreatable: false
+    },
+    "service-account-unreadable": {
+        title: "We could not read this project's stored credentials",
+        description: "The service account stored for this project could not be decrypted. This one is on our side, so please get in touch and we will sort it out.",
+        recreatable: false
+    }
+};
+
+const UNKNOWN_SERVICE_ACCOUNT_FAILURE: ServiceAccountFailureCopy = {
+    title: "The service account linked to this project is not working",
+    description: "FireCMS could not use the service account stored for this project. Recreating it usually resolves the problem.",
+    recreatable: true
+};
+
+/**
+ * What the user sees when the delegated service account is gone or unusable.
+ *
+ * The account lives in the *client's* Google Cloud project, so it can stop
+ * working without anything changing on our side — someone tidying up IAM is
+ * enough. The remedy is nearly always "recreate it", but that needs a Google
+ * account with access to that project, which whoever hit the error may not
+ * have. So this names what actually broke, offers the one-click fix, and when
+ * the fix comes back refused, explains who has to do it instead.
+ */
+function ServiceAccountRecoveryView({
+                                        fireCMSBackend,
+                                        projectId,
+                                        onFixed,
+                                        reason,
+                                        clientEmail
+                                    }: {
     fireCMSBackend: FireCMSBackend,
     projectId: string,
     onFixed?: () => void,
-    message: string
+    reason?: string,
+    clientEmail?: string
 }) {
 
     const { projectsApi } = useFireCMSBackend();
-
     const snackbarController = useSnackbarController();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [pendingLogin, setPendingLogin] = useState(false);
+    const [fixError, setFixError] = useState<Error | undefined>();
 
-    const doCreateServiceAccount = async () => {
-        if (!fireCMSBackend.googleCredential?.accessToken) {
-            throw new Error("SassMissingServiceAccountErrorView: No access token found");
-        }
+    const copy = (reason ? SERVICE_ACCOUNT_FAILURES[reason] : undefined) ?? UNKNOWN_SERVICE_ACCOUNT_FAILURE;
+
+    const runFix = useCallback(async () => {
+        const accessToken = fireCMSBackend.googleCredential?.accessToken;
+        if (!accessToken) return;
         setIsSubmitting(true);
-        return projectsApi.createServiceAccount(fireCMSBackend.googleCredential.accessToken, projectId, true)
-            .finally(() => setIsSubmitting(false))
-    };
+        setFixError(undefined);
+        try {
+            await projectsApi.createServiceAccount(accessToken, projectId, true);
+            snackbarController.open({
+                type: "success",
+                message: "Service account recreated successfully"
+            });
+            onFixed?.();
+        } catch (e) {
+            // Previously this path reported success regardless, and the user was
+            // sent back round the same failing login.
+            setFixError(e as Error);
+            snackbarController.open({
+                type: "error",
+                message: "Could not recreate the service account: " + (e as Error).message
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    }, [fireCMSBackend.googleCredential?.accessToken, projectId, projectsApi, snackbarController, onFixed]);
 
     useEffect(() => {
         if (pendingLogin && fireCMSBackend.googleCredential?.accessToken) {
-            doCreateServiceAccount().then(() => {
-                snackbarController.open({
-                    type: "success",
-                    message: "Service account created successfully"
-                });
-                if (onFixed)
-                    onFixed();
-            }).catch(e => {
-                snackbarController.open({
-                    type: "error",
-                    message: "Service account creation error: " + e.message
-                });
-            });
             setPendingLogin(false);
+            runFix();
         }
-    }, [pendingLogin, fireCMSBackend.googleCredential?.accessToken]);
+    }, [pendingLogin, fireCMSBackend.googleCredential?.accessToken, runFix]);
 
-    const onClick = async () => {
-        const accessToken = fireCMSBackend.googleCredential?.accessToken;
-        if (!accessToken) {
+    const onClick = () => {
+        if (!fireCMSBackend.googleCredential?.accessToken) {
+            // We need the cloud-platform scope to touch IAM, so send the user
+            // back through Google with the admin scopes and fix once we return.
             setPendingLogin(true);
             fireCMSBackend.googleLogin(true);
         } else {
-            await doCreateServiceAccount();
+            runFix();
         }
     };
-    return <div
-        className="flex flex-col space-y-2 py-4">
-        <Typography color={"error"}>
-            {message}
-        </Typography>
-        <LoadingButton
 
-            color="error"
-            onClick={onClick}
-            loading={isSubmitting}
-            startIcon={<BuildIcon/>}
-        >
-            Fix
-        </LoadingButton>
-    </div>
+    const fixErrorCode = fixError instanceof ApiError ? fixError.code : undefined;
+    const lacksProjectAccess = fixErrorCode === "no-access-to-project";
+    const googleTokenExpired = fixErrorCode === "google-cloud-token-expired";
+
+    return <div className="flex flex-col space-y-4 py-4">
+
+        <div className="flex flex-col space-y-2">
+            <Typography variant={"subtitle2"} color={"error"}>
+                {copy.title}
+            </Typography>
+            <Typography variant={"body2"} color={"secondary"}>
+                {copy.description}
+            </Typography>
+            {clientEmail && <code className="text-xs text-gray-500 dark:text-gray-400">
+                {clientEmail}
+            </code>}
+        </div>
+
+        {copy.recreatable && !lacksProjectAccess && <div className="flex flex-col space-y-2">
+            <LoadingButton
+                color="error"
+                onClick={onClick}
+                loading={isSubmitting}
+                startIcon={<BuildIcon/>}
+            >
+                {googleTokenExpired ? "Sign in with Google and retry" : "Recreate service account"}
+            </LoadingButton>
+            <Typography variant={"caption"} color={"secondary"}>
+                You need to be signed in with a Google account that can manage service
+                accounts in the <code>{projectId}</code> Google Cloud project.
+            </Typography>
+        </div>}
+
+        {copy.recreatable && lacksProjectAccess && <NoProjectAccessView projectId={projectId}
+                                                                       onRetry={onClick}
+                                                                       retrying={isSubmitting}/>}
+
+        {reason === "auth-not-configured" && <ExternalConsoleLink
+            href={`https://console.firebase.google.com/project/${projectId}/authentication/providers`}
+            label={"Enable Authentication in the Firebase console"}/>}
+
+        {reason === "service-account-unreadable" && <SupportLink/>}
+
+        {fixError && !lacksProjectAccess && <Typography variant={"caption"} color={"error"}>
+            {fixError.message}
+        </Typography>}
+
+    </div>;
+}
+
+/**
+ * The common team case: the person who hit the broken login is not the person
+ * who owns the Google Cloud project, so no button we show them can help.
+ */
+function NoProjectAccessView({
+                                 projectId,
+                                 onRetry,
+                                 retrying
+                             }: {
+    projectId: string,
+    onRetry: () => void,
+    retrying: boolean
+}) {
+    return <div className="flex flex-col space-y-3 p-4 rounded-md border border-amber-500/30 bg-amber-500/5">
+        <Typography variant={"subtitle2"} className={"text-amber-700 dark:text-amber-400"}>
+            Your Google account cannot fix this project
+        </Typography>
+        <Typography variant={"body2"} color={"secondary"}>
+            The account you signed in with does not have access to the <code>{projectId}</code> Google
+            Cloud project, so it cannot recreate the service account. Ask someone with
+            the <strong>Owner</strong> role (or any role granting <code>iam.serviceAccounts.create</code>)
+            on that project to open this page and press the button, and access will be restored for everyone.
+        </Typography>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <Button variant={"text"}
+                    size={"small"}
+                    onClick={onRetry}
+                    disabled={retrying}>
+                Try again with a different account
+            </Button>
+            <ExternalConsoleLink
+                href={`https://console.cloud.google.com/iam-admin/serviceaccounts?project=${projectId}`}
+                label={"Open the service accounts console"}/>
+        </div>
+    </div>;
+}
+
+function ExternalConsoleLink({
+                                 href,
+                                 label
+                             }: {
+    href: string,
+    label: string
+}) {
+    return <a href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center text-sm font-semibold text-primary hover:underline gap-1">
+        {label} <OpenInNewIcon size="smallest"/>
+    </a>;
+}
+
+function SupportLink() {
+    return <Typography variant={"body2"} color={"secondary"}>
+        Reach us at <a className="text-primary dark:text-primary-light underline"
+                       href="mailto:hello@firecms.co?subject=FireCMS%20service%20account%20error"
+                       rel="noopener noreferrer"
+                       target="_blank">hello@firecms.co</a> and we will get this project back up.
+    </Typography>;
 }
 
 function CloudNeedsToAcceptTermsErrorView({

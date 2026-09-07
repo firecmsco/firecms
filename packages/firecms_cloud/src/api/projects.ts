@@ -234,26 +234,43 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
+    /**
+     * Recreates the FireCMS service account inside the client's Google Cloud
+     * project. Pass `reset` to delete the existing account first, which is what
+     * you want when the stored key stopped working.
+     *
+     * The caller needs a Google token with the cloud-platform scope *and* access
+     * to the client project; without both, the backend refuses and we surface
+     * that rather than reporting a success that never happened.
+     */
     async function createServiceAccount(googleAccessToken: string,
                                         projectId: string,
-                                        reset: boolean): Promise<FireCMSCloudUserWithRoles> {
+                                        reset: boolean): Promise<void> {
         const firebaseAccessToken = await getBackendAuthToken();
         const url = `${host}/projects/${projectId}/service_accounts?reset=${reset}`;
 
-        return fetch(url,
+        const res = await fetch(url,
             {
                 method: "POST",
                 headers: buildHeaders({
                     firebaseAccessToken,
                     googleAccessToken
                 }),
-            })
-            .then(async (res) => {
-                if (res.status === 409) // already exists
-                    throw Error("The service account already exists for this project.")
-                const data = await res.json();
-                return data.user as FireCMSCloudUserWithRoles;
             });
+
+        if (res.ok) return;
+
+        if (res.status === 409)
+            throw new ApiError("The service account already exists for this project.",
+                "service-account-already-exists",
+                projectId);
+
+        const data = await res.json().catch(() => undefined);
+        throw new ApiError(
+            data?.message ?? `Could not create the service account (HTTP ${res.status})`,
+            data?.code,
+            projectId,
+            data?.data);
     }
 
     async function doDelegatedLogin(projectId: string): Promise<string> {
