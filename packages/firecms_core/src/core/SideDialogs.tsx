@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useSideDialogsController } from "../hooks";
 import { EntitySidePanelProps, SideDialogPanelProps } from "../types";
 import { Sheet } from "@firecms/ui";
@@ -67,6 +67,40 @@ export function SideDialogs() {
     </>;
 }
 
+// Menus, selects and popovers opened inside a side dialog are dismissed by Radix as
+// soon as the pointer goes down, but the dialog underneath only makes up its mind on
+// the click that follows, when that layer is already gone and the dialog looks like
+// the topmost one. Without this, the click that dismisses an open menu also asks the
+// panel to close, and an edited entity greets the user with the unsaved changes dialog.
+const NESTED_LAYER_SELECTOR = [
+    "[data-radix-menu-content]",
+    "[data-radix-select-viewport]",
+    "[data-radix-popper-content-wrapper] [role=\"dialog\"]",
+    "[data-suggestion-menu=\"true\"]"
+].join(",");
+
+function useNestedLayerOpenOnPointerDown() {
+    const ref = useRef(false);
+    useEffect(() => {
+        const onPointerDown = () => {
+            ref.current = Array.from(document.querySelectorAll(NESTED_LAYER_SELECTOR))
+                .some(element => window.getComputedStyle(element).visibility !== "hidden");
+        };
+        // the keyboard dismisses one layer at a time on its own, so a stale pointer
+        // interaction must not swallow a close requested with Escape
+        const onKeyDown = () => {
+            ref.current = false;
+        };
+        document.addEventListener("pointerdown", onPointerDown, true);
+        document.addEventListener("keydown", onKeyDown, true);
+        return () => {
+            document.removeEventListener("pointerdown", onPointerDown, true);
+            document.removeEventListener("keydown", onKeyDown, true);
+        };
+    }, []);
+    return ref;
+}
+
 function SideDialogView({
     offsetPosition,
     panel
@@ -81,6 +115,8 @@ function SideDialogView({
     const [blockedNavigationMessage, setBlockedNavigationMessage] = useState<React.ReactNode | undefined>();
 
     const [pendingClose, setPendingClose] = useState(false);
+
+    const nestedLayerOpenOnPointerDown = useNestedLayerOpenOnPointerDown();
 
     const widthRef = React.useRef<string | undefined>(panel?.width);
     const width = widthRef.current;
@@ -142,6 +178,13 @@ function SideDialogView({
                         if (suggestionMenu && window.getComputedStyle(suggestionMenu).visibility !== "hidden") {
                             // Don't close the sheet if a suggestion menu is visible
                             // Let Tiptap handle closing the menu first
+                            return;
+                        }
+                        // this interaction started on top of a menu or popover: it dismissed
+                        // that layer, it was not a request to close the panel. The flag is
+                        // left alone because a single click asks to close more than once;
+                        // the next pointer or key interaction recomputes it.
+                        if (nestedLayerOpenOnPointerDown.current) {
                             return;
                         }
                         onCloseRequest();

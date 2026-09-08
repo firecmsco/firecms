@@ -43,6 +43,7 @@ export function FormEnhanceAction({
     const storageKey = createLocalStorageKey(path, status);
 
     const [loading, setLoading] = React.useState(false);
+    const [menuOpen, setMenuOpen] = React.useState(false);
     const dataEnhancementController = useDataEnhancementController();
     const { t } = useTranslation();
 
@@ -126,6 +127,8 @@ export function FormEnhanceAction({
     const noIdSet = !formContext?.entityId;
 
     function submit() {
+        // picking a suggestion closes the menu, so submitting the prompt should too
+        setMenuOpen(false);
         enhance(instructions);
     }
 
@@ -133,6 +136,8 @@ export function FormEnhanceAction({
         <Menu
             align={"end"}
             sideOffset={8}
+            open={menuOpen}
+            onOpenChange={setMenuOpen}
             className={"max-w-[100vw]"}
             trigger={<Button variant={"filled"}
                 color={"neutral"}
@@ -227,7 +232,7 @@ export function FormEnhanceAction({
                 </IconButton>
 
                 <IconButton
-                    onClick={() => enhance(instructions)}
+                    onClick={submit}
                     size={"small"}
                     color={!instructions ? "primary" : undefined}
                     disabled={loading || !instructions}>
