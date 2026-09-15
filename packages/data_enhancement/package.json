@@ -84,7 +84,7 @@
   "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae",
   "repository": {
     "type": "git",
-    "url": "https://github.com/FireCMSco/firecms.git",
+    "url": "git+https://github.com/firecmsco/firecms.git",
     "directory": "packages/data_enhancement"
   }
 }
