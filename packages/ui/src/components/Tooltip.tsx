@@ -55,10 +55,10 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
         return <>{children}</>;
 
     const trigger = asChild
-        ? <TooltipPrimitive.Trigger asChild={true}>
+        ? <TooltipPrimitive.Trigger asChild={true} onFocus={openOnlyOnKeyboardFocus}>
             {children}
         </TooltipPrimitive.Trigger>
-        : <TooltipPrimitive.Trigger asChild={true}>
+        : <TooltipPrimitive.Trigger asChild={true} onFocus={openOnlyOnKeyboardFocus}>
             <div style={style} className={className} ref={ref} {...props}>
                 {children}
             </div>
@@ -85,6 +85,20 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
         </TooltipPrimitive.Provider>
     );
 });
+
+/**
+ * Radix opens a tooltip on any focus of its trigger. Keep that for keyboard focus only: a clicked
+ * trigger keeps focus behind the dialog it opened, and the browser focuses it again when the
+ * window is re-activated, which would float its tooltip over the dialog.
+ */
+function openOnlyOnKeyboardFocus(event: React.FocusEvent<HTMLElement>) {
+    try {
+        if (!(event.target as HTMLElement).matches(":focus-visible"))
+            event.preventDefault(); // skips Radix's own focus handler
+    } catch {
+        // no :focus-visible support: keep Radix's behavior
+    }
+}
 
 const styles = `
 
