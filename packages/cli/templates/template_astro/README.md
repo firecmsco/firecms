@@ -4,16 +4,15 @@ This is an [Astro](https://astro.build) project that demonstrates how to integra
 
 ## Getting Started
 
-First, install dependencies from the monorepo root:
+Install the dependencies:
 
 ```bash
 npm install
 ```
 
-Then, run the development server:
+Then run the development server:
 
 ```bash
-cd examples/example_astro
 npm run dev
 ```
 
@@ -31,8 +30,6 @@ src/
 │   │   ├── blog.tsx
 │   │   ├── users_collection.tsx
 │   │   └── locales.tsx
-│   ├── components/
-│   │   └── CustomLoginView.tsx
 │   └── views/
 │       └── ExampleCMSView.tsx
 ├── common/                 # Shared config and types
@@ -51,6 +48,16 @@ src/
 Astro renders pages statically by default, but FireCMS is a fully interactive React application that requires client-side rendering. This example uses Astro's `client:only="react"` directive to render the CMS entirely on the client side, avoiding SSR for components that depend on browser APIs like `window` and `BrowserRouter`.
 
 The catch-all route `[...path].astro` ensures all CMS sub-routes (`/cms/products`, `/cms/blog`, etc.) are handled by the React Router inside FireCMS.
+
+## License
+
+The data enhancement, user management and import/export plugins are FireCMS PRO
+features, so a deployed CMS needs a license key. You can get one at
+[firecms.co](https://app.firecms.co/subscriptions). Set it as `PUBLIC_FIRECMS_API_KEY`
+in the `.env` file; it is passed to the `apiKey` prop of `<FireCMS>` in `src/cms/App.tsx`.
+
+Astro inlines `PUBLIC_` variables into the client bundle at build time, so if your host
+sets environment variables, set it there before building.
 
 ## Learn More
 

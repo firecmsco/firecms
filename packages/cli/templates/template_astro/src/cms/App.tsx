@@ -22,6 +22,7 @@ import {
 } from "@firecms/core";
 import type { CMSView } from "@firecms/core";
 import {
+    FirebaseLoginView,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
@@ -36,7 +37,6 @@ import { useImportPlugin } from "@firecms/data_import";
 import { useExportPlugin } from "@firecms/data_export";
 import { productsCollection } from "./collections/products";
 import { blogCollection } from "./collections/blog";
-import { CustomLoginView } from "./components/CustomLoginView";
 import { ExampleCMSView } from "./views/ExampleCMSView";
 
 import { usersCollection } from "./collections/users_collection";
@@ -134,14 +134,6 @@ export function App() {
         storageSource
     });
 
-    const navigationController = useBuildNavigationController({
-        collections: collectionsBuilder,
-        views,
-        adminViews: userManagementAdminViews,
-        authController,
-        dataSourceDelegate: firestoreDelegate
-    });
-
     /**
      * Data enhancement plugin
      */
@@ -164,6 +156,25 @@ export function App() {
     const importPlugin = useImportPlugin();
     const exportPlugin = useExportPlugin();
 
+    /**
+     * Plugins go to the navigation controller, which is where they can
+     * modify collections and add views and navigation entries.
+     */
+    const plugins = [
+        dataEnhancementPlugin,
+        importPlugin,
+        exportPlugin,
+        userManagementPlugin
+    ];
+
+    const navigationController = useBuildNavigationController({
+        collections: collectionsBuilder,
+        views,
+        adminViews: userManagementAdminViews,
+        plugins,
+        authController,
+        dataSourceDelegate: firestoreDelegate
+    });
 
     if (firebaseConfigLoading || !firebaseApp) {
         return <CircularProgressCenter />;
@@ -179,17 +190,12 @@ export function App() {
                 <ModeControllerProvider value={modeController}>
 
                     <FireCMS
+                        apiKey={import.meta.env.PUBLIC_FIRECMS_API_KEY}
                         navigationController={navigationController}
                         authController={userManagement}
                         userConfigPersistence={userConfigPersistence}
                         dataSourceDelegate={firestoreDelegate}
                         storageSource={storageSource}
-                        plugins={[
-                            dataEnhancementPlugin,
-                            importPlugin,
-                            exportPlugin,
-                            userManagementPlugin
-                        ]}
                     >
                         {({
                             context,
@@ -204,7 +210,7 @@ export function App() {
                                     component = (
                                         <div
                                             className={"bg-white dark:bg-surface-900 rounded-2xl max-w-[500px] w-full h-fit"}>
-                                            <CustomLoginView
+                                            <FirebaseLoginView
                                                 allowSkipLogin={false}
                                                 signInOptions={signInOptions}
                                                 firebaseApp={firebaseApp}

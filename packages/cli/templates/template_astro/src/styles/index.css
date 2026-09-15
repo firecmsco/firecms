@@ -5,8 +5,9 @@
 
 @plugin "@tailwindcss/typography";
 
-@source "./**/*.{js,ts,jsx,tsx}";
-@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+@source "../**/*.{js,ts,jsx,tsx}";
+/* Relative to this file, which is one level deeper than in the other templates. */
+@source "../../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
 
 :root {
     --color-primary: #0070F4;
