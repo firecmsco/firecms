@@ -15,6 +15,9 @@
   },
   "scripts": {
     "test": "jest --passWithNoTests",
+    "test:templates": "node scripts/templates/check.mjs",
+    "test:templates:signed-in": "node scripts/templates/signed-in.mjs",
+    "test:templates:published": "node scripts/templates/smoke-published.mjs",
     "build": "rm -rf templates/template_cloud/node_modules && rm -rf templates/template_cloud/yarn.lock && rm -rf templates/template_cloud/pnpm-lock.yaml && rm -rf templates/template_astro/node_modules && rm -rf templates/template_astro/dist && rm -rf templates/template_astro/.astro && vite build && tsc --emitDeclarationOnly -p tsconfig.json",
     "dev": "ts-node src/test.ts",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
