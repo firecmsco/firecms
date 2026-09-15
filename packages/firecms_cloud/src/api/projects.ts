@@ -21,6 +21,17 @@ export type InitialCollectionsSetupDiagnostics = {
 
 export type ProjectsApi = ReturnType<typeof buildProjectsApi>;
 
+/**
+ * The backend's answer to changing the projects on a graduated PRO license.
+ * `quantity` and `subscription_id` are null when the license has no
+ * subscription (nothing to bill yet).
+ */
+export type LicenseProjectsUpdate = {
+    firebase_project_ids: string[];
+    quantity: number | null;
+    subscription_id: string | null;
+};
+
 export type RootCollectionInfo = {
     path: string;
     databaseId?: string;
@@ -376,19 +387,53 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         type: SubscriptionType
     }): Promise<string> {
         const firebaseAccessToken = await getBackendAuthToken();
-        return fetch(`${host}/customer/create-checkout-session?return_url=${window.location.href}`,
+        return fetch(`${host}/customer/create-checkout-session?return_url=${encodeURIComponent(window.location.href)}`,
             {
                 method: "POST",
                 headers: buildHeaders({ firebaseAccessToken }),
                 body: JSON.stringify(props)
             })
             .then(async (res) => {
-                const data = await res.json();
+                const data = await res.json().catch(() => undefined);
                 if (!res.ok) {
-                    throw new Error(data?.error ?? "Error creating checkout session");
+                    // 400s carry `message`, 500s `error`.
+                    throw new Error(data?.error ?? data?.message ?? `Error creating checkout session (HTTP ${res.status})`);
                 }
                 return data.url as string;
             });
+    }
+
+    /**
+     * Replace the Firebase projects linked to a graduated
+     * (`per_project_graduated`) PRO license.
+     *
+     * The backend also moves the license's Stripe subscription to
+     * `max(1, projects)`, prorated, so the quantity billed always equals the
+     * projects linked. That is why these licenses must not write
+     * `firebase_project_ids` to Firestore directly the way the legacy
+     * `per_project` / `per_user` licenses do.
+     *
+     * Rejects with the backend's message: 400 an invalid project id, 403 not the
+     * license owner, 404 no such license, 409 a legacy license, 5xx Stripe
+     * refused the quantity change.
+     */
+    async function setLicenseProjects(licenseId: string, firebaseProjectIds: string[]): Promise<LicenseProjectsUpdate> {
+        const firebaseAccessToken = await getBackendAuthToken();
+        const res = await fetch(`${host}/customer/licenses/${encodeURIComponent(licenseId)}/projects`,
+            {
+                method: "PUT",
+                headers: buildHeaders({ firebaseAccessToken }),
+                body: JSON.stringify({ firebase_project_ids: firebaseProjectIds })
+            });
+        const data = await res.json().catch(() => undefined);
+        if (!res.ok) {
+            throw new ApiError(
+                data?.message ?? data?.error ?? `Could not update the projects on this license (HTTP ${res.status})`,
+                data?.code ?? String(res.status),
+                undefined,
+                data?.data);
+        }
+        return data?.data as LicenseProjectsUpdate;
     }
 
     async function createCloudStripeNewSubscriptionLink(props: {
@@ -512,6 +557,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         doDelegatedLogin,
         createStripeNewSubscriptionLink,
         createCloudStripeNewSubscriptionLink,
+        setLicenseProjects,
 
         initialCollectionsSetup,
         setupCollections,

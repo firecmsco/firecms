@@ -1,5 +1,6 @@
 import { CurrencyOption, ProductPrice, Subscription } from "../../types/subscriptions";
 import { ProjectSubscriptionPlan } from "../../types/projects";
+import { describeGraduatedPrice, formatAmount, isGraduatedProPrice } from "../../utils/pro_pricing";
 
 export function getCurrencyString({
                                       key,
@@ -14,15 +15,20 @@ export function getCurrencyString({
 export function getPriceString(price: ProductPrice) {
 
     const type = price.metadata.type ?? "per_user";
+    if (isGraduatedProPrice(price)) {
+        // Tiered, so `unit_amount` is null: the amounts are in the tiers.
+        const { first, additional, interval } = describeGraduatedPrice(price);
+        return formatAmount(first, price.currency) + " first project, " + formatAmount(additional, price.currency) + " each additional /" + interval;
+    }
     if (price.billing_scheme === "tiered") {
-        const firstFlatPrice = price.tiers.find(p => p.flat_amount);
+        const firstFlatPrice = price.tiers?.find(p => p.flat_amount);
         if (firstFlatPrice)
             return "Starting at " + formatPrice(firstFlatPrice.flat_amount as number, price.currency);
         else
             return "Billing in " + price.currency;
     }
 
-    return formatPrice(price.unit_amount, price.currency) + (type === "per_user" ? " user/" : " project/") + price.interval;
+    return formatPrice(price.unit_amount ?? 0, price.currency) + (type === "per_user" ? " user/" : " project/") + price.interval;
 
 }
 

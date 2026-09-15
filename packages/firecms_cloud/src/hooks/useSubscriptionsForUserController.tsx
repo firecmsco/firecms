@@ -14,6 +14,12 @@ export type SubscribeParams = {
     quantity?: number,
     licenseId?: string,
     productPrice: ProductPrice,
+    /**
+     * Sent to the checkout endpoint as `productPriceType`. Defaults to the
+     * price's Stripe `type` (`recurring` / `one_time`); graduated PRO license
+     * checkouts send `per_project_graduated`.
+     */
+    productPriceType?: string,
     onCheckoutSessionReady: (url?: string, error?: Error) => void,
     type: SubscriptionType
 };
@@ -125,27 +131,15 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
             });
     }, [firestoreRef, userId]);
 
-    const subscribe = async (props: {
-                                 projectId?: string,
-                                 licenseId?: string,
-                                 quantity?: number,
-                                 productPrice: ProductPrice,
-                                 onCheckoutSessionReady: (url?: string, error?: Error) => void,
-                                 type: SubscriptionType
-                             }
-    ) => {
+    const subscribe = async (props: SubscribeParams) => {
         const {
-            projectId,
-            licenseId,
             productPrice,
-            quantity,
-            onCheckoutSessionReady,
-            type
+            onCheckoutSessionReady
         } = props;
 
         console.debug("Subscribing to product", props);
         const productPriceId = productPrice.id;
-        const productPriceType = productPrice.type;
+        const productPriceType = props.productPriceType ?? productPrice.type;
         try {
             const sessionUrl: string = await projectsApi.createStripeNewSubscriptionLink({
                 ...props,

@@ -22,28 +22,46 @@ export type CurrencyOption = {
     unit_amount_decimal: string;
 };
 
+/**
+ * What a PRO license price bills for, from the Stripe price's `metadata.type`.
+ * - `per_user`: legacy, quantity = seats.
+ * - `per_project`: legacy flat price per Firebase project.
+ * - `per_project_graduated`: one price with graduated tiers (first project at
+ *   one rate, every further project at a lower one); quantity = linked projects.
+ */
+export type ProLicensePriceType = "per_user" | "per_project" | "per_project_graduated";
+
+export type PriceInterval = "month" | "year";
+
 export type ProductPrice = {
     id: string;
     active: boolean;
-    billing_scheme: string;
+    /** `tiered` prices carry their amounts in `tiers` and have a null `unit_amount`. */
+    billing_scheme: "per_unit" | "tiered" | string;
+    tiers_mode?: "graduated" | "volume" | null;
     currency: "eur" | "usd";
     description: string;
-    interval: "month";
+    interval: PriceInterval;
     interval_count: number;
     lookup_key?: string;
     metadata: {
         product: string;
-        type: "per_user" | "per_project";
+        type: ProLicensePriceType;
     }
     currency_options: Record<"eur" | "usd", CurrencyOption>
-    tiers: ProductPriceTier[];
+    /**
+     * Present on tiered prices, as synced by the Stripe extension; `null` or
+     * missing on per-unit ones.
+     */
+    tiers?: ProductPriceTier[] | null;
     default: boolean;
     tax_behavior: string;
     type: "recurring" | "one_time";
-    unit_amount: number;
+    /** Null on tiered prices. */
+    unit_amount: number | null;
     recurring: {
         aggregate_usage: "max";
-        interval: "month";
+        interval: PriceInterval;
         interval_count: number;
         trial_period_days: number;
         usage_type: "metered"
@@ -53,10 +71,11 @@ export type ProductPrice = {
 
 export type ProductPriceTier = {
     flat_amount: number | null;
-    unit_amount: number;
-    up_to: number;
-    unit_amount_decimal: string;
-    flat_amount_decimal: number | null;
+    unit_amount: number | null;
+    /** Last unit this tier covers; `null` means infinity (the last tier). */
+    up_to: number | null;
+    unit_amount_decimal: string | null;
+    flat_amount_decimal: string | null;
 }
 
 export type SubscriptionType = "openai" | "cloud_plus" | "pro";

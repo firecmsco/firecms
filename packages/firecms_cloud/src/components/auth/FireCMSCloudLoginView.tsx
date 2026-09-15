@@ -18,6 +18,7 @@ import { GoogleLoginButton } from "./GoogleLoginButton";
 import { FireCMSBackend } from "../../types";
 import { LoginButton } from "@firecms/firebase";
 import { CloudUserPasswordForm } from "./CloudUserPasswordForm";
+import { describeGraduatedPrice, formatAmount, preferredCurrency } from "../../utils/pro_pricing";
 
 export interface FireCMSCloudLoginViewProps {
     fireCMSBackend: FireCMSBackend;
@@ -29,6 +30,13 @@ export interface FireCMSCloudLoginViewProps {
     onAnalyticsEvent?: (event: string, params?: object) => void;
     title?: React.ReactNode;
     subtitle?: React.ReactNode;
+    /**
+     * `pro` is the sign-in for buying a self-hosted PRO license (the app reaches
+     * it from links carrying `intent=pro`): PRO branding, the PRO features, the
+     * price and the trial, instead of the Cloud pitch. Its strings (`pro_*`)
+     * are supplied by the host app's translation overrides. Defaults to `cloud`.
+     */
+    variant?: "cloud" | "pro";
 }
 
 /**
@@ -45,11 +53,20 @@ export function FireCMSCloudLoginView({
                                           includeTermsAndNewsLetter,
                                           disableMarketing,
                                           onAnalyticsEvent,
-                                          title,
-                                          subtitle
+                                          title: titleProp,
+                                          subtitle: subtitleProp,
+                                          variant = "cloud"
                                       }: FireCMSCloudLoginViewProps) {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { mode, setMode } = useModeController();
+
+    const isPro = variant === "pro";
+    // A product name, the same in every language, like the CLOUD title below.
+    // eslint-disable-next-line i18next/no-literal-string
+    const title = titleProp ?? (isPro ? <>FireCMS <Typography variant={"h4"}
+                                                           component={"span"}
+                                                           className={"text-primary"}>PRO</Typography></> : undefined);
+    const subtitle = subtitleProp ?? (isPro ? t("pro_login_subtitle") : undefined);
 
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [termsMissing, setTermsMissing] = useState(false);
@@ -78,9 +95,9 @@ export function FireCMSCloudLoginView({
         const timer = setTimeout(() => {
             setFadeIn(true);
         }, 10);
-        onAnalyticsEvent?.("view_displayed");
+        onAnalyticsEvent?.("view_displayed", { variant });
         return () => clearTimeout(timer);
-    }, [onAnalyticsEvent]);
+    }, [onAnalyticsEvent, variant]);
 
     function buildErrorView() {
         let errorView: any;
@@ -200,7 +217,9 @@ export function FireCMSCloudLoginView({
 
             <div className="relative flex flex-col lg:flex-row w-full max-w-[1440px] mx-auto min-h-screen justify-center items-stretch lg:items-center m-0 p-0">
                 {/* Marketing Section - Left Side (Desktop only) */}
-                {!disableMarketing && <div
+                {!disableMarketing && isPro && <ProMarketing/>}
+
+                {!disableMarketing && !isPro && <div
                     className="hidden lg:flex lg:w-1/2 text-white flex-col justify-center items-center p-12 m-0">
                     <div className="max-w-md w-full">
                     <Typography variant="h5" className="font-mono uppercase mb-8 text-white ">
@@ -268,6 +287,10 @@ export function FireCMSCloudLoginView({
                         {subtitle}
                     </Typography>
                 )}
+
+                {/* Outside the marketing column, which is desktop-only: the
+                    price has to be on screen on a phone too. */}
+                {isPro && <ProPriceAndTrial locale={i18n?.language}/>}
 
                 <div className={"w-full max-w-md"}>
                     {includeTermsAndNewsLetter &&
@@ -372,6 +395,57 @@ export function FireCMSCloudLoginView({
         </div>
     );
 
+}
+
+const PRO_FEATURE_KEYS = [
+    "pro_login_feature_schema_editor",
+    "pro_login_feature_import_export",
+    "pro_login_feature_history",
+    "pro_login_feature_users",
+    "pro_login_feature_seats"
+];
+
+function ProMarketing() {
+    const { t } = useTranslation();
+    return <div className="hidden lg:flex lg:w-1/2 text-white flex-col justify-center items-center p-12 m-0">
+        <div className="max-w-md w-full">
+            <Typography variant="h5" className="font-mono uppercase mb-8 text-white">
+                {t("pro_login_marketing_title")}
+            </Typography>
+            <ul className="space-y-3 text-left list-disc list-inside marker:text-white">
+                {PRO_FEATURE_KEYS.map((key) => <li key={key}>
+                    <Typography variant="body1" className="text-blue-50 inline">
+                        {t(key)}
+                    </Typography>
+                </li>)}
+            </ul>
+        </div>
+    </div>;
+}
+
+/**
+ * The price, from the list prices rather than Stripe: nothing is loaded
+ * before sign-in, and a signed-out visitor should not cost Firestore reads.
+ */
+function ProPriceAndTrial({ locale }: { locale?: string }) {
+    const { t } = useTranslation();
+    const currency = preferredCurrency();
+    const { first, additional } = describeGraduatedPrice({
+        currency,
+        interval: "month",
+        metadata: { type: "per_project_graduated" }
+    });
+    return <div className="mb-6 text-center max-w-sm flex flex-col gap-1">
+        <Typography variant={"subtitle1"}>
+            {t("pro_price_line_month", {
+                first: formatAmount(first, currency, locale),
+                additional: formatAmount(additional, currency, locale)
+            })}
+        </Typography>
+        <Typography variant={"body2"} color={"secondary"}>
+            {t("pro_login_trial")}
+        </Typography>
+    </div>;
 }
 
 const subscribeNewsletter = (email: string) => {
