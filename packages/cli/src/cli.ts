@@ -69,6 +69,8 @@ async function loginArgs(rawArgs) {
         return;
     }
     await login(env, debug);
+    // `login` explains its own failures; the exit code is what tells a script about them.
+    if (!await getCurrentUser(env, debug)) process.exitCode = 1;
 }
 
 async function logoutArgs(rawArgs) {

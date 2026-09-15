@@ -61,7 +61,7 @@ export async function login(env: "prod" | "dev", debug: boolean) {
             }
         }
 
-    }).listen(3000);
+    });
 
     server.on("connection", (socket) => {
         activeConnections.add(socket);
@@ -69,6 +69,17 @@ export async function login(env: "prod" | "dev", debug: boolean) {
             activeConnections.delete(socket);
         });
     });
+
+    // Open the browser only once the server is up. The sign-in comes back to this port, so
+    // without it the login cannot finish, and the browser would land on whatever holds it.
+    try {
+        await listen(server, 3000);
+    } catch (err) {
+        if ((err as NodeJS.ErrnoException).code !== "EADDRINUSE") throw err;
+        console.error(`${chalk.red.bold("ERROR")} Port 3000 is already in use, and logging in needs it: the browser hands the sign-in back to the CLI there.`);
+        console.error(`Stop whatever is using it (it may be another ${chalk.bold(authCommand("login", env))} still waiting for you to sign in) and try again.`);
+        return;
+    }
 
     open("http://localhost:3000");
 
@@ -88,6 +99,17 @@ export async function login(env: "prod" | "dev", debug: boolean) {
             }
             server.close();
         })
+    });
+}
+
+/** Resolves once `server` is listening on `port`, and rejects if it cannot bind. */
+function listen(server: http.Server, port: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+        server.once("error", reject);
+        server.listen(port, () => {
+            server.off("error", reject);
+            resolve();
+        });
     });
 }
 

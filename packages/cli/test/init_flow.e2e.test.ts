@@ -1,8 +1,10 @@
 import { afterAll, beforeAll, describe, expect, it } from "@jest/globals";
 import { execSync, spawn } from "child_process";
 import fs from "fs";
+import net from "net";
 import os from "os";
 import path from "path";
+import { pathToFileURL } from "url";
 
 /**
  * End-to-end tests for `firecms init`, covering every template it can scaffold.
@@ -13,10 +15,25 @@ import path from "path";
  * template resolution and the file copy exactly as a user meets them.
  *
  * The CLI stays interactive even when every flag is supplied (`--projectId` only seeds a
- * prompt default), so the harness feeds newlines to accept defaults until the process
- * exits. No network or login is needed: logged out, the project picker falls back to
- * "Enter project id manually".
-
+ * prompt default), so the harness answers prompts over stdin until the process exits. Not
+ * every default is safe to accept, so each run is sandboxed:
+ *
+ * - `HOME` is a fresh temp directory. The CLI keeps its credentials in `~/.firecms`, so with
+ *   the real HOME a logged-in developer's run would call the FireCMS API as them. Here every
+ *   CLI run is logged out; only the type-check test seeds a session, a fake one.
+ * - Logged out, the first prompt is "Do you want to log in?", and it defaults to yes, which
+ *   starts a server on port 3000 and opens a browser. So the first answer is always "n".
+ *   After that there is no project picker: the CLI asks for the project id directly, with
+ *   `--projectId` as the default.
+ * - A stub `open` comes first on PATH and only records its arguments, and the preload also
+ *   records each launch before it happens. Every run asserts there were none, and every
+ *   logged-out run that it came away without credentials.
+ * - A preload blocks all network access, so "no network" is enforced rather than assumed.
+ *
+ * `--cloud` cannot be scaffolded through the CLI logged out: the CLI insists on a login and
+ * exits when it is declined, which is tested as such. The cloud template itself is
+ * scaffolded by calling `createProject` from the built bundle, the function the CLI hands
+ * off to once its prompts are answered.
  */
 
 const CLI_ROOT = path.resolve(__dirname, "..");
@@ -45,61 +62,173 @@ function filesContaining(root: string, needle: string): string[] {
     return hits.sort();
 }
 
-/**
- * `copyTemplateFiles` substitutes the Firebase project id into a *different* file list per
- * template, so each one is asserted against its own list rather than a shared assumption.
- */
-const TEMPLATES: Array<{
+type TemplateCase = {
     name: string;
     flag: string;
     dir: string;
     /** Files that must exist regardless of substitution. */
     expected: string[];
-}> = [
+    /** Where `copyWebAppConfig` writes the web app config. Self-hosted templates only. */
+    firebaseConfig?: string;
+    /** The CLI will not scaffold this template logged out. */
+    requiresLogin?: boolean;
+};
+
+/**
+ * `copyTemplateFiles` substitutes the Firebase project id into a *different* file list per
+ * template, so each one is asserted against its own list rather than a shared assumption.
+ */
+const TEMPLATES: TemplateCase[] = [
     {
         name: "pro",
         flag: "--pro",
         dir: "template_pro",
-        expected: ["package.json", "index.html", "tsconfig.json", "src"]
+        expected: ["package.json", "index.html", "tsconfig.json", "src"],
+        firebaseConfig: "src/firebase_config.ts"
     },
     {
         name: "community",
         flag: "--community",
         dir: "template",
-        expected: ["package.json", "index.html", "tsconfig.json", "src"]
+        expected: ["package.json", "index.html", "tsconfig.json", "src"],
+        firebaseConfig: "src/firebase_config.ts"
     },
     {
         name: "cloud",
         flag: "--cloud",
         dir: "template_cloud",
-        expected: ["package.json", "src"]
+        expected: ["package.json", "src"],
+        requiresLogin: true
     },
     {
         name: "next-pro",
         flag: "--next-pro",
         dir: "template_next_pro",
-        expected: ["package.json", "src"]
+        expected: ["package.json", "src"],
+        firebaseConfig: "src/app/common/firebase_config.ts"
     },
     {
         name: "astro",
         flag: "--astro",
         dir: "template_astro",
-        expected: ["package.json", "src"]
+        expected: ["package.json", "src"],
+        firebaseConfig: "src/common/firebase_config.ts"
     }
 ];
 
 /** Artefacts that must never be copied out of a template into a user's new project. */
 const MUST_NOT_LEAK = ["node_modules", "pnpm-lock.yaml", "yarn.lock", "package-lock.json", "dist", "build", ".astro"];
 
-let workDir: string;
+/** A run that has not exited by then is stuck, e.g. waiting for an OAuth callback. */
+const RUN_TIMEOUT_MS = 60_000;
 
-/** Run `firecms <args>` in `cwd`, answering every prompt with a bare newline. */
-function runInit(args: string[], cwd: string): Promise<{ code: number | null, output: string }> {
+/**
+ * Loaded into every child with `--import`. It blocks all network access, so a code path that
+ * would call the FireCMS API (or Google's) fails loudly instead of quietly reaching
+ * production. The one request it answers is `create_webapp`, with an empty config, and only
+ * a run with a fake session gets far enough to make it.
+ *
+ * It also records every browser launch, synchronously, before handing it to the stub on
+ * PATH. `open` spawns its launcher and moves on, so a CLI that crashes straight after (as
+ * `login` used to on a busy port) exits before the stub has written a thing. Launching by
+ * bare name sends the `xdg-open` bundled inside `open` on Linux to the stub as well.
+ */
+const PRELOAD = `
+import childProcess from "node:child_process";
+import fs from "node:fs";
+import { syncBuiltinESMExports } from "node:module";
+import net from "node:net";
+import path from "node:path";
+
+const spawn = childProcess.spawn;
+childProcess.spawn = function (command, args, options) {
+    const name = path.basename(String(command));
+    if (name !== "open" && name !== "xdg-open") return spawn.apply(this, arguments);
+    const argv = Array.isArray(args) ? args : [];
+    fs.appendFileSync(process.env.FIRECMS_E2E_OPEN_LOG, "[spawn] " + [name, ...argv].join(" ") + "\\n");
+    return spawn.call(this, name, args, options);
+};
+syncBuiltinESMExports();
+
+const blocked = (what) => {
+    throw new Error("firecms e2e sandbox: network access is blocked (" + what + ")");
+};
+net.Socket.prototype.connect = function () {
+    blocked("socket connect");
+};
+globalThis.fetch = async (input) => {
+    const url = String(input?.url ?? input);
+    if (url.endsWith("/create_webapp")) {
+        return new Response(JSON.stringify({ data: {} }), { headers: { "content-type": "application/json" } });
+    }
+    blocked("fetch " + url);
+};
+`;
+
+/** Calls `createProject` from the built bundle with no prompts in front of it. */
+const CREATE_PROJECT = `
+const [bundle, template, dir_name, firebaseProjectId] = process.argv.slice(1);
+const { createProject } = await import(bundle);
+await createProject({ template, dir_name, firebaseProjectId, env: "prod", git: false });
+`;
+
+let workDir: string;
+let preload: string;
+
+type Sandbox = { home: string, openLog: string, env: NodeJS.ProcessEnv };
+type RunResult = { code: number | null, output: string };
+
+/**
+ * A throwaway HOME, so the CLI never sees the developer's `~/.firecms` credentials, and a
+ * PATH whose first entry is a stub `open` that records its arguments instead of opening a
+ * browser. `session` seeds a fake, unexpired login instead; see the type-check test.
+ */
+function makeSandbox({ session = false } = {}): Sandbox {
+    const root = fs.mkdtempSync(path.join(workDir, "sandbox-"));
+    const home = path.join(root, "home");
+    const bin = path.join(root, "bin");
+    const openLog = path.join(root, "open-calls.log");
+    fs.mkdirSync(home);
+    fs.mkdirSync(bin);
+
+    // The `open` package launches `open` on macOS and `xdg-open` on Linux; the preload makes
+    // sure both come from here.
+    for (const name of ["open", "xdg-open"]) {
+        fs.writeFileSync(path.join(bin, name), `#!/bin/sh\nprintf '[stub] %s\\n' "$*" >> '${openLog}'\n`, { mode: 0o755 });
+    }
+
+    if (session) {
+        // `getCurrentUser` only decodes the id token, and `refreshCredentials` hands back
+        // unexpired credentials as they are, so none of this reaches the API.
+        const b64 = (o: object) => Buffer.from(JSON.stringify(o)).toString("base64url");
+        fs.mkdirSync(path.join(home, ".firecms"));
+        fs.writeFileSync(path.join(home, ".firecms", "tokens.json"), JSON.stringify({
+            id_token: [b64({ alg: "none" }), b64({ email: "e2e@example.invalid" }), ""].join("."),
+            access_token: "e2e-fake-access-token",
+            expiry_date: Date.now() + 60 * 60 * 1000
+        }));
+    }
+
+    return {
+        home,
+        openLog,
+        env: {
+            ...process.env,
+            CI: "1",
+            HOME: home,
+            PATH: bin + path.delimiter + process.env.PATH,
+            FIRECMS_E2E_OPEN_LOG: openLog
+        }
+    };
+}
+
+/** Run `node <nodeArgs>` in `cwd` inside `sandbox`, answering prompts until it exits. */
+function runNode(nodeArgs: string[], cwd: string, sandbox: Sandbox): Promise<RunResult> {
     return new Promise((resolve) => {
-        const child = spawn(process.execPath, [BIN, ...args], {
+        const child = spawn(process.execPath, ["--import", pathToFileURL(preload).href, ...nodeArgs], {
             cwd,
             stdio: ["pipe", "pipe", "pipe"],
-            env: { ...process.env, CI: "1" }
+            env: sandbox.env
         });
 
         let output = "";
@@ -110,8 +239,12 @@ function runInit(args: string[], cwd: string): Promise<{ code: number | null, ou
         // expected and must not surface as a test failure.
         child.stdin.on("error", () => undefined);
 
-        // Accept defaults. Keep feeding until the process exits — the number of prompts
-        // varies by template, so a fixed-size buffer would either run dry or race.
+        // Logged out, the first prompt is "Do you want to log in?" and a bare newline means
+        // yes. Nothing reads stdin before that prompt, so this waits in the pipe for it.
+        child.stdin.write("n\n");
+
+        // Accept every other default. Keep feeding until the process exits — the number of
+        // prompts varies by template, so a fixed-size buffer would either run dry or race.
         const tick = setInterval(() => {
             if (!child.stdin.writable) return;
             try {
@@ -121,18 +254,76 @@ function runInit(args: string[], cwd: string): Promise<{ code: number | null, ou
             }
         }, 150);
 
+        const deadline = setTimeout(() => {
+            output += `\n[harness] killed after ${RUN_TIMEOUT_MS} ms`;
+            child.kill("SIGKILL");
+        }, RUN_TIMEOUT_MS);
+
         child.on("close", (code) => {
             clearInterval(tick);
+            clearTimeout(deadline);
             child.stdin.end();
             resolve({ code, output });
         });
     });
 }
 
-/** Scaffold `template` into a fresh directory and return the project path. */
-async function scaffold(flag: string, dirName = "app"): Promise<{ cwd: string, project: string, output: string }> {
+/** No run may open a browser, and a logged-out one must not come away with credentials. */
+function expectNoSideEffects(sandbox: Sandbox, { loggedOut }: { loggedOut: boolean }) {
+    const opened = fs.existsSync(sandbox.openLog)
+        ? fs.readFileSync(sandbox.openLog, "utf8").split("\n").filter(Boolean)
+        : [];
+    expect({ opened }).toEqual({ opened: [] });
+    if (loggedOut) {
+        expect({ credentials: fs.existsSync(path.join(sandbox.home, ".firecms")) })
+            .toEqual({ credentials: false });
+    }
+}
+
+/** `text` without terminal escape codes. */
+const plain = (text: string) => text.replace(/\u001b\[[0-9;?]*[A-Za-z]/g, "");
+
+/**
+ * Run `firecms <args>` in `cwd`, logged out: decline the login prompt, accept every other
+ * default. `loginPrompt` is what the run must have done with "Do you want to log in?":
+ * interactive runs meet it and decline it, while `--yes` and `firecms login` never show it.
+ */
+async function runCli(
+    args: string[],
+    cwd: string,
+    { loginPrompt = "declined" }: { loginPrompt?: "declined" | "absent" } = {}
+): Promise<RunResult> {
+    const sandbox = makeSandbox();
+    const result = await runNode([BIN, ...args], cwd, sandbox);
+    expectNoSideEffects(sandbox, { loggedOut: true });
+    if (loginPrompt === "declined") {
+        expect(plain(result.output)).toContain("Do you want to log in? No");
+    } else {
+        expect(plain(result.output)).not.toContain("Do you want to log in?");
+    }
+    return result;
+}
+
+/** Scaffold `template` by calling `createProject` directly, past the CLI and its login gate. */
+async function runCreateProject(template: string, dirName: string, cwd: string, { session = false } = {}): Promise<RunResult> {
+    const sandbox = makeSandbox({ session });
+    const result = await runNode(
+        ["--input-type=module", "-e", CREATE_PROJECT, pathToFileURL(BUILT).href, template, dirName, PROJECT_ID],
+        cwd,
+        sandbox
+    );
+    expectNoSideEffects(sandbox, { loggedOut: !session });
+    return result;
+}
+
+/** Scaffold template `t` into a fresh directory and return the project path. */
+async function scaffold(t: TemplateCase, dirName = "app"): Promise<{ cwd: string, project: string, output: string }> {
     const cwd = fs.mkdtempSync(path.join(workDir, "run-"));
-    const { output } = await runInit(["init", flag, "--projectId", PROJECT_ID, dirName], cwd);
+    // Logged out, the CLI will not scaffold cloud at all (see "firecms init — logged out"),
+    // so cloud goes straight to the function the CLI would hand off to.
+    const { output } = t.requiresLogin
+        ? await runCreateProject(t.name, dirName, cwd)
+        : await runCli(["init", t.flag, "--projectId", PROJECT_ID, dirName], cwd);
     return {
         cwd,
         project: path.join(cwd, dirName),
@@ -146,6 +337,8 @@ beforeAll(() => {
         execSync("npm run build", { cwd: CLI_ROOT, stdio: "ignore" });
     }
     workDir = fs.mkdtempSync(path.join(os.tmpdir(), "firecms-cli-e2e-"));
+    preload = path.join(workDir, "sandbox_preload.mjs");
+    fs.writeFileSync(preload, PRELOAD);
 }, 600_000);
 
 afterAll(() => {
@@ -157,7 +350,7 @@ describe("firecms init — every template", () => {
     it.each(TEMPLATES.map(t => [t.name, t] as const))(
         "%s: scaffolds a complete project",
         async (_name, t) => {
-            const { project, output } = await scaffold(t.flag);
+            const { project, output } = await scaffold(t);
 
             expect(output).toContain("Copy project files");
             expect(fs.existsSync(project)).toBe(true);
@@ -192,13 +385,9 @@ describe("firecms init — every template", () => {
             const withPlaceholder = filesContaining(templateRoot, PLACEHOLDER)
                 .map(f => path.relative(templateRoot, f));
 
-            const { project } = await scaffold(t.flag);
+            const { project } = await scaffold(t);
 
             for (const f of withPlaceholder) {
-                // `copyWebAppConfig` rewrites the firebase config from the server when the
-                // developer is logged in, so its contents are not deterministic here. The
-                // placeholder check below still covers it.
-                if (f.endsWith("firebase_config.ts")) continue;
                 const contents = fs.readFileSync(path.join(project, f), "utf8");
                 expect({ file: f, substituted: contents.includes(PROJECT_ID) })
                     .toEqual({ file: f, substituted: true });
@@ -216,7 +405,7 @@ describe("firecms init — every template", () => {
     it.each(TEMPLATES.map(t => [t.name, t] as const))(
         "%s: does not leak template build artefacts into the new project",
         async (_name, t) => {
-            const { project } = await scaffold(t.flag);
+            const { project } = await scaffold(t);
 
             // The template folders double as local dev projects, so a stale node_modules
             // or lockfile there would otherwise be copied into every new project.
@@ -232,27 +421,25 @@ describe("firecms init — every template", () => {
 
 describe("firecms init — generated project type-checks", () => {
 
-    it.each(TEMPLATES.map(t => [t.name, t] as const))(
+    it.each(TEMPLATES.filter(t => t.firebaseConfig).map(t => [t.name, t] as const))(
         "%s: the firebase config keeps its type annotation",
         async (_name, t) => {
-            const { project } = await scaffold(t.flag);
-
-            // `copyWebAppConfig` rewrites this file when the developer is logged in, and
-            // used to drop the `Record<string, string>` annotation the templates ship.
-            // TypeScript then infers the literal type, so an empty config makes
+            // Logged in, `copyWebAppConfig` rewrites this file with the config the server
+            // returns, and used to drop the `Record<string, string>` annotation. TypeScript
+            // then infers the literal type, so an empty config makes
             // `firebaseConfig.projectId` a compile error and `npm run build` fails with
             //   src/App.tsx: error TS2339: Property 'projectId' does not exist on type '{}'
             // An empty config is legitimate — App.tsx checks for it and throws a helpful
             // message at runtime — so it has to keep type-checking.
-            const configs = ["src/firebase_config.ts", "src/common/firebase_config.ts", "src/app/common/firebase_config.ts"]
-                .map(f => path.join(project, f))
-                .filter(f => fs.existsSync(f));
+            //
+            // The CLI only runs logged out here, and logged out nothing rewrites the file. So
+            // this calls `createProject` with a fake session, and the sandbox answers the
+            // `create_webapp` request with exactly that empty config.
+            const cwd = fs.mkdtempSync(path.join(workDir, "run-"));
+            await runCreateProject(t.name, "app", cwd, { session: true });
 
-            for (const f of configs) {
-                const contents = fs.readFileSync(f, "utf8");
-                expect({ file: path.relative(project, f), typed: contents.includes("Record<string, string>") })
-                    .toEqual({ file: path.relative(project, f), typed: true });
-            }
+            expect(fs.readFileSync(path.join(cwd, "app", t.firebaseConfig!), "utf8"))
+                .toEqual("export const firebaseConfig: Record<string, string> = {}\n");
         },
         300_000
     );
@@ -291,7 +478,7 @@ describe("firecms init — published package", () => {
 describe("firecms init — argument handling", () => {
 
     it("scaffolds into the directory named on the command line", async () => {
-        const { cwd, project } = await scaffold("--pro", "my-app");
+        const { cwd, project } = await scaffold(TEMPLATES.find(t => t.name === "pro")!, "my-app");
 
         // Regression: the "init" subcommand used to leak into the positional args, so the
         // project was scaffolded into a folder literally called "init".
@@ -304,11 +491,86 @@ describe("firecms init — argument handling", () => {
         fs.mkdirSync(path.join(cwd, "app"));
         fs.writeFileSync(path.join(cwd, "app", "existing.txt"), "do not clobber me");
 
-        const { output } = await runInit(["init", "--pro", "--projectId", PROJECT_ID, "app"], cwd);
+        const { output } = await runCli(["init", "--pro", "--projectId", PROJECT_ID, "app"], cwd);
 
         expect(output).toContain("Directory is not empty");
         expect(fs.readFileSync(path.join(cwd, "app", "existing.txt"), "utf8")).toEqual("do not clobber me");
         expect(fs.existsSync(path.join(cwd, "app", "package.json"))).toBe(false);
+    }, 300_000);
+
+});
+
+describe("firecms init — logged out", () => {
+
+    it("cloud: asks to log in, and exits 1 without scaffolding when that is declined", async () => {
+        const cwd = fs.mkdtempSync(path.join(workDir, "cloud-"));
+
+        const { code, output } = await runCli(["init", "--cloud", "--projectId", PROJECT_ID, "app"], cwd);
+
+        expect(output).toContain("You need to be logged in to create a project");
+        expect(output).toContain("The login process was not completed");
+        // It used to exit 0 here, so a script could not tell that nothing was created.
+        expect(code).toBe(1);
+        expect(fs.existsSync(path.join(cwd, "app"))).toBe(false);
+    }, 300_000);
+
+    it("--yes: scaffolds without asking to log in", async () => {
+        const cwd = fs.mkdtempSync(path.join(workDir, "yes-"));
+
+        // The login prompt defaults to yes, so an unattended `--yes` run that met it would
+        // start a login: a server on port 3000, and a browser waiting for someone to sign in.
+        const { code, output } = await runCli(
+            ["init", "--pro", "--yes", "--projectId", PROJECT_ID, "app"],
+            cwd,
+            { loginPrompt: "absent" }
+        );
+
+        expect(output).toContain("Copy project files");
+        expect(code).toBe(0);
+        expect(fs.existsSync(path.join(cwd, "app", "package.json"))).toBe(true);
+    }, 300_000);
+
+    it("cloud with --yes: exits 1 and says to log in first, without asking", async () => {
+        const cwd = fs.mkdtempSync(path.join(workDir, "cloud-yes-"));
+
+        const { code, output } = await runCli(
+            ["init", "--cloud", "--yes", "--projectId", PROJECT_ID, "app"],
+            cwd,
+            { loginPrompt: "absent" }
+        );
+
+        expect(plain(output)).toContain("Run firecms login first");
+        expect(code).toBe(1);
+        expect(fs.existsSync(path.join(cwd, "app"))).toBe(false);
+    }, 300_000);
+
+});
+
+describe("firecms login", () => {
+
+    it("reports a busy port 3000 instead of opening a browser", async () => {
+        // The sign-in redirects back to a server on port 3000, so hold that port. If
+        // something else already holds it, it is just as busy.
+        const holder = net.createServer();
+        await new Promise<void>((resolve, reject) => {
+            holder.once("error", (err: NodeJS.ErrnoException) => err.code === "EADDRINUSE" ? resolve() : reject(err));
+            holder.listen(3000, () => resolve());
+        });
+
+        try {
+            const cwd = fs.mkdtempSync(path.join(workDir, "login-"));
+
+            // Logged out, so this goes straight for the port. `runCli` asserts the stub
+            // `open` was never called: the browser used to open before the port was known
+            // to be free, and then the process crashed on EADDRINUSE.
+            const { code, output } = await runCli(["login"], cwd, { loginPrompt: "absent" });
+
+            expect(plain(output)).toContain("Port 3000 is already in use");
+            expect(output).not.toContain("EADDRINUSE");
+            expect(code).toBe(1);
+        } finally {
+            if (holder.listening) holder.close();
+        }
     }, 300_000);
 
 });

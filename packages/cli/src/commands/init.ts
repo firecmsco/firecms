@@ -10,7 +10,7 @@ import { Listr } from "listr2";
 import axios from "axios";
 import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import { getCurrentUser, getTokens, login, refreshCredentials } from "./auth";
-import { describeRequestError } from "../util/request_error";
+import { authCommand, describeRequestError } from "../util/request_error";
 import ora from "ora";
 
 import fsExtra from "fs-extra";
@@ -93,17 +93,25 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
         });
     }
 
-    if (mustLogin) {
+    // `--yes` never asks to log in. The prompt defaults to yes, so an unattended run that met
+    // it would open a browser and wait on port 3000 for someone to sign in.
+    if (mustLogin && options.skipPrompts) {
+        console.log("%s %s", chalk.red.bold("ERROR"),
+            `--yes with --cloud needs you to be logged in. Run ${chalk.bold(authCommand("login", options.env))} first.`);
+        process.exit(1);
+    } else if (mustLogin) {
         console.log("You need to be logged in to create a project");
         await promptLogin();
 
         const currentUser = await getCurrentUser(options.env, options.debug);
         if (!currentUser) {
             console.log("The login process was not completed. Exiting...");
-            return;
+            process.exit(1);
         }
     } else if (currentUser) {
         console.log("You are logged in as", currentUser["email"]);
+    } else if (options.skipPrompts) {
+        console.log(`Not logged in, so the Firebase config is left for you to fill in. Run ${chalk.bold(authCommand("login", options.env))} before init to have it done for you.`);
     } else {
         console.log("You can login to FireCMS to automatically set up your project, or continue without logging in");
         await promptLogin();
