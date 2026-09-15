@@ -33,3 +33,4 @@ export * from "./useBuildModeController";
 
 export * from "./useValidateAuthenticator";
 export * from "./useTranslation";
+export * from "./useLicenseStatus";

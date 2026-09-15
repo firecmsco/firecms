@@ -23,8 +23,10 @@ export function useTranslation() {
      * Also supports i18next interpolation variables, e.g.
      *   t("add_to_field", { fieldName: "Tags" })
      *   t("error_deleting", { message: err.message })
+     * Pass `count` as a number to pick a plural form (`key_one`, falling back
+     * to `key`); i18next ignores a string `count`.
      */
-    const typedT = (key: string, vars?: Record<string, string>): string =>
+    const typedT = (key: string, vars?: Record<string, string | number>): string =>
         t(key, vars) as string;
 
     return { t: typedT, i18n };

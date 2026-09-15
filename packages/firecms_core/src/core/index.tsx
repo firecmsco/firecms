@@ -1,4 +1,5 @@
 export * from "./FireCMS";
+export * from "./pro_plugins";
 
 export * from "./DefaultDrawer";
 export * from "./DrawerNavigationItem";

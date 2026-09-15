@@ -66,8 +66,32 @@ export interface FireCMSTranslations {
     select_from: string;
     done: string;
     log_out: string;
-    license_needed: string;
-    license_description: string;
+    /** License banner during the PRO trial. `{{days}}` is the number of days left; plural form. */
+    license_trial_banner: string;
+    /** `license_trial_banner` when one day is left (i18next `_one` plural form). */
+    license_trial_banner_one: string;
+    /** License banner once the trial has ended. `{{date}}` is the day it ended. */
+    license_expired_banner: string;
+    /** `license_expired_banner` when the end date is not known. */
+    license_expired_banner_undated: string;
+    /** License banner when the license key is not linked to this project. `{{projectId}}` is the Firebase project id. */
+    license_invalid_project_banner: string;
+    /** `license_invalid_project_banner` when the project id is not known. */
+    license_invalid_project_banner_unnamed: string;
+    /** License banner when more projects are linked than the license covers. `{{licensed}}` covered, `{{actual}}` linked; plural form. */
+    license_over_quota_banner: string;
+    /** `license_over_quota_banner` when the license covers one project (i18next `_one` plural form). */
+    license_over_quota_banner_one: string;
+    /** Link in the license banner to buy a license. */
+    license_get_license: string;
+    /** Link in the over-quota banner to the license settings. */
+    license_update_license: string;
+    /** Link in the invalid-project banner to link this project to the license. */
+    license_add_project_to_license: string;
+    /** Title of the notice a PRO view shows while PRO features are paused. */
+    pro_features_paused: string;
+    /** Users and Roles views while PRO features are paused. */
+    user_management_paused_description: string;
     column_cannot_be_edited: string;
     close: string;
     unsaved_local_changes: string;

@@ -70,9 +70,27 @@ export type FireCMSProps<USER extends User> = {
     }) => React.ReactNode;
 
     /**
-     * If you have a custom API key, you can use it here.
+     * Your FireCMS PRO license key. It is checked against
+     * `https://api.firecms.co/access_log` when a user signs in.
      */
     apiKey?: string;
+
+    /**
+     * On sign-in FireCMS sends one request to `https://api.firecms.co/access_log`
+     * with the user's ID token (which carries the Firebase project id, the uid
+     * and the email), the user's email, the datasource key and the keys of the
+     * mounted plugins; the browser adds the page's referrer. It is how the
+     * FireCMS PRO license and trial are checked. No database credentials or
+     * content are sent.
+     *
+     * Set to `false` to skip that request. This only takes effect when the
+     * app has no `apiKey` and mounts no PRO plugin (collection editor, user
+     * management, import/export, entity history, data enhancement, DataTalk):
+     * otherwise the request is the license check and is always sent.
+     *
+     * Defaults to `true`.
+     */
+    telemetry?: boolean;
 
     /**
      * Record of custom form fields to be used in the CMS.

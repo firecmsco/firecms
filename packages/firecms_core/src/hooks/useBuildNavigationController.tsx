@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import equal from "react-fast-compare"
 import { useBlocker, useNavigate } from "react-router-dom";
+import { filterPausedPlugins, isProPaused } from "../core/pro_plugins";
+import { useLicenseStatus } from "./useLicenseStatus";
 
 import {
     AuthController,
@@ -115,7 +117,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         views: viewsProp,
         adminViews: adminViewsProp,
         viewsOrder,
-        plugins,
+        plugins: allPlugins,
         userConfigPersistence,
         dataSourceDelegate,
         disabled,
@@ -123,6 +125,27 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     } = props;
 
     const navigate = useNavigate();
+
+    // While PRO is paused, PRO plugins contribute no collections, collection
+    // modifications, views or navigation entries. This hook runs above
+    // `FireCMS`, so the status arrives through the store `FireCMS` publishes to,
+    // and its arrival re-renders this hook, which resolves navigation again.
+    const licenseStatus = useLicenseStatus();
+    const proPaused = isProPaused(licenseStatus);
+    const plugins = useMemo(
+        () => filterPausedPlugins(allPlugins, licenseStatus),
+        [allPlugins, licenseStatus]
+    );
+
+    // Navigation resolves asynchronously, so a resolution started before the
+    // pause changed can finish after one started since. This ref holds the
+    // current pause so the older one is dropped instead of restoring what the
+    // paused plugins contributed. Declared before the effect that refreshes.
+    const proPausedRef = useRef(proPaused);
+    useEffect(() => {
+        proPausedRef.current = proPaused;
+    }, [proPaused]);
+    const resolvedProPausedRef = useRef<boolean | undefined>(undefined);
 
     const collectionsRef = useRef<EntityCollection[] | undefined>(undefined);
     const viewsRef = useRef<CMSView[] | undefined>(undefined);
@@ -302,7 +325,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             groups: uniqueGroups,
             onNavigationEntriesUpdate: onNavigationEntriesUpdateCallback!,
         };
-    }, [navigationGroupMappings, buildCMSUrlPath, buildUrlCollectionPath, pluginGroups]);
+    }, [navigationGroupMappings, buildCMSUrlPath, buildUrlCollectionPath, pluginGroups, plugins]);
 
     const onNavigationEntriesOrderUpdate = useCallback((entries: NavigationGroupMapping[]) => {
         if (!plugins) {
@@ -342,6 +365,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
         console.debug("Refreshing navigation");
 
+        const resolvingWhilePaused = proPaused;
+
         try {
 
             const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all([
@@ -351,10 +376,21 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             ]
             );
 
+            // Superseded: a newer resolution runs with the current pause.
+            if (resolvingWhilePaused !== proPausedRef.current)
+                return;
+
             const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder, undefined, onNavigationEntriesOrderUpdate);
 
-            let shouldUpdateTopLevelNav = false;
-            if (!areCollectionListsEqual(collectionsRef.current ?? [], resolvedCollections)) {
+            // When the pause changes, everything below is replaced, including
+            // what the comparisons ignore: they skip functions, and a plugin may
+            // have added only collection callbacks, or only regrouped entries.
+            const pauseChanged = resolvedProPausedRef.current !== undefined
+                && resolvedProPausedRef.current !== resolvingWhilePaused;
+            resolvedProPausedRef.current = resolvingWhilePaused;
+
+            let shouldUpdateTopLevelNav = pauseChanged;
+            if (pauseChanged || !areCollectionListsEqual(collectionsRef.current ?? [], resolvedCollections)) {
                 collectionsRef.current = resolvedCollections;
                 console.debug("Collections have changed", resolvedCollections);
                 shouldUpdateTopLevelNav = true;
@@ -363,7 +399,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                 collectionsRef.current = resolvedCollections;
                 shouldUpdateTopLevelNav = true;
             }
-            if (!equal(viewsRef.current, resolvedViews)) {
+            if (pauseChanged || !equal(viewsRef.current, resolvedViews)) {
                 viewsRef.current = resolvedViews;
                 shouldUpdateTopLevelNav = true;
             }
@@ -400,6 +436,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         viewsProp,
         adminViewsProp,
         computeTopNavigation,
+        plugins,
+        proPaused
     ]);
 
     useEffect(() => {
@@ -588,7 +626,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         getParentCollectionIds,
         convertIdsToPaths,
         navigate,
-        plugins
+        // All of them, paused or not: `FireCMS` sends every key to the license
+        // check and applies the same pause to what it renders.
+        plugins: allPlugins
     };
 }
 

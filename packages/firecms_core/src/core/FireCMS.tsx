@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef } from "react";
-import { CenteredView, Typography } from "@firecms/ui";
+import { CenteredView } from "@firecms/ui";
 import { AppliedBundles, applyPluginTranslations, createAppliedBundles } from "./plugin_translations";
+import { filterPausedPlugins, isProPaused } from "./pro_plugins";
 import { AuthController } from "../types";
 import { CustomizationController, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { AuthControllerContext, ModeControllerProvider } from "../contexts";
@@ -24,6 +25,7 @@ import { AnalyticsContext } from "../contexts/AnalyticsContext";
 import { useProjectLog } from "../hooks/useProjectLog";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext";
+import { LicenseStatusContext, publishLicenseStatus } from "../contexts/LicenseStatusContext";
 
 /**
  * If you are using independent components of the CMS
@@ -55,6 +57,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         components,
         navigationController,
         apiKey,
+        telemetry,
         userManagement: _userManagement
     } = props;
 
@@ -62,11 +65,42 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         console.warn("The `plugins` prop is deprecated in the FireCMS component. You should pass your plugins to `useBuildNavigationController` instead.");
     }
 
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
 
     const modeController = useBuildModeController();
 
-    const plugins = navigationController.plugins ?? _pluginsProp;
+    // Every plugin the app mounts. The license check is sent all of their keys:
+    // the server decides from them whether the project needs a license.
+    const allPlugins = navigationController.plugins ?? _pluginsProp;
+
+    const licenseStatus = useProjectLog({
+        apiKey,
+        telemetry,
+        authController,
+        dataSourceDelegate,
+        plugins: allPlugins
+    });
+
+    // The CMS always renders. While PRO is paused, PRO plugins drop out of
+    // everything below (providers, form, collection view and home page
+    // contributions); `useBuildNavigationController` drops their collection,
+    // view and navigation contributions from the status published below.
+    const plugins = useMemo(
+        () => filterPausedPlugins(allPlugins, licenseStatus),
+        [allPlugins, licenseStatus]
+    );
+
+    useEffect(() => {
+        publishLicenseStatus(licenseStatus);
+        if (licenseStatus?.message) {
+            if (isProPaused(licenseStatus)) console.warn(licenseStatus.message);
+            else console.debug(licenseStatus.message);
+        }
+    }, [licenseStatus]);
+
+    // The status belongs to this FireCMS; do not leave it to a later one.
+    useEffect(() => () => publishLicenseStatus(null), []);
+
     const userManagement = plugins?.find(p => p.userManagement)?.userManagement
         ?? _userManagement
         ?? {
@@ -96,13 +130,6 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         onAnalyticsEvent
     }), []);
 
-    const accessResponse = useProjectLog({
-        apiKey,
-        authController,
-        dataSourceDelegate,
-        plugins
-    });
-
     /**
      * Controller in charge of fetching and persisting data
      */
@@ -116,7 +143,8 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
     // Inject plugin translations into the live i18next instance.
     //
     // The work, and the reason repeat writes have to be suppressed, is in
-    // `applyPluginTranslations`.
+    // `applyPluginTranslations`. Paused plugins keep their strings: app code
+    // may render their components directly, and strings unlock nothing.
     const appliedBundles = useRef<AppliedBundles>(createAppliedBundles());
     const appliedTo = useRef<unknown>(null);
 
@@ -135,7 +163,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         const isActive = () => active;
         const applyFor = (language: string) => applyPluginTranslations({
             i18n,
-            plugins,
+            plugins: allPlugins,
             language,
             applied: appliedBundles.current,
             isActive
@@ -147,11 +175,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
             active = false;
             i18n.off("languageChanged", applyFor);
         };
-    }, [i18n, plugins]);
-
-    if (accessResponse?.message) {
-        console.warn(accessResponse.message);
-    }
+    }, [i18n, allPlugins]);
 
     if (navigationController.navigationLoadingError) {
         return (
@@ -173,26 +197,8 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         );
     }
 
-    if (accessResponse?.blocked) {
-        return (
-            <CenteredView maxWidth={"md"} fullScreen={true} className={"flex flex-col gap-2"}>
-                {/* eslint-disable-next-line i18next/no-literal-string */}
-                <Typography variant={"h4"} gutterBottom>
-                    {t("license_needed")}
-                </Typography>
-                <Typography>
-                    {(() => {
-                        const parts = t("license_description", { email: "%%EMAIL%%" }).split("%%EMAIL%%");
-                        return <>{parts[0]}<a href={"mailto:hello@firecms.co"}>hello@firecms.co</a>{parts[1]}</>;
-                    })()}
-                </Typography>
-                {accessResponse?.message &&
-                    <Typography>{accessResponse?.message}</Typography>}
-            </CenteredView>
-        );
-    }
-
     return (
+        <LicenseStatusContext.Provider value={licenseStatus}>
         <AnalyticsContext.Provider value={analyticsController}>
             <CustomizationControllerContext.Provider value={customizationController}>
                 <UserConfigurationPersistenceContext.Provider
@@ -228,6 +234,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
                 </UserConfigurationPersistenceContext.Provider>
             </CustomizationControllerContext.Provider>
         </AnalyticsContext.Provider>
+        </LicenseStatusContext.Provider>
     );
 
 }

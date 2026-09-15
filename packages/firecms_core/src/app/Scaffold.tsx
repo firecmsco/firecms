@@ -3,6 +3,7 @@ import { cls, defaultBorderMixin, IconButton, MenuIcon, Sheet } from "@firecms/u
 import equal from "react-fast-compare"
 import { useLargeLayout } from "../hooks";
 import { ErrorBoundary } from "../components";
+import { LicenseBanner } from "../components/LicenseBanner";
 import { AppContext } from "./useApp";
 import { useTranslation } from "../hooks/useTranslation";
 
@@ -145,6 +146,12 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                         className="flex flex-col flex-grow overflow-auto">
 
                         {hasAppBar && <DrawerHeader />}
+
+                        <LicenseBanner
+                            className={cls("flex-shrink-0", {
+                                "px-2 pb-1 lg:px-4 lg:pb-2": padding,
+                                "pt-2 lg:pt-4": !hasAppBar
+                            })}/>
 
                         <div
                             className={cls(defaultBorderMixin, "flex-grow overflow-auto m-0 ", {

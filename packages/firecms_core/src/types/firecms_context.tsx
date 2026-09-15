@@ -11,6 +11,7 @@ import { DialogsController } from "./dialogs_controller";
 import { CustomizationController } from "./customization_controller";
 import { AnalyticsController } from "./analytics_controller";
 import { InternalUserManagement } from "./internal_user_management";
+import { AccessResponse } from "./license";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -96,5 +97,13 @@ export type FireCMSContext<USER extends User = User, AuthControllerType extends 
      * section will be implemented automatically.
      */
     userManagement: InternalUserManagement<USER>
+
+    /**
+     * FireCMS license status of this project, `null` until the license check
+     * answers or when it is not sent. PRO plugins are paused while `blocked`
+     * is true.
+     * @see useLicenseStatus
+     */
+    licenseStatus?: AccessResponse | null;
 
 };
