@@ -1,10 +1,13 @@
 import { DataType } from "@firecms/core";
+import { isIsoDateText } from "./text_values";
 
 export function getInferenceType(value: any): DataType {
     if (typeof value === "number")
         return "number";
+    // A CSV cell is text until mapped, so an ISO date column would otherwise be
+    // proposed as a text property; SheetJS used to hand it over as a Date.
     else if (typeof value === "string")
-        return "string";
+        return isIsoDateText(value) ? "date" : "string";
     else if (typeof value === "boolean")
         return "boolean";
     else if (value instanceof Date)

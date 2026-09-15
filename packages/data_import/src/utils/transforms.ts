@@ -1,12 +1,25 @@
 import { isPrototypePollutingKey, pathTraversesPrototype } from "./prototype_keys";
 
 /**
+ * The own value at `key` when it is an object to descend into. An inherited one is
+ * never returned: `{}["toString"]` is `Object.prototype.toString`, and a header
+ * `toString.call` walked into it and replaced `.call` on the built-in for the whole
+ * tab. A primitive is not returned either, since a property can't be set on one.
+ */
+function ownObjectAt(parent: Record<string, any>, key: string | number): object | undefined {
+    if (!Object.prototype.hasOwnProperty.call(parent, key)) return undefined;
+    const value = parent[key];
+    return typeof value === "object" && value !== null ? value : undefined;
+}
+
+/**
  * Take an object with keys of type `address.street`, `address.city` and
  * convert it to an object with nested objects like `{ address: { street: ..., city: ... } }`
  *
- * Keys here are the header row of an uploaded file, so a column that would walk
- * onto the prototype chain (`__proto__.polluted`, `constructor.prototype.x`) is
- * skipped rather than written.
+ * Keys here are the header row of an uploaded file. A `__proto__` segment is
+ * skipped rather than written, and every step descends only into objects this
+ * function created (or the file supplied), never into an inherited value, so
+ * `constructor.prototype.x` is just three nested names.
  * @param flatObj
  */
 export function unflattenObject(flatObj: { [key: string]: any }) {
@@ -23,18 +36,18 @@ export function unflattenObject(flatObj: { [key: string]: any }) {
                 const mainPropertyName = keyPart.slice(0, keyPart.indexOf("["));
                 const index = parseInt(keyPart.slice(keyPart.indexOf("[") + 1, keyPart.indexOf("]")));
 
-                if (!currentObj[mainPropertyName]) {
+                if (!Array.isArray(ownObjectAt(currentObj, mainPropertyName))) {
                     currentObj[mainPropertyName] = []
                 }
 
                 if (i !== keyParts.length - 1) {
-                    currentObj[mainPropertyName][index] = currentObj[mainPropertyName][index] || {};
+                    currentObj[mainPropertyName][index] = ownObjectAt(currentObj[mainPropertyName], index) ?? {};
                     currentObj = currentObj[mainPropertyName][index];
                 } else {
                     currentObj[mainPropertyName][index] = flatObj[key];
                 }
             } else if (i !== keyParts.length - 1) {
-                currentObj[keyPart] = currentObj[keyPart] || {};
+                currentObj[keyPart] = ownObjectAt(currentObj, keyPart) ?? {};
                 currentObj = currentObj[keyPart];
             } else {
                 currentObj[keyPart] = flatObj[key];

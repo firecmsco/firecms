@@ -1,4 +1,4 @@
-import { isPrototypePollutingKey } from "./prototype_keys";
+import { sheetRowsToObjects, type SheetCell } from "./file_headers";
 
 /**
  * Delimiters sniffed from the header row, most common first.
@@ -62,12 +62,14 @@ export function parseCsvRows(text: string, delimiter = ","): string[][] {
             i++;
             continue;
         }
-        if (char === "\r") {
-            // CRLF: the line ends on the \n. A lone CR outside quotes is dropped.
+        if (char === "\r" && text[i + 1] === "\n") {
+            // CRLF: the line ends on the \n.
             i++;
             continue;
         }
-        if (char === "\n") {
+        // A lone CR ends a line too: Excel for Mac's "Macintosh Comma Separated"
+        // writes nothing else, and dropping it read the whole file as one row.
+        if (char === "\n" || char === "\r") {
             endField();
             rows.push(row);
             row = [];
@@ -96,7 +98,9 @@ export function detectCsvDelimiter(text: string): string {
     let best = CANDIDATE_DELIMITERS[0];
     let bestCount = 1;
     for (const candidate of CANDIDATE_DELIMITERS) {
-        const count = parseCsvRows(sample, candidate)[0]?.length ?? 0;
+        // The header row, which is the first row with anything in it.
+        const count = parseCsvRows(sample, candidate)
+            .find(row => row.some(cell => cell.trim() !== ""))?.length ?? 0;
         if (count > bestCount) {
             best = candidate;
             bestCount = count;
@@ -107,40 +111,50 @@ export function detectCsvDelimiter(text: string): string {
 
 export interface ParsedCsv {
     headers: string[];
-    data: Record<string, string>[];
+    data: Record<string, SheetCell>[];
+}
+
+/**
+ * Type one CSV value the way a spreadsheet cell arrives from the .xlsx reader.
+ *
+ * `TRUE` and `FALSE` in any case become booleans: Excel and Google Sheets write
+ * them in capitals, which the later JSON parse (lower case only) misses, and a
+ * boolean property compared the text against "true", importing every TRUE as
+ * false. Numbers and JSON are parsed later, by `mapJsonParse`; a date stays text
+ * until the target property says it is one, so a text column keeps it as written.
+ */
+function typeCsvValue(value: string): SheetCell {
+    const lower = value.trim().toLowerCase();
+    if (lower === "true") return true;
+    if (lower === "false") return false;
+    return value;
 }
 
 /**
  * Parse CSV text into one object per row, keyed by the header row.
  *
- * A blank header keeps its column rather than collapsing it, so the cells to its
- * right stay under their own names.
+ * A blank cell (or one holding only spaces) is left out of its row, like an empty
+ * spreadsheet cell and as SheetJS did. As `""` it became 0, false, an Invalid Date
+ * or a reference to "" (which fails the whole save) once mapped, and replaced the
+ * collection's defaults; FireCMS's own export writes every null as a blank cell.
+ * Header naming (blank and repeated headers) is shared with the .xlsx reader.
  */
 export function parseCsvToObjects(text: string): ParsedCsv {
     // A BOM is one character of the first header, and Excel writes one.
     const cleaned = text.charCodeAt(0) === 0xFEFF ? text.slice(1) : text;
     const delimiter = detectCsvDelimiter(cleaned);
     const rows = parseCsvRows(cleaned, delimiter)
-        .filter(row => row.some(cell => cell.trim() !== ""));
+        .map(row => row.map(cell => cell.trim() === "" ? null : cell));
 
-    if (rows.length === 0) {
-        return { headers: [], data: [] };
-    }
-
-    const headers = rows[0].map((header, index) => header.trim() || `Column${index + 1}`);
-
-    const data = rows.slice(1).map((cells) => {
-        const obj: Record<string, string> = {};
-        headers.forEach((header, index) => {
-            // The header row is uploaded data: `obj["__proto__"] = …` is the
-            // prototype setter, not a column. Refused, as elsewhere in import.
-            if (isPrototypePollutingKey(header)) return;
-            const cell = cells[index];
-            if (cell === undefined) return;
-            obj[header] = cell;
-        });
-        return obj;
-    });
-
-    return { headers, data };
+    const { headers, data } = sheetRowsToObjects(rows);
+    return {
+        headers,
+        data: data.map(row => {
+            const typed: Record<string, SheetCell> = {};
+            for (const [key, value] of Object.entries(row)) {
+                typed[key] = typeof value === "string" ? typeCsvValue(value) : value;
+            }
+            return typed;
+        })
+    };
 }

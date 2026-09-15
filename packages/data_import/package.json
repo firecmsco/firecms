@@ -79,7 +79,8 @@
     ],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
-    }
+    },
+    "globalSetup": "<rootDir>/test/time_zone_setup.js"
   },
   "files": [
     "dist",

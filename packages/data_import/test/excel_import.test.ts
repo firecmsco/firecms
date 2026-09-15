@@ -58,11 +58,11 @@ describe("importing an .xlsx workbook", () => {
 
     test("keeps numbers, booleans and dates as themselves", async () => {
         // The import maps values by type: a number arriving as "9.5" would make a
-        // string column of every imported row.
-        const releasedAt = new Date(Date.UTC(2024, 2, 1, 12, 30));
+        // string column of every imported row. exceljs writes a Date's UTC
+        // reading into the cell, so this cell shows 2024-03-01 12:30.
         const file = await workbookFile([
             ["name", "price", "available", "released_at"],
-            ["Widget", 9.5, true, releasedAt]
+            ["Widget", 9.5, true, new Date(Date.UTC(2024, 2, 1, 12, 30))]
         ]);
 
         const { data } = await convertFileToJson(file);
@@ -72,7 +72,24 @@ describe("importing an .xlsx workbook", () => {
         expect(row.price).toBe(9.5);
         expect(row.available).toBe(true);
         expect(row.released_at).toBeInstanceOf(Date);
-        expect((row.released_at as Date).getTime()).toEqual(releasedAt.getTime());
+        expect(row.released_at).toEqual(new Date(2024, 2, 1, 12, 30));
+    });
+
+    test("a date imports as the day and time the cell shows, in the viewer's zone", async () => {
+        // Excel dates carry no zone. Read as UTC, a cell showing 2024-01-15
+        // became Jan 14 19:00 in New York, and FireCMS showed the day before.
+        // test/time_zone_setup.js puts every test there; UTC would hide it.
+        expect(new Date(2024, 0, 15).getTimezoneOffset()).toBeGreaterThan(0);
+        const file = await workbookFile([
+            ["name", "day", "at"],
+            ["A", new Date(Date.UTC(2024, 0, 15)), new Date(Date.UTC(2024, 6, 4, 23, 45))]
+        ]);
+
+        const { data } = await convertFileToJson(file);
+        const row = data[0] as { day: Date, at: Date };
+
+        expect(row.day).toEqual(new Date(2024, 0, 15));
+        expect(row.at).toEqual(new Date(2024, 6, 4, 23, 45));
     });
 
     test("puts times back on the second the reader truncates them off", async () => {
@@ -86,8 +103,8 @@ describe("importing an .xlsx workbook", () => {
         const { data } = await convertFileToJson(file);
         const row = data[0] as { at: Date, precise: Date };
 
-        expect(row.at.toISOString()).toEqual("2024-03-01T12:30:00.000Z");
-        expect(Math.abs(row.precise.getTime() - halfSecond.getTime())).toBeLessThanOrEqual(1);
+        expect(row.at).toEqual(new Date(2024, 2, 1, 12, 30));
+        expect(Math.abs(row.precise.getTime() - new Date(2024, 2, 1, 12, 30, 0, 500).getTime())).toBeLessThanOrEqual(1);
     });
 
     test("still parses JSON held in a cell, and reassembles dotted headers", async () => {
@@ -104,16 +121,41 @@ describe("importing an .xlsx workbook", () => {
 
     test("a blank header column does not shift the columns after it", async () => {
         // Compacting the header row with `filter(Boolean)` moved every later name
-        // one column left, and each value landed in its neighbour's field.
+        // one column left, and each value landed in its neighbour's field. The
+        // unnamed column holds data, so it is kept under its position.
         const file = await workbookFile([
-            ["name", "", "price"],
-            ["Widget", "spacer", 9.5]
+            ["name", null, "price", null],
+            ["Widget", "spacer", 9.5, null]
         ]);
 
         const { data, propertiesOrder } = await convertFileToJson(file);
 
+        expect(propertiesOrder).toEqual(["name", "Column2", "price"]);
+        expect(data).toEqual([{ name: "Widget", Column2: "spacer", price: 9.5 }]);
+    });
+
+    test("a repeated header gets a suffix instead of overwriting the first column", async () => {
+        const file = await workbookFile([["name", "name", "price"], ["A", "B", 1]]);
+
+        const { data, propertiesOrder } = await convertFileToJson(file);
+
+        expect(propertiesOrder).toEqual(["name", "name_1", "price"]);
+        expect(data).toEqual([{ name: "A", name_1: "B", price: 1 }]);
+    });
+
+    test("reads a table that starts lower down the sheet", async () => {
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet("Sheet1");
+        sheet.getCell("C3").value = "name";
+        sheet.getCell("D3").value = "price";
+        sheet.getCell("C4").value = "Chair";
+        sheet.getCell("D4").value = 40;
+        const buffer = await workbook.xlsx.writeBuffer();
+
+        const { data, propertiesOrder } = await convertFileToJson(new File([buffer as ArrayBuffer], "offset.xlsx", { type: XLSX_TYPE }));
+
         expect(propertiesOrder).toEqual(["name", "price"]);
-        expect(data).toEqual([{ name: "Widget", price: 9.5 }]);
+        expect(data).toEqual([{ name: "Chair", price: 40 }]);
     });
 
     test("skips empty rows, and leaves empty cells out of the row", async () => {
@@ -152,9 +194,9 @@ describe("importing an .xlsx workbook", () => {
         await expect(convertFileToJson(file)).rejects.toThrow(/no worksheets/i);
     });
 
-    test("refuses a sheet whose first row has no headers", async () => {
-        const file = await workbookFile([[null, null], ["Chair", 40]]);
+    test("refuses a sheet with a header row and nothing under it", async () => {
+        const file = await workbookFile([[null, null], ["name", "price"]]);
 
-        await expect(convertFileToJson(file)).rejects.toThrow(/no column headers/i);
+        await expect(convertFileToJson(file)).rejects.toThrow(/no rows under it/);
     });
 });

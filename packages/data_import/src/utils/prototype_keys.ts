@@ -1,22 +1,21 @@
 /**
- * Keys an import must never write with `obj[key] = value`.
+ * The one key an import must never write with `obj[key] = value`.
  *
  * Import keys come from the uploaded file (its header row, or its JSON keys), so
  * they are attacker data. `obj["__proto__"] = value` is the prototype setter rather
- * than an own property, and walking `constructor` then `prototype` from a plain
- * object reaches `Object.prototype`: a column named `__proto__.polluted` or
- * `constructor.prototype.polluted` would write onto every object in the tab.
+ * than an own property. `constructor` and `prototype` are ordinary names as long as
+ * nothing walks into an inherited value, and `unflattenObject` walks own values
+ * only: a column called `constructor` is a real column (a Formula 1 results table
+ * has one), and dropping it lost data.
  */
-const PROTOTYPE_KEYS = new Set(["__proto__", "constructor", "prototype"]);
-
 export function isPrototypePollutingKey(key: string): boolean {
-    return PROTOTYPE_KEYS.has(key);
+    return key === "__proto__";
 }
 
 /**
  * Whether any segment of a dotted or indexed path (`a.__proto__.b`, `__proto__[0]`)
- * is one of those keys.
+ * is that key.
  */
 export function pathTraversesPrototype(path: string): boolean {
-    return path.split(/[.[\]]/).some(segment => PROTOTYPE_KEYS.has(segment));
+    return path.split(/[.[\]]/).some(isPrototypePollutingKey);
 }

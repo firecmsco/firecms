@@ -15,6 +15,7 @@ import {
 } from "@firecms/core";
 import { unflattenObject } from "./transforms";
 import { isPrototypePollutingKey } from "./prototype_keys";
+import { parseBooleanText, parseDateText, parseNumberText } from "./text_values";
 import { getIn } from "@firecms/formex";
 import { inferTypeFromValue } from "@firecms/schema_inference";
 
@@ -98,11 +99,12 @@ export function processValueMapping(authController: AuthController, value: any, 
     if (from === "array" && to === "array" && Array.isArray(value) && usedProperty.of && !isPropertyBuilder(usedProperty.of as PropertyOrBuilder)) {
         return value.map(v => processValueMapping(authController, v, navigation, usedProperty.of as Property));
     } else if (from === "string" && to === "number" && typeof value === "string") {
-        return Number(value);
+        return parseNumberText(value);
     } else if (from === "string" && to === "array" && typeof value === "string" && usedProperty.of && !isPropertyBuilder(usedProperty.of as PropertyOrBuilder)) {
-        return value.split(",").map((v: string) => processValueMapping(authController, v, usedProperty.of));
+        return value.split(",").map((v: string) => processValueMapping(authController, v.trim(), navigation, usedProperty.of as Property));
     } else if (from === "string" && to === "boolean") {
-        return value === "true";
+        // Unrecognised text stays false, as it always was.
+        return parseBooleanText(value) ?? false;
     } else if (from === "number" && to === "boolean") {
         return value === 1;
     } else if (from === "boolean" && to === "number") {
@@ -114,11 +116,7 @@ export function processValueMapping(authController: AuthController, value: any, 
     } else if (from === "string" && to === "array" && typeof value === "string") {
         return value.split(",").map((v: string) => v.trim());
     } else if (from === "string" && to === "date" && typeof value === "string") {
-        try {
-            return new Date(value);
-        } catch (e) {
-            return value;
-        }
+        return parseDateText(value);
     } else if (from === "date" && to === "string") {
         return value instanceof Date && value.toISOString();
     } else if (from === "number" && to === "date" && typeof value === "number") {

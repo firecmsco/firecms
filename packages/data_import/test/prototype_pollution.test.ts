@@ -27,10 +27,28 @@ describe("import refuses header keys that reach the prototype chain", () => {
     });
 
     test("unflattenObject does not write through constructor.prototype", () => {
-        const result = unflattenObject({ "constructor.prototype.polluted": "pwned" }) as Record<string, unknown>;
+        // Three ordinary nested names: the walk never enters the inherited
+        // `constructor`, so this builds own objects instead.
+        const result = unflattenObject({ "constructor.prototype.polluted": "pwned" }) as Record<string, any>;
 
         expect(({} as Record<string, unknown>).polluted).toBeUndefined();
-        expect(result.polluted).toBeUndefined();
+        expect(Object.prototype.hasOwnProperty.call(Object.prototype, "polluted")).toBe(false);
+        expect(result.constructor).toEqual({ prototype: { polluted: "pwned" } });
+    });
+
+    test.each([
+        ["toString.call", () => Object.prototype.toString.call([])],
+        ["hasOwnProperty.x", () => (Object.prototype.hasOwnProperty as unknown as Record<string, unknown>).x],
+        ["valueOf[0]", () => (Object.prototype.valueOf as unknown as Record<number, unknown>)[0]]
+    ])("unflattenObject leaves the built-in behind %j alone", (header, probe) => {
+        // `currentObj[key] || {}` walked into the inherited function and set a
+        // property on it: `toString.call` broke Object.prototype.toString.call
+        // for the whole tab.
+        const before = probe();
+        const result = unflattenObject({ [header]: "pwned" }) as Record<string, any>;
+
+        expect(probe()).toEqual(before);
+        expect(Object.prototype.hasOwnProperty.call(result, header.split(/[.[]/)[0])).toBe(true);
     });
 
     test("unflattenObject does not write through an indexed __proto__ header", () => {
@@ -86,10 +104,18 @@ describe("import refuses header keys that reach the prototype chain", () => {
         expect(data).toEqual([{ name: "Alice" }]);
     });
 
+    test("a column called constructor survives every step", () => {
+        const { data } = parseCsvToObjects("driver,constructor,prototype\nHamilton,Mercedes,x\n");
+        const rows = data.map(mapJsonParse).map(unflattenObject);
+
+        expect(rows).toEqual([{ driver: "Hamilton", constructor: "Mercedes", prototype: "x" }]);
+        expect(flattenEntry(rows[0])).toEqual({ driver: "Hamilton", constructor: "Mercedes", prototype: "x" });
+    });
+
     test.each([
         ["a.__proto__.b", true],
         ["__proto__[0]", true],
-        ["constructor.prototype.x", true],
+        ["constructor.prototype.x", false],
         ["address.street", false],
         ["tags[0]", false],
         ["proto", false]

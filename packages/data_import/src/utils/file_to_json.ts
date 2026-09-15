@@ -1,7 +1,6 @@
-import { getWorksheetHeaders, type SheetCell } from "./file_headers";
+import { sheetRowsToObjects, type SheetCell } from "./file_headers";
 import { parseCsvToObjects } from "./csv";
 import { mapJsonParse, unflattenObject } from "./transforms";
-import { isPrototypePollutingKey } from "./prototype_keys";
 
 // Part of this package's public API since before it moved to ./transforms.
 export { unflattenObject };
@@ -54,12 +53,33 @@ function loadXlsxReader(): Promise<ReadXlsxFile> {
  * A date within a millisecond of a whole second is put back on it; a genuine
  * sub-second value is left alone.
  */
-function snapToSecond(cell: SheetCell): SheetCell {
-    if (!(cell instanceof Date)) return cell;
-    const time = cell.getTime();
+function snapToSecond(date: Date): Date {
+    const time = date.getTime();
     const second = Math.round(time / 1000) * 1000;
-    return Math.abs(time - second) <= 1 ? new Date(second) : cell;
+    return Math.abs(time - second) <= 1 ? new Date(second) : date;
 }
+
+/**
+ * Excel stores a date as a wall-clock reading with no time zone: a cell showing
+ * 2024-01-15 means that day wherever the file is opened. read-excel-file hands the
+ * reading over as UTC, which is 19:00 the day before in New York, and FireCMS shows
+ * dates in the viewer's zone: every date-only cell imported a day early west of
+ * UTC. The same reading is rebuilt in local time, which is what SheetJS returned.
+ */
+function utcReadingToLocal(date: Date): Date {
+    // setFullYear rather than the constructor, which maps years 0-99 to 1900-1999.
+    const local = new Date(0);
+    local.setFullYear(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+    local.setHours(date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
+    return local;
+}
+
+function xlsxCell(cell: SheetCell): SheetCell {
+    return cell instanceof Date ? utcReadingToLocal(snapToSecond(cell)) : cell;
+}
+
+// Said, rather than opening the mapping step with nothing in it.
+const NO_ROWS = "The file has a header row but no rows under it";
 
 function isCsvFile(file: File): boolean {
     const name = (file.name ?? "").toLowerCase();
@@ -81,6 +101,10 @@ export function convertFileToJson(file: File): Promise<ConversionResult> {
                     const { headers, data } = parseCsvToObjects(e.target?.result as string);
                     if (headers.length === 0) {
                         reject(new Error("The CSV file is empty"));
+                        return;
+                    }
+                    if (data.length === 0) {
+                        reject(new Error(NO_ROWS));
                         return;
                     }
                     resolve({
@@ -159,41 +183,19 @@ export function convertFileToJson(file: File): Promise<ConversionResult> {
                         return;
                     }
 
-                    const [headerRow, ...dataRows] = firstSheet.data;
-                    if (!headerRow) {
+                    const { headers, data } = sheetRowsToObjects(firstSheet.data.map(row => row.map(xlsxCell)));
+                    if (headers.length === 0) {
                         reject(new Error("The spreadsheet is empty"));
                         return;
                     }
-
-                    const headers = getWorksheetHeaders(headerRow);
-                    if (headers.order.length === 0) {
-                        reject(new Error("The spreadsheet has no column headers in its first row"));
+                    if (data.length === 0) {
+                        reject(new Error(NO_ROWS));
                         return;
                     }
 
-                    const parsedData: Array<Record<string, unknown>> = [];
-                    for (const row of dataRows) {
-                        // A wholly empty row is not a record.
-                        if (row.every(cell => cell === null || cell === undefined)) continue;
-
-                        const obj: Record<string, unknown> = {};
-                        row.forEach((cell, index) => {
-                            // An empty cell contributes no key: the difference between
-                            // "blank" and "absent" is what the import's defaults key off.
-                            if (cell === null || cell === undefined) return;
-                            const header = headers.byColumn.get(index);
-                            // A `__proto__` header would be the prototype setter here
-                            // rather than a column; refused, as in csv.ts.
-                            if (header && !isPrototypePollutingKey(header)) {
-                                obj[header] = snapToSecond(cell);
-                            }
-                        });
-                        parsedData.push(obj);
-                    }
-
                     resolve({
-                        data: toImportRows(parsedData),
-                        propertiesOrder: headers.order
+                        data: toImportRows(data),
+                        propertiesOrder: headers
                     });
                 } catch (err) {
                     console.error("Error parsing Excel file", err);
