@@ -60,14 +60,29 @@ export function FormEnhanceAction({
     const updateSuggestedPrompts = useCallback(async function updateSuggestedPrompts(instructions?: string) {
         if (loadingPrompts.current) return;
         loadingPrompts.current = true;
-        const prompts = status === "new"
-            ? (await getSamplePrompts(collection.singularName ?? collection.name, instructions)).prompts
-            : getPromptsForExistingEntities(collection.properties, t);
+        try {
+            let prompts: SamplePrompt[];
+            if (status === "new") {
+                try {
+                    prompts = (await getSamplePrompts(collection.singularName ?? collection.name, instructions)).prompts;
+                } catch (e) {
+                    // Sample prompts are a convenience. When the backend refuses them (no plan,
+                    // an expired token, a bad request) offer the generic ones instead: the
+                    // effects that call this don't catch, so a rejection here went unhandled
+                    // (FIRECMS-SASS-12N).
+                    console.warn("Could not load sample prompts, using the generic ones", e);
+                    prompts = getPromptsForExistingEntities(collection.properties, t);
+                }
+            } else {
+                prompts = getPromptsForExistingEntities(collection.properties, t);
+            }
 
-        const recentPromptsFromStorage = getRecentPromptsFromStorage(storageKey);
-        const recentPrompts = recentPromptsFromStorage.map(prompt => prompt.prompt);
-        setSamplePrompts([...recentPromptsFromStorage, ...prompts.filter(p => !recentPrompts.includes(p.prompt))].slice(0, 5));
-        loadingPrompts.current = false;
+            const recentPromptsFromStorage = getRecentPromptsFromStorage(storageKey);
+            const recentPrompts = recentPromptsFromStorage.map(prompt => prompt.prompt);
+            setSamplePrompts([...recentPromptsFromStorage, ...prompts.filter(p => !recentPrompts.includes(p.prompt))].slice(0, 5));
+        } finally {
+            loadingPrompts.current = false;
+        }
     },
         [collection.name, collection.singularName, getSamplePrompts, status]);
 

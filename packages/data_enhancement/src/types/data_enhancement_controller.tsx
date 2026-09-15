@@ -15,6 +15,10 @@ export type DataEnhancementController = {
      */
     enabled: boolean;
     suggestions: Record<string, string | number>;
+    /**
+     * Resolves with null when the enhancement fails, once the user has been told why.
+     * Never rejects.
+     */
     enhance: <M extends object>(props: EnhanceParams<M>) => Promise<EnhancedDataResult | null>;
     clearSuggestion: (key: string, suggestion: string | number) => void;
     allowReferenceDataSelection: boolean;

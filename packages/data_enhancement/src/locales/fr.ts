@@ -16,6 +16,8 @@ export const dataEnhancementTranslationsFr = {
     subscription_needed: "Un abonnement valide est nécessaire pour utiliser cette fonctionnalité.",
     login_to_enhance: "Vous devez être connecté pour améliorer les données",
     no_fields_updated: "Aucun champ n'a été mis à jour",
+    autofill_failed: "Échec du remplissage automatique : {{message}}",
+    autocomplete_failed: "Échec de la saisie semi-automatique : {{message}}",
     ask_ai_to_write: "Demander à l'IA d'écrire",
     instructions: "Instructions"
 };

@@ -8,6 +8,7 @@ import {
 } from "../types/data_enhancement_controller";
 import {
     DataSource,
+    EditorAIController,
     Entity,
     EntityCollection,
     getValueInPath,
@@ -21,7 +22,7 @@ import {
     useTranslation
 } from "@firecms/core";
 
-import { enhanceDataAPIStream, fetchEntityPromptSuggestion } from "../api";
+import { enhanceDataAPIStream, fetchEntityPromptSuggestion, isPaymentRequiredError } from "../api";
 import { getAppendableSuggestion } from "../utils/suggestions";
 import { getSimplifiedProperties } from "../utils/properties";
 import { useEditorAIController } from "../editor/useEditorAIController";
@@ -214,16 +215,46 @@ export function DataEnhancementControllerProvider({
         }));
     };
 
-    function displayNeededSubscriptionSnackbar(projectId: any) {
+    /**
+     * Tell the user why an AI request failed. A 402 is an expected state rather than a
+     * bug: the project has no plan that includes data enhancement, or has used up its
+     * free runs.
+     */
+    function showRequestError(e: any, failedMessageKey: "autofill_failed" | "autocomplete_failed") {
+        if (isPaymentRequiredError(e)) {
+            snackbarController.open({
+                type: "warning",
+                message: t("subscription_needed"),
+                autoHideDuration: 6000
+            });
+            return;
+        }
+        console.error("Data enhancement error", e);
         snackbarController.open({
-            type: "warning",
-            message: t("subscription_needed"),
-            autoHideDuration: 4000
-        })
+            type: "error",
+            message: t(failedMessageKey, { message: e?.message || String(e) })
+        });
     }
 
-    const editorAIController = useEditorAIController({ getAuthToken: authController.getAuthToken });
+    const baseEditorAIController = useEditorAIController({ getAuthToken: authController.getAuthToken });
+    // The markdown editor awaits autocomplete from a slash command without a catch, so a
+    // failure, such as a 402, would otherwise surface as an unhandled rejection.
+    const editorAIController: EditorAIController = {
+        autocomplete: (textBefore, textAfter, onUpdate) =>
+            baseEditorAIController.autocomplete(textBefore, textAfter, onUpdate)
+                .catch((e) => {
+                    showRequestError(e, "autocomplete_failed");
+                    return "";
+                })
+    };
 
+    /**
+     * Resolves with null when the enhancement fails, after telling the user why; it never
+     * rejects. Every caller starts it from a click handler and only chains `.finally()`
+     * to clear its spinner, so a rejection here was an unhandled rejection: the 402
+     * "Payment required" of FIRECMS-SASS-12Q and the stream parse error of
+     * FIRECMS-SASS-12P both escaped this way.
+     */
     const enhance = async (props: EnhanceParams<any>): Promise<EnhancedDataResult | null> => {
 
         if (!authController.user) {
@@ -231,11 +262,10 @@ export function DataEnhancementControllerProvider({
                 type: "warning",
                 message: t("login_to_enhance")
             });
-            return Promise.reject(new Error("Not logged in"));
+            return null;
         }
 
         const resolvedPath = navigationController.resolveIdsFrom(path, pathSegments);
-        const firebaseToken = await authController.getAuthToken();
 
         if (props.propertyKey) {
             clearSuggestion(props.propertyKey)
@@ -248,26 +278,22 @@ export function DataEnhancementControllerProvider({
 
         const currentValues = valuesRef.current ?? {};
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             function onError(e: any) {
                 setLoadingSuggestions([]);
-                if (e.code === "payment-required") {
-                    const projectId = e.data.projectId;
-                    displayNeededSubscriptionSnackbar(projectId);
-                } else {
-                    console.error("Enhance error", e);
-                }
+                enhancingInProgress.current = false;
+                showRequestError(e, "autofill_failed");
                 onAnalyticsEvent?.("de:autofill_error", {
                     path: resolvedPath,
                     entityName: collection.singularName ?? collection.name,
-                    errorCode: e.code
+                    errorCode: e?.code,
+                    errorStatus: e?.status
                 });
-                reject(e);
-                enhancingInProgress.current = false;
+                resolve(null);
             }
 
-            try {
-                enhanceDataAPIStream({
+            authController.getAuthToken()
+                .then((firebaseToken) => enhanceDataAPIStream({
                     ...props,
                     host,
                     apiKey,
@@ -296,7 +322,7 @@ export function DataEnhancementControllerProvider({
                                 })
                             });
                         }
-                        const suggestionsCount = Object.keys(result.suggestions).length;
+                        const suggestionsCount = Object.keys(result.suggestions ?? {}).length;
                         if (suggestionsCount === 0) {
                             snackbarController.open({
                                 type: "info",
@@ -320,10 +346,10 @@ export function DataEnhancementControllerProvider({
                         resolve(result);
                         enhancingInProgress.current = false;
                     }
-                }).catch(onError);
-            } catch (e: any) {
-                onError(e);
-            }
+                }))
+                // enhanceDataAPIStream reports its own failures through onError; this
+                // catches getAuthToken rejecting.
+                .catch(onError);
         })
     };
 

@@ -16,6 +16,8 @@ export const dataEnhancementTranslationsHi = {
     subscription_needed: "इस फ़ंक्शन का उपयोग करने के लिए एक वैध सब्सक्रिप्शन आवश्यक है।",
     login_to_enhance: "डेटा एन्हांस करने के लिए लॉग इन करना आवश्यक है",
     no_fields_updated: "कोई फ़ील्ड अपडेट नहीं हुई",
+    autofill_failed: "ऑटोफ़िल विफल रहा: {{message}}",
+    autocomplete_failed: "ऑटोकम्प्लीट विफल रहा: {{message}}",
     ask_ai_to_write: "AI से लिखने के लिए कहें",
     instructions: "निर्देश"
 };

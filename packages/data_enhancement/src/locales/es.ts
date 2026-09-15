@@ -16,6 +16,8 @@ export const dataEnhancementTranslationsEs = {
     subscription_needed: "Se necesita una suscripción válida para usar esta función.",
     login_to_enhance: "Necesitas iniciar sesión para mejorar datos",
     no_fields_updated: "No se actualizaron campos",
+    autofill_failed: "No se pudo autocompletar: {{message}}",
+    autocomplete_failed: "No se pudo completar el texto: {{message}}",
     ask_ai_to_write: "Pídele a la IA que escriba",
     instructions: "Instrucciones"
 };

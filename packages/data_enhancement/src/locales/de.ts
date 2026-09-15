@@ -16,6 +16,8 @@ export const dataEnhancementTranslationsDe = {
     subscription_needed: "Für die Nutzung dieser Funktion ist ein gültiges Abonnement erforderlich.",
     login_to_enhance: "Sie müssen angemeldet sein, um Daten zu erweitern",
     no_fields_updated: "Keine Felder wurden aktualisiert",
+    autofill_failed: "Automatisches Ausfüllen fehlgeschlagen: {{message}}",
+    autocomplete_failed: "Automatische Vervollständigung fehlgeschlagen: {{message}}",
     ask_ai_to_write: "KI zum Schreiben auffordern",
     instructions: "Anweisungen"
 };
