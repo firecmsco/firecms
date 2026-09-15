@@ -4,11 +4,13 @@ import { UsersTable } from "./UsersTable";
 import { UserDetailsForm } from "./UserDetailsForm";
 import React, { useCallback, useState } from "react";
 import { useUserManagement } from "../../hooks/useUserManagement";
-import { User, useTranslation
+import { isProPaused, useLicenseStatus, User, useTranslation
 } from "@firecms/core";
+import { UserManagementPausedNotice } from "../UserManagementPausedNotice";
 
 export const UsersView = function UsersView({ children }: { children?: React.ReactNode }) {
     const { t } = useTranslation();
+    const paused = isProPaused(useLicenseStatus());
 
 
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -32,6 +34,18 @@ export const UsersView = function UsersView({ children }: { children?: React.Rea
         setNewFormKey(k => k + 1);
         setDialogOpen(true);
     }, []);
+
+    if (paused) {
+        return (
+            <Container className="w-full flex flex-col py-4 gap-4" maxWidth={"6xl"}>
+                {children}
+                <Typography gutterBottom variant="h4"
+                            className="mt-12"
+                            component="h4">{t("users")}</Typography>
+                <UserManagementPausedNotice/>
+            </Container>
+        );
+    }
 
     return (
         <Container className="w-full flex flex-col py-4 gap-4" maxWidth={"6xl"}>

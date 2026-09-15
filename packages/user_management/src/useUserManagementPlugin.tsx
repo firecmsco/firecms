@@ -1,4 +1,12 @@
-import { FireCMSPlugin, useAuthController, User, useSnackbarController, useTranslation } from "@firecms/core";
+import {
+    FireCMSPlugin,
+    isProPaused,
+    useAuthController,
+    useLicenseStatus,
+    User,
+    useSnackbarController,
+    useTranslation
+} from "@firecms/core";
 import { UserManagementProvider } from "./UserManagementProvider";
 import { UserManagement } from "./types";
 import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
@@ -47,6 +55,12 @@ export function IntroWidget({
     const authController = useAuthController();
     const snackbarController = useSnackbarController();
     const { t } = useTranslation();
+    const licenseStatus = useLicenseStatus();
+
+    // Creating roles and users is paused with PRO; the Users and Roles views
+    // say so. The plugin itself stays mounted for sign-in and role checks.
+    if (isProPaused(licenseStatus))
+        return null;
 
     const buttonLabel = noUsers && noRoles
         ? t("create_default_roles_and_add_admin")

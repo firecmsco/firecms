@@ -1,14 +1,16 @@
 import React, { useCallback, useState } from "react";
 
-import { Role, useNavigationController, useTranslation
+import { isProPaused, Role, useLicenseStatus, useNavigationController, useTranslation
 } from "@firecms/core";
 import { AddIcon, Button, Container, Typography } from "@firecms/ui";
 import { RolesTable } from "./RolesTable";
 import { RolesDetailsForm } from "./RolesDetailsForm";
+import { UserManagementPausedNotice } from "../UserManagementPausedNotice";
 
 export const RolesView = React.memo(
     function RolesView({ children }: { children?: React.ReactNode }) {
     const { t } = useTranslation();
+    const paused = isProPaused(useLicenseStatus());
 
 
         const { collections } = useNavigationController();
@@ -24,6 +26,18 @@ export const RolesView = React.memo(
             setSelectedRole(undefined);
             setDialogOpen(false);
         };
+
+        if (paused) {
+            return (
+                <Container className="w-full flex flex-col py-4 gap-4" maxWidth={"6xl"}>
+                    {children}
+                    <Typography gutterBottom variant="h4"
+                                className="mt-12"
+                                component="h4">{t("roles")}</Typography>
+                    <UserManagementPausedNotice/>
+                </Container>
+            );
+        }
 
         return (
             <Container className="w-full flex flex-col py-4 gap-4" maxWidth={"6xl"}>
