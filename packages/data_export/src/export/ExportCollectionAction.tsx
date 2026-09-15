@@ -32,6 +32,7 @@ import {
     Tooltip
 } from "@firecms/ui";
 import { downloadEntitiesExport } from "./export";
+import { fetchSelectedEntities } from "./selected_entities";
 
 const DOCS_LIMIT = 500;
 
@@ -93,6 +94,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     pathSegments: inputPathSegments,
     collectionEntitiesCount,
     tableController,
+    selectionController,
     onAnalyticsEvent,
     exportAllowed,
     notAllowedView
@@ -113,6 +115,10 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const [exportType, setExportType] = React.useState<"csv" | "json">("csv");
     const [dateExportType, setDateExportType] = React.useState<"timestamp" | "string">("string");
     const [applyFilterAndSort, setApplyFilterAndSort] = React.useState<boolean>(true);
+    const [exportScope, setExportScope] = React.useState<"all" | "selected">("all");
+
+    const selectedEntities = selectionController?.selectedEntities ?? [];
+    const exportSelected = exportScope === "selected" && selectedEntities.length > 0;
 
     // the filter and sort currently applied in the collection view
     const filterValues = tableController?.filterValues;
@@ -156,8 +162,10 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = useCallback(() => {
+        // rows selected before opening are the likelier intent, so they are the default
+        setExportScope(selectedEntities.length > 0 ? "selected" : "all");
         setOpen(true);
-    }, [setOpen]);
+    }, [setOpen, selectedEntities.length]);
 
     const handleClose = useCallback(() => {
         setOpen(false);
@@ -203,7 +211,8 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
         exportConfig: ExportConfig<any> | undefined) => {
 
         onAnalyticsEvent?.("export_collection", {
-            collection: collection.path
+            collection: collection.path,
+            scope: exportSelected ? "selected" : "all"
         });
         setDataLoading(true);
 
@@ -218,14 +227,25 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
             forceFilter
         });
 
-        dataSource.fetchCollection<M>({
-            path,
-            pathSegments,
-            collection,
-            filter,
-            orderBy,
-            order
-        })
+        const dataPromise = exportSelected
+            ? fetchSelectedEntities<M>({
+                dataSource,
+                selectedEntities,
+                tableData: tableController?.data,
+                collection,
+                path,
+                pathSegments
+            })
+            : dataSource.fetchCollection<M>({
+                path,
+                pathSegments,
+                collection,
+                filter,
+                orderBy,
+                order
+            });
+
+        dataPromise
             .then(async (data) => {
                 setDataLoadingError(undefined);
                 const additionalData = await fetchAdditionalFields(data);
@@ -264,7 +284,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
             })
             .finally(() => setDataLoading(false));
 
-    }, [onAnalyticsEvent, dataSource, path, fetchAdditionalFields, includeUndefinedValues, flattenArrays, exportType, dateExportType, filterOrSortActive, applyFilterAndSort, filterValues, sortBy, forceFilter]);
+    }, [onAnalyticsEvent, dataSource, path, pathSegments, fetchAdditionalFields, includeUndefinedValues, flattenArrays, exportType, dateExportType, filterOrSortActive, applyFilterAndSort, filterValues, sortBy, forceFilter, exportSelected, selectedEntities, tableController?.data]);
 
     const onOkClicked = useCallback(() => {
         doDownload(collection, exportConfig);
@@ -294,7 +314,26 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
                 <div>{t("download_table_csv")}</div>
 
-                {collectionEntitiesCount !== undefined && collectionEntitiesCount > DOCS_LIMIT &&
+                {selectedEntities.length > 0 && <div className={"p-4 flex flex-col"}>
+                    <div className="flex items-center">
+                        <input id="radio-scope-all" type="radio" value="all" name="exportScope"
+                            checked={!exportSelected}
+                            onChange={() => setExportScope("all")}
+                            className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
+                        <label htmlFor="radio-scope-all"
+                            className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">{t("export_all_entities")}</label>
+                    </div>
+                    <div className="flex items-center">
+                        <input id="radio-scope-selected" type="radio" value="selected" name="exportScope"
+                            checked={exportSelected}
+                            onChange={() => setExportScope("selected")}
+                            className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
+                        <label htmlFor="radio-scope-selected"
+                            className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">{t("export_selected_entities", { count: selectedEntities.length.toString() })}</label>
+                    </div>
+                </div>}
+
+                {!exportSelected && collectionEntitiesCount !== undefined && collectionEntitiesCount > DOCS_LIMIT &&
                     <Alert color={"warning"}>
                         <div>
                             {t("large_number_of_documents", { count: collectionEntitiesCount.toString() })}
@@ -341,7 +380,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                     </div>
                 </div>
 
-                {filterOrSortActive && <BooleanSwitchWithLabel
+                {!exportSelected && filterOrSortActive && <BooleanSwitchWithLabel
                     size={"small"}
                     value={applyFilterAndSort}
                     onValueChange={setApplyFilterAndSort}

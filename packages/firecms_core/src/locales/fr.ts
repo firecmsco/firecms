@@ -401,6 +401,8 @@ export const fr: FireCMSTranslations = {
     large_number_of_documents: "Cette collection contient un grand nombre de documents ({{count}}).",
     include_undefined_values: "Inclure les valeurs non définies",
     export_apply_filter_sort: "N'exporter que les résultats correspondant au filtre/tri actuel",
+    export_all_entities: "Toutes les entités",
+    export_selected_entities: "Entités sélectionnées ({{count}})",
     submit: "Soumettre",
 
     no_filterable_properties: "Aucune propriété filtrable disponible",

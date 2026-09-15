@@ -399,7 +399,7 @@ export const en: FireCMSTranslations = {
     data_imported_successfully: "Data imported successfully",
     export: "Export",
     export_data: "Export data",
-    download_table_csv: "Download the the content of this table as a CSV",
+    download_table_csv: "Download the content of this table as a CSV",
     csv: "CSV",
     json: "JSON",
     dates_as_timestamps: "Dates as timestamps",
@@ -409,6 +409,8 @@ export const en: FireCMSTranslations = {
     large_number_of_documents: "This collections has a large number of documents ({{count}}).",
     include_undefined_values: "Include undefined values",
     export_apply_filter_sort: "Only export results matching the current filter/sort",
+    export_all_entities: "All entities",
+    export_selected_entities: "Selected entities ({{count}})",
     submit: "Submit",
 
     no_filterable_properties: "No filterable properties available",

@@ -401,6 +401,8 @@ export const hi: FireCMSTranslations = {
     large_number_of_documents: "इस संग्रह में बड़ी संख्या में दस्तावेज़ हैं ({{count}})।",
     include_undefined_values: "अपरिभाषित (undefined) मान शामिल करें",
     export_apply_filter_sort: "केवल वर्तमान फ़िल्टर/सॉर्ट से मेल खाने वाले परिणाम निर्यात करें",
+    export_all_entities: "सभी इकाइयाँ",
+    export_selected_entities: "चयनित इकाइयाँ ({{count}})",
     submit: "सबमिट करें",
 
     no_filterable_properties: "कोई फ़िल्टर करने योग्य गुण उपलब्ध नहीं हैं",

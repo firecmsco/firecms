@@ -445,6 +445,10 @@ export interface FireCMSTranslations {
     include_undefined_values: string;
     /** Toggle in the export dialog, only shown when a filter or sort is active */
     export_apply_filter_sort: string;
+    /** Choice in the export dialog, only shown when entities are selected */
+    export_all_entities: string;
+    /** Same choice; `{{count}}` is the number of selected entities */
+    export_selected_entities: string;
     submit: string;
 
     no_filterable_properties: string;
