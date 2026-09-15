@@ -58,6 +58,11 @@ export function useProseMirror({ initialContent, editable = true, handleImageUpl
             state: defaultState,
             editable: () => editable,
             dispatchTransaction: (tr: Transaction) => {
+                // Async work (image uploads and their preload, AI autocomplete
+                // streams) can finish after the editor unmounted. Applying a
+                // transaction to a destroyed view throws inside ProseMirror
+                // (`docView` is null), so drop it: there is nothing to update.
+                if (editorView.isDestroyed) return;
                 const newState = editorView.state.apply(tr);
                 editorView.updateState(newState);
                 setState(newState);

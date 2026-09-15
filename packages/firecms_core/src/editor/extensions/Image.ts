@@ -4,9 +4,20 @@ import { Plugin, PluginKey } from "prosemirror-state";
 
 export type UploadFn = (image: File) => Promise<string>;
 
+/**
+ * Shows the image as a placeholder at `pos`, uploads it, and swaps the
+ * placeholder for the uploaded image once it has loaded.
+ *
+ * Every step after the first runs asynchronously — the FileReader callback that
+ * calls this, the upload, and the preload of the uploaded image — and the editor
+ * can be unmounted during any of them (the user closes the entity or navigates
+ * away while an image is still uploading). Dispatching on a destroyed
+ * `EditorView` throws inside ProseMirror (`docView` is null), so each step
+ * checks the view is still alive before touching it.
+ */
 export async function onFileRead(view: EditorView, readerEvent: ProgressEvent<FileReader>, pos: number, upload: UploadFn, image: File) {
 
-    const { schema } = view.state;
+    if (view.isDestroyed) return;
 
     // @ts-ignore
     const plugin = view.state.plugins.find((p: Plugin) => p.key === ImagePluginKey.key);
@@ -31,7 +42,12 @@ export async function onFileRead(view: EditorView, readerEvent: ProgressEvent<Fi
     const src = await upload(image);
     console.debug("Uploaded image", src);
 
+    // The upload is kept (the caller stored the file), but there is no longer
+    // an editor to put it in.
+    if (view.isDestroyed) return;
+
     const replacePlaceholder = () => {
+        if (view.isDestroyed) return;
         // Retrieve the LATEST state after the async upload
         let currentDecos = plugin.getState(view.state) as DecorationSet;
         const foundDecos = currentDecos.find(undefined, undefined, spec => spec.id === decoId);

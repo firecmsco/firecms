@@ -198,10 +198,13 @@ const autocompleteSuggestionItem: SuggestionItem = {
         let buffer = "";
         const result = await aiController.autocomplete(textBeforeCursor, textAfterCursor, (delta) => {
             buffer += delta;
-            if (delta.length !== 0) {
+            if (delta.length !== 0 && !view.isDestroyed) {
                 textLoadingCommands.toggleLoadingDecoration(view.state, view.dispatch, buffer);
             }
         });
+
+        // The editor may have been unmounted while the completion streamed in.
+        if (view.isDestroyed) return;
 
         // Insert parsed text result at cursor natively
         try {
