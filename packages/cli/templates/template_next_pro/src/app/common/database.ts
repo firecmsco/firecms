@@ -9,8 +9,8 @@ import {
     query,
     QueryConstraint,
     where
-} from "@firebase/firestore";
-import { getDownloadURL, ref } from "@firebase/storage";
+} from "firebase/firestore";
+import { getDownloadURL, ref } from "firebase/storage";
 import { BlogEntryWithId, ProductWithId } from "@/app/common/types";
 
 
