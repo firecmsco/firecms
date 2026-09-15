@@ -35,3 +35,6 @@ report.**.json
 
 /website-astro-v2/.firebase/hosting.ZGlzdA.cache
 
+
+# Claude Code: per-developer settings, never shared
+.claude/settings.local.json

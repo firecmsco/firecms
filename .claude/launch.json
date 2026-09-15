@@ -57,6 +57,85 @@
         "5212"
       ],
       "port": 5212
+    },
+    {
+      "name": "email-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8917",
+        "--directory",
+        "/private/tmp/claude-501/-Users-francesco-firecms/b1593da5-2847-4f66-a391-d4ba7851b1b0/scratchpad"
+      ],
+      "port": 8917
+    },
+    {
+      "name": "funnel-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8918",
+        "--directory",
+        "/private/tmp/claude-501/-Users-francesco-firecms/c8792539-4a24-475c-b9a4-a12797e6ee8a/scratchpad"
+      ],
+      "port": 8918
+    },
+    {
+      "name": "saas-prod-api",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev:prod",
+        "--prefix",
+        "saas",
+        "--",
+        "--port",
+        "5213"
+      ],
+      "port": 5213
+    },
+    {
+      "name": "design-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8919",
+        "--directory",
+        "/private/tmp/claude-501/-Users-francesco-firecms/a605fd5b-9f4b-4db2-bb3c-f7c4dabb31d8/scratchpad"
+      ],
+      "port": 8919
+    },
+    {
+      "name": "demo-app",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--dir",
+        "/Users/francesco/rebase/app",
+        "dev"
+      ],
+      "port": 5173
+    },
+    {
+      "name": "rebase-website",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--dir",
+        "/Users/francesco/rebase/website",
+        "dev"
+      ],
+      "port": 4321
+    },
+    {
+      "name": "rebase-db-harness",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd /Users/francesco/rebase/saas/frontend && node /private/tmp/claude-501/-Users-francesco-firecms/76484292-e280-48c5-9c9e-01bdab5e2c18/scratchpad/db-harness/serve.mjs"
+      ],
+      "port": 5190
     }
   ]
 }
