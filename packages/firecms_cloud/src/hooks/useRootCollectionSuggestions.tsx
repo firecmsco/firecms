@@ -28,6 +28,12 @@ export function useRootCollectionSuggestions({ projectId }: { projectId: string 
             .then((collections) => {
                 setRootPathSuggestions(collections.filter(c => !existingPaths.includes(c.path.trim().toLowerCase())));
             })
+            // Suggestions are a convenience; a project whose collections cannot
+            // be listed just gets none, not an unhandled rejection.
+            .catch((error) => {
+                console.warn("Could not load root collection suggestions", { projectId, error });
+                setRootPathSuggestions([]);
+            })
             .finally(() => setLoading(false));
     }, []);
 
