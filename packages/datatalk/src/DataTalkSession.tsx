@@ -112,7 +112,7 @@ export function DataTalkSession({
         }
     }, []);
 
-    const submit = async (messageText: string, baseMessages: ChatMessage[] = messages) => {
+    const submit = (messageText: string, baseMessages: ChatMessage[] = messages) => {
         if (!messageText) return;
 
         if (onAnalyticsEvent) {
@@ -143,30 +143,32 @@ export function DataTalkSession({
 
         setTextInput("");
 
-        const firebaseToken = await getAuthToken();
         let currentMessageResponse = "";
 
         setMessageLoading(true);
-        streamDataTalkCommand(firebaseToken,
-            messageText,
-            apiEndpoint,
-            session.id,
-            baseMessages,
-            (newDelta) => {
-                currentMessageResponse += newDelta;
-                setMessages([
-                    ...newMessages,
-                    {
-                        id: systemMessageId,
-                        loading: true,
-                        text: currentMessageResponse,
-                        user: "SYSTEM",
-                        date: new Date()
-                    }
-                ]);
-            },
-            schemaContext,
-            projectId)
+        // The token is part of the chain, so failing to get one ends up in the
+        // error message below instead of leaving the reply loading forever.
+        getAuthToken()
+            .then((firebaseToken) => streamDataTalkCommand(firebaseToken,
+                messageText,
+                apiEndpoint,
+                session.id,
+                baseMessages,
+                (newDelta) => {
+                    currentMessageResponse += newDelta;
+                    setMessages([
+                        ...newMessages,
+                        {
+                            id: systemMessageId,
+                            loading: true,
+                            text: currentMessageResponse,
+                            user: "SYSTEM",
+                            date: new Date()
+                        }
+                    ]);
+                },
+                schemaContext,
+                projectId))
             .then((newMessage) => {
                 const updatedMessages: ChatMessage[] = [
                     ...newMessages,

@@ -73,7 +73,7 @@ function CreateSessionAndRedirect({ dataTalkConfig }: { dataTalkConfig: DataTalk
         if (initialPrompt) {
             dataTalkConfig.createSessionId().then(sessionId => {
                 navigate(`${basePath}${sessionId}?prompt=${initialPrompt}`, { replace: true });
-            });
+            }).catch(e => console.error("Could not create a DataTalk session", e));
             return;
         }
 
@@ -84,7 +84,7 @@ function CreateSessionAndRedirect({ dataTalkConfig }: { dataTalkConfig: DataTalk
         } else {
             dataTalkConfig.createSessionId().then(sessionId => {
                 navigate(`${basePath}${sessionId}`, { replace: true });
-            });
+            }).catch(e => console.error("Could not create a DataTalk session", e));
         }
     }, []);
 
@@ -120,7 +120,7 @@ function DataTalkSessionWithPanel({
             const pathParts = location.pathname.split("/");
             pathParts[pathParts.length - 1] = newSessionId;
             navigate(pathParts.join("/"));
-        });
+        }).catch(e => console.error("Could not create a DataTalk session", e));
     }, [dataTalkConfig, location.pathname, navigate]);
 
     return (
@@ -215,7 +215,9 @@ function DataTalkRouteInner({
                     messages
                 };
                 setSession(newSession);
-                dataTalkConfig.saveSession(newSession);
+                // The conversation on screen is unaffected; only its history is lost.
+                dataTalkConfig.saveSession(newSession)
+                    .catch(e => console.error("Could not save the DataTalk session", e));
             }}
         />
     )

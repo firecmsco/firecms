@@ -87,12 +87,14 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
                         }
                     });
 
-                    // Read the next chunk
-                    reader.read().then(processChunk);
+                    // Read the next chunk. Returned, so a failed read reaches the catch below.
+                    return reader.read().then(processChunk);
                 };
 
-                // Start reading the stream
-                reader.read().then(processChunk);
+                // Start reading the stream; a dropped connection rejects instead of hanging.
+                reader.read().then(processChunk).catch(reject);
+            } else {
+                reject(new DataTalkApiError("The DataTalk API sent an empty response", String(response.status)));
             }
         } catch (error) {
             console.error("Error streaming data talk command", error);
@@ -101,6 +103,10 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
     });
 }
 
+/**
+ * Asks the backend for prompt suggestions based on the project's collections.
+ * Resolves to a list of prompts, or rejects with a {@link DataTalkApiError}.
+ */
 export function getDataTalkSamplePrompts(firebaseAccessToken: string,
     apiEndpoint: string = DEFAULT_API_ENDPOINT,
     messages?: ChatMessage[],
@@ -130,7 +136,9 @@ export function getDataTalkSamplePrompts(firebaseAccessToken: string,
             }
             return response.json();
         })
-        .then(data => data.data);
+        .then(data => Array.isArray(data?.data)
+            ? data.data.filter((prompt: unknown): prompt is string => typeof prompt === "string")
+            : []);
 }
 
 export class DataTalkApiError extends Error {

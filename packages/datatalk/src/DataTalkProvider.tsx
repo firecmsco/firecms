@@ -66,20 +66,26 @@ export function useBuildDataTalkConfig({
 
     const samplePromptsRequested = useRef(false);
 
+    // Runs in the background on every page, not just DataTalk's, so a failure must
+    // stay quiet: the intro then shows its built-in example prompts.
     useEffect(() => {
         if (!enabled) return;
         if (!loadSamplePrompts) return; // Skip loading sample prompts if not requested
         if (samplePromptsRequested.current) return; // Prevent multiple requests
         samplePromptsRequested.current = true;
         getAuthToken()
-            .then((firebaseToken) => {
-                getDataTalkSamplePrompts(firebaseToken, apiEndpoint, undefined, undefined, projectId).then(setSamplePrompts);
-            })
-            .catch((e) => {
-                // User may not be logged in yet
-                console.debug("Could not load DataTalk sample prompts:", e.message);
-                samplePromptsRequested.current = false; // Allow retry when user logs in
-            });
+            .then(
+                (firebaseToken) => getDataTalkSamplePrompts(firebaseToken, apiEndpoint, undefined, undefined, projectId)
+                    .then(setSamplePrompts)
+                    .catch((e) => {
+                        // Not retried: the backend would most likely fail the same way again.
+                        console.warn("Could not load DataTalk sample prompts:", e?.message ?? e);
+                    }),
+                (e) => {
+                    // User may not be logged in yet
+                    console.debug("Could not get a token for DataTalk sample prompts:", e?.message ?? e);
+                    samplePromptsRequested.current = false; // Allow retry when user logs in
+                });
     }, [enabled, loadSamplePrompts, getAuthToken, apiEndpoint]);
 
     const createSessionId = useCallback(async (): Promise<string> => {
