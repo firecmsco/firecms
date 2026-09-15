@@ -169,6 +169,10 @@ export default defineConfig({
                             }
                         },
                         {
+                            label: "Telemetry", translations: { es: "Telemetría", de: "Telemetrie", fr: "Télémétrie" , it: "Telemetria", pt: "Telemetria" },
+                            slug: "docs/self/telemetry"
+                        },
+                        {
                             label: "User Management", translations: { es: "Gestión de usuarios", de: "Benutzerverwaltung", fr: "Gestion des utilisateurs" , it: "Gestione utenti", pt: "Gestão de usuários" },
                             slug: "docs/pro/user_management",
                             badge: {

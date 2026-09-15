@@ -1,8 +1,10 @@
 ---
 // src/components/pages/CompareContent.astro
 import SectionBackgroundAccents from "../SectionBackgroundAccents.astro";
+import { useTranslatedPath } from "../../i18n/utils";
 
 const { lang, t } = Astro.props;
+const tp = useTranslatedPath(lang as any);
 
 // Helper function or component for checkmark/dash (optional, but cleaner)
 // Or use inline SVGs directly as shown below
@@ -13,8 +15,11 @@ const features = [
     // Core & Deployment
     { feature: t('compare.table.features.1'), community: checkIcon, pro: checkIcon, cloud: dashIcon },
     { feature: t('compare.table.features.2'), community: dashIcon, pro: dashIcon, cloud: checkIcon },
-    { feature: t('compare.table.features.3'), community: checkIcon, pro: checkIcon, cloud: dashIcon }, // Pro builds on Community
-    { feature: t('compare.table.features.4'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
+    // PRO is the MIT core plus the PRO plugins, which are BSL 1.1 (see packages/*/LICENSE)
+    { feature: t('compare.table.features.3'), community: checkIcon, pro: t('compare.table.values.mitCoreBslPlugins'), cloud: dashIcon },
+    // PRO: every linked Firebase project is billed (first project, then the additional-project rate)
+    { feature: t('compare.table.features.4'), community: checkIcon, pro: t('compare.table.values.billedPerProject'), cloud: checkIcon },
+    { feature: t('compare.table.features.43'), community: checkIcon, pro: checkIcon, cloud: t('compare.table.values.billedPerUser') },
     { feature: t('compare.table.features.5'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
 
     // Core Features
@@ -27,9 +32,10 @@ const features = [
     { feature: t('compare.table.features.12'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
     { feature: t('compare.table.features.13'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
     { feature: t('compare.table.features.14'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
-    { feature: t('compare.table.features.15'), community: checkIcon, pro: dashIcon, cloud: dashIcon }, // Assuming basic export is OSS
 
     // PRO & Cloud Features
+    // Export: Community has none. `exportable` in @firecms/core is only read by the
+    // BSL @firecms/data_export plugin (key "export"), which needs a license.
     { feature: t('compare.table.features.16'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
     { feature: t('compare.table.features.17'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
     { feature: t('compare.table.features.18'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
@@ -39,10 +45,11 @@ const features = [
     { feature: t('compare.table.features.22'), community: t('compare.table.values.devManaged'), pro: t('compare.table.values.devManaged'), cloud: t('compare.table.values.devManaged') },
     { feature: t('compare.table.features.23'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
     { feature: t('compare.table.features.24'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
-    { feature: t('compare.table.features.25'), community: dashIcon, pro: checkIcon, cloud: checkIcon }, // Cloud includes PRO features equivalent
     { feature: t('compare.table.features.26'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
-    { feature: t('compare.table.features.27'), community: dashIcon, pro: dashIcon, cloud: checkIcon }, // Cloud only currently
-    { feature: t('compare.table.features.28'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    // @firecms/datatalk is published (BSL) and /datatalk accepts a PRO license; key "datatalk" needs one
+    { feature: t('compare.table.features.27'), community: dashIcon, pro: checkIcon, cloud: checkIcon },
+    // Named Firestore databases: `databaseId` on collections, in the MIT core and @firecms/firebase
+    { feature: t('compare.table.features.28'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
 
     // Customization & Extensibility
     { feature: t('compare.table.features.29'), community: checkIcon, pro: checkIcon, cloud: checkIcon }, // Assuming basic possible on cloud via code
@@ -53,15 +60,14 @@ const features = [
     { feature: t('compare.table.features.34'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
     { feature: t('compare.table.features.35'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
     { feature: t('compare.table.features.36'), community: checkIcon, pro: checkIcon, cloud: checkIcon }, // Core components can be overridden
-    { feature: t('compare.table.features.37'), community: t('compare.table.values.devManaged'), pro: checkIcon, cloud: t('compare.table.values.enterpriseOnly') }, // UI/Config vs Code
+    // The authController is part of the MIT core; any auth provider works in Community
+    { feature: t('compare.table.features.37'), community: checkIcon, pro: checkIcon, cloud: t('compare.table.values.enterpriseOnly') },
     { feature: t('compare.table.features.38'), community: checkIcon, pro: checkIcon, cloud: dashIcon }, // Self-hosted advantage
 
     // Security & Support
     { feature: t('compare.table.features.39'), community: checkIcon, pro: checkIcon, cloud: checkIcon },
     { feature: t('compare.table.features.40'), community: dashIcon, pro: t('compare.table.values.enterpriseOnly'), cloud: t('compare.table.values.enterpriseOnly') },
     { feature: t('compare.table.features.41'), community: t('compare.table.values.community'), pro: t('compare.table.values.priority'), cloud: t('compare.table.values.standardPriority') }, // Cloud Plus gets Standard
-    { feature: t('compare.table.features.42'), community: dashIcon, pro: checkIcon, cloud: t('compare.table.values.enterpriseOnly') },
-
 ];
 ---
 <main>
@@ -119,10 +125,10 @@ const features = [
                     <tr>
                         <th scope="row" class="py-7 pl-6 pr-3 text-left text-base font-semibold text-white">{t('compare.table.footer.getStarted')}</th>
                         <td class="px-3 py-7 text-center">
-                            <a href="/developers" class="inline-flex items-center rounded-lg bg-white/10 px-4 sm:px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-white/20 transition-colors">{t('compare.table.footer.viewDocs')}</a>
+                            <a href={tp("/developers")} class="inline-flex items-center rounded-lg bg-white/10 px-4 sm:px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-white/20 transition-colors">{t('compare.table.footer.viewDocs')}</a>
                         </td>
                         <td class="px-3 py-7 text-center">
-                            <a href="/pricing" class="inline-flex items-center rounded-lg bg-white/10 px-4 sm:px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-white/20 transition-colors">{t('compare.table.footer.buyLicense')}</a>
+                            <a href={tp("/pro")} class="inline-flex items-center rounded-lg bg-white/10 px-4 sm:px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-white/20 transition-colors">{t('compare.table.footer.buyLicense')}</a>
                         </td>
                         <td class="px-3 py-7 text-center">
                             <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark transition-colors">{t('compare.table.footer.startTrial')}</a>

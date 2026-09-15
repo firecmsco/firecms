@@ -1,0 +1,69 @@
+---
+// EUR / USD switch. Every element on the page with both `data-eur` and
+// `data-usd` shows its price in the selected currency (see PriceText.astro).
+// The choice is remembered so /pricing and /pro agree.
+---
+<div class="flex items-center gap-2 text-xs md:text-sm text-surface-500">
+    <div class="inline-flex items-center gap-1">
+        <button type="button" data-currency-option="eur" aria-pressed="true"
+                class="cursor-pointer px-2 py-0.5 rounded font-medium transition-colors border text-surface-800 bg-surface-200 border-surface-300">
+            EUR €
+        </button>
+        <span class="text-surface-400">/</span>
+        <button type="button" data-currency-option="usd" aria-pressed="false"
+                class="cursor-pointer px-2 py-0.5 rounded font-medium transition-colors border border-transparent text-surface-500 hover:text-surface-700">
+            USD $
+        </button>
+    </div>
+</div>
+
+<script>
+    const STORAGE_KEY = "firecms-currency";
+    const ACTIVE = ["text-surface-800", "bg-surface-200", "border-surface-300"];
+    const INACTIVE = ["text-surface-500", "hover:text-surface-700", "border-transparent"];
+
+    function applyCurrency(currency: "eur" | "usd") {
+        document.querySelectorAll<HTMLButtonElement>("[data-currency-option]").forEach((button) => {
+            const active = button.dataset.currencyOption === currency;
+            button.setAttribute("aria-pressed", String(active));
+            button.classList.remove(...(active ? INACTIVE : ACTIVE));
+            button.classList.add(...(active ? ACTIVE : INACTIVE));
+        });
+        document.querySelectorAll<HTMLElement>("[data-eur][data-usd]").forEach((element) => {
+            const price = currency === "eur" ? element.dataset.eur : element.dataset.usd;
+            if (price) element.textContent = price;
+        });
+    }
+
+    function readStoredCurrency(): "eur" | "usd" | null {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            return stored === "usd" || stored === "eur" ? stored : null;
+        } catch {
+            return null;
+        }
+    }
+
+    function initCurrencyToggle() {
+        const buttons = document.querySelectorAll<HTMLButtonElement>("[data-currency-option]");
+        if (buttons.length === 0) return;
+        buttons.forEach((button) => {
+            if (button.dataset.bound) return;
+            button.dataset.bound = "true";
+            button.addEventListener("click", () => {
+                const currency = button.dataset.currencyOption === "usd" ? "usd" : "eur";
+                try {
+                    localStorage.setItem(STORAGE_KEY, currency);
+                } catch {
+                    // Private mode or blocked storage: the switch still works on this page.
+                }
+                applyCurrency(currency);
+            });
+        });
+        const stored = readStoredCurrency();
+        if (stored) applyCurrency(stored);
+    }
+
+    document.addEventListener("astro:page-load", initCurrencyToggle);
+    initCurrencyToggle();
+</script>

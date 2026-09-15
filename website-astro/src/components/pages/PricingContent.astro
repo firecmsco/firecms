@@ -1,9 +1,29 @@
 ---
 import SectionBackgroundAccents from "../SectionBackgroundAccents.astro";
+import CurrencyToggle from "../CurrencyToggle.astro";
+import PriceText from "../PriceText.astro";
 import { useTranslatedPath } from "../../i18n/utils";
+import { PRO_PRICES } from "../../utils/pro_pricing";
 
 const { lang, t } = Astro.props;
 const tp = useTranslatedPath(lang as any);
+
+// FAQ answers mark emphasis as **bold** in the translation files.
+const withBold = (text: string) => text
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+
+const proFeatures = [
+    t('pricing.pro.f1'),
+    t('pricing.pro.f2'),
+    t('pricing.pro.f3'),
+    t('pricing.pro.f4'),
+    t('pricing.pro.f5'),
+    t('pricing.pro.f6'),
+    t('pricing.pro.f7'),
+    t('pricing.pro.f8'),
+    t('pricing.pro.f9'),
+];
 ---
 <main>
         {/* Hero Section */}
@@ -42,19 +62,7 @@ const tp = useTranslatedPath(lang as any);
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 {/* Currency Toggle */}
                 <div class="mb-10 flex justify-center w-full">
-                    <div class="flex items-center gap-2 text-xs md:text-sm text-surface-500">
-                        <div class="inline-flex items-center gap-1">
-                            <button id="currency-eur" aria-pressed="true"
-                                    class="cursor-pointer px-2 py-0.5 rounded font-medium transition-colors text-surface-800 bg-surface-200 border border-surface-300">
-                                EUR €
-                            </button>
-                            <span class="text-surface-400">/</span>
-                            <button id="currency-usd" aria-pressed="false"
-                                    class="cursor-pointer px-2 py-0.5 rounded font-medium transition-colors text-surface-500 hover:text-surface-700">
-                                USD $
-                            </button>
-                        </div>
-                    </div>
+                    <CurrencyToggle/>
                 </div>
 
                 {/* --- Pricing Grid --- */}
@@ -220,78 +228,29 @@ const tp = useTranslatedPath(lang as any);
                             {t('pricing.pro.badge')}
                         </div>
                         <h3 class="text-2xl font-semibold leading-7 text-white">{t('pricing.pro.title')}</h3>
-                        <p class="mt-4 text-base font-semibold leading-7 text-surface-400 h-7">&nbsp;</p>
+                        <p class="mt-4 text-base font-semibold leading-7 text-surface-400 min-h-7">{t('pricing.pro.trial')}</p>
                         <p class="flex items-baseline gap-x-2">
-                            <span class="text-4xl font-bold tracking-tight text-white" id="pro-price" data-eur="€149.99"
-                                  data-usd="$199.99">€149.99</span>
+                            <span class="text-4xl font-bold tracking-tight text-white" id="pro-price"
+                                  data-eur={PRO_PRICES.first.eur}
+                                  data-usd={PRO_PRICES.first.usd}>{PRO_PRICES.first.eur}</span>
                             <span class="text-base font-semibold leading-7 text-surface-400">{t('pricing.pro.period')}</span>
+                        </p>
+                        <p class="mt-1 text-sm font-semibold leading-6 text-surface-400">
+                            <PriceText text={t('pricing.pro.additional')} prices={PRO_PRICES}
+                                       ids={{ additional: "pro-price-additional" }} priceClass="text-white"/>
                         </p>
                         <p class="mt-6 text-base leading-7 text-surface-300 h-16">{t('pricing.pro.desc')}</p>
                         <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-surface-300 xl:mt-10">
-                            <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                     class="h-6 w-5 flex-none text-yellow-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M4.5 12.75l6 6 9-13.5"></path>
-                                </svg>
-                                {t('pricing.pro.f1')}
-                            </li>
-                            <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                     class="h-6 w-5 flex-none text-yellow-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M4.5 12.75l6 6 9-13.5"></path>
-                                </svg>
-                                {t('pricing.pro.f2')}
-                            </li>
-                            <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                     class="h-6 w-5 flex-none text-yellow-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M4.5 12.75l6 6 9-13.5"></path>
-                                </svg>
-                                {t('pricing.pro.f3')}
-                            </li>
-                            <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                     class="h-6 w-5 flex-none text-yellow-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M4.5 12.75l6 6 9-13.5"></path>
-                                </svg>
-                                {t('pricing.pro.f4')}
-                            </li>
-                            <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                     class="h-6 w-5 flex-none text-yellow-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M4.5 12.75l6 6 9-13.5"></path>
-                                </svg>
-                                {t('pricing.pro.f5')}
-                            </li>
-                            <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                     class="h-6 w-5 flex-none text-yellow-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M4.5 12.75l6 6 9-13.5"></path>
-                                </svg>
-                                {t('pricing.pro.f6')}
-                            </li>
-                            <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                     class="h-6 w-5 flex-none text-yellow-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M4.5 12.75l6 6 9-13.5"></path>
-                                </svg>
-                                {t('pricing.pro.f7')}
-                            </li>
-                            <li class="flex gap-x-3 items-center">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                     class="h-6 w-5 flex-none text-yellow-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M4.5 12.75l6 6 9-13.5"></path>
-                                </svg>
-                                {t('pricing.pro.f8')}
-                            </li>
+                            {proFeatures.map((feature) => (
+                                <li class="flex gap-x-3 items-center">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                         class="h-6 w-5 flex-none text-yellow-400">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M4.5 12.75l6 6 9-13.5"></path>
+                                    </svg>
+                                    <span><PriceText text={feature} prices={PRO_PRICES}/></span>
+                                </li>
+                            ))}
                         </ul>
                         <a href={tp("/pro")} aria-describedby="tier-pro"
                            data-track
@@ -404,8 +363,8 @@ const tp = useTranslatedPath(lang as any);
                 </span>
                             </summary>
                             <div class="mt-4 leading-7 text-surface-300 prose prose-invert max-w-none prose-p:my-2">
-                                <p>{t('pricing.faq.q1.a1')}</p>
-                                <p>{t('pricing.faq.q1.a2')}</p>
+                                <p set:html={withBold(t('pricing.faq.q1.a1'))}/>
+                                <p set:html={withBold(t('pricing.faq.q1.a2'))}/>
                             </div>
                         </details>
                         <details class="py-8 group">
@@ -418,8 +377,8 @@ const tp = useTranslatedPath(lang as any);
                 </span>
                             </summary>
                             <div class="mt-4 leading-7 text-surface-300 prose prose-invert max-w-none prose-p:my-2">
-                                <p>{t('pricing.faq.q2.a1')}</p>
-                                <p>{t('pricing.faq.q2.a2')}</p>
+                                <p set:html={withBold(t('pricing.faq.q2.a1'))}/>
+                                <p set:html={withBold(t('pricing.faq.q2.a2'))}/>
                             </div>
                         </details>
                         <details class="py-8 group">
@@ -432,7 +391,7 @@ const tp = useTranslatedPath(lang as any);
                 </span>
                             </summary>
                             <div class="mt-4 leading-7 text-surface-300 prose prose-invert max-w-none prose-p:my-2">
-                                <p>{t('pricing.faq.q3.a')}</p>
+                                <p set:html={withBold(t('pricing.faq.q3.a'))}/>
                             </div>
                         </details>
                         <details class="py-8 group">
@@ -445,7 +404,7 @@ const tp = useTranslatedPath(lang as any);
                 </span>
                             </summary>
                             <div class="mt-4 leading-7 text-surface-300 prose prose-invert max-w-none prose-p:my-2">
-                                <p>{t('pricing.faq.q4.a')}</p>
+                                <p set:html={withBold(t('pricing.faq.q4.a'))}/>
                             </div>
                         </details>
                         {/* */}
@@ -455,48 +414,3 @@ const tp = useTranslatedPath(lang as any);
         </section>
 
     </main>
-
-<script>
-    // Currency toggle functionality
-    function initializeCurrencyToggle() {
-        const eurBtn = document.getElementById("currency-eur");
-        const usdBtn = document.getElementById("currency-usd");
-        const cloudPrice = document.getElementById("cloud-price");
-        const proPrice = document.getElementById("pro-price");
-
-        function updateCurrency(currency: string) {
-            if (!eurBtn || !usdBtn) return;
-            if (currency === "eur") {
-                eurBtn.setAttribute("aria-pressed", "true");
-                eurBtn.classList.add("text-surface-800", "bg-surface-200", "border-surface-300");
-                eurBtn.classList.remove("text-surface-500", "hover:text-surface-700");
-
-                usdBtn.setAttribute("aria-pressed", "false");
-                usdBtn.classList.remove("text-surface-800", "bg-surface-200", "border-surface-300");
-                usdBtn.classList.add("text-surface-500", "hover:text-surface-700");
-
-                if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.eur || "€9.99";
-                if (proPrice) proPrice.textContent = proPrice.dataset.eur || "€149.99";
-            } else {
-                usdBtn.setAttribute("aria-pressed", "true");
-                usdBtn.classList.add("text-surface-800", "bg-surface-200", "border-surface-300");
-                usdBtn.classList.remove("text-surface-500", "hover:text-surface-700");
-
-                eurBtn.setAttribute("aria-pressed", "false");
-                eurBtn.classList.remove("text-surface-800", "bg-surface-200", "border-surface-300");
-                eurBtn.classList.add("text-surface-500", "hover:text-surface-700");
-
-                if (cloudPrice) cloudPrice.textContent = cloudPrice.dataset.usd || "$11.99";
-                if (proPrice) proPrice.textContent = proPrice.dataset.usd || "$199.99";
-            }
-        }
-
-        if (eurBtn && usdBtn) {
-            eurBtn.addEventListener("click", () => updateCurrency("eur"));
-            usdBtn.addEventListener("click", () => updateCurrency("usd"));
-        }
-    }
-
-    document.addEventListener("astro:page-load", initializeCurrencyToggle);
-    initializeCurrencyToggle(); // Also run on initial load
-</script>

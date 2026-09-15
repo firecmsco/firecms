@@ -27,10 +27,26 @@ export class Analytics {
             const target = e.target as HTMLElement;
             const trackedElement = target.closest('[data-track]');
             if (trackedElement) {
+                const elementText = trackedElement.textContent?.trim();
                 this.trackEvent('button_click', {
                     element_id: trackedElement.id,
-                    element_text: trackedElement.textContent?.trim()
+                    element_text: elementText
                 });
+                // The call above only reaches our own endpoint. Send the same click
+                // to GA4 as `cta_click`, keyed by the element id (e.g. pro-start-trial,
+                // pro-buy, pricing-pro-license). A separate name keeps it apart from
+                // GA4's automatic outbound `click` and from `go_to_app`, which
+                // enhance-app-links.js fires for every app.firecms.co link.
+                const gtag = (window as any).gtag;
+                if (typeof gtag === 'function' && trackedElement.id) {
+                    gtag('event', 'cta_click', {
+                        cta_id: trackedElement.id,
+                        link_url: (trackedElement as HTMLAnchorElement).href || undefined,
+                        link_text: elementText,
+                        page_path: window.location.pathname,
+                        transport_type: 'beacon'
+                    });
+                }
             }
 
             const link = target.closest('a[href^="http"]');

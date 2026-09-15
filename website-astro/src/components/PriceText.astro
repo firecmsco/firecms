@@ -1,0 +1,24 @@
+---
+// Renders a translated string whose `{name}` placeholders are prices that follow
+// the EUR/USD switch in CurrencyToggle.astro, e.g.
+// "{first} / month for your first project, {additional} for each additional".
+import type { CurrencyPrice } from "../utils/pro_pricing";
+
+interface Props {
+    text: string;
+    prices: Record<string, CurrencyPrice>;
+    /** Optional element id per placeholder, e.g. { first: "pro-price" }. */
+    ids?: Record<string, string>;
+    priceClass?: string;
+}
+
+const { text, prices, ids = {}, priceClass } = Astro.props;
+const parts = text.split(/(\{[a-z]+\})/g).filter((part) => part !== "");
+---
+{parts.map((part) => {
+    const key = part.match(/^\{([a-z]+)\}$/)?.[1];
+    const price = key ? prices[key] : undefined;
+    return price
+        ? <span id={ids[key!]} class={priceClass} data-eur={price.eur} data-usd={price.usd}>{price.eur}</span>
+        : part;
+})}
