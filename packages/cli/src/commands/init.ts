@@ -503,6 +503,7 @@ async function copyTemplateFiles(options: InitOptions) {
     return fsExtra.copy(options.templateDirectory, options.targetDirectory, {
         overwrite: false,
     }).then(async _ => {
+        await restoreGitignore(options.targetDirectory);
         if (options.template === "pro" || options.template === "community") {
             return replaceProjectIdInTemplateFiles(options, [
                 "./src/App.tsx",
@@ -524,6 +525,16 @@ async function copyTemplateFiles(options: InitOptions) {
             ]);
         }
     });
+}
+
+// npm never packs `.gitignore` files, so a template published with one would
+// scaffold projects without it. Each template ships it as `gitignore` instead,
+// and it gets its real name here.
+async function restoreGitignore(targetDirectory: string) {
+    const shipped = path.resolve(targetDirectory, "gitignore");
+    if (fs.existsSync(shipped)) {
+        await fs.promises.rename(shipped, path.resolve(targetDirectory, ".gitignore"));
+    }
 }
 
 async function copyWebAppConfig(options: InitOptions, firebaseConfig: object) {

@@ -1,0 +1,49 @@
+# What running a template locally leaves behind. Listed here it stays out of
+# this repo's git and out of the published package: npm reads a directory's
+# .gitignore to decide what to pack when it has no .npmignore.
+#
+# This is not the .gitignore generated projects get. npm never packs
+# .gitignore files, so each template ships its own as `gitignore`, and
+# `firecms init` renames it to `.gitignore` in the new project.
+#
+# Never start a `!` rule with `**`: npm's ignore walker then re-includes every
+# file in the templates, caches and all. Anchor it to `/*/` instead.
+
+# dependencies and package manager state
+node_modules/
+.yarn/
+.pnp.*
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
+# build output and generated files
+/*/dist/
+/*/dist-ssr/
+/*/build/
+/*/out/
+/*/.next/
+/*/.astro/
+/*/.firebase/
+/*/.vercel/
+/*/coverage/
+/*/next-env.d.ts
+*.tsbuildinfo
+
+# env files can hold real keys; only these ship, with nothing secret in them
+.env*
+!/template/.env.template
+!/template_pro/.env
+!/template_next_pro/.env
+
+# local settings, secrets and logs
+*.local
+*.pem
+.idea/
+/*/.vscode/*
+!/*/.vscode/extensions.json
+.eslintcache
+*.log
+
+# cloud projects are not deployed with the Firebase CLI
+/template_cloud/.firebaserc

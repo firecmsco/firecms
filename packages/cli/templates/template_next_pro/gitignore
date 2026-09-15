@@ -30,7 +30,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files. `.env` is not ignored: it holds the FireCMS license key,
-# and ignoring it here also drops it from the published CLI package.
+# which Next.js puts in the client bundle anyway.
 .env*.local
 
 # vercel

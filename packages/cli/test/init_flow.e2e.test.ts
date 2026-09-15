@@ -167,6 +167,14 @@ describe("firecms init — every template", () => {
                     .toEqual({ file: f, exists: true });
             }
 
+            // npm never packs `.gitignore` files, so each template ships its ignore file
+            // as `gitignore` and init has to give it its real name.
+            const gitignore = path.join(project, ".gitignore");
+            expect(fs.existsSync(gitignore)).toBe(true);
+            expect(fs.readFileSync(gitignore, "utf8"))
+                .toEqual(fs.readFileSync(path.join(CLI_ROOT, "templates", t.dir, "gitignore"), "utf8"));
+            expect(fs.existsSync(path.join(project, "gitignore"))).toBe(false);
+
             const pkg = JSON.parse(fs.readFileSync(path.join(project, "package.json"), "utf8"));
             expect(typeof pkg.name).toBe("string");
             expect(pkg.name.length).toBeGreaterThan(0);
@@ -248,6 +256,35 @@ describe("firecms init — generated project type-checks", () => {
         },
         300_000
     );
+
+});
+
+describe("firecms init — published package", () => {
+
+    it("packs every template's ignore file and none of its local leftovers", () => {
+        // The tests above scaffold from the template folders, so they cannot see what
+        // `npm pack` leaves out: it drops `.gitignore` files, and it decides what else
+        // to skip from the ignore files it finds (templates/.gitignore).
+        const out = execSync("npm pack --dry-run --json", {
+            cwd: CLI_ROOT,
+            encoding: "utf8",
+            stdio: ["ignore", "pipe", "ignore"]
+        });
+        // Recent npm keys the result by package name; older versions return an array.
+        const parsed = JSON.parse(out);
+        const result = Array.isArray(parsed) ? parsed[0] : Object.values(parsed)[0];
+        const files: string[] = (result as { files: { path: string }[] }).files.map(f => f.path);
+
+        for (const t of TEMPLATES) {
+            const shipped = `templates/${t.dir}/gitignore`;
+            expect({ file: shipped, packed: files.includes(shipped) })
+                .toEqual({ file: shipped, packed: true });
+        }
+
+        const leftovers = files.filter(f => f.startsWith("templates/") && f.split("/").some(segment =>
+            MUST_NOT_LEAK.includes(segment) || segment === ".yarn" || segment.endsWith(".tsbuildinfo")));
+        expect(leftovers).toEqual([]);
+    }, 120_000);
 
 });
 
