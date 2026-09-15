@@ -701,9 +701,6 @@ importers:
       fs-extra:
         specifier: ^11.3.0
         version: 11.3.5
-      googleapis:
-        specifier: ^173.0.0
-        version: 173.0.0
       inquirer:
         specifier: 12.11.1
         version: 12.11.1(@types/node@26.1.1)
@@ -8035,10 +8032,6 @@ packages:
 
   googleapis@166.0.0:
     resolution: {integrity: sha512-Xz7yG+ihVvYMwSULKIMeTp6vDX95rrSbsaR3xUmgYjwQdAkchMQ5ndFeG5QZwcBOIyvJFvG7ZLIZE7mKW2X/hw==}
-    engines: {node: '>=18'}
-
-  googleapis@173.0.0:
-    resolution: {integrity: sha512-xEJJYLZ4qeenVyfzispNfRjCe9bsv7CzBv5zYFLvScOze9snJ8S9W6hjQ729CWPQt5mvn/JrcRaCHzQiukt0ng==}
     engines: {node: '>=18'}
 
   gopd@1.2.0:
@@ -20574,13 +20567,6 @@ snapshots:
       - supports-color
 
   googleapis@166.0.0:
-    dependencies:
-      google-auth-library: 10.9.0
-      googleapis-common: 8.0.2
-    transitivePeerDependencies:
-      - supports-color
-
-  googleapis@173.0.0:
     dependencies:
       google-auth-library: 10.9.0
       googleapis-common: 8.0.2
