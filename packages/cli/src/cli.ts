@@ -132,7 +132,11 @@ async function deployArgs(rawArgs) {
     }
 
     const currentUser = await getCurrentUser(env, debug);
-    if (!currentUser) {
+    if (!currentUser && process.stdin.isTTY) {
+        // Only where someone can actually sign in. Unattended, this started a login that
+        // waited for a browser nobody would open, printing nothing; `deploy` below says
+        // what is wrong and exits 1 instead.
+        console.log("You need to be logged in to deploy.");
         await login(env, debug);
     }
 

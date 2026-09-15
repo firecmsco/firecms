@@ -159,7 +159,8 @@ net.Socket.prototype.connect = function () {
 globalThis.fetch = async (input) => {
     const url = String(input?.url ?? input);
     if (url.endsWith("/create_webapp")) {
-        return new Response(JSON.stringify({ data: {} }), { headers: { "content-type": "application/json" } });
+        const config = process.env.FIRECMS_E2E_WEBAPP_CONFIG ?? "{}";
+        return new Response(JSON.stringify({ data: JSON.parse(config) }), { headers: { "content-type": "application/json" } });
     }
     blocked("fetch " + url);
 };
@@ -183,7 +184,8 @@ type RunResult = { code: number | null, output: string };
  * PATH whose first entry is a stub `open` that records its arguments instead of opening a
  * browser. `session` seeds a fake, unexpired login instead; see the type-check test.
  */
-function makeSandbox({ session = false } = {}): Sandbox {
+function makeSandbox({ session = false, webappConfig, rawTokens }:
+                         { session?: boolean, webappConfig?: object, rawTokens?: string } = {}): Sandbox {
     const root = fs.mkdtempSync(path.join(workDir, "sandbox-"));
     const home = path.join(root, "home");
     const bin = path.join(root, "bin");
@@ -195,6 +197,13 @@ function makeSandbox({ session = false } = {}): Sandbox {
     // sure both come from here.
     for (const name of ["open", "xdg-open"]) {
         fs.writeFileSync(path.join(bin, name), `#!/bin/sh\nprintf '[stub] %s\\n' "$*" >> '${openLog}'\n`, { mode: 0o755 });
+    }
+
+    if (rawTokens !== undefined) {
+        // A tokens.json the CLI cannot make sense of, as a truncated write or a hand edit
+        // leaves it.
+        fs.mkdirSync(path.join(home, ".firecms"));
+        fs.writeFileSync(path.join(home, ".firecms", "tokens.json"), rawTokens);
     }
 
     if (session) {
@@ -217,7 +226,8 @@ function makeSandbox({ session = false } = {}): Sandbox {
             CI: "1",
             HOME: home,
             PATH: bin + path.delimiter + process.env.PATH,
-            FIRECMS_E2E_OPEN_LOG: openLog
+            FIRECMS_E2E_OPEN_LOG: openLog,
+            ...(webappConfig ? { FIRECMS_E2E_WEBAPP_CONFIG: JSON.stringify(webappConfig) } : {})
         }
     };
 }
@@ -239,16 +249,25 @@ function runNode(nodeArgs: string[], cwd: string, sandbox: Sandbox): Promise<Run
         // expected and must not surface as a test failure.
         child.stdin.on("error", () => undefined);
 
-        // Logged out, the first prompt is "Do you want to log in?" and a bare newline means
-        // yes. Nothing reads stdin before that prompt, so this waits in the pipe for it.
-        child.stdin.write("n\n");
-
-        // Accept every other default. Keep feeding until the process exits — the number of
-        // prompts varies by template, so a fixed-size buffer would either run dry or race.
+        // Answer each prompt once, by name, when it appears. Writing bare newlines on a
+        // timer instead would race: "Do you want to log in?" defaults to YES, so a newline
+        // already sitting in the pipe when it appears starts a login.
+        const answers: [string, string][] = [
+            ["Do you want to log in?", "n\n"],
+            ["Choose a template", "\n"],
+            ["Select your project", "\n"],
+            ["Please enter your Firebase project ID", "\n"],
+            ["Please choose which folder", "\n"],
+            ["Initialize a git repository?", "\n"]
+        ];
+        const answered = new Set<string>();
         const tick = setInterval(() => {
             if (!child.stdin.writable) return;
+            const next = answers.find(([prompt]) => output.includes(prompt) && !answered.has(prompt));
+            if (!next) return;
+            answered.add(next[0]);
             try {
-                child.stdin.write("\n");
+                child.stdin.write(next[1]);
             } catch {
                 // Child has gone away; the close handler below will resolve.
             }
@@ -291,11 +310,11 @@ const plain = (text: string) => text.replace(/\u001b\[[0-9;?]*[A-Za-z]/g, "");
 async function runCli(
     args: string[],
     cwd: string,
-    { loginPrompt = "declined" }: { loginPrompt?: "declined" | "absent" } = {}
+    { loginPrompt = "declined", rawTokens }: { loginPrompt?: "declined" | "absent", rawTokens?: string } = {}
 ): Promise<RunResult> {
-    const sandbox = makeSandbox();
+    const sandbox = makeSandbox({ rawTokens });
     const result = await runNode([BIN, ...args], cwd, sandbox);
-    expectNoSideEffects(sandbox, { loggedOut: true });
+    expectNoSideEffects(sandbox, { loggedOut: rawTokens === undefined });
     if (loginPrompt === "declined") {
         expect(plain(result.output)).toContain("Do you want to log in? No");
     } else {
@@ -305,8 +324,9 @@ async function runCli(
 }
 
 /** Scaffold `template` by calling `createProject` directly, past the CLI and its login gate. */
-async function runCreateProject(template: string, dirName: string, cwd: string, { session = false } = {}): Promise<RunResult> {
-    const sandbox = makeSandbox({ session });
+async function runCreateProject(template: string, dirName: string, cwd: string,
+                                { session = false, webappConfig }: { session?: boolean, webappConfig?: object } = {}): Promise<RunResult> {
+    const sandbox = makeSandbox({ session, webappConfig });
     const result = await runNode(
         ["--input-type=module", "-e", CREATE_PROJECT, pathToFileURL(BUILT).href, template, dirName, PROJECT_ID],
         cwd,
@@ -434,12 +454,35 @@ describe("firecms init — generated project type-checks", () => {
             //
             // The CLI only runs logged out here, and logged out nothing rewrites the file. So
             // this calls `createProject` with a fake session, and the sandbox answers the
-            // `create_webapp` request with exactly that empty config.
+            // `create_webapp` request with the config below.
             const cwd = fs.mkdtempSync(path.join(workDir, "run-"));
-            await runCreateProject(t.name, "app", cwd, { session: true });
+            await runCreateProject(t.name, "app", cwd, {
+                session: true,
+                webappConfig: { apiKey: "e2e-fake-api-key", projectId: PROJECT_ID }
+            });
 
-            expect(fs.readFileSync(path.join(cwd, "app", t.firebaseConfig!), "utf8"))
-                .toEqual("export const firebaseConfig: Record<string, string> = {}\n");
+            const written = fs.readFileSync(path.join(cwd, "app", t.firebaseConfig!), "utf8");
+            expect(written.startsWith("export const firebaseConfig: Record<string, string> = {")).toBe(true);
+            expect(written).toContain("\"apiKey\": \"e2e-fake-api-key\"");
+        },
+        300_000
+    );
+
+    it.each(TEMPLATES.filter(t => t.firebaseConfig).map(t => [t.name, t] as const))(
+        "%s: an empty config from the server leaves the template's own file alone",
+        async (_name, t) => {
+            // A refused or expired session comes back with `{}`, which is truthy: it was
+            // written out as the config, replacing the placeholders the template ships, and
+            // nothing was said about it.
+            const cwd = fs.mkdtempSync(path.join(workDir, "empty-config-"));
+            // As shipped, but with the project id substituted, which is a separate step.
+            const shipped = fs.readFileSync(path.join(CLI_ROOT, "templates", t.dir, t.firebaseConfig!), "utf8")
+                .split(PLACEHOLDER).join(PROJECT_ID);
+
+            const { output } = await runCreateProject(t.name, "app", cwd, { session: true });
+
+            expect(fs.readFileSync(path.join(cwd, "app", t.firebaseConfig!), "utf8")).toEqual(shipped);
+            expect(plain(output)).toContain("Could not read your Firebase config");
         },
         300_000
     );
@@ -609,6 +652,44 @@ describe("firecms init — logged out", () => {
         expect(fs.existsSync(path.join(cwd, "app", "package.json"))).toBe(true);
     }, 300_000);
 
+    it("cloud chosen from the template list also asks to log in", async () => {
+        const cwd = fs.mkdtempSync(path.join(workDir, "cloud-list-"));
+
+        // "FireCMS Cloud" is the first choice, so accepting the defaults picks it. The login
+        // gate used to be decided from the flags alone, before the list was shown, so this
+        // path scaffolded a cloud project logged out — which `--cloud` refuses.
+        const { code, output } = await runCli(["init", "app"], cwd);
+
+        expect(plain(output)).toContain("Choose a template");
+        expect(output).toContain("You need to be logged in to create a project");
+        expect(code).toBe(1);
+        expect(fs.existsSync(path.join(cwd, "app"))).toBe(false);
+    }, 300_000);
+
+    it("a saved login it cannot read is treated as logged out", async () => {
+        const cwd = fs.mkdtempSync(path.join(workDir, "corrupt-tokens-"));
+
+        // Every command used to die with a SyntaxError here, `logout` included, so there was
+        // no way out but deleting the file by hand.
+        const { code, output } = await runCli(["init", "--pro", "--yes", "--projectId", PROJECT_ID, "app"],
+            cwd, { loginPrompt: "absent", rawTokens: "not json at all" });
+
+        expect(plain(output)).toContain("Your saved login could not be read");
+        expect(code).toBe(0);
+        expect(fs.existsSync(path.join(cwd, "app", "package.json"))).toBe(true);
+    }, 300_000);
+
+    it("deploy without a login refuses instead of waiting for a browser", async () => {
+        const cwd = fs.mkdtempSync(path.join(workDir, "deploy-"));
+
+        // It used to start a login: a server on port 3000 and a browser nobody would open,
+        // printing nothing at all, waiting for ever.
+        const { code, output } = await runCli(["deploy", "--project", "demo-e2e"], cwd, { loginPrompt: "absent" });
+
+        expect(plain(output)).toContain("You are not logged in");
+        expect(code).toBe(1);
+    }, 300_000);
+
     it("cloud with --yes: exits 1 and says to log in first, without asking", async () => {
         const cwd = fs.mkdtempSync(path.join(workDir, "cloud-yes-"));
 
@@ -628,13 +709,19 @@ describe("firecms init — logged out", () => {
 describe("firecms login", () => {
 
     it("reports a busy port 3000 instead of opening a browser", async () => {
-        // The sign-in redirects back to a server on port 3000, so hold that port. If
-        // something else already holds it, it is just as busy.
+        // The sign-in redirects back to a server on port 3000, so hold that port ourselves.
+        // Relying on a foreign holder made this flaky: when that process let go between the
+        // check and the CLI's own listen, the CLI started a real login and waited.
         const holder = net.createServer();
-        await new Promise<void>((resolve, reject) => {
-            holder.once("error", (err: NodeJS.ErrnoException) => err.code === "EADDRINUSE" ? resolve() : reject(err));
-            holder.listen(3000, () => resolve());
+        const owned = await new Promise<boolean>((resolve, reject) => {
+            holder.once("error", (err: NodeJS.ErrnoException) => err.code === "EADDRINUSE" ? resolve(false) : reject(err));
+            holder.listen(3000, () => resolve(true));
         });
+        if (!owned) {
+            // Something outside this suite holds 3000; it may let go at any moment.
+            console.warn("Skipping: port 3000 is held by another process");
+            return;
+        }
 
         try {
             const cwd = fs.mkdtempSync(path.join(workDir, "login-"));
@@ -651,5 +738,47 @@ describe("firecms login", () => {
             if (holder.listening) holder.close();
         }
     }, 300_000);
+
+    it("says where to sign in instead of waiting in silence", async () => {
+        // The URL was printed from the local server's request handler, so a run whose
+        // browser never opens (a server, a container, the stub here) printed nothing at all
+        // and waited for ever.
+        const free = net.createServer();
+        const canBind = await new Promise<boolean>((resolve, reject) => {
+            free.once("error", (err: NodeJS.ErrnoException) => err.code === "EADDRINUSE" ? resolve(false) : reject(err));
+            free.listen(3000, () => resolve(true));
+        });
+        if (!canBind) {
+            console.warn("Skipping: port 3000 is held by another process");
+            return;
+        }
+        await new Promise<void>(resolve => free.close(() => resolve()));
+
+        const cwd = fs.mkdtempSync(path.join(workDir, "login-url-"));
+        const sandbox = makeSandbox();
+        const child = spawn(process.execPath, [BIN, "login"], { cwd, env: sandbox.env, stdio: ["pipe", "pipe", "pipe"] });
+        let output = "";
+        const printedUrl = new Promise<void>(resolve => {
+            const onData = (chunk: Buffer) => {
+                output += chunk;
+                if (output.includes("http://localhost:3000")) resolve();
+            };
+            child.stdout.on("data", onData);
+            child.stderr.on("data", onData);
+        });
+
+        try {
+            await Promise.race([
+                printedUrl,
+                new Promise((_resolve, reject) => setTimeout(
+                    () => reject(new Error("the sign-in URL was never printed; output was:\n" + output)), 30_000))
+            ]);
+        } finally {
+            child.kill("SIGKILL");
+        }
+
+        expect(plain(output)).toContain("Waiting for the sign-in");
+        expect(fs.existsSync(path.join(sandbox.home, ".firecms"))).toBe(false);
+    }, 60_000);
 
 });

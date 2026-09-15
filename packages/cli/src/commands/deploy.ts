@@ -21,7 +21,14 @@ export async function deploy(projectId: string, env: "prod" | "dev", debug: bool
         return;
     }
     console.log("Starting deploy");
-    const zipFilePath = await createZipFromBuild();
+    let zipFilePath: string;
+    try {
+        zipFilePath = await createZipFromBuild();
+    } catch (e) {
+        console.log("%s %s", chalk.red.bold("ERROR"), (e as Error).message);
+        process.exitCode = 1;
+        return;
+    }
 
     let sourceZipPath: string | null = null;
     try {
@@ -36,7 +43,15 @@ export async function deploy(projectId: string, env: "prod" | "dev", debug: bool
     await uploadZip(projectId, zipFilePath, sourceZipPath, env, debug);
 }
 
+export const BUILD_DIR = "./dist/assets";
+
 export async function createZipFromBuild(): Promise<string> {
+    // `archive.directory` on a missing folder adds nothing and raises nothing, so a deploy
+    // run before the build uploaded an empty zip — over whatever was already deployed.
+    const buildDir = path.resolve(BUILD_DIR);
+    if (!fs.existsSync(buildDir) || fs.readdirSync(buildDir).length === 0) {
+        throw new Error(`Nothing to deploy: ${BUILD_DIR} is missing or empty. Run \`npm run build\` first.`);
+    }
     return new Promise((resolve, reject) => {
         const tmpdir = os.tmpdir();
         const destFile = path.join(tmpdir, `firecms_build.zip`);

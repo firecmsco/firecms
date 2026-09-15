@@ -75,11 +75,15 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
 `);
 
     let options = parseArgumentsIntoOptions(rawArgs);
+    // The template is settled before the login gate below: asked from the list, "FireCMS
+    // Cloud" used to walk straight past it and scaffold a cloud project logged out, which
+    // `--cloud` refuses.
+    options = await promptForTemplate(options);
     const currentUser = await getCurrentUser(options.env, options.debug);
     const mustLogin = ["cloud"].includes(options.template) && !currentUser;
 
     async function promptLogin() {
-        await inquirer.prompt([
+        await ask([
             {
                 type: "confirm",
                 name: "login",
@@ -121,6 +125,18 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
     // console.log({ options });
 
     await createProject(options);
+}
+
+/**
+ * A Firebase project ID: 6 to 30 characters, lower case letters, digits and hyphens,
+ * starting with a letter and not ending in a hyphen. Older projects can be scoped to a
+ * domain (`example.com:my-project`), which the backend still accepts.
+ */
+export function isFirebaseProjectId(value: string): boolean {
+    const id = value.includes(":") ? value.slice(value.lastIndexOf(":") + 1) : value;
+    const domain = value.includes(":") ? value.slice(0, value.lastIndexOf(":")) : "";
+    if (domain && !/^[a-z0-9.-]+$/.test(domain)) return false;
+    return /^[a-z][a-z0-9-]{4,28}[a-z0-9]$/.test(id);
 }
 
 const INIT_USAGE = `${chalk.green.bold("Usage")}
@@ -199,14 +215,90 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
         template = "astro";
     }
 
+    const firebaseProjectId = args["--projectId"]?.trim();
+    if (firebaseProjectId !== undefined && !isFirebaseProjectId(firebaseProjectId)) {
+        // It is written into .firebaserc, firebase.json, the deploy script and the Firebase
+        // config. Anything goes there unchecked: a quote made package.json invalid JSON.
+        console.log("%s %s is not a Firebase project ID (lower case letters, digits and hyphens, 6 to 30 characters)",
+            chalk.red.bold("ERROR"), JSON.stringify(args["--projectId"]));
+        process.exit(1);
+    }
+
     return {
         git: args["--git"] || false,
         dir_name: args._[0],
         template,
         debug: args["--debug"] || false,
-        firebaseProjectId: args["--projectId"],
+        firebaseProjectId,
         skipPrompts: args["--yes"] || false,
         env
+    };
+}
+
+/**
+ * Ask the questions, or say why we cannot. Ctrl-C and a closed stdin both arrive here as
+ * inquirer's ExitPromptError, which used to print a stack trace — and, unattended, to exit
+ * 0 having created nothing, so a script read it as success.
+ */
+async function ask(questions: any): Promise<any> {
+    try {
+        return await inquirer.prompt(questions);
+    } catch (e: any) {
+        if (e?.name !== "ExitPromptError") throw e;
+        console.log("");
+        if (process.stdin.isTTY) {
+            console.log("Cancelled. Nothing was created.");
+            process.exit(130);
+        }
+        console.log("%s %s", chalk.red.bold("ERROR"),
+            "This needs a terminal to ask questions in. Pass the answers as flags instead:");
+        console.log(INIT_USAGE);
+        process.exit(1);
+    }
+}
+
+/** The template, from the flags or from the list. */
+async function promptForTemplate(options: InitOptions): Promise<InitOptions> {
+    if (options.template) return options;
+    if (options.skipPrompts) {
+        // Every answer has to come from the flags, so anything missing is an error rather
+        // than something to guess at.
+        console.log("%s %s", chalk.red.bold("ERROR"),
+            "--yes needs the template as a flag: --cloud, --pro, --next-pro, --community or --astro");
+        process.exit(1);
+    }
+    const answers = await ask([
+        {
+            type: "list",
+            name: "template",
+            message: "Choose a template",
+            choices: [
+                {
+                    name: "FireCMS Cloud " + chalk.gray("(use this option if you access FireCMS from app.firecms.co)"),
+                    value: "cloud"
+                },
+                {
+                    name: "FireCMS PRO " + chalk.gray("(self-hosted version with full functionality)"),
+                    value: "pro"
+                },
+                {
+                    name: "FireCMS PRO with Next.js frontend " + chalk.gray("(self-hosted version with frontend boilerplate CRUD app)"),
+                    value: "next-pro"
+                },
+                {
+                    name: "FireCMS Community " + chalk.gray("(MIT licensed version, free forever)"),
+                    value: "community"
+                },
+                {
+                    name: "FireCMS with Astro " + chalk.gray("(self-hosted with Astro SSG/SSR and blog support)"),
+                    value: "astro"
+                }
+            ]
+        }
+    ]);
+    return {
+        ...options,
+        template: answers.template
     };
 }
 
@@ -236,41 +328,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
 
     const questions = [];
 
-    let template = options.template;
-    if (!template) {
-        const answers = await inquirer.prompt([
-            {
-                type: "list",
-                name: "template",
-                message: "Choose a template",
-                choices: [
-                    {
-                        name: "FireCMS Cloud " + chalk.gray("(use this option if you access FireCMS from app.firecms.co)"),
-                        value: "cloud"
-                    },
-                    {
-                        name: "FireCMS PRO " + chalk.gray("(self-hosted version with full functionality)"),
-                        value: "pro"
-                    },
-                    {
-                        name: "FireCMS PRO with Next.js frontend" + chalk.gray("(self-hosted version with frontend boilerplate CRUD app)"),
-                        value: "next-pro"
-                    },
-                    {
-                        name: "FireCMS Community " + chalk.gray("(MIT licensed version, free forever)"),
-                        value: "community"
-                    },
-                    {
-                        name: "FireCMS with Astro " + chalk.gray("(self-hosted with Astro SSG/SSR and blog support)"),
-                        value: "astro"
-                    }
-                ]
-            }
-        ]);
-        template = answers.template;
-        options.template = template;
-    }
-
+    const template = options.template;
     const currentUser = await getCurrentUser(options.env, options.debug);
     let shouldAskForProjectManually = false;
 
@@ -355,7 +413,14 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         name: "firebaseProjectIdManual",
         message: "Please enter your Firebase project ID",
         when: (answers) => shouldAskForProjectManually || !answers.firebaseProjectId || answers.firebaseProjectId === "!_-manual",
-        default: options.firebaseProjectId
+        default: options.firebaseProjectId,
+        filter: (value: string) => value.trim(),
+        // Empty is allowed: the project ID can be filled in later, and createProject says
+        // in which files. Anything else has to be a project ID, since it is written into
+        // .firebaserc, the deploy script and the Firebase config.
+        validate: (value: string) => !value.trim() || isFirebaseProjectId(value.trim())
+            ? true
+            : `"${value.trim()}" is not a Firebase project ID (lower case letters, digits and hyphens, 6 to 30 characters)`
     });
 
 
@@ -363,7 +428,10 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         type: "input",
         name: "dir_name",
         message: "Please choose which folder to create the project in",
-        default: options.dir_name ?? defaultName
+        default: options.dir_name ?? defaultName,
+        filter: (value: string) => value.trim(),
+        // An empty answer used to scaffold into the current directory and then print "cd ".
+        validate: (value: string) => value.trim() ? true : "Please give a folder name"
     });
 
     // Asked of everyone. It used to be gated on `answers.firebaseProjectId`, which only
@@ -377,13 +445,13 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         });
     }
 
-    const answers = await inquirer.prompt(questions);
+    const answers = await ask(questions);
 
     return {
         ...options,
-        dir_name: answers.dir_name ?? options.dir_name,
+        dir_name: answers.dir_name?.trim() || options.dir_name || defaultName,
         git: options.git || answers.git,
-        firebaseProjectId: answers.firebaseProjectIdManual || answers.firebaseProjectId
+        firebaseProjectId: answers.firebaseProjectIdManual?.trim() || answers.firebaseProjectId
     };
 }
 
@@ -397,7 +465,9 @@ export async function createProject(options: InitOptions) {
             console.error("%s %s is a file, not a folder", chalk.red.bold("ERROR"), options.dir_name);
             process.exit(1);
         }
-        if (fs.readdirSync(targetDirectory).length !== 0) {
+        // `git init` first, or a look in Finder, is normal and leaves the folder usable.
+        const existing = fs.readdirSync(targetDirectory).filter(entry => entry !== ".git" && entry !== ".DS_Store");
+        if (existing.length !== 0) {
             console.error("%s Directory is not empty: %s", chalk.red.bold("ERROR"), targetDirectory);
             process.exit(1);
         }
@@ -442,6 +512,9 @@ export async function createProject(options: InitOptions) {
     }
 
     const currentUser = await getCurrentUser(options.env, options.debug);
+    // Said after the tasks, because anything printed while listr is drawing its spinners
+    // is drawn over: the webapp step used to fail, log over itself, and still show a ✔.
+    const afterwards: string[] = [];
     const tasks = new Listr([
         {
             title: "Copy project files: " + options.targetDirectory,
@@ -449,7 +522,14 @@ export async function createProject(options: InitOptions) {
         },
         {
             title: "Creating FireCMS webapp in project: " + options.firebaseProjectId,
-            task: (ctx) => createWebApp(options),
+            task: async (ctx, task) => {
+                const written = await createWebApp(options);
+                if (!written) {
+                    task.title = "Could not create the FireCMS webapp in " + options.firebaseProjectId;
+                    afterwards.push(`Could not read your Firebase config from FireCMS, so ${chalk.cyan.bold(firebaseConfigPath(options.template))} was left as it is.`);
+                    afterwards.push(`Fill it in from the Firebase console, or run ${chalk.bold(authCommand("login", options.env))} and scaffold again.`);
+                }
+            },
             enabled: () => currentUser && isSelfHostedTemplate(options.template)
         },
         {
@@ -465,6 +545,11 @@ export async function createProject(options: InitOptions) {
     console.log("%s Your project is ready!", chalk.green.bold("DONE"));
     console.log("");
 
+    if (afterwards.length > 0) {
+        afterwards.forEach(line => console.log("⚠️ " + line));
+        console.log("");
+    }
+
     const needProjectId = options.firebaseProjectId ? [] : filesWithProjectIdPlaceholder(options);
     if (needProjectId.length > 0) {
         console.log(`No Firebase project ID was given. Replace ${chalk.cyan.bold(PROJECT_ID_PLACEHOLDER)} with it in:`);
@@ -472,6 +557,7 @@ export async function createProject(options: InitOptions) {
         console.log("");
     }
 
+    const pm = packageManagerCommands();
     if (options.template === "pro" || options.template === "community") {
         console.log("Make sure you have a valid Firebase config in ");
         console.log(chalk.cyan.bold("src/firebase_config.ts"));
@@ -482,8 +568,8 @@ export async function createProject(options: InitOptions) {
         console.log("");
         console.log("Run:");
         console.log(chalk.bgYellow.black.bold("cd " + shellQuote(options.dir_name)));
-        console.log(chalk.bgYellow.black.bold("npm install"));
-        console.log(chalk.bgYellow.black.bold("npm run dev"));
+        console.log(chalk.bgYellow.black.bold(pm.install));
+        console.log(chalk.bgYellow.black.bold(pm.run("dev")));
         console.log("");
     } else if (options.template === "next-pro") {
         console.log("Make sure you have a valid Firebase config in ");
@@ -493,17 +579,17 @@ export async function createProject(options: InitOptions) {
         console.log("");
         console.log("Run:");
         console.log(chalk.bgYellow.black.bold("cd " + shellQuote(options.dir_name)));
-        console.log(chalk.bgYellow.black.bold("npm install"));
-        console.log(chalk.bgYellow.black.bold("npm run dev"));
+        console.log(chalk.bgYellow.black.bold(pm.install));
+        console.log(chalk.bgYellow.black.bold(pm.run("dev")));
         console.log("");
     } else if (options.template === "cloud") {
         console.log("If you want to run your project locally, run:");
         console.log(chalk.bgYellow.black.bold("cd " + shellQuote(options.dir_name)));
-        console.log(chalk.bgYellow.black.bold("npm install"));
-        console.log(chalk.bgYellow.black.bold("npm run dev"));
+        console.log(chalk.bgYellow.black.bold(pm.install));
+        console.log(chalk.bgYellow.black.bold(pm.run("dev")));
         console.log("");
         console.log("If you want to deploy your project, run:");
-        console.log(chalk.bgYellow.black.bold("npm run deploy"));
+        console.log(chalk.bgYellow.black.bold(pm.run("deploy")));
         console.log("and see it running in https://app.firecms.co");
         console.log("");
     } else if (options.template === "astro") {
@@ -512,8 +598,8 @@ export async function createProject(options: InitOptions) {
         console.log("");
         console.log("Run:");
         console.log(chalk.bgYellow.black.bold("cd " + shellQuote(options.dir_name)));
-        console.log(chalk.bgYellow.black.bold("npm install"));
-        console.log(chalk.bgYellow.black.bold("npm run dev"));
+        console.log(chalk.bgYellow.black.bold(pm.install));
+        console.log(chalk.bgYellow.black.bold(pm.run("dev")));
         console.log("");
     } else {
         throw new Error("createProject: Invalid template");
@@ -526,14 +612,23 @@ export async function createProject(options: InitOptions) {
     return true;
 }
 
-async function createWebApp(options: InitOptions) {
-    const firebaseConfig = await createSelfHostedProjectWebappConfig(options.env, options.firebaseProjectId, options.debug);
-    if (firebaseConfig)
-        await copyWebAppConfig(options, firebaseConfig);
+/** The Firebase config the template reads, per template. */
+function firebaseConfigPath(template: Template): string {
+    if (template === "next-pro") return "src/app/common/firebase_config.ts";
+    if (template === "astro") return "src/common/firebase_config.ts";
+    return "src/firebase_config.ts";
+}
 
-    if (!firebaseConfig) {
-        console.warn("Could not set webapp config automatically. Please update your config manually in " + chalk.bold("src/firebase_config.ts"));
+/** Whether a config was actually written. */
+async function createWebApp(options: InitOptions): Promise<boolean> {
+    const firebaseConfig = await createSelfHostedProjectWebappConfig(options.env, options.firebaseProjectId, options.debug);
+    // An empty object is what a refused or expired session comes back with, and it used to
+    // be written out as the config — `{}` is truthy — with no warning at all.
+    if (!firebaseConfig || Object.keys(firebaseConfig).length === 0) {
+        return false;
     }
+    await copyWebAppConfig(options, firebaseConfig);
+    return true;
 }
 
 const PROJECT_ID_PLACEHOLDER = "[REPLACE_WITH_PROJECT_ID]";
@@ -567,6 +662,18 @@ function filesWithProjectIdPlaceholder(options: InitOptions): string[] {
         const fullFileName = path.resolve(options.targetDirectory, file);
         return fs.existsSync(fullFileName) && fs.readFileSync(fullFileName, "utf8").includes(PROJECT_ID_PLACEHOLDER);
     }).map(file => path.normalize(file));
+}
+
+/**
+ * The package manager the user started us with, so the next steps we print are the commands
+ * they can actually run. Every template was told to use npm, whatever ran the scaffolder.
+ */
+function packageManagerCommands(): { install: string, run: (script: string) => string } {
+    const agent = process.env.npm_config_user_agent ?? "";
+    if (agent.startsWith("pnpm")) return { install: "pnpm install", run: (s) => `pnpm ${s}` };
+    if (agent.startsWith("yarn")) return { install: "yarn", run: (s) => `yarn ${s}` };
+    if (agent.startsWith("bun")) return { install: "bun install", run: (s) => `bun run ${s}` };
+    return { install: "npm install", run: (s) => `npm run ${s}` };
 }
 
 /** A folder name as it has to be typed in a shell. */
@@ -621,7 +728,9 @@ async function replaceProjectIdInTemplateFiles(options: InitOptions, files: stri
         const fullFileName = path.resolve(options.targetDirectory, file);
         try {
             const data = await fs.promises.readFile(fullFileName, "utf8");
-            const result = data.replace(/\[REPLACE_WITH_PROJECT_ID]/g, options.firebaseProjectId);
+            // A function, not the string: `$&` and friends in a project ID would otherwise
+            // be expanded as replacement patterns.
+            const result = data.replace(/\[REPLACE_WITH_PROJECT_ID]/g, () => options.firebaseProjectId);
             if (result !== data) {
                 await fs.promises.writeFile(fullFileName, result, "utf8");
             }

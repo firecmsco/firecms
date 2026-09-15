@@ -1,11 +1,17 @@
 import { inspect } from "util";
+import path from "path";
 
 /**
  * `firecms login` or `firecms logout` for `env`. Logins are saved per environment, so after
  * a dev login expires a bare `firecms login` signs in to prod and leaves dev broken.
+ *
+ * Under `create-firecms-app` there is no `firecms` on the PATH, so it names the command
+ * that does exist.
  */
 export function authCommand(command: "login" | "logout", env: "prod" | "dev"): string {
-    return `firecms ${command}${env === "dev" ? " --env=dev" : ""}`;
+    const invokedAs = path.basename(process.argv[1] ?? "").replace(/\.[cm]?js$/, "");
+    const cli = invokedAs.startsWith("create-firecms-app") ? "npx @firecms/cli" : "firecms";
+    return `${cli} ${command}${env === "dev" ? " --env=dev" : ""}`;
 }
 
 /**

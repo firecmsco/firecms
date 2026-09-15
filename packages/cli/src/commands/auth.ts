@@ -22,7 +22,21 @@ export async function getCurrentUser(env: "prod" | "dev", debug: boolean): Promi
         return null;
     }
     if (debug) console.log("userCredential", userCredential);
-    return parseJwt(userCredential["id_token"]);
+    try {
+        return parseJwt(userCredential["id_token"]);
+    } catch (e) {
+        // A saved login without an id_token, or with an unreadable one, used to throw out
+        // of every command — including the `logout` that would clear it.
+        unreadableLogin(env, debug, e);
+        return null;
+    }
+}
+
+/** A saved login we cannot read means "logged out", said once, rather than a crash. */
+function unreadableLogin(env: "prod" | "dev", debug: boolean, e: unknown) {
+    console.log("⚠️ Your saved login could not be read, so you are treated as logged out.");
+    console.log(`Run ${chalk.bold(authCommand("login", env))} to log in again.`);
+    if (debug) console.log(e);
 }
 
 export async function login(env: "prod" | "dev", debug: boolean) {
@@ -81,10 +95,25 @@ export async function login(env: "prod" | "dev", debug: boolean) {
         return;
     }
 
+    // Said before the browser opens, and said at all: the sign-in URL used to be printed
+    // from the request handler, so a run whose browser never opened (a server, a container,
+    // a stubbed opener) printed nothing at all and waited for ever.
+    console.log("Opening your browser to sign in to FireCMS.");
+    console.log(`If it does not open, go to ${chalk.cyan.bold("http://localhost:3000")}`);
+    console.log(`Waiting for the sign-in to come back here… (${chalk.bold("Ctrl-C")} to stop)`);
+
     open("http://localhost:3000");
 
     return new Promise(async (resolve, reject) => {
+        const giveUp = setTimeout(() => {
+            console.log("");
+            console.log(`${chalk.red.bold("ERROR")} No sign-in came back within ${LOGIN_TIMEOUT_MS / 60_000} minutes.`);
+            for (const socket of activeConnections) socket.destroy();
+            server.close();
+            resolve(null);
+        }, LOGIN_TIMEOUT_MS);
         emitter.once("tokensReady", async (code) => {
+            clearTimeout(giveUp);
             // Handle the OAuth 2.0 server response
             const tokens = await exchangeCodeForToken(code, env);
             if (!tokens) {
@@ -101,6 +130,9 @@ export async function login(env: "prod" | "dev", debug: boolean) {
         })
     });
 }
+
+/** How long `login` waits for the browser to hand the sign-in back before giving up. */
+const LOGIN_TIMEOUT_MS = 5 * 60_000;
 
 /** Resolves once `server` is listening on `port`, and rejects if it cannot bind. */
 function listen(server: http.Server, port: number): Promise<void> {
@@ -161,8 +193,18 @@ export async function getTokens(env: "prod" | "dev", debug: boolean): Promise<ob
                 reject(err);
                 return;
             }
-            const result = JSON.parse(data);
-            if (result["env"] === "dev") {
+            let result: any;
+            try {
+                result = JSON.parse(data);
+            } catch (e) {
+                // A truncated or hand-edited tokens.json used to make every command die
+                // with a SyntaxError, `logout` included, leaving no way out but deleting
+                // the file by hand.
+                unreadableLogin(env, debug, e);
+                resolve(null);
+                return;
+            }
+            if (result?.["env"] === "dev") {
                 console.log("Using DEV environment");
             }
             resolve(result);
