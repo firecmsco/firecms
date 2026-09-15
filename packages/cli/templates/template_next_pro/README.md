@@ -72,5 +72,9 @@ The products view includes automatic pagination and filtering.
 In order to use the FireCMS PRO features you need to have a valid license key. 
 The PRO features are implemented as plugins.
 You can get one at [firecms.co](https://app.firecms.co/subscriptions).
-When you get your API key, you can set it in the `.env` file.
+When you get your API key, set it as `NEXT_PUBLIC_FIRECMS_API_KEY` in the `.env` file.
+It is passed to the `apiKey` prop of `<FireCMS>` in `src/app/cms/App.tsx`.
+
+Next.js inlines `NEXT_PUBLIC_` variables into the client bundle at build time,
+so if your host sets environment variables (e.g. Vercel), set it there before building.
 

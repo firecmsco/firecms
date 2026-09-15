@@ -132,16 +132,6 @@ export function App() {
         storageSource
     });
 
-    const navigationController = useBuildNavigationController({
-        disabled: authLoading,
-        collections: collectionsBuilder,
-        // collectionPermissions: userManagement.collectionPermissions, // TODO: enable this
-        // views,
-        adminViews: userManagementAdminViews,
-        authController,
-        dataSourceDelegate: firestoreDelegate
-    });
-
     /**
      * Data enhancement plugin
      */
@@ -164,6 +154,28 @@ export function App() {
     const importPlugin = useImportPlugin();
     const exportPlugin = useExportPlugin();
 
+    /**
+     * Plugins go to the navigation controller, which is where they can
+     * modify collections and add views and navigation entries.
+     */
+    const plugins = [
+        dataEnhancementPlugin,
+        importPlugin,
+        exportPlugin,
+        userManagementPlugin
+    ];
+
+    const navigationController = useBuildNavigationController({
+        disabled: authLoading,
+        collections: collectionsBuilder,
+        // collectionPermissions: userManagement.collectionPermissions, // TODO: enable this
+        // views,
+        adminViews: userManagementAdminViews,
+        plugins,
+        authController,
+        dataSourceDelegate: firestoreDelegate
+    });
+
     if (firebaseConfigLoading || !firebaseApp) {
         return <CircularProgressCenter/>;
     }
@@ -178,17 +190,12 @@ export function App() {
                 <ModeControllerProvider value={modeController}>
 
                     <FireCMS
+                        apiKey={process.env.NEXT_PUBLIC_FIRECMS_API_KEY}
                         navigationController={navigationController}
                         authController={userManagement}
                         userConfigPersistence={userConfigPersistence}
                         dataSourceDelegate={firestoreDelegate}
                         storageSource={storageSource}
-                        plugins={[
-                            dataEnhancementPlugin,
-                            importPlugin,
-                            exportPlugin,
-                            userManagementPlugin
-                        ]}
                     >
                         {({
                               context,

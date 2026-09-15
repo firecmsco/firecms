@@ -29,8 +29,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# local env files. `.env` is not ignored: it holds the FireCMS license key,
+# and ignoring it here also drops it from the published CLI package.
+.env*.local
 
 # vercel
 .vercel

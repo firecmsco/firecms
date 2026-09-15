@@ -150,15 +150,6 @@ export function App() {
         storageSource
     });
 
-    const navigationController = useBuildNavigationController({
-        collections: collectionsBuilder,
-        collectionPermissions: userManagementController.collectionPermissions,
-        views,
-        adminViews: userManagementAdminViews,
-        authController: userManagementController,
-        dataSourceDelegate: firestoreDelegate
-    });
-
     /**
      * Data enhancement plugin
      */
@@ -186,6 +177,28 @@ export function App() {
         collectionInference: buildCollectionInference(firebaseApp),
     });
 
+    /**
+     * Plugins go to the navigation controller, which is where they can
+     * modify collections and add views and navigation entries.
+     */
+    const plugins = [
+        dataEnhancementPlugin,
+        importPlugin,
+        exportPlugin,
+        userManagementPlugin,
+        collectionEditorPlugin
+    ];
+
+    const navigationController = useBuildNavigationController({
+        collections: collectionsBuilder,
+        collectionPermissions: userManagementController.collectionPermissions,
+        views,
+        adminViews: userManagementAdminViews,
+        plugins,
+        authController: userManagementController,
+        dataSourceDelegate: firestoreDelegate
+    });
+
     if (firebaseConfigLoading || !firebaseApp) {
         return <CircularProgressCenter/>;
     }
@@ -207,13 +220,6 @@ export function App() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={[
-                        dataEnhancementPlugin,
-                        importPlugin,
-                        exportPlugin,
-                        userManagementPlugin,
-                        collectionEditorPlugin
-                    ]}
                 >
                     {({
                           context,
