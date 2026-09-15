@@ -45,6 +45,7 @@ import {
     installWithLocalPackages,
     makeSandbox,
     makeWorkDir,
+    onInterrupt,
     packCli,
     packLocalPackages,
     parseArgs,
@@ -194,11 +195,18 @@ async function waitForHttp(url, timeoutMs, isAlive = () => true) {
     throw new Error(`${url} did not come up in ${timeoutMs / 1000}s (${last})`);
 }
 
+/** Every emulator and preview server still up, for an interrupt to stop before cleaning up. */
+const longRunning = new Set();
+
 /** A long-running child in its own process group, so everything it spawns dies with it. */
 function startProcess(cmd, args, { cwd, env, logFile }) {
     const child = spawn(cmd, args, { cwd, env, stdio: ["ignore", "pipe", "pipe"], detached: true });
     let exited = false;
-    child.on("exit", () => exited = true);
+    longRunning.add(child);
+    child.on("exit", () => {
+        exited = true;
+        longRunning.delete(child);
+    });
     const log = fs.openSync(logFile, "a");
     child.stdout.on("data", d => fs.writeSync(log, d));
     child.stderr.on("data", d => fs.writeSync(log, d));
@@ -475,30 +483,45 @@ const templates = selectTemplates(opts.only ?? Object.keys(SIGNED_IN).join(","))
     });
 const work = makeWorkDir("firecms-signed-in-");
 console.log(`Working in ${work}`);
-
-const { playwright, ExcelJS, firebaseBin } = await installTools(path.join(work, "tools"));
-const importFile = await writeImportWorkbook(ExcelJS, path.join(work, "import.xlsx"));
-let cliDir;
-let cliTarball;
-if (opts["cli-dir"]) {
-    cliDir = path.resolve(opts["cli-dir"]);
-} else {
-    ({ cliDir, tarball: cliTarball } = await packCli(work));
-}
-const tarballs = await packLocalPackages(path.join(work, "tarballs"), { cliTarball });
-
-const ports = {
-    auth: await freePort(),
-    firestore: await freePort(),
-    firestoreWs: await freePort(),
-    hub: await freePort(),
-    logging: await freePort()
-};
-const emulators = await startEmulators(path.join(work, "emulators"), firebaseBin, ports);
-console.log(`Emulators up (auth ${ports.auth}, firestore ${ports.firestore})\n`);
+onInterrupt(() => {
+    // Before the files go: the emulators write into the work folder until they stop.
+    for (const child of longRunning) {
+        try {
+            process.kill(-child.pid, "SIGKILL");
+        } catch {
+            // already gone
+        }
+    }
+    cleanUpWorkDir(work, { ok: false, keep: opts.keep });
+});
 
 const reports = [];
+let emulators;
+let setupError;
 try {
+    // Setup inside the try as well: a missing Java 21 or a failed tool install must
+    // still clean up the tools, tarballs and extracted CLI it has put down so far.
+    const { playwright, ExcelJS, firebaseBin } = await installTools(path.join(work, "tools"));
+    const importFile = await writeImportWorkbook(ExcelJS, path.join(work, "import.xlsx"));
+    let cliDir;
+    let cliTarball;
+    if (opts["cli-dir"]) {
+        cliDir = path.resolve(opts["cli-dir"]);
+    } else {
+        ({ cliDir, tarball: cliTarball } = await packCli(work));
+    }
+    const tarballs = await packLocalPackages(path.join(work, "tarballs"), { cliTarball });
+
+    const ports = {
+        auth: await freePort(),
+        firestore: await freePort(),
+        firestoreWs: await freePort(),
+        hub: await freePort(),
+        logging: await freePort()
+    };
+    emulators = await startEmulators(path.join(work, "emulators"), firebaseBin, ports);
+    console.log(`Emulators up (auth ${ports.auth}, firestore ${ports.firestore})\n`);
+
     // One at a time: they share the emulators, and each run starts from a clean seed.
     for (const template of templates) {
         const spec = SIGNED_IN[template.name];
@@ -567,10 +590,13 @@ try {
         await server?.stop();
         reports.push({ template, reporter });
     }
+} catch (e) {
+    setupError = e;
+    console.error(`\nThe signed-in check could not run: ${e?.stack ?? e}`);
 } finally {
-    await emulators.stop();
+    await emulators?.stop();
 }
 
-const ok = printSummary("Signed-in browser check (Firebase emulators)", reports);
+const ok = !setupError && printSummary("Signed-in browser check (Firebase emulators)", reports);
 cleanUpWorkDir(work, { ok, keep: opts.keep });
 process.exit(ok ? 0 : 1);

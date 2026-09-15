@@ -24,7 +24,56 @@ on:
           - alpha
 
 jobs:
+  # Nothing is published unless every template `firecms init` hands out scaffolds,
+  # installs (pnpm 11, against the packages in this commit), builds, type-checks and
+  # passes its license key. See packages/cli/scripts/templates.
+  #
+  # A job of its own, with no npm token and no id-token: templates ship no lockfile, so
+  # the check resolves each one's caret ranges fresh from npm and runs their build tools,
+  # third-party code nobody pinned. `publish` below builds its own copy from the lockfile
+  # once this passes and reuses nothing from here.
+  check-templates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: |
+          # --ignore-scripts, then rebuild: see the publish job.
+          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm rebuild
+
+      - name: Build packages
+        run: pnpm run build
+
+      - name: Check the CLI templates against this build
+        run: pnpm --filter @firecms/cli run test:templates --jobs 3
+
+      # A failed run keeps its logs (and nothing else) in the temp dir.
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: template-check-logs
+          path: /tmp/firecms-*/**/*.log
+
   publish:
+    needs: check-templates
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -112,12 +161,6 @@ jobs:
 
       - name: Build packages
         run: pnpm run build
-
-      # Nothing is published unless every template `firecms init` hands out scaffolds,
-      # installs (pnpm 11, against the packages just built), builds, type-checks and
-      # passes its license key. See packages/cli/scripts/templates.
-      - name: Check the CLI templates against this build
-        run: pnpm --filter @firecms/cli run test:templates --jobs 3
 
       - name: Determine dist-tag
         id: dist-tag

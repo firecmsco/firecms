@@ -34,6 +34,7 @@ import {
     localPackages,
     makeSandbox,
     makeWorkDir,
+    onInterrupt,
     parseArgs,
     pool,
     printSummary,
@@ -74,6 +75,7 @@ async function waitForRegistry() {
 
 const work = makeWorkDir("firecms-published-smoke-");
 console.log(`Working in ${work}`);
+onInterrupt(() => cleanUpWorkDir(work, { ok: false, keep: opts.keep }));
 await waitForRegistry();
 
 // The published CLI, with its own dependencies from npm.

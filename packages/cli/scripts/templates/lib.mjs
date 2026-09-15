@@ -34,10 +34,26 @@ export const TEMPLATE_PNPM = "pnpm@11.1.0";
  */
 export const TEMPLATE_NPM = "npm@12.0.2";
 
-/** `[command, args]` for running `args` with a template's package manager. */
-function packageManager(name, args) {
+const fetchedPackageManagers = new Map();
+
+/**
+ * `[command, args]` for running `args` with a template's package manager.
+ *
+ * A pinned one is fetched into npx's cache once, by a single `--version` call that
+ * every caller waits on: three cold `npx --yes pnpm@…` calls started together race
+ * while unpacking into the same cache folder, and the npm that ships with Node 22
+ * (CI's) fails some with ENOTEMPTY. Three parallel installs lost one in three runs.
+ */
+async function packageManager(name, args) {
     const pinned = { pnpm: TEMPLATE_PNPM, npm: TEMPLATE_NPM }[name];
-    return pinned ? ["npx", ["--yes", pinned, ...args]] : [name, args];
+    if (!pinned) return [name, args];
+    if (!fetchedPackageManagers.has(pinned)) {
+        fetchedPackageManagers.set(pinned, run("npx", ["--yes", pinned, "--version"]).then(({ code, output }) => {
+            if (code !== 0) throw new Error(`Could not fetch ${pinned} with npx:\n${tail(output)}`);
+        }));
+    }
+    await fetchedPackageManagers.get(pinned);
+    return ["npx", ["--yes", pinned, ...args]];
 }
 
 /**
@@ -85,6 +101,48 @@ export function makeWorkDir(prefix) {
     return fs.mkdtempSync(path.join(os.tmpdir(), prefix));
 }
 
+const liveChildren = new Set();
+
+/** Kill a command started by `run` together with everything it started. */
+function killTree(child, signal) {
+    try {
+        process.kill(-child.pid, signal);
+    } catch {
+        // Already gone, or never started.
+    }
+}
+
+// A crash in the script must not leave its commands running either.
+process.on("exit", () => {
+    for (const child of liveChildren) killTree(child, "SIGKILL");
+});
+
+const interruptCleanups = [];
+
+/**
+ * Run `cleanup` if the script is interrupted (Ctrl-C, or CI cancelling the job), after
+ * stopping every command still running. Without it a cancelled run left its installs,
+ * builds and emulators running, and gigabytes in the temp folder.
+ */
+export function onInterrupt(cleanup) {
+    interruptCleanups.push(cleanup);
+    if (interruptCleanups.length > 1) return;
+    for (const [signal, exitCode] of [["SIGINT", 130], ["SIGTERM", 143]]) {
+        process.once(signal, () => {
+            console.error(`\n${signal}: stopping ${liveChildren.size} running command(s) and cleaning up`);
+            for (const child of liveChildren) killTree(child, "SIGKILL");
+            for (const fn of interruptCleanups) {
+                try {
+                    fn();
+                } catch (e) {
+                    console.error(`Cleanup failed: ${e.message}`);
+                }
+            }
+            process.exit(exitCode);
+        });
+    }
+}
+
 /**
  * Run a command, capturing its output (and appending it to `logFile`). Never rejects:
  * the caller decides what a non-zero exit means.
@@ -92,7 +150,10 @@ export function makeWorkDir(prefix) {
 export function run(cmd, args, { cwd, env = process.env, timeoutMs = 15 * 60_000, logFile, onChild } = {}) {
     return new Promise((resolve) => {
         if (logFile) fs.appendFileSync(logFile, `\n$ ${cmd} ${args.join(" ")}\n`);
-        const child = spawn(cmd, args, { cwd, env, stdio: ["pipe", "pipe", "pipe"] });
+        // Its own process group, so a timeout or an interrupt stops the whole tree
+        // (npx → pnpm → node → esbuild): killing `npx` alone left the rest running.
+        const child = spawn(cmd, args, { cwd, env, stdio: ["pipe", "pipe", "pipe"], detached: true });
+        liveChildren.add(child);
         onChild?.(child);
         let output = "";
         const onData = (d) => {
@@ -104,11 +165,12 @@ export function run(cmd, args, { cwd, env = process.env, timeoutMs = 15 * 60_000
         child.stdin.on("error", () => undefined);
         const timer = setTimeout(() => {
             onData(`\n[harness] killed after ${timeoutMs} ms\n`);
-            child.kill("SIGKILL");
+            killTree(child, "SIGKILL");
         }, timeoutMs);
         child.on("error", (e) => onData(`\n[harness] ${e.message}\n`));
         child.on("close", (code) => {
             clearTimeout(timer);
+            liveChildren.delete(child);
             resolve({ code, output });
         });
     });
@@ -267,7 +329,8 @@ export function scaffoldWithInit({ cliDir, template, parentDir, dirName, project
     return new Promise((resolve) => {
         const args = [path.join(cliDir, "bin", "firecms.js"), "init", template.flag, "--projectId", projectId, dirName];
         if (logFile) fs.appendFileSync(logFile, `\n$ node ${args.join(" ")}\n`);
-        const child = spawn(process.execPath, args, { cwd: parentDir, env: sandbox.env, stdio: ["pipe", "pipe", "pipe"] });
+        const child = spawn(process.execPath, args, { cwd: parentDir, env: sandbox.env, stdio: ["pipe", "pipe", "pipe"], detached: true });
+        liveChildren.add(child);
         let output = "";
         const onData = (d) => {
             output += d;
@@ -286,11 +349,12 @@ export function scaffoldWithInit({ cliDir, template, parentDir, dirName, project
         }, 150);
         const timer = setTimeout(() => {
             onData("\n[harness] killed after 120000 ms\n");
-            child.kill("SIGKILL");
+            killTree(child, "SIGKILL");
         }, 120_000);
         child.on("close", (code) => {
             clearInterval(tick);
             clearTimeout(timer);
+            liveChildren.delete(child);
             resolve({ code, output });
         });
     });
@@ -314,7 +378,7 @@ export async function installWithLocalPackages(project, tarballs, { logFile } = 
     const workspaceFile = path.join(project, "pnpm-workspace.yaml");
     const shipped = fs.existsSync(workspaceFile) ? fs.readFileSync(workspaceFile, "utf8").trimEnd() + "\n\n" : "";
     fs.writeFileSync(workspaceFile, `${shipped}strictDepBuilds: false\noverrides:\n${overrides}`);
-    const [cmd, args] = packageManager("pnpm", ["install", "--no-frozen-lockfile"]);
+    const [cmd, args] = await packageManager("pnpm", ["install", "--no-frozen-lockfile"]);
     return run(cmd, args, { cwd: project, env: { ...process.env, CI: "1" }, logFile });
 }
 
@@ -336,7 +400,7 @@ export async function installPublished(project, version, { logFile } = {}) {
         ...Object.fromEntries(Object.keys(localPackages()).map(name => [name, version]))
     };
     writeJson(file, pkg);
-    const [cmd, args] = packageManager("npm", ["install", "--no-audit", "--no-fund"]);
+    const [cmd, args] = await packageManager("npm", ["install", "--no-audit", "--no-fund"]);
     return run(cmd, args, { cwd: project, logFile });
 }
 
@@ -347,8 +411,8 @@ export function typecheck(project, { logFile } = {}) {
     });
 }
 
-export function buildProject(project, packageManagerName, env = {}, { logFile } = {}) {
-    const [cmd, args] = packageManager(packageManagerName, ["run", "build"]);
+export async function buildProject(project, packageManagerName, env = {}, { logFile } = {}) {
+    const [cmd, args] = await packageManager(packageManagerName, ["run", "build"]);
     return run(cmd, args, {
         cwd: project,
         env: { ...process.env, NEXT_TELEMETRY_DISABLED: "1", ...env },
@@ -509,8 +573,10 @@ export function cleanUpWorkDir(work, { ok, keep }) {
         console.log(`\nKept ${work}`);
         return;
     }
+    // Retries: after an interrupt, the killed commands may still be letting go of files.
+    const remove = (target) => fs.rmSync(target, { recursive: true, force: true, maxRetries: 5 });
     if (ok) {
-        fs.rmSync(work, { recursive: true, force: true });
+        remove(work);
         return;
     }
     const keepFile = (name) => name.endsWith(".log") || name.endsWith(".png");
@@ -519,7 +585,7 @@ export function cleanUpWorkDir(work, { ok, keep }) {
             const full = path.join(dir, entry.name);
             if (entry.isDirectory() && entry.name === "logs") continue;
             if (entry.isDirectory() && depth === 0) prune(full, 1);
-            else if (!(entry.isFile() && keepFile(entry.name))) fs.rmSync(full, { recursive: true, force: true });
+            else if (!(entry.isFile() && keepFile(entry.name))) remove(full);
         }
     };
     prune(work, 0);

@@ -42,6 +42,7 @@ import {
     lintDeprecated,
     makeSandbox,
     makeWorkDir,
+    onInterrupt,
     packCli,
     packLocalPackages,
     parseArgs,
@@ -57,6 +58,7 @@ const templates = selectTemplates(opts.only);
 const jobs = Number(opts.jobs ?? 2);
 const work = makeWorkDir("firecms-template-check-");
 console.log(`Working in ${work}`);
+onInterrupt(() => cleanUpWorkDir(work, { ok: false, keep: opts.keep }));
 
 let cliDir;
 let cliTarball;

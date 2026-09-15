@@ -5,6 +5,14 @@
 # builds. npm installs them here; pnpm keeps them nested inside @firecms/cloud and
 # firebase unless told to hoist them, and the build fails with
 #     Could not resolve entry module "@firecms/core".
+# pnpm reads settings from this file since 10.5; older versions ignore them, so
+# building with pnpm needs 10.5 or later.
 publicHoistPattern:
   - "@firecms/*"
   - "@firebase/*"
+
+# The project itself, and nothing else. Without a `packages` field pnpm before 10.5
+# refuses to run at all in this folder ("packages field missing or empty"), not
+# even `pnpm install`.
+packages:
+  - "."
