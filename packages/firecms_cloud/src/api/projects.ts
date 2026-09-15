@@ -413,8 +413,22 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
+    /**
+     * remoteEntry.js is loaded with a cross-origin `import()` and fetches its
+     * chunks relative to its own URL, so whatever authorizes those fetches has
+     * to be part of the path. That is a short-lived token the backend scopes to
+     * this one revision, minted with the Firebase ID token in a header: the ID
+     * token itself would be written to the request log with every chunk.
+     */
     async function getRemoteConfigUrl(projectId: string, revisionId?: string) {
-        return `${host}/projects/${projectId}/app_config/${revisionId}/${await getBackendAuthToken()}/remoteEntry.js`;
+        const firebaseAccessToken = await getBackendAuthToken();
+        const res = await fetch(`${host}/projects/${projectId}/app_config/${revisionId}/asset_token`,
+            {
+                method: "POST",
+                headers: buildHeaders({ firebaseAccessToken })
+            });
+        const { token } = await handleApiResponse<{ token: string }>(res, projectId);
+        return `${host}/projects/${projectId}/app_config/${revisionId}/bundle/${token}/remoteEntry.js`;
     }
 
     /**
