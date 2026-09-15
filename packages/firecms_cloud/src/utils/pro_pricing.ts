@@ -11,8 +11,8 @@ import type { PriceInterval } from "../types/subscriptions";
 export type PriceCurrency = "eur" | "usd";
 
 /**
- * The PRO list prices (PRO_PLAN.md section 1): the first project on a license,
- * then every further project on the same license.
+ * The PRO list prices: the first project on a license, then every further
+ * project on the same license.
  *
  * Used only when there is no Stripe price to read them from: on the sign-in
  * screen, which shows the price before anything is loaded, and for a graduated
