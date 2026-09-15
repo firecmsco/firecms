@@ -10,6 +10,7 @@ import { Listr } from "listr2";
 import axios from "axios";
 import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import { getCurrentUser, getTokens, login, refreshCredentials } from "./auth";
+import { describeRequestError } from "../util/request_error";
 import ora from "ora";
 
 import fsExtra from "fs-extra";
@@ -618,7 +619,7 @@ async function getGcpProjects(env: "prod" | "dev", debug: boolean, onErr?: (e: a
         if (onErr) {
             onErr(e);
         }
-        console.error("Error getting projects", e.response?.data);
+        console.error("Error getting projects:", describeRequestError(e));
     }
 }
 
@@ -646,7 +647,7 @@ async function getCloudProjects(env: "prod" | "dev", debug: boolean, onErr?: (e:
         if (onErr) {
             onErr(e);
         }
-        console.error("Error getting projects", e.response?.data);
+        console.error("Error getting projects:", describeRequestError(e));
     }
 }
 

@@ -10,12 +10,14 @@ import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import ora from "ora";
 import chalk from "chalk";
 import { createWriteStream } from "fs";
+import { authCommand, describeRequestError, isLoginRejected } from "../util/request_error";
 
 export async function deploy(projectId: string, env: "prod" | "dev", debug: boolean) {
     const currentUser = await getCurrentUser(env, debug);
     if (!currentUser) {
         console.log("⚠️ You are not logged in");
-        console.log(`Run ${chalk.red.bold("firecms login")} to log in`);
+        console.log(`Run ${chalk.red.bold(authCommand("login", env))} to log in`);
+        process.exitCode = 1;
         return;
     }
     console.log("Starting deploy");
@@ -115,18 +117,27 @@ export async function uploadZip(projectId: string, zipFilePath: string, sourceZi
     if (env === "dev") {
         console.log("!!! Uploading to dev server");
     }
-    const spinner = ora("Uploading build of project " + projectId).start();
 
+    // refreshCredentials returns null once it has failed, logged the user out and said why.
+    // Both checks run before the spinner starts, so their output is not drawn over and an
+    // early return does not leave it spinning.
     const tokens = await refreshCredentials(env, await getTokens(env, debug));
-
-    const form = new FormData();
+    if (!tokens) {
+        console.error(`\n${chalk.red.bold("Deploy failed:")} your saved login could not be refreshed. Run ${chalk.red.bold(authCommand("login", env))}, then deploy again.`);
+        process.exitCode = 1;
+        return;
+    }
 
     // Check if the file exists
     if (!fs.existsSync(zipFilePath)) {
         console.error(`File ${zipFilePath} does not exist`);
+        process.exitCode = 1;
         return;
     }
 
+    const spinner = ora("Uploading build of project " + projectId).start();
+
+    const form = new FormData();
     form.append("zip", fs.createReadStream(zipFilePath), "file.zip");
 
     // Append source zip if available
@@ -154,13 +165,19 @@ export async function uploadZip(projectId: string, zipFilePath: string, sourceZi
             console.error("There was an error uploading the build");
             console.error(response.data);
             spinner.fail();
+            process.exitCode = 1;
         }
 
         // console.log(response.data);
     } catch (err) {
-        console.error("There was an error uploading the build");
-        console.error(err.response.data);
         spinner.fail();
+        console.error(`${chalk.red.bold("There was an error uploading the build:")} ${describeRequestError(err)}`);
+        if (isLoginRejected(err)) {
+            // The rejected tokens are still saved, and `firecms login` refuses to run while
+            // they are, so logging out has to come first.
+            console.error(`Your saved login was rejected. Run ${chalk.red.bold(authCommand("logout", env))}, then ${chalk.red.bold(authCommand("login", env))}, and deploy again.`);
+        }
+        process.exitCode = 1;
     }
 }
 

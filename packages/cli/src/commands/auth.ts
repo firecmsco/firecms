@@ -9,6 +9,7 @@ import * as os from "os";
 import EventEmitter from "events";
 import chalk from "chalk";
 import { done_html } from "../util/done_html";
+import { authCommand, describeRequestError } from "../util/request_error";
 
 import https from "https";
 
@@ -29,7 +30,7 @@ export async function login(env: "prod" | "dev", debug: boolean) {
     const currentUser = await getCurrentUser(env, debug);
     if (currentUser) {
         console.log("You are already logged in as", currentUser["email"]);
-        console.log(`Run ${chalk.bold("firecms logout")} to sign out`);
+        console.log(`Run ${chalk.bold(authCommand("logout", env))} to sign out`);
         return;
     }
 
@@ -111,7 +112,7 @@ export async function logout(env: "prod" | "dev", debug: boolean) {
     const userCredential = await getTokens(env, debug);
     if (!userCredential) {
         console.log("⚠️ You are not logged in");
-        console.log(`Run ${chalk.red.bold("firecms login")} to log in`);
+        console.log(`Run ${chalk.red.bold(authCommand("login", env))} to log in`);
         return;
     }
 
@@ -235,8 +236,8 @@ export async function refreshCredentials(env: "dev" | "prod", credentials?: obje
     } catch (error) {
         if (onErr) onErr(error);
         await logout(env, false);
-        console.error("\nError refreshing credentials", error.response?.status, error.response?.data?.message);
-        console.log(`⚠️ Run ${chalk.red.bold("firecms login")} to log in again`);
+        console.error("\nError refreshing credentials:", describeRequestError(error));
+        console.log(`⚠️ Run ${chalk.red.bold(authCommand("login", env))} to log in again`);
         return null;
     }
 }
