@@ -13,7 +13,8 @@ import {
     ResolvedProperty,
     resolveProperty
 } from "@firecms/core";
-import { unflattenObject } from "./file_to_json";
+import { unflattenObject } from "./transforms";
+import { isPrototypePollutingKey } from "./prototype_keys";
 import { getIn } from "@firecms/formex";
 import { inferTypeFromValue } from "@firecms/schema_inference";
 
@@ -66,6 +67,9 @@ export function convertDataToEntity(authController: AuthController,
 
 export function flattenEntry(obj: any, parent = ""): any {
     return Object.keys(obj).reduce((acc, key) => {
+        // Keys of uploaded JSON: `acc["__proto__"] = value` would replace the
+        // accumulator's prototype instead of adding a field.
+        if (isPrototypePollutingKey(key)) return acc;
         const prefixedKey = parent ? `${parent}.${key}` : key;
 
         if (typeof obj[key] === "object" && !(obj[key] instanceof Date) && obj[key] !== null && !Array.isArray(obj[key])) {

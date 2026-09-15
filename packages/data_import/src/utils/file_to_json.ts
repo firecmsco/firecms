@@ -1,13 +1,101 @@
-import { getXLSXHeaders } from "./file_headers";
+import { getWorksheetHeaders, type SheetCell } from "./file_headers";
+import { parseCsvToObjects } from "./csv";
+import { mapJsonParse, unflattenObject } from "./transforms";
+import { isPrototypePollutingKey } from "./prototype_keys";
+
+// Part of this package's public API since before it moved to ./transforms.
+export { unflattenObject };
 
 type ConversionResult = {
     data: object[];
     propertiesOrder: string[]
 }
 
+/** One entry per sheet, as `read-excel-file`'s default export returns them. */
+type SheetEntry = { sheet: string; data: SheetCell[][] };
+type ReadXlsxFile = (input: File | Blob | ArrayBuffer) => Promise<SheetEntry[]>;
+
+let xlsxReader: Promise<ReadXlsxFile> | undefined;
+
+/**
+ * The workbook reader, fetched the first time somebody opens a workbook: a static
+ * import would put it on the startup path of every FireCMS app, because
+ * `@firecms/cloud` reaches this module through its barrel.
+ *
+ * `read-excel-file` rather than SheetJS `xlsx`: SheetJS publishes current releases
+ * only on its own CDN, so as a dependency it was a URL, and npm 12
+ * (`allow-remote=none`) and pnpm 11 (`blockExoticSubdeps`) refuse URL-resolved
+ * packages by default. Every FireCMS app installs this package through
+ * @firecms/firebase, so no new project could install with either. Nothing here
+ * writes a workbook; this is the one place that reads one.
+ */
+function loadXlsxReader(): Promise<ReadXlsxFile> {
+    // `/browser`, not the bare package name: `read-excel-file` publishes no root
+    // export, only `./browser`, `./universal`, `./node` and `./web-worker`. The
+    // browser entry takes the ArrayBuffer the FileReader below produces.
+    xlsxReader ??= import("read-excel-file/browser").then(mod => {
+        const candidate = (mod as { default?: unknown }).default ?? mod;
+        // `default.default` under some interop paths: unwrap one more level rather
+        // than call a namespace object and fail at the moment a user picks a file,
+        // which is the only moment this code runs.
+        const fn = typeof candidate === "function"
+            ? candidate
+            : (candidate as { default?: unknown })?.default;
+        if (typeof fn !== "function") throw new Error("read-excel-file did not resolve to a function");
+        return fn as ReadXlsxFile;
+    });
+    return xlsxReader;
+}
+
+/**
+ * read-excel-file turns Excel's date serials (fractional days) into milliseconds
+ * with `Math.floor`, and the fraction is rarely exact in floating point: a time of
+ * 12:30:00 arrives as 12:29:59.999, and a CMS showing minutes would display 12:29.
+ * A date within a millisecond of a whole second is put back on it; a genuine
+ * sub-second value is left alone.
+ */
+function snapToSecond(cell: SheetCell): SheetCell {
+    if (!(cell instanceof Date)) return cell;
+    const time = cell.getTime();
+    const second = Math.round(time / 1000) * 1000;
+    return Math.abs(time - second) <= 1 ? new Date(second) : cell;
+}
+
+function isCsvFile(file: File): boolean {
+    const name = (file.name ?? "").toLowerCase();
+    if (name.endsWith(".csv") || name.endsWith(".tsv")) return true;
+    return file.type === "text/csv" || file.type === "application/csv";
+}
+
+function toImportRows(rows: Array<Record<string, unknown>>): object[] {
+    return rows.map(mapJsonParse).map(unflattenObject);
+}
+
 export function convertFileToJson(file: File): Promise<ConversionResult> {
     return new Promise((resolve, reject) => {
-        if (file.type === "application/json") {
+        if (isCsvFile(file)) {
+            console.debug("Converting CSV file to JSON", file.name);
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const { headers, data } = parseCsvToObjects(e.target?.result as string);
+                    if (headers.length === 0) {
+                        reject(new Error("The CSV file is empty"));
+                        return;
+                    }
+                    resolve({
+                        data: toImportRows(data),
+                        propertiesOrder: headers
+                    });
+                } catch (err) {
+                    console.error("Error parsing CSV file", err);
+                    reject(err);
+                }
+            };
+            reader.onerror = () => reject(reader.error ?? new Error("Could not read the file"));
+            // Explicit UTF-8: the browser's default guess mangles accented and CJK text.
+            reader.readAsText(file, "utf-8");
+        } else if (file.type === "application/json") {
             console.debug("Converting JSON file to JSON", file.name);
             const reader = new FileReader();
             reader.onload = function (e) {
@@ -32,81 +120,88 @@ export function convertFileToJson(file: File): Promise<ConversionResult> {
             reader.readAsText(file);
         } else {
             console.debug("Converting Excel file to JSON", file.name);
-            // `xlsx` is 355KB and only a spreadsheet import needs it, but a
-            // static import put it on the startup path of every FireCMS app:
-            // `@firecms/cloud` reaches this module through its barrel. Loaded
-            // here instead, so the cost falls on the import flow that uses it.
-            import("xlsx").then((XLSX) => {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const data = new Uint8Array(e.target?.result as ArrayBuffer);
-                    const workbook = XLSX.read(data, {
-                        type: "array",
-                        codepage: 65001,
-                        cellDates: true,
-                    });
-                    const worksheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[worksheetName];
-                    const parsedData: Array<any> = XLSX.utils.sheet_to_json(worksheet);
-                    const headers = getXLSXHeaders(worksheet, XLSX.utils);
-                    const cleanedData = parsedData.map(mapJsonParse);
-                    const jsonData = cleanedData.map(unflattenObject);
+            const reader = new FileReader();
+            reader.onload = async function (e) {
+                try {
+                    const buffer = e.target?.result as ArrayBuffer;
+                    // Every .xlsx is a zip, and its first two bytes say so. Anything
+                    // else (a legacy .xls, a CSV renamed .xlsx) is refused by name
+                    // here, because what the reader says about it is a stack trace
+                    // from inside its own unzipper.
+                    const magic = new Uint8Array(buffer, 0, Math.min(2, buffer.byteLength));
+                    if (magic[0] !== 0x50 || magic[1] !== 0x4b) {
+                        reject(new Error(
+                            `'${file.name}' is not a readable .xlsx workbook. `
+                            + "Export it again as .xlsx, or save it as .csv."
+                        ));
+                        return;
+                    }
+
+                    const readXlsxFile = await loadXlsxReader();
+                    let sheets: SheetEntry[];
+                    try {
+                        sheets = await readXlsxFile(buffer);
+                    } catch (readError) {
+                        // A workbook with zero sheets throws from inside the reader
+                        // rather than returning an empty list. The file is a valid zip
+                        // (checked above), so the honest reading is that there is
+                        // nothing in it to import.
+                        console.debug("Spreadsheet reader failed", readError);
+                        reject(new Error(
+                            "No worksheets found in file — it has no sheets, or none this reader can open."
+                        ));
+                        return;
+                    }
+
+                    const firstSheet = sheets[0];
+                    if (!firstSheet) {
+                        reject(new Error("No worksheets found in file"));
+                        return;
+                    }
+
+                    const [headerRow, ...dataRows] = firstSheet.data;
+                    if (!headerRow) {
+                        reject(new Error("The spreadsheet is empty"));
+                        return;
+                    }
+
+                    const headers = getWorksheetHeaders(headerRow);
+                    if (headers.order.length === 0) {
+                        reject(new Error("The spreadsheet has no column headers in its first row"));
+                        return;
+                    }
+
+                    const parsedData: Array<Record<string, unknown>> = [];
+                    for (const row of dataRows) {
+                        // A wholly empty row is not a record.
+                        if (row.every(cell => cell === null || cell === undefined)) continue;
+
+                        const obj: Record<string, unknown> = {};
+                        row.forEach((cell, index) => {
+                            // An empty cell contributes no key: the difference between
+                            // "blank" and "absent" is what the import's defaults key off.
+                            if (cell === null || cell === undefined) return;
+                            const header = headers.byColumn.get(index);
+                            // A `__proto__` header would be the prototype setter here
+                            // rather than a column; refused, as in csv.ts.
+                            if (header && !isPrototypePollutingKey(header)) {
+                                obj[header] = snapToSecond(cell);
+                            }
+                        });
+                        parsedData.push(obj);
+                    }
+
                     resolve({
-                        data: jsonData,
-                        propertiesOrder: headers
+                        data: toImportRows(parsedData),
+                        propertiesOrder: headers.order
                     });
-                };
-                reader.onerror = reject;
-                reader.readAsArrayBuffer(file);
-            }).catch(reject);
+                } catch (err) {
+                    console.error("Error parsing Excel file", err);
+                    reject(err);
+                }
+            };
+            reader.onerror = () => reject(reader.error ?? new Error("Could not read the file"));
+            reader.readAsArrayBuffer(file);
         }
     });
-}
-
-function mapJsonParse(obj: Record<string, any>) {
-    return Object.keys(obj).reduce((acc: Record<string, any>, key) => {
-        try {
-            acc[key] = JSON.parse(obj[key]);
-        } catch (e) {
-            acc[key] = obj[key];
-        }
-        return acc;
-    }, {});
-}
-
-/**
- * Take an object with keys of type `address.street`, `address.city` and
- * convert it to an object with nested objects like `{ address: { street: ..., city: ... } }`
- * @param flatObj
- */
-export function unflattenObject(flatObj: { [key: string]: any }) {
-    return Object.keys(flatObj).reduce((nestedObj, key) => {
-        let currentObj = nestedObj;
-        const keyParts = key.split(".");
-        keyParts.forEach((keyPart, i) => {
-
-            if (/^[\w]+\[\d+\]$/.test(keyPart)) {
-                const mainPropertyName = keyPart.slice(0, keyPart.indexOf("["));
-                const index = parseInt(keyPart.slice(keyPart.indexOf("[") + 1, keyPart.indexOf("]")));
-
-                if (!currentObj[mainPropertyName]) {
-                    currentObj[mainPropertyName] = []
-                }
-
-                if (i !== keyParts.length - 1) {
-                    currentObj[mainPropertyName][index] = currentObj[mainPropertyName][index] || {};
-                    currentObj = currentObj[mainPropertyName][index];
-                } else {
-                    currentObj[mainPropertyName][index] = flatObj[key];
-                }
-            } else if (i !== keyParts.length - 1) {
-                currentObj[keyPart] = currentObj[keyPart] || {};
-                currentObj = currentObj[keyPart];
-            } else {
-                currentObj[keyPart] = flatObj[key];
-            }
-
-        });
-        return nestedObj;
-    }, {} as { [key: string]: any });
 }

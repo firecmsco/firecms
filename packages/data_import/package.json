@@ -12,7 +12,7 @@
     "@firecms/formex": "workspace:^3.4.0",
     "@firecms/schema_inference": "workspace:^3.4.0",
     "@firecms/ui": "workspace:^3.4.0",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
+    "read-excel-file": "^9.3.10"
   },
   "peerDependencies": {
     "react": ">=18.3.1 || >=19.0.0",
@@ -57,7 +57,9 @@
     "babel-jest": "^29.7.0",
     "babel-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",
     "eslint-plugin-react-compiler": "^19.1.0-rc.2",
+    "exceljs": "^4.4.0",
     "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.2.0",
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3",
     "vite": "^7.2.4"

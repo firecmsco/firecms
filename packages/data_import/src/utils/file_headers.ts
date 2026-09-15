@@ -1,96 +1,38 @@
-import type * as XLSX from "xlsx";
-
 /**
- * `utils` is passed in rather than imported because `xlsx` is 355KB and is now
- * loaded on demand by `convertFileToJson`. A static import here would pull it
- * back onto the startup path through the `utils` barrel.
+ * The header row of a spreadsheet, as a column index → name map.
+ *
+ * A map rather than an array, so that a blank header in the middle of the row
+ * can be dropped without moving the names after it: with an array compacted by
+ * `filter(Boolean)`, every later name shifts one column left and each value lands
+ * in its neighbour's field.
  */
-export function getXLSXHeaders(sheet: any, utils: typeof XLSX.utils) {
-    let header = 0; let offset = 1;
-    const hdr = [];
-    const o:any = {};
-    if (sheet == null || sheet["!ref"] == null) return [];
-    const range = o.range !== undefined ? o.range : sheet["!ref"];
-    let r;
-    if (o.header === 1) header = 1;
-    else if (o.header === "A") header = 2;
-    else if (Array.isArray(o.header)) header = 3;
-    switch (typeof range) {
-        case "string":
-            r = safeDecodeRange(range);
-            break;
-        case "number":
-            r = safeDecodeRange(sheet["!ref"]);
-            r.s.r = range;
-            break;
-        default:
-            r = range;
-    }
-    if (header > 0) offset = 0;
-    const rr = utils.encode_row(r.s.r);
-    const cols = new Array(r.e.c - r.s.c + 1);
-    for (let C = r.s.c; C <= r.e.c; ++C) {
-        cols[C] = utils.encode_col(C);
-        const val = sheet[cols[C] + rr];
-        switch (header) {
-            case 1:
-                hdr.push(C);
-                break;
-            case 2:
-                hdr.push(cols[C]);
-                break;
-            case 3:
-                hdr.push(o.header[C - r.s.c]);
-                break;
-            default:
-                if (val === undefined) continue;
-                hdr.push(utils.format_cell(val));
-        }
-    }
-    return hdr;
+export interface SheetHeaders {
+    /** Column index (0-based) → the field name that column feeds. */
+    byColumn: Map<number, string>;
+    /** The names in column order: the import's `propertiesOrder`. */
+    order: string[];
 }
 
-function safeDecodeRange(range:any) {
-    const o = {
-        s: {
-            c: 0,
-            r: 0
-        },
-        e: {
-            c: 0,
-            r: 0
-        }
-    };
-    let idx = 0; let i = 0; let cc = 0;
-    const len = range.length;
-    for (idx = 0; i < len; ++i) {
-        if ((cc = range.charCodeAt(i) - 64) < 1 || cc > 26) break;
-        idx = 26 * idx + cc;
-    }
-    o.s.c = --idx;
+/** A cell as `read-excel-file` hands it over: a primitive, or null when empty. */
+export type SheetCell = string | number | boolean | Date | null;
 
-    for (idx = 0; i < len; ++i) {
-        if ((cc = range.charCodeAt(i) - 48) < 0 || cc > 9) break;
-        idx = 10 * idx + cc;
-    }
-    o.s.r = --idx;
+/**
+ * Read the header names out of the first row. A column whose header is blank is
+ * left out entirely, so it contributes neither a field nor a value.
+ */
+export function getWorksheetHeaders(headerRow: readonly SheetCell[]): SheetHeaders {
+    const byColumn = new Map<number, string>();
+    const order: string[] = [];
 
-    if (i === len || range.charCodeAt(++i) === 58) {
-        o.e.c = o.s.c;
-        o.e.r = o.s.r;
-        return o;
-    }
+    headerRow.forEach((cell, index) => {
+        // `0` and `false` are legitimate header text and must survive; only an
+        // empty cell and an all-whitespace one are "no header".
+        if (cell === null || cell === undefined) return;
+        const name = (cell instanceof Date ? cell.toISOString() : String(cell)).trim();
+        if (!name) return;
+        byColumn.set(index, name);
+        order.push(name);
+    });
 
-    for (idx = 0; i !== len; ++i) {
-        if ((cc = range.charCodeAt(i) - 64) < 1 || cc > 26) break;
-        idx = 26 * idx + cc;
-    }
-    o.e.c = --idx;
-
-    for (idx = 0; i !== len; ++i) {
-        if ((cc = range.charCodeAt(i) - 48) < 0 || cc > 9) break;
-        idx = 10 * idx + cc;
-    }
-    o.e.r = --idx;
-    return o;
+    return { byColumn, order };
 }
