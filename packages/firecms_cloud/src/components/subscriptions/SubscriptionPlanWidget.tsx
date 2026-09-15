@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
-import { Alert, Button, CircularProgress } from "@firecms/ui";
+import React from "react";
+import { Alert, Button, LoadingButton } from "@firecms/ui";
 import { PaywallDialog } from "./Paywall";
 import { useFireCMSBackend, useProjectConfig } from "../../hooks";
 import { useProjectSubscriptions } from "../../hooks/useProjectSubscriptions";
 import { Subscription } from "../../types";
+import { useOpenStripePortal } from "./useOpenStripePortal";
 
 export type SubscriptionPlanWidgetProps = {}
 
@@ -60,27 +61,22 @@ function PastDueAlert({ subscription, projectId }: { subscription: Subscription,
 
     const projectsApi = useFireCMSBackend().projectsApi;
 
-    const [url, setUrl] = React.useState<string | null>(null);
-    useEffect(() => {
-        projectsApi.getStripeUpdateLinkForPaymentMethod(subscription.id, projectId)
-            .then(setUrl)
-            .catch(console.error);
-    }, []);
+    // Fetched when clicked: each link is a Stripe portal session.
+    const {
+        openPortal,
+        opening
+    } = useOpenStripePortal();
 
     return <Alert
         color={"error"}
         outerClassName={"my-4"}
-        action={url
-            ? <Button
-                component={"a"}
-                href={url}
-                target={"_blank"}
-                rel="noopener noreferrer"
-                className={"dark:!text-white dark:border-white dark:hover:bg-white dark:hover:!text-primary min-w-content"}
-            >
-                Update
-            </Button>
-            : <CircularProgress size={"smallest"} />}>
+        action={<LoadingButton
+            loading={Boolean(opening)}
+            onClick={() => openPortal("payment_method", () => projectsApi.getStripeUpdateLinkForPaymentMethod(subscription.id, projectId))}
+            className={"dark:!text-white dark:border-white dark:hover:bg-white dark:hover:!text-primary min-w-content"}
+        >
+            Update
+        </LoadingButton>}>
         <div>Your subscription is past due. Please update your payment method to avoid service disruption</div>
     </Alert>;
 }

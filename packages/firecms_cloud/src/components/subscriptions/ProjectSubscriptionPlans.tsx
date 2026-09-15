@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useBrowserTitleAndIcon, useTranslation } from "@firecms/core";
-import { AutoAwesomeIcon, Button, Card, Chip, CircularProgress, cls, Typography, } from "@firecms/ui";
+import { AutoAwesomeIcon, Button, Card, Chip, CircularProgress, cls, LoadingButton, Typography, } from "@firecms/ui";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { useProjectSubscriptions } from "../../hooks/useProjectSubscriptions";
 import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
@@ -8,6 +8,7 @@ import { formatPrice, getPriceString, getSubscriptionStatusText } from "../setti
 import { Subscription } from "../../types";
 import { StripeDisclaimer } from "./StripeDisclaimer";
 import { useFireCMSBackend, useProjectConfig } from "../../hooks";
+import { useOpenStripePortal } from "./useOpenStripePortal";
 
 export function ProjectSubscriptionPlans() {
 
@@ -194,31 +195,17 @@ function CurrentCloudSubscriptionView({
     projectId,
 }: CurrentSubscriptionViewProps) {
 
-    const {
-        getBackendAuthToken,
-        projectsApi
-    } = useFireCMSBackend();
+    const { projectsApi } = useFireCMSBackend();
 
     const { t } = useTranslation();
 
     const statusText = getSubscriptionStatusText(subscription);
-    const [cancelLinkUrl, setCancelLinkUrl] = useState<string | undefined>(undefined);
 
-    useEffect(() => {
-        if (!cancelLinkUrl && !subscription.canceled_at) {
-            projectsApi.getStripeCancelLinkForSubscription(subscription.id, projectId)
-                .then(setCancelLinkUrl);
-        }
-    }, [subscription.canceled_at]);
-
-    const [stripeUpdatePaymentUrl, setStripeUpdatePaymentUrl] = useState<string | undefined>(undefined);
-
-    useEffect(() => {
-        if (subscription.id) {
-            projectsApi.getStripeUpdateLinkForPaymentMethod(subscription.id, projectId)
-                .then(setStripeUpdatePaymentUrl);
-        }
-    }, []);
+    // Links are fetched when clicked: each one is a Stripe portal session.
+    const {
+        openPortal,
+        opening
+    } = useOpenStripePortal();
 
     // Detect if this is a per-seat subscription vs legacy metered billing
     const isPerSeatBilling = subscription.items?.[0]?.price?.lookup_key === "cloud_per_seat";
@@ -259,24 +246,29 @@ function CurrentCloudSubscriptionView({
                         {isPerSeatBilling && <> {t("settings_no_additional_charges")}</>}
                     </>}
 
-                    {!subscription.canceled_at && <a
-                        className={" " + subscription.canceled_at ? undefined : "text-text-secondary dark:text-text-secondary-dark"}
-                        href={cancelLinkUrl}
-                        target="_blank" rel="noreferrer">{
-                            " " + t("settings_manage_subscription")
-                        }</a>}
+                    {!subscription.canceled_at && <>
+                        {" "}
+                        <button
+                            type={"button"}
+                            className={"inline-flex items-center gap-1 text-primary hover:underline disabled:cursor-default disabled:no-underline"}
+                            disabled={Boolean(opening)}
+                            onClick={() => openPortal("cancel", () => projectsApi.getStripeCancelLinkForSubscription(subscription.id, projectId))}>
+                            {t("settings_manage_subscription")}
+                            {opening === "cancel" && <CircularProgress size={"smallest"}/>}
+                        </button>
+                    </>}
 
                 </div>
 
-                {stripeUpdatePaymentUrl && <Button component={"a"}
+                <LoadingButton
                     variant={"filled"}
                     color={"neutral"}
                     size={"small"}
-                    href={stripeUpdatePaymentUrl}
-                    target="_blank"
-                    rel="noreferrer">
-                    Update payment method
-                </Button>}
+                    loading={opening === "payment_method"}
+                    disabled={Boolean(opening)}
+                    onClick={() => openPortal("payment_method", () => projectsApi.getStripeUpdateLinkForPaymentMethod(subscription.id, projectId))}>
+                    {t("update_payment_method")}
+                </LoadingButton>
 
             </div>
 

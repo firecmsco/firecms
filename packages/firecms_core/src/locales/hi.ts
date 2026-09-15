@@ -499,6 +499,7 @@ export const hi: FireCMSTranslations = {
     licensed_projects_lowercase: "लाइसेंस प्राप्त प्रोजेक्ट्स",
     manage: "प्रबंधित करें",
     update_payment_method: "भुगतान विधि अपडेट करें",
+    stripe_portal_error: "Stripe नहीं खुल सका: {{message}}",
     your_firecms_cloud_projects: "आपके FireCMS Cloud प्रोजेक्ट्स",
     status_active: "सक्रिय",
     status_trialing: "परीक्षण (ट्रायल)",

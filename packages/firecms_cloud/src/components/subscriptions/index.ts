@@ -5,3 +5,4 @@ export * from "./ProjectSubscriptionPlans";
 export * from "./StripeDisclaimer";
 export * from "./SubscriptionPlanWidget";
 export * from "./SubscriptionPriceSelect";
+export * from "./useOpenStripePortal";

@@ -499,6 +499,7 @@ export const de: FireCMSTranslations = {
     licensed_projects_lowercase: "lizenzierte projekte",
     manage: "Verwalten",
     update_payment_method: "Zahlungsmethode aktualisieren",
+    stripe_portal_error: "Stripe konnte nicht geöffnet werden: {{message}}",
     your_firecms_cloud_projects: "Ihre FireCMS Cloud Projekte",
     status_active: "Aktiv",
     status_trialing: "Testphase",

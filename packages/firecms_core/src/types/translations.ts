@@ -531,6 +531,8 @@ export interface FireCMSTranslations {
     licensed_projects_lowercase: string;
     manage: string;
     update_payment_method: string;
+    /** Snackbar when a Stripe billing portal link can't be created. `{{message}}` is the reason. */
+    stripe_portal_error: string;
     your_firecms_cloud_projects: string;
     status_active: string;
     status_trialing: string;

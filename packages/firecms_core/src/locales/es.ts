@@ -507,6 +507,7 @@ export const es: FireCMSTranslations = {
     licensed_projects_lowercase: "proyectos licenciados",
     manage: "Administrar",
     update_payment_method: "Actualizar método de pago",
+    stripe_portal_error: "No se pudo abrir Stripe: {{message}}",
     your_firecms_cloud_projects: "Tus proyectos de FireCMS Cloud",
     status_active: "Activo",
     status_trialing: "En prueba",
