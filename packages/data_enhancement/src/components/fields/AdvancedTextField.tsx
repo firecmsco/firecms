@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useRef } from "react";
 
 import {
     cls,
@@ -41,9 +41,16 @@ export function AdvancedTextField<T extends string | number>({
 
     const [internalValue, setInternalValue] = React.useState<string>(value ? value.toString() : "");
 
-    useEffect(() => {
+    // Follow outside changes to `value` (autofill, form reset) while rendering,
+    // not in an effect. The effect re-set the same string after every keystroke,
+    // leaving an update pending after each commit; a fast burst of input events
+    // piled those up until React threw "Maximum update depth exceeded"
+    // (FIRECMS-SASS-12M).
+    const [syncedValue, setSyncedValue] = React.useState<T>(value);
+    if (value !== syncedValue) {
+        setSyncedValue(value);
         setInternalValue(value ? value.toString() : "");
-    }, [value]);
+    }
 
     const onScroll = useCallback((e: any) => {
         if (!ref.current) return;
