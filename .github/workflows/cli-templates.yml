@@ -1,0 +1,122 @@
+name: CLI and templates
+
+# What `firecms init` hands a new user: the CLI itself, and every template it scaffolds
+# checked against the packages in this commit. The scripts live in
+# packages/cli/scripts/templates; see the README there.
+
+on:
+  pull_request:
+    paths:
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/cli-templates.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/cli-templates.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: cli-templates-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  cli:
+    name: CLI tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: |
+          # --ignore-scripts, then rebuild: see publish.yml.
+          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm rebuild
+
+      - name: Build the CLI
+        run: pnpm --filter @firecms/cli run build
+
+      # Unit tests, the `firecms init` end-to-end suite (sandboxed: no login, no network,
+      # no browser) and the check of what `npm pack` would publish.
+      - name: Test the CLI
+        run: pnpm --filter @firecms/cli test
+
+  templates:
+    name: Templates against this build
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      # The Firestore emulator needs Java 21.
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm rebuild
+
+      - name: Build packages
+        run: pnpm run build
+
+      # Reads uploaded CSV and .xlsx files; the templates' import flow depends on it.
+      - name: Test data import
+        run: pnpm --filter @firecms/data_import test
+
+      # Scaffold every template from the CLI as it would be published, install it with
+      # pnpm 11 against these packages, build, check its styles, type-check, lint for
+      # deprecated APIs, and check the license key reaches the browser bundle.
+      - name: Check every template
+        run: pnpm --filter @firecms/cli run test:templates --jobs 3
+
+      - name: Install Chromium
+        run: npx --yes playwright@1.62.1 install --with-deps chromium
+
+      # Sign in to each PRO template in Chromium against the Firebase emulators: license
+      # check, PRO plugins, Firestore data, home page drag-and-drop, an .xlsx import.
+      - name: Signed-in browser check
+        run: pnpm --filter @firecms/cli run test:templates:signed-in
+
+      # A failed run keeps its logs and screenshots (and nothing else) in the temp dir.
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: template-check-logs
+          path: |
+            ${{ runner.temp }}/firecms-*/**/*.log
+            ${{ runner.temp }}/firecms-*/**/*.png
+            /tmp/firecms-*/**/*.log
+            /tmp/firecms-*/**/*.png
+          if-no-files-found: ignore

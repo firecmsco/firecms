@@ -113,6 +113,12 @@ jobs:
       - name: Build packages
         run: pnpm run build
 
+      # Nothing is published unless every template `firecms init` hands out scaffolds,
+      # installs (pnpm 11, against the packages just built), builds, type-checks and
+      # passes its license key. See packages/cli/scripts/templates.
+      - name: Check the CLI templates against this build
+        run: pnpm --filter @firecms/cli run test:templates --jobs 3
+
       - name: Determine dist-tag
         id: dist-tag
         run: |
