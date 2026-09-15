@@ -7,10 +7,12 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+const HELP_COMMANDS = ["help", "--help", "-h"];
+
 export async function entry(args) {
 
     if (args.length < 2) {
-        printHelp();
+        await printHelp();
         return;
     }
 
@@ -31,12 +33,36 @@ export async function entry(args) {
         await deployArgs(args);
     } else if (command === "version" || command === "-v" || command === "--version") {
         printVersion();
+    } else if (!command || HELP_COMMANDS.includes(command)) {
+        await printHelp();
     } else {
-        if (command)
-            console.log("Unknown command", command)
-        printHelp();
-        return;
+        console.log("%s Unknown command %s", chalk.red.bold("ERROR"), command);
+        await printHelp();
+        process.exitCode = 1;
     }
+}
+
+/**
+ * Parse a command's flags. An unknown flag, or a flag missing its value, is a usage
+ * error to print, not a stack trace.
+ */
+function parseCommandArgs<T extends arg.Spec>(spec: T, rawArgs: string[], usage: string): arg.Result<T> {
+    try {
+        return arg(spec, { argv: rawArgs.slice(3) });
+    } catch (e: any) {
+        if (typeof e?.code === "string" && e.code.startsWith("ARG_")) {
+            console.log("%s %s", chalk.red.bold("ERROR"), e.message);
+            console.log(usage);
+            process.exit(1);
+        }
+        throw e;
+    }
+}
+
+function invalidEnv(usage: string) {
+    console.log("%s Please specify a valid environment: dev or prod", chalk.red.bold("ERROR"));
+    console.log(usage);
+    process.exitCode = 1;
 }
 
 function printVersion() {
@@ -52,20 +78,15 @@ function printVersion() {
 }
 
 async function loginArgs(rawArgs) {
-    const args = arg(
-        {
-            "--env": String,
-            "--debug": Boolean
-        },
-        {
-            argv: rawArgs.slice(2),
-        }
-    );
+    const usage = "Usage: firecms login [--env=prod|dev]";
+    const args = parseCommandArgs({
+        "--env": String,
+        "--debug": Boolean
+    }, rawArgs, usage);
     const env = args["--env"] || "prod";
     const debug = args["--debug"] || false;
     if (env !== "prod" && env !== "dev") {
-        console.log("Please specify a valid environment: dev or prod");
-        console.log("firecms login --env=prod");
+        invalidEnv(usage);
         return;
     }
     await login(env, debug);
@@ -74,48 +95,39 @@ async function loginArgs(rawArgs) {
 }
 
 async function logoutArgs(rawArgs) {
-    const args = arg(
-        {
-            "--env": String,
-            "--debug": Boolean
-        },
-        {
-            argv: rawArgs.slice(2),
-        }
-    );
+    const usage = "Usage: firecms logout [--env=prod|dev]";
+    const args = parseCommandArgs({
+        "--env": String,
+        "--debug": Boolean
+    }, rawArgs, usage);
     const env = args["--env"] || "prod";
     const debug = args["--debug"] || false;
     if (env !== "prod" && env !== "dev") {
-        console.log("Please specify a valid environment: dev or prod");
-        console.log("firecms logout --env=prod");
+        invalidEnv(usage);
         return;
     }
     await logout(env, debug);
 }
 
 async function deployArgs(rawArgs) {
-    const args = arg(
-        {
-            "--project": String,
-            "--env": String,
-            "--debug": Boolean
-        },
-        {
-            argv: rawArgs.slice(2),
-        }
-    );
+    const usage = "Usage: firecms deploy --project=your-project-id [--env=prod|dev]";
+    const args = parseCommandArgs({
+        "--project": String,
+        "--env": String,
+        "--debug": Boolean
+    }, rawArgs, usage);
     const project = args["--project"];
 
     if (!project) {
-        console.log("Please specify a project:");
-        console.log("firecms deploy --project=your-project-id");
+        console.log("%s Please specify a project", chalk.red.bold("ERROR"));
+        console.log(usage);
+        process.exitCode = 1;
         return;
     }
     const env = args["--env"] || "prod";
     const debug = args["--debug"] || false;
     if (env !== "prod" && env !== "dev") {
-        console.log("Please specify a valid environment:");
-        console.log("firecms deploy --project=your-project-id --env=dev");
+        invalidEnv(usage);
         return;
     }
 
@@ -138,7 +150,7 @@ firecms ${chalk.blue.bold("<command>")} [options]
 ${chalk.green.bold("Commands")}
 ${chalk.blue.bold("login")} - Login to FireCMS
 ${chalk.blue.bold("logout")} - Sign out
-${chalk.blue.bold("init")} - Create a new CMS project
+${chalk.blue.bold("init")} - Create a new CMS project (${chalk.bold("firecms init --help")} for its options)
 ${chalk.blue.bold("deploy")} - Deploy an existing CMS project
 ${chalk.blue.bold("version")} - Show version info
 `);

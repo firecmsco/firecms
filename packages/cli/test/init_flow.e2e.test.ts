@@ -498,6 +498,85 @@ describe("firecms init — argument handling", () => {
         expect(fs.existsSync(path.join(cwd, "app", "package.json"))).toBe(false);
     }, 300_000);
 
+    it("scaffolds into an absolute path, and into a folder whose parent does not exist yet", async () => {
+        const cwd = fs.mkdtempSync(path.join(workDir, "paths-"));
+        const absolute = path.join(cwd, "elsewhere", "abs-app");
+
+        // Both used to crash with ENOENT: the folder was prefixed with "./", so an
+        // absolute one became ".//abs/path", and it was created without its parents.
+        const abs = await runCli(["init", "--pro", "--yes", "--projectId", PROJECT_ID, absolute], cwd, { loginPrompt: "absent" });
+        const nested = await runCli(["init", "--pro", "--yes", "--projectId", PROJECT_ID, "a/b/app"], cwd, { loginPrompt: "absent" });
+
+        expect([abs.code, nested.code]).toEqual([0, 0]);
+        expect(fs.existsSync(path.join(absolute, "package.json"))).toBe(true);
+        expect(fs.existsSync(path.join(cwd, "a", "b", "app", "package.json"))).toBe(true);
+    }, 300_000);
+
+    it("without a project id, keeps the placeholder and says which files need it", async () => {
+        const cwd = fs.mkdtempSync(path.join(workDir, "no-project-id-"));
+
+        const { code, output } = await runCli(["init", "--pro", "--yes", "app"], cwd, { loginPrompt: "absent" });
+
+        // It used to write the string "undefined": `"default": "undefined"` in .firebaserc
+        // and `--project undefined` in the deploy script.
+        expect(code).toBe(0);
+        const project = path.join(cwd, "app");
+        expect(filesContaining(project, "undefined").map(f => path.relative(project, f)))
+            .not.toEqual(expect.arrayContaining([".firebaserc", "firebase.json", "package.json"]));
+        expect(fs.readFileSync(path.join(project, ".firebaserc"), "utf8")).toContain(PLACEHOLDER);
+        expect(plain(output)).toContain("No Firebase project ID was given");
+        expect(plain(output)).toContain(".firebaserc");
+    }, 300_000);
+
+    it("asks a logged-out user whether to initialize git", async () => {
+        const cwd = fs.mkdtempSync(path.join(workDir, "git-prompt-"));
+
+        // The question was gated on the logged-in project list, so it never appeared.
+        const { output } = await runCli(["init", "--community", "--projectId", PROJECT_ID, "app"], cwd);
+
+        expect(plain(output)).toContain("Initialize a git repository?");
+    }, 300_000);
+
+    it("rejects an unknown environment or a flag without its value, without a stack trace", async () => {
+        const cwd = fs.mkdtempSync(path.join(workDir, "bad-args-"));
+
+        const env = await runCli(["init", "--pro", "--yes", "--env", "staging", "app"], cwd, { loginPrompt: "absent" });
+        const missing = await runCli(["init", "--pro", "--yes", "--projectId"], cwd, { loginPrompt: "absent" });
+
+        expect([env.code, missing.code]).toEqual([1, 1]);
+        expect(plain(env.output)).toContain("Please specify a valid environment");
+        expect(plain(missing.output)).toContain("option requires argument: --projectId");
+        for (const { output } of [env, missing]) {
+            expect(output).not.toMatch(/^\s+at /m);
+        }
+        expect(fs.existsSync(path.join(cwd, "app"))).toBe(false);
+    }, 300_000);
+
+});
+
+describe("firecms help and unknown commands", () => {
+
+    it.each(["--help", "-h", "help", "init --help"])(
+        "`firecms %s` prints the usage and exits 0",
+        async (command) => {
+            const cwd = fs.mkdtempSync(path.join(workDir, "help-"));
+            const { code, output } = await runCli(command.split(" "), cwd, { loginPrompt: "absent" });
+
+            expect(code).toBe(0);
+            expect(plain(output)).toContain("Usage");
+            expect(plain(output)).not.toContain("Unknown command");
+        },
+        120_000
+    );
+
+    it("an unknown command exits 1", async () => {
+        const cwd = fs.mkdtempSync(path.join(workDir, "unknown-"));
+        const { code, output } = await runCli(["bogus"], cwd, { loginPrompt: "absent" });
+
+        expect(code).toBe(1);
+        expect(plain(output)).toContain("Unknown command bogus");
+    }, 120_000);
+
 });
 
 describe("firecms init — logged out", () => {

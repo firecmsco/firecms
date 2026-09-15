@@ -123,6 +123,18 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
     await createProject(options);
 }
 
+const INIT_USAGE = `${chalk.green.bold("Usage")}
+  firecms init [folder] [options]      (or: npx create-firecms-app [folder] [options])
+
+${chalk.green.bold("Options")}
+  --pro | --community | --next-pro | --astro | --cloud
+                       The template. Asked for when not given.
+  --projectId <id>     Your Firebase project ID, written into the project's config.
+  --yes                Ask nothing. Needs a template flag; --cloud also needs
+                       --projectId and a login (firecms login).
+  --git                Initialize a git repository.
+  --help               Show this help.`;
+
 function parseArgumentsIntoOptions(rawArgs): InitOptions {
     let args;
     try {
@@ -138,17 +150,19 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
                 "--community": Boolean,
                 "--astro": Boolean,
                 "--debug": Boolean,
-                "--env": String
+                "--env": String,
+                "--help": Boolean,
+                "-h": "--help"
             },
             {
                 argv: rawArgs.slice(2)
             }
         );
     } catch (e: any) {
-        // Without this an unknown flag surfaces as an uncaught ARG_UNKNOWN_OPTION with a
-        // raw Node stack trace. `--v2` in particular used to be valid, so anyone with it
-        // in a script deserves to be told what happened.
-        if (e?.code === "ARG_UNKNOWN_OPTION") {
+        // Without this an unknown flag (or `--projectId` with no value) surfaces as an
+        // uncaught ARG_* error with a raw Node stack trace. `--v2` in particular used to be
+        // valid, so anyone with it in a script deserves to be told what happened.
+        if (typeof e?.code === "string" && e.code.startsWith("ARG_")) {
             console.log("%s %s", chalk.red.bold("ERROR"), e.message);
             if (rawArgs.includes("--v2")) {
                 console.log("");
@@ -156,15 +170,20 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
                 console.log(`Use ${chalk.cyan.bold("--pro")}, ${chalk.cyan.bold("--community")}, ${chalk.cyan.bold("--cloud")}, ${chalk.cyan.bold("--next-pro")} or ${chalk.cyan.bold("--astro")} instead.`);
             }
             console.log("");
+            console.log(INIT_USAGE);
             process.exit(1);
         }
         throw e;
     }
+    if (args["--help"]) {
+        console.log(INIT_USAGE);
+        process.exit(0);
+    }
     const env = args["--env"] || "prod";
     if (env !== "prod" && env !== "dev") {
-        console.log("Please specify a valid environment: dev or prod");
-        console.log("create-firecms-app --env=prod");
-        return;
+        console.log("%s Please specify a valid environment: dev or prod", chalk.red.bold("ERROR"));
+        console.log(INIT_USAGE);
+        process.exit(1);
     }
 
     let template: Template;
@@ -347,12 +366,13 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         default: options.dir_name ?? defaultName
     });
 
+    // Asked of everyone. It used to be gated on `answers.firebaseProjectId`, which only
+    // the logged-in project list sets, so nobody logged out was ever asked.
     if (!options.git) {
         questions.push({
             type: "confirm",
             name: "git",
             message: "Initialize a git repository?",
-            when: (answers) => Boolean(answers.firebaseProjectId),
             default: false
         });
     }
@@ -369,20 +389,21 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
 
 export async function createProject(options: InitOptions) {
 
-    const dir = "./" + options.dir_name;
-    if (fs.existsSync(dir)) {
-        if (fs.readdirSync(dir).length !== 0) {
-            console.error("%s Directory is not empty", chalk.red.bold("ERROR"));
+    // Resolved, not prefixed with "./": an absolute folder became ".//abs/path", and a
+    // folder inside a missing parent failed with ENOENT, both as stack traces.
+    const targetDirectory = path.resolve(process.cwd(), options.dir_name);
+    if (fs.existsSync(targetDirectory)) {
+        if (!fs.statSync(targetDirectory).isDirectory()) {
+            console.error("%s %s is a file, not a folder", chalk.red.bold("ERROR"), options.dir_name);
+            process.exit(1);
+        }
+        if (fs.readdirSync(targetDirectory).length !== 0) {
+            console.error("%s Directory is not empty: %s", chalk.red.bold("ERROR"), targetDirectory);
             process.exit(1);
         }
     } else {
-        fs.mkdirSync(dir);
+        fs.mkdirSync(targetDirectory, { recursive: true });
     }
-
-    const targetDirectory = path.resolve(
-        process.cwd(),
-        dir
-    );
 
     options = {
         ...options,
@@ -444,6 +465,13 @@ export async function createProject(options: InitOptions) {
     console.log("%s Your project is ready!", chalk.green.bold("DONE"));
     console.log("");
 
+    const needProjectId = options.firebaseProjectId ? [] : filesWithProjectIdPlaceholder(options);
+    if (needProjectId.length > 0) {
+        console.log(`No Firebase project ID was given. Replace ${chalk.cyan.bold(PROJECT_ID_PLACEHOLDER)} with it in:`);
+        needProjectId.forEach(file => console.log("  " + chalk.cyan.bold(file)));
+        console.log("");
+    }
+
     if (options.template === "pro" || options.template === "community") {
         console.log("Make sure you have a valid Firebase config in ");
         console.log(chalk.cyan.bold("src/firebase_config.ts"));
@@ -453,7 +481,7 @@ export async function createProject(options: InitOptions) {
         }
         console.log("");
         console.log("Run:");
-        console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
+        console.log(chalk.bgYellow.black.bold("cd " + shellQuote(options.dir_name)));
         console.log(chalk.bgYellow.black.bold("npm install"));
         console.log(chalk.bgYellow.black.bold("npm run dev"));
         console.log("");
@@ -464,13 +492,13 @@ export async function createProject(options: InitOptions) {
         console.log(`Also, make sure the user that is logging in has read/write access to the path ${chalk.cyan.bold("__FIRECMS")} in your database `);
         console.log("");
         console.log("Run:");
-        console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
+        console.log(chalk.bgYellow.black.bold("cd " + shellQuote(options.dir_name)));
         console.log(chalk.bgYellow.black.bold("npm install"));
         console.log(chalk.bgYellow.black.bold("npm run dev"));
         console.log("");
     } else if (options.template === "cloud") {
         console.log("If you want to run your project locally, run:");
-        console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
+        console.log(chalk.bgYellow.black.bold("cd " + shellQuote(options.dir_name)));
         console.log(chalk.bgYellow.black.bold("npm install"));
         console.log(chalk.bgYellow.black.bold("npm run dev"));
         console.log("");
@@ -483,7 +511,7 @@ export async function createProject(options: InitOptions) {
         console.log(chalk.cyan.bold("src/common/firebase_config.ts"));
         console.log("");
         console.log("Run:");
-        console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
+        console.log(chalk.bgYellow.black.bold("cd " + shellQuote(options.dir_name)));
         console.log(chalk.bgYellow.black.bold("npm install"));
         console.log(chalk.bgYellow.black.bold("npm run dev"));
         console.log("");
@@ -508,32 +536,42 @@ async function createWebApp(options: InitOptions) {
     }
 }
 
+const PROJECT_ID_PLACEHOLDER = "[REPLACE_WITH_PROJECT_ID]";
+
+/** The files of each template that carry the Firebase project ID placeholder. */
+const PROJECT_ID_FILES: Record<Template, string[]> = {
+    "pro": ["./src/App.tsx", "./firebase.json", "./package.json", "./.firebaserc"],
+    "community": ["./src/App.tsx", "./firebase.json", "./package.json", "./.firebaserc"],
+    "astro": ["./src/common/firebase_config.ts", "./package.json", "./.firebaserc"],
+    "cloud": ["./src/App.tsx", "./package.json"],
+    "next-pro": []
+};
+
 async function copyTemplateFiles(options: InitOptions) {
     return fsExtra.copy(options.templateDirectory, options.targetDirectory, {
         overwrite: false,
     }).then(async _ => {
         await restoreGitignore(options.targetDirectory);
-        if (options.template === "pro" || options.template === "community") {
-            return replaceProjectIdInTemplateFiles(options, [
-                "./src/App.tsx",
-                "./firebase.json",
-                "./package.json",
-                "./.firebaserc"
-            ]);
-        } else if (options.template === "astro") {
-            return replaceProjectIdInTemplateFiles(options, [
-                "./src/common/firebase_config.ts",
-                "./package.json",
-                "./.firebaserc"
-            ]);
-        } else if (options.template === "cloud") {
-
-            return replaceProjectIdInTemplateFiles(options, [
-                "./src/App.tsx",
-                "./package.json"
-            ]);
+        // Without a project ID the placeholder stays, and createProject says where: it
+        // used to be replaced with the string "undefined" (`"default": "undefined"` in
+        // .firebaserc, `--project undefined` in the deploy script).
+        if (options.firebaseProjectId) {
+            return replaceProjectIdInTemplateFiles(options, PROJECT_ID_FILES[options.template] ?? []);
         }
     });
+}
+
+/** The files, relative to the project, that still hold the project ID placeholder. */
+function filesWithProjectIdPlaceholder(options: InitOptions): string[] {
+    return (PROJECT_ID_FILES[options.template] ?? []).filter(file => {
+        const fullFileName = path.resolve(options.targetDirectory, file);
+        return fs.existsSync(fullFileName) && fs.readFileSync(fullFileName, "utf8").includes(PROJECT_ID_PLACEHOLDER);
+    }).map(file => path.normalize(file));
+}
+
+/** A folder name as it has to be typed in a shell. */
+function shellQuote(value: string): string {
+    return /^[\w./@:+-]+$/.test(value) ? value : `'${value.replace(/'/g, "'\\''")}'`;
 }
 
 // npm never packs `.gitignore` files, so a template published with one would
