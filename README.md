@@ -224,6 +224,12 @@ Trusted by engineers at **Google**, **Microsoft**, **IKEA**, and thousands of co
 
 ---
 
+## Who Builds FireCMS?
+
+Built and maintained by [Camberi](https://camberi.com?utm_source=firecms&utm_medium=referral&utm_campaign=built-by), a product engineering studio in Madrid and Munich that also builds for clients.
+
+---
+
 ## Demo
 
 Explore the live demo — you can modify data freely, it gets periodically restored:

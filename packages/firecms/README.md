@@ -104,3 +104,7 @@ Possible values are `prod` (default) and `dev`.
 ```bash
 firecms deploy --env dev
 ```
+
+## Who builds this
+
+Built and maintained by [Camberi](https://camberi.com?utm_source=firecms&utm_medium=referral&utm_campaign=built-by), a product engineering studio in Madrid and Munich that also builds for clients.

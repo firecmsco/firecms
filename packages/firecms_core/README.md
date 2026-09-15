@@ -145,6 +145,10 @@ Keep in mind you need to update the dependencies in that project if you want to
 use it as it is, without linking it to the library source code. More details in
 its README
 
+## Who builds this
+
+Built and maintained by [Camberi](https://camberi.com?utm_source=firecms&utm_medium=referral&utm_campaign=built-by), a product engineering studio in Madrid and Munich that also builds for clients.
+
 ## Contact and support
 
 If you need general support, you can open a GitHub issue.

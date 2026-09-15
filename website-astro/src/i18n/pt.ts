@@ -51,6 +51,7 @@ export const pt = {
   'footer.product': 'Produto',
   'footer.legal': 'Legal',
   'footer.family': 'Família FireCMS',
+  'footer.builtBy.html': 'Desenvolvido e mantido pela <a href="https://camberi.com?utm_source=firecms&amp;utm_medium=referral&amp;utm_campaign=built-by" target="_blank" rel="noopener noreferrer" class="hover:underline hover:text-primary-light transition-colors duration-200">Camberi</a>, um estúdio de engenharia de produto em Madrid e Munique que também trabalha para clientes.',
   'social.trusted': 'Confiado por desenvolvedores em empresas líderes',
   'social.more': 'e milhares mais',
   'usecases.title.1': 'Um Framework,',
