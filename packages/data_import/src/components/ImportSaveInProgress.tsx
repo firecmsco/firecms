@@ -76,7 +76,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
     }
 
     return (
-        <div className={"flex flex-col gap-4 items-center"}>
+        <div className={"flex flex-col gap-4 items-center my-auto"}>
             <CircularProgress/>
 
             <Typography variant={"h6"}>

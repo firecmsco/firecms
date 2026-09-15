@@ -131,14 +131,20 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
             </IconButton>
         </Tooltip>
 
+        {/* A column, so the content fills the space between the title and the actions and grows past it
+            when the mapping list is long, leaving the sticky actions at the bottom */}
         <Dialog open={open}
                 fullWidth={step !== "initial"}
                 fullHeight={step !== "initial"}
-                maxWidth={step === "initial" ? "lg" : "7xl"}>
+                maxWidth={step === "initial" ? "lg" : "7xl"}
+                className={"flex flex-col items-stretch justify-start"}>
 
-            <DialogTitle variant={"h6"} hidden={step === "preview"}>{t("import_data")}</DialogTitle>
+            {/* No gutter: flex margins don't collapse, and the content's margin already spaces it */}
+            <DialogTitle variant={"h6"}
+                         gutterBottom={false}
+                         hidden={step === "preview"}>{t("import_data")}</DialogTitle>
 
-            <DialogContent className={"h-full flex flex-col gap-4 my-4"} fullHeight={step === "preview"}>
+            <DialogContent className={"flex flex-col gap-4 my-4"} fullHeight={step === "preview"}>
 
                 {step === "initial" && <>
                     <Typography variant={"body2"}>
