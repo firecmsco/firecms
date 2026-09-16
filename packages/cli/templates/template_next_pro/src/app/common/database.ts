@@ -1,4 +1,4 @@
-import { firebaseApp, storage } from "./firebase";
+import { firebaseApp, firebaseConfigured, storage } from "./firebase";
 import {
     collection,
     doc,
@@ -25,6 +25,7 @@ export const getProducts = async ({
     minPriceFilter?: number,
     maxPriceFilter?: number,
 }): Promise<ProductWithId[]> => {
+    if (!firebaseConfigured) return [];
     console.log("Getting products", { limit, categoryFilter });
     const colRef = collection(getFirestore(firebaseApp), "products");
     const queryConstraints: QueryConstraint[] = [limitClause(limit)];
@@ -44,6 +45,7 @@ export const getProducts = async ({
 
 
 export const getProduct = async (id: string): Promise<ProductWithId | null> => {
+    if (!firebaseConfigured) return null;
     console.log("Getting product", id);
     const docRef = doc(getFirestore(firebaseApp), "products", id);
     const docSnap = await getDoc(docRef);
@@ -80,6 +82,7 @@ export const getBlogEntries = async ({
                                      }: {
     limit?: number;
 }): Promise<BlogEntryWithId[]> => {
+    if (!firebaseConfigured) return [];
     console.log("Getting blog entries", { limit });
     const colRef = collection(getFirestore(firebaseApp), "blog");
     const queryConstraints: QueryConstraint[] = [limitClause(limit)];
@@ -90,6 +93,7 @@ export const getBlogEntries = async ({
 }
 
 export const getBlogEntry = async (id: string): Promise<BlogEntryWithId | null> => {
+    if (!firebaseConfigured) return null;
     console.log("Getting blog entry", id);
     const docRef = doc(getFirestore(firebaseApp), "blog", id);
     const docSnap = await getDoc(docRef);

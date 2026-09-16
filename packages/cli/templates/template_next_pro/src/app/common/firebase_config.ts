@@ -1,10 +1,8 @@
-export const firebaseConfig = {
-    apiKey: "AIzaSyBzt-JvcXvpDrdNU7jYX3fC3v0EAHjTKEw",
-    authDomain: "demo.firecms.co",
-    databaseURL: "https://firecms-demo-27150.firebaseio.com",
-    projectId: "firecms-demo-27150",
-    storageBucket: "firecms-demo-27150.appspot.com",
-    messagingSenderId: "837544933711",
-    appId: "1:837544933711:web:75822ffc0840e3ae01ad3a",
-    measurementId: "G-8HRE8MVXZJ"
+export const firebaseConfig: Record<string, string> = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "[REPLACE_WITH_PROJECT_ID].firebaseapp.com",
+    projectId: "[REPLACE_WITH_PROJECT_ID]",
+    storageBucket: "[REPLACE_WITH_PROJECT_ID].appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
 };

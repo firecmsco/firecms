@@ -639,7 +639,7 @@ const PROJECT_ID_FILES: Record<Template, string[]> = {
     "community": ["./src/App.tsx", "./firebase.json", "./package.json", "./.firebaserc"],
     "astro": ["./src/common/firebase_config.ts", "./package.json", "./.firebaserc"],
     "cloud": ["./src/App.tsx", "./package.json"],
-    "next-pro": []
+    "next-pro": ["./src/app/common/firebase_config.ts"]
 };
 
 async function copyTemplateFiles(options: InitOptions) {

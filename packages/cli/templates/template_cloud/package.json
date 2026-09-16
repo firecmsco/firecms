@@ -18,9 +18,10 @@
     "react-dom": "^19.2.3"
   },
   "devDependencies": {
+    "@firecms/cli": "^3.0.0",
     "@originjs/vite-plugin-federation": "^1.4.1",
-    "@tailwindcss/vite": "^4.1.18",
     "@tailwindcss/typography": "^0.5.15",
+    "@tailwindcss/vite": "^4.1.18",
     "@types/react": "^19.2.3",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.3.2",

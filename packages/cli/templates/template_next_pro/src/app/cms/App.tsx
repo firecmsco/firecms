@@ -34,6 +34,7 @@ import {
 } from "@firecms/firebase";
 
 import { firebaseConfig } from "../common/firebase_config";
+import { firebaseConfigured } from "../common/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
 import { useImportPlugin } from "@firecms/data_import";
@@ -48,7 +49,7 @@ export function App() {
 
     const title = "FireCMS e-commerce and blog demo";
 
-    if (!firebaseConfig?.projectId) {
+    if (!firebaseConfigured) {
         throw new Error("Firebase config not found. Please check your `firebase_config.ts` file and make sure it is correctly set up.");
     }
 
