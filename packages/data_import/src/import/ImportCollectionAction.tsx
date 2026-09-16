@@ -134,7 +134,6 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
         {/* A column, so the content fills the space between the title and the actions and grows past it
             when the mapping list is long, leaving the sticky actions at the bottom */}
         <Dialog open={open}
-                fullWidth={step !== "initial"}
                 fullHeight={step !== "initial"}
                 maxWidth={step === "initial" ? "lg" : "7xl"}
                 className={"flex flex-col items-stretch justify-start"}>

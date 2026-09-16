@@ -15,7 +15,7 @@ export type DialogProps = {
     fullHeight?: boolean;
     fullScreen?: boolean;
     scrollable?: boolean;
-    maxWidth?: keyof typeof widthClasses;
+    maxWidth?: keyof typeof maxWidthClasses;
     modal?: boolean;
     onOpenAutoFocus?: (e: Event) => void;
     onEscapeKeyDown?: (e: KeyboardEvent) => void;
@@ -29,19 +29,37 @@ export type DialogProps = {
     "aria-describedby"?: string;
 };
 
-const widthClasses = {
-    xs: "max-w-xs w-xs",
-    sm: "max-w-sm w-sm",
-    md: "max-w-md w-md",
-    lg: "max-w-lg w-lg",
-    xl: "max-w-xl w-xl",
-    "2xl": "max-w-2xl w-2xl",
-    "3xl": "max-w-3xl w-3xl",
-    "4xl": "max-w-4xl w-4xl",
-    "5xl": "max-w-5xl w-5xl",
-    "6xl": "max-w-6xl w-6xl",
-    "7xl": "max-w-7xl w-7xl",
-    full: "max-w-full w-full"
+const maxWidthClasses = {
+    xs: "max-w-xs",
+    sm: "max-w-sm",
+    md: "max-w-md",
+    lg: "max-w-lg",
+    xl: "max-w-xl",
+    "2xl": "max-w-2xl",
+    "3xl": "max-w-3xl",
+    "4xl": "max-w-4xl",
+    "5xl": "max-w-5xl",
+    "6xl": "max-w-6xl",
+    "7xl": "max-w-7xl",
+    full: "max-w-full"
+};
+
+// Only for dialogs that are not `fullWidth`. tailwind-merge 2.x doesn't recognise the
+// Tailwind v4 container sizes (`w-xl`) as widths, so it would keep one next to `w-11/12`,
+// and the fixed width would win: the dialog then fills a narrow screen edge to edge.
+const widthClasses: Record<keyof typeof maxWidthClasses, string> = {
+    xs: "w-xs",
+    sm: "w-sm",
+    md: "w-md",
+    lg: "w-lg",
+    xl: "w-xl",
+    "2xl": "w-2xl",
+    "3xl": "w-3xl",
+    "4xl": "w-4xl",
+    "5xl": "w-5xl",
+    "6xl": "w-6xl",
+    "7xl": "w-7xl",
+    full: "w-full"
 };
 
 export const Dialog = ({
@@ -131,7 +149,8 @@ export const Dialog = ({
                                 "ease-in-out duration-200",
                                 scrollable && "overflow-y-auto",
                                 displayed && open ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]",
-                                maxWidth && !fullScreen ? widthClasses[maxWidth] : undefined,
+                                maxWidth && !fullScreen ? maxWidthClasses[maxWidth] : undefined,
+                                maxWidth && !fullWidth && !fullScreen ? widthClasses[maxWidth] : undefined,
                                 className
                             )}>
                             {children}
