@@ -406,7 +406,7 @@ export const en: FireCMSTranslations = {
     dates_as_strings: "Dates as strings",
     flatten_arrays: "Flatten arrays",
     download: "Download",
-    large_number_of_documents: "This collections has a large number of documents ({{count}}).",
+    large_number_of_documents: "This collection has a large number of documents ({{count}}).",
     include_undefined_values: "Include undefined values",
     export_apply_filter_sort: "Only export results matching the current filter/sort",
     export_all_entities: "All entities",

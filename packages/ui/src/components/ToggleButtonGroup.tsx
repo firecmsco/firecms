@@ -22,6 +22,10 @@ export type ToggleButtonGroupProps<T extends string = string> = {
      */
     options: ToggleButtonOption<T>[];
     /**
+     * Stretch to the container's width, splitting it evenly between the options
+     */
+    fullWidth?: boolean;
+    /**
      * Additional class names for the container
      */
     className?: string;
@@ -35,10 +39,11 @@ export function ToggleButtonGroup<T extends string = string>({
     value,
     onValueChange,
     options,
+    fullWidth,
     className
 }: ToggleButtonGroupProps<T>) {
     return (
-        <div role="group" aria-label="Toggle options" className={cls("inline-flex flex-row bg-surface-100 dark:bg-surface-900 rounded-lg p-1 gap-1", className)}>
+        <div role="group" aria-label="Toggle options" className={cls(fullWidth ? "flex w-full" : "inline-flex", "flex-row bg-surface-100 dark:bg-surface-900 rounded-lg p-1 gap-1", className)}>
             {options.map((option) => (
                 <button
                     key={option.value}
@@ -54,6 +59,7 @@ export function ToggleButtonGroup<T extends string = string>({
                     disabled={option.disabled}
                     className={cls(
                         "flex flex-row items-center justify-center gap-2 py-3 px-4 rounded-md transition-colors",
+                        fullWidth && "flex-1 text-center text-balance",
                         value === option.value
                             ? "bg-white dark:bg-surface-900 text-primary dark:text-primary-300 shadow-sm"
                             : "text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700",

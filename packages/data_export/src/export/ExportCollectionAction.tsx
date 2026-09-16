@@ -22,14 +22,15 @@ import {
     BooleanSwitchWithLabel,
     Button,
     CircularProgress,
-    cls,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
     DownloadIcon,
     IconButton,
-    Tooltip
+    ToggleButtonGroup,
+    Tooltip,
+    Typography
 } from "@firecms/ui";
 import { downloadEntitiesExport } from "./export";
 import { fetchSelectedEntities } from "./selected_entities";
@@ -119,6 +120,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
     const selectedEntities = selectionController?.selectedEntities ?? [];
     const exportSelected = exportScope === "selected" && selectedEntities.length > 0;
+    const showLargeCollectionWarning = !exportSelected && collectionEntitiesCount !== undefined && collectionEntitiesCount > DOCS_LIMIT;
 
     // the filter and sort currently applied in the collection view
     const filterValues = tableController?.filterValues;
@@ -130,6 +132,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
         sortBy,
         forceFilter
     }), [filterValues, sortBy, forceFilter]);
+    const showFilterToggle = !exportSelected && filterOrSortActive;
 
     const authController = useAuthController();
     const { t } = useTranslation();
@@ -310,96 +313,75 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
             <DialogTitle variant={"h6"}>{t("export_data")}</DialogTitle>
 
-            <DialogContent className={"flex flex-col gap-4 my-4"}>
+            <DialogContent className={"flex flex-col gap-6 my-4"}>
 
-                <div>{t("download_table_csv")}</div>
+                {/* first, so the reason comes before the options it makes unusable */}
+                {!canExport && notAllowedView}
 
-                {selectedEntities.length > 0 && <div className={"p-4 flex flex-col"}>
-                    <div className="flex items-center">
-                        <input id="radio-scope-all" type="radio" value="all" name="exportScope"
-                            checked={!exportSelected}
-                            onChange={() => setExportScope("all")}
-                            className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
-                        <label htmlFor="radio-scope-all"
-                            className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">{t("export_all_entities")}</label>
-                    </div>
-                    <div className="flex items-center">
-                        <input id="radio-scope-selected" type="radio" value="selected" name="exportScope"
-                            checked={exportSelected}
-                            onChange={() => setExportScope("selected")}
-                            className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
-                        <label htmlFor="radio-scope-selected"
-                            className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">{t("export_selected_entities", { count: selectedEntities.length.toString() })}</label>
-                    </div>
-                </div>}
+                {/* Which entities: only rendered when there is a choice or a caveat */}
+                {(selectedEntities.length > 0 || showFilterToggle || showLargeCollectionWarning) &&
+                    <div className={"flex flex-col gap-2"}>
+                        {selectedEntities.length > 0 && <ToggleButtonGroup
+                            fullWidth={true}
+                            value={exportSelected ? "selected" : "all"}
+                            onValueChange={setExportScope}
+                            options={[
+                                { value: "all", label: t("export_all_entities") },
+                                { value: "selected", label: t("export_selected_entities", { count: selectedEntities.length.toString() }) }
+                            ]} />}
 
-                {!exportSelected && collectionEntitiesCount !== undefined && collectionEntitiesCount > DOCS_LIMIT &&
-                    <Alert color={"warning"}>
-                        <div>
-                            {t("large_number_of_documents", { count: collectionEntitiesCount.toString() })}
-                        </div>
-                    </Alert>}
+                        {showFilterToggle && <BooleanSwitchWithLabel
+                            size={"small"}
+                            value={applyFilterAndSort}
+                            onValueChange={setApplyFilterAndSort}
+                            label={t("export_apply_filter_sort")} />}
 
-                <div className={"flex flex-row gap-4"}>
-                    <div className={"p-4 flex flex-col"}>
-                        <div className="flex items-center">
-                            <input id="radio-csv" type="radio" value="csv" name="exportType"
-                                checked={exportType === "csv"}
-                                onChange={() => setExportType("csv")}
-                                className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
-                            <label htmlFor="radio-csv"
-                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">{t("csv")}</label>
-                        </div>
-                        <div className="flex items-center">
-                            <input id="radio-json" type="radio" value="json" name="exportType"
-                                checked={exportType === "json"}
-                                onChange={() => setExportType("json")}
-                                className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
-                            <label htmlFor="radio-json"
-                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">{t("json")}</label>
-                        </div>
-                    </div>
+                        {showLargeCollectionWarning && <Alert color={"warning"} size={"small"}>
+                            {t("large_number_of_documents", { count: String(collectionEntitiesCount) })}
+                        </Alert>}
+                    </div>}
 
-                    <div className={"p-4 flex flex-col"}>
-                        <div className="flex items-center">
-                            <input id="radio-timestamp" type="radio" value="timestamp" name="dateExportType"
-                                checked={dateExportType === "timestamp"}
-                                onChange={() => setDateExportType("timestamp")}
-                                className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
-                            <label htmlFor="radio-timestamp"
-                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">{t("dates_as_timestamps")} ({dateRef.current.getTime()})</label>
-                        </div>
-                        <div className="flex items-center">
-                            <input id="radio-string" type="radio" value="string" name="dateExportType"
-                                checked={dateExportType === "string"}
-                                onChange={() => setDateExportType("string")}
-                                className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
-                            <label htmlFor="radio-string"
-                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">{t("dates_as_strings")} ({dateRef.current.toISOString()})</label>
-                        </div>
-                    </div>
+                {/* The file format, and the option that only applies to CSV */}
+                <div className={"flex flex-col gap-2"}>
+                    <ToggleButtonGroup
+                        fullWidth={true}
+                        value={exportType}
+                        onValueChange={setExportType}
+                        options={[
+                            { value: "csv", label: t("csv") },
+                            { value: "json", label: t("json") }
+                        ]} />
+
+                    {exportType === "csv" && <BooleanSwitchWithLabel
+                        size={"small"}
+                        value={flattenArrays}
+                        onValueChange={setFlattenArrays}
+                        label={t("flatten_arrays")} />}
                 </div>
 
-                {!exportSelected && filterOrSortActive && <BooleanSwitchWithLabel
-                    size={"small"}
-                    value={applyFilterAndSort}
-                    onValueChange={setApplyFilterAndSort}
-                    label={t("export_apply_filter_sort")} />}
+                {/* How values are written */}
+                <div className={"flex flex-col gap-2"}>
+                    <div className={"flex flex-col gap-1"}>
+                        <ToggleButtonGroup
+                            fullWidth={true}
+                            value={dateExportType}
+                            onValueChange={setDateExportType}
+                            options={[
+                                { value: "string", label: t("dates_as_strings") },
+                                { value: "timestamp", label: t("dates_as_timestamps") }
+                            ]} />
+                        {/* how a date will read in the file */}
+                        <Typography variant={"caption"} color={"secondary"} className={"px-1 font-mono tabular-nums"}>
+                            {dateExportType === "string" ? dateRef.current.toISOString() : dateRef.current.getTime()}
+                        </Typography>
+                    </div>
 
-                <BooleanSwitchWithLabel
-                    size={"small"}
-                    disabled={exportType !== "csv"}
-                    value={flattenArrays}
-                    onValueChange={setFlattenArrays}
-                    label={t("flatten_arrays")} />
-
-                <BooleanSwitchWithLabel
-                    size={"small"}
-                    value={includeUndefinedValues}
-                    onValueChange={setIncludeUndefinedValues}
-                    label={t("include_undefined_values")} />
-
-                {!canExport && notAllowedView}
+                    <BooleanSwitchWithLabel
+                        size={"small"}
+                        value={includeUndefinedValues}
+                        onValueChange={setIncludeUndefinedValues}
+                        label={t("include_undefined_values")} />
+                </div>
 
             </DialogContent>
 
@@ -413,6 +395,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                 </Button>
 
                 <Button onClick={onOkClicked}
+                    color={"primary"}
                     disabled={dataLoading || !canExport}>
                     {t("download")}
                 </Button>
