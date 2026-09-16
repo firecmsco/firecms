@@ -610,7 +610,7 @@ export const pt = {
   'pro.price.trial': '30 dias grátis em produção, sem cartão.',
   'pro.hero.cta.trial': 'Começar o teste grátis',
   'pro.hero.cta.docs': 'Ler a documentação',
-  'pro.features.title': 'As telas de administração que seus clientes pedem, já prontas',
+  'pro.features.title': 'As telas de administração de que todo app acaba precisando, já prontas',
   'pro.features.subtitle': 'Edição de schema, usuários e papéis, importação em massa e histórico de alterações rodam no seu próprio deploy, para que seu tempo vá para o que é específico de cada projeto.',
   'pro.features.schema.title': 'Editor visual de schema',
   'pro.features.schema.desc': 'Crie e altere coleções e campos em um editor visual. O FireCMS pode inferir um schema a partir dos dados que já estão em uma coleção, e as alterações valem sem deploy de código.',

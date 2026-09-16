@@ -708,7 +708,7 @@ export const es = {
   'pro.price.trial': '30 días gratis en producción, sin tarjeta.',
   'pro.hero.cta.trial': 'Empieza la prueba gratis',
   'pro.hero.cta.docs': 'Lee la documentación',
-  'pro.features.title': 'Las pantallas de administración que piden tus clientes, ya hechas',
+  'pro.features.title': 'Las pantallas de administración que toda app acaba necesitando, ya hechas',
   'pro.features.subtitle': 'Edición de esquemas, usuarios y roles, importación masiva e historial de cambios funcionan dentro de tu propio despliegue, para que dediques tu tiempo a lo que es propio de cada proyecto.',
   'pro.features.schema.title': 'Editor visual de esquemas',
   'pro.features.schema.desc': 'Crea y modifica colecciones y campos en un editor visual. FireCMS puede inferir un esquema a partir de los datos que ya hay en una colección, y los cambios se aplican sin desplegar código.',

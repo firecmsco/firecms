@@ -703,7 +703,7 @@ export const de = {
   'pro.price.trial': '30 Tage kostenlos in Produktion, ohne Kreditkarte.',
   'pro.hero.cta.trial': 'Kostenlos testen',
   'pro.hero.cta.docs': 'Dokumentation lesen',
-  'pro.features.title': 'Die Admin-Oberflächen, die Ihre Kunden verlangen, fertig gebaut',
+  'pro.features.title': 'Die Admin-Oberflächen, die jede App früher oder später braucht, fertig gebaut',
   'pro.features.subtitle': 'Schema-Bearbeitung, Benutzer und Rollen, Massenimport und Änderungsverlauf laufen in Ihrem eigenen Deployment. So bleibt Ihre Zeit für das, was jedes Projekt ausmacht.',
   'pro.features.schema.title': 'Visueller Schema-Editor',
   'pro.features.schema.desc': 'Erstellen und ändern Sie Kollektionen und Felder in einem visuellen Editor. FireCMS kann ein Schema aus den vorhandenen Daten einer Kollektion ableiten, und Änderungen greifen ohne Code-Deployment.',

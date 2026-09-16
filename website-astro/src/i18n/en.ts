@@ -703,7 +703,7 @@ export const en = {
   'pro.price.trial': '30 days free in production, no card.',
   'pro.hero.cta.trial': 'Start free trial',
   'pro.hero.cta.docs': 'Read the docs',
-  'pro.features.title': 'The admin screens your clients ask for, already built',
+  'pro.features.title': 'The admin screens every app ends up needing, already built',
   'pro.features.subtitle': 'Schema editing, users and roles, bulk import and change history run inside your own deployment, so your time goes to the parts that are specific to each project.',
   'pro.features.schema.title': 'Visual schema editor',
   'pro.features.schema.desc': 'Create and change collections and fields in a visual editor. FireCMS can infer a schema from the data already in a collection, and changes apply without a code deploy.',
