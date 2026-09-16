@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
 import {
-    Chip, defaultBorderMixin, Icon, IconButton, Typography, cls, useMaterialIcons
+    Chip, defaultBorderMixin, Icon, IconButton, Typography, cls
 } from "./firecms/ui";
 
 /**
@@ -129,7 +129,6 @@ export default function EntityHistoryDemo({ height = 480 }: { height?: number | 
     const { ref, inView } = useInView<HTMLDivElement>();
     const [shown, setShown] = useState(1);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-    useMaterialIcons();
 
     // Revisions arrive newest-first as the listener pages in.
     useEffect(() => {

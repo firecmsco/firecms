@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
-import { Chip, Icon, PropertyConfigBadge, Typography, useMaterialIcons } from "./firecms/ui";
+import { Chip, Icon, PropertyConfigBadge, Typography } from "./firecms/ui";
 
 /**
  * Beat 4 of the homepage showcase: "you extend it in React".
@@ -173,7 +173,6 @@ function BodyView({ view, src, selected }: { view: "front" | "back"; src: string
 
 export default function CustomFieldDemo({ height = 520 }: { height?: number | string }) {
     const { ref, inView } = useInView<HTMLDivElement>();
-    useMaterialIcons();
     const [step, setStep] = useState(0);
     const [revealed, setRevealed] = useState(STEPS[0].parts.length);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);

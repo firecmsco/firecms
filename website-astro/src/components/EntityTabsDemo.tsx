@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
 import {
-    Icon, PROPERTY_CONFIGS, TextFieldWithLabel, Typography, cls, defaultBorderMixin,
-    useMaterialIcons
+    Icon, PROPERTY_CONFIGS, TextFieldWithLabel, Typography, cls, defaultBorderMixin
 } from "./firecms/ui";
 
 /**
@@ -30,7 +29,6 @@ export default function EntityTabsDemo({ height = 520 }: { height?: number | str
     const { ref, inView } = useInView<HTMLDivElement>();
     const [tab, setTab] = useState(0);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-    useMaterialIcons();
 
     useEffect(() => {
         if (timer.current) clearTimeout(timer.current);

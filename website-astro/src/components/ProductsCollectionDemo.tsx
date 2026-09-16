@@ -1,3 +1,4 @@
+import "@material-design-icons/font/filled.css";
 import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
 
@@ -154,19 +155,6 @@ export default function ProductsCollectionDemo({ height = 700 }: { height?: numb
     const [step, setStep] = useState(0);
     const [focused, setFocused] = useState<{ row: number; col: string } | null>(null);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-    // The app renders its icons as Material Icons ligatures; load the font here
-    // so the component works wherever it is mounted.
-    useEffect(() => {
-        const HREF = "https://fonts.googleapis.com/icon?family=Material+Icons";
-        if (document.querySelector(`link[href="${HREF}"]`)) return;
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = HREF;
-        link.media = "print";
-        link.onload = () => { link.media = "all"; };
-        document.head.appendChild(link);
-    }, []);
 
     useEffect(() => {
         if (timer.current) clearTimeout(timer.current);

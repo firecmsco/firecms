@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
 import {
     CHIP_COLORS, CheckboxDisplay, Chip, Icon, IconButton, Table, TableBody, TableCell,
-    TableHeader, TableRow, Typography, useMaterialIcons
+    TableHeader, TableRow, Typography
 } from "./firecms/ui";
 
 /**
@@ -64,7 +64,6 @@ export default function RolePermissionsDemo({ height = 420 }: { height?: number 
     const { ref, inView } = useInView<HTMLDivElement>();
     const [extra, setExtra] = useState(false);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-    useMaterialIcons();
 
     useEffect(() => {
         if (timer.current) clearTimeout(timer.current);

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
 import {
     BooleanSwitch, Button, Chip, Icon, SelectDisplay, TextFieldDisplay, Typography,
-    cls, defaultBorderMixin, fieldBackgroundMixin, useMaterialIcons
+    cls, defaultBorderMixin, fieldBackgroundMixin
 } from "./firecms/ui";
 
 /**
@@ -108,7 +108,6 @@ export default function QueryFilterDemo({ height = 760 }: { height?: number | st
     const { ref, inView } = useInView<HTMLDivElement>();
     const [step, setStep] = useState(0);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-    useMaterialIcons();
 
     const beat = BEATS[step % BEATS.length];
 

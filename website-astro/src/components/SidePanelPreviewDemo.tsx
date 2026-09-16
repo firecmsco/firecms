@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
 import {
     BooleanSwitch, Chip, Icon, PROPERTY_CONFIGS, TextFieldWithLabel, cls,
-    defaultBorderMixin, useMaterialIcons
+    defaultBorderMixin
 } from "./firecms/ui";
 
 /**
@@ -41,7 +41,6 @@ export default function SidePanelPreviewDemo({ height = 470 }: { height?: number
     const [typed, setTyped] = useState(TITLES[0]);
     const [phase, setPhase] = useState<"settled" | "clearing" | "typing">("settled");
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-    useMaterialIcons();
 
     useEffect(() => {
         if (timer.current) clearTimeout(timer.current);

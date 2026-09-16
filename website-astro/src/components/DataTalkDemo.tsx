@@ -1,3 +1,4 @@
+import "@material-design-icons/font/filled.css";
 import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { CodeBlock } from "./CodeBlock";

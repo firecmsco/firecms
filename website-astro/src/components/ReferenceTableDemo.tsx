@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
 import {
-    Chip, Icon, cls, defaultBorderMixin, useMaterialIcons
+    Chip, Icon, cls, defaultBorderMixin
 } from "./firecms/ui";
 
 /**
@@ -92,7 +92,6 @@ export default function ReferenceTableDemo({ height = 560 }: { height?: number |
     const { ref, inView } = useInView<HTMLDivElement>();
     const [pulse, setPulse] = useState(0);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-    useMaterialIcons();
 
     useEffect(() => {
         if (timer.current) clearTimeout(timer.current);

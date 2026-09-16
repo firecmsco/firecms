@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
-import { Icon, useMaterialIcons } from "./firecms/ui";
+import { Icon } from "./firecms/ui";
 
 /**
  * Beat 2 of the homepage showcase: "or let an agent set it up".
@@ -78,7 +78,6 @@ const CHECK = (
 
 export default function McpSessionDemo({ height = 520 }: { height?: number | string }) {
     const { ref, inView } = useInView<HTMLDivElement>();
-    useMaterialIcons();
     const [step, setStep] = useState(0);
     const [subStep, setSubStep] = useState(0);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);

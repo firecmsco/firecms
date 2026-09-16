@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
-import { Icon, Typography, cls, defaultBorderMixin, useMaterialIcons } from "./firecms/ui";
+import { Icon, Typography, cls, defaultBorderMixin } from "./firecms/ui";
 
 /**
  * The Firestore explorer — FireCMS's raw data view.
@@ -73,7 +73,6 @@ export default function FirestoreAdminDemo({ height = 700 }: { height?: number |
     const { ref, inView } = useInView<HTMLDivElement>();
     const [docIndex, setDocIndex] = useState(0);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-    useMaterialIcons();
 
     useEffect(() => {
         if (timer.current) clearTimeout(timer.current);

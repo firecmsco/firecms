@@ -1,4 +1,9 @@
 import React from "react";
+// The icons below are Material Icons ligatures: without the font they render as
+// words ("short_text", "delete"). Import the self-hosted font here rather than
+// fetching Google's copy after hydration or counting on another package to pull
+// it into the page.
+import "@material-design-icons/font/filled.css";
 
 /**
  * FireCMS UI primitives, transcribed from the real product.
@@ -52,20 +57,6 @@ export function Icon({
             {icon}
         </span>
     );
-}
-
-/** Load Material Icons once, non-blocking. The app bundles the font; here it is fetched. */
-export function useMaterialIcons() {
-    React.useEffect(() => {
-        const HREF = "https://fonts.googleapis.com/icon?family=Material+Icons";
-        if (document.querySelector(`link[href="${HREF}"]`)) return;
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = HREF;
-        link.media = "print";
-        link.onload = () => { link.media = "all"; };
-        document.head.appendChild(link);
-    }, []);
 }
 
 /* ------------------------------------------------------------ Typography */

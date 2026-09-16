@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "./useInView";
 import {
     Icon, IconButton, PropertyConfigBadge, SelectDisplay, Table, TableBody, TableCell,
-    TableHeader, TableRow, TextFieldDisplay, Typography, cls, useMaterialIcons,
+    TableHeader, TableRow, TextFieldDisplay, Typography, cls,
     type PropertyConfigKey
 } from "./firecms/ui";
 
@@ -42,7 +42,6 @@ export default function ImportMappingDemo({ height = 800 }: { height?: number | 
     const { ref, inView } = useInView<HTMLDivElement>();
     const [mapped, setMapped] = useState(0);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-    useMaterialIcons();
 
     useEffect(() => {
         if (timer.current) clearTimeout(timer.current);
