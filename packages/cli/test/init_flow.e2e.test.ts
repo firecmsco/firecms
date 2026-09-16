@@ -758,26 +758,32 @@ describe("firecms login", () => {
         const sandbox = makeSandbox();
         const child = spawn(process.execPath, [BIN, "login"], { cwd, env: sandbox.env, stdio: ["pipe", "pipe", "pipe"] });
         let output = "";
-        const printedUrl = new Promise<void>(resolve => {
+        // The last of the three lines it prints before waiting, so the whole message is out.
+        const waiting = new Promise<void>(resolve => {
             const onData = (chunk: Buffer) => {
                 output += chunk;
-                if (output.includes("http://localhost:3000")) resolve();
+                if (output.includes("Waiting for the sign-in")) resolve();
             };
             child.stdout.on("data", onData);
             child.stderr.on("data", onData);
         });
 
+        let timer: NodeJS.Timeout | undefined;
         try {
             await Promise.race([
-                printedUrl,
-                new Promise((_resolve, reject) => setTimeout(
-                    () => reject(new Error("the sign-in URL was never printed; output was:\n" + output)), 30_000))
+                waiting,
+                new Promise((_resolve, reject) => {
+                    timer = setTimeout(
+                        () => reject(new Error("login never said it was waiting; output was:\n" + output)), 30_000);
+                })
             ]);
         } finally {
+            if (timer) clearTimeout(timer);
             child.kill("SIGKILL");
+            await new Promise<void>(resolve => child.once("close", () => resolve()));
         }
 
-        expect(plain(output)).toContain("Waiting for the sign-in");
+        expect(plain(output)).toContain("http://localhost:3000");
         expect(fs.existsSync(path.join(sandbox.home, ".firecms"))).toBe(false);
     }, 60_000);
 

@@ -11,6 +11,7 @@ import axios from "axios";
 import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import { getCurrentUser, getTokens, login, refreshCredentials } from "./auth";
 import { authCommand, describeRequestError } from "../util/request_error";
+import { isFirebaseProjectId, pinnedFireCMSVersion } from "../util/scaffold";
 import ora from "ora";
 
 import fsExtra from "fs-extra";
@@ -127,18 +128,6 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
     await createProject(options);
 }
 
-/**
- * A Firebase project ID: 6 to 30 characters, lower case letters, digits and hyphens,
- * starting with a letter and not ending in a hyphen. Older projects can be scoped to a
- * domain (`example.com:my-project`), which the backend still accepts.
- */
-export function isFirebaseProjectId(value: string): boolean {
-    const id = value.includes(":") ? value.slice(value.lastIndexOf(":") + 1) : value;
-    const domain = value.includes(":") ? value.slice(0, value.lastIndexOf(":")) : "";
-    if (domain && !/^[a-z0-9.-]+$/.test(domain)) return false;
-    return /^[a-z][a-z0-9-]{4,28}[a-z0-9]$/.test(id);
-}
-
 const INIT_USAGE = `${chalk.green.bold("Usage")}
   firecms init [folder] [options]      (or: npx create-firecms-app [folder] [options])
 
@@ -168,7 +157,9 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
                 "--debug": Boolean,
                 "--env": String,
                 "--help": Boolean,
-                "-h": "--help"
+                "-h": "--help",
+                "--version": Boolean,
+                "-v": "--version"
             },
             {
                 argv: rawArgs.slice(2)
@@ -195,6 +186,11 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
         console.log(INIT_USAGE);
         process.exit(0);
     }
+    // `create-firecms-app --version` has no other way to ask.
+    if (args["--version"]) {
+        console.log(cliVersion() ?? "unknown");
+        process.exit(0);
+    }
     const env = args["--env"] || "prod";
     if (env !== "prod" && env !== "dev") {
         console.log("%s Please specify a valid environment: dev or prod", chalk.red.bold("ERROR"));
@@ -202,17 +198,24 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
         process.exit(1);
     }
 
-    let template: Template;
-    if (args["--cloud"]) {
-        template = "cloud";
-    } else if (args["--next-pro"]) {
-        template = "next-pro";
-    } else if (args["--pro"]) {
-        template = "pro";
-    } else if (args["--community"]) {
-        template = "community";
-    } else if (args["--astro"]) {
-        template = "astro";
+    // One template, or none: they used to be resolved by priority, so `--pro --community`
+    // silently scaffolded pro.
+    const chosen: [string, Template][] = ([
+        ["--cloud", "cloud"],
+        ["--next-pro", "next-pro"],
+        ["--pro", "pro"],
+        ["--community", "community"],
+        ["--astro", "astro"]
+    ] as [string, Template][]).filter(([flag]) => args[flag]);
+    if (chosen.length > 1) {
+        console.log("%s Pick one template, not %s", chalk.red.bold("ERROR"), chosen.map(([flag]) => flag).join(" and "));
+        console.log(INIT_USAGE);
+        process.exit(1);
+    }
+    const template: Template | undefined = chosen[0]?.[1];
+
+    if (args._.length > 1) {
+        console.log("%s Ignoring extra arguments: %s", chalk.yellow.bold("WARNING"), args._.slice(1).join(" "));
     }
 
     const firebaseProjectId = args["--projectId"]?.trim();
@@ -647,6 +650,10 @@ async function copyTemplateFiles(options: InitOptions) {
         overwrite: false,
     }).then(async _ => {
         await restoreGitignore(options.targetDirectory);
+        const pinned = pinnedFireCMSVersion(cliVersion());
+        if (pinned) {
+            await pinFireCMSVersions(options.targetDirectory, pinned);
+        }
         // Without a project ID the placeholder stays, and createProject says where: it
         // used to be replaced with the string "undefined" (`"default": "undefined"` in
         // .firebaserc, `--project undefined` in the deploy script).
@@ -674,6 +681,27 @@ function packageManagerCommands(): { install: string, run: (script: string) => s
     if (agent.startsWith("yarn")) return { install: "yarn", run: (s) => `yarn ${s}` };
     if (agent.startsWith("bun")) return { install: "bun install", run: (s) => `bun run ${s}` };
     return { install: "npm install", run: (s) => `npm run ${s}` };
+}
+
+/** This CLI's own version, from the package it was installed as. */
+export function cliVersion(): string | undefined {
+    try {
+        return JSON.parse(fs.readFileSync(path.resolve(targetDirPath, "package.json"), "utf8")).version;
+    } catch {
+        return undefined;
+    }
+}
+
+/** Point every `@firecms/*` dependency of the new project at `version`. */
+async function pinFireCMSVersions(targetDirectory: string, version: string) {
+    const file = path.resolve(targetDirectory, "package.json");
+    const pkg = JSON.parse(await fs.promises.readFile(file, "utf8"));
+    for (const field of ["dependencies", "devDependencies"]) {
+        for (const dep of Object.keys(pkg[field] ?? {})) {
+            if (dep === "firecms" || dep.startsWith("@firecms/")) pkg[field][dep] = version;
+        }
+    }
+    await fs.promises.writeFile(file, JSON.stringify(pkg, null, 2) + "\n", "utf8");
 }
 
 /** A folder name as it has to be typed in a shell. */
