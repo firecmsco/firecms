@@ -12,7 +12,7 @@ o [agenda una llamada](https://calendar.google.com/calendar/u/0/appointments/sch
 
 ## Precio
 
-FireCMS PRO cuesta **€99 al mes por el primer proyecto** y **€49 al mes por cada proyecto adicional** en la misma licencia.
+FireCMS PRO cuesta **€99 al mes por el primer proyecto** y **€49 al mes por cada proyecto adicional** en la misma licencia, más IVA.
 
 | | Mensual | Anual |
 |---|---|---|

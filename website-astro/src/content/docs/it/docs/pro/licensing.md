@@ -12,7 +12,7 @@ o [prenota una chiamata](https://calendar.google.com/calendar/u/0/appointments/s
 
 ## Prezzo
 
-FireCMS PRO costa **€99 al mese per il primo progetto** e **€49 al mese per ogni progetto aggiuntivo** sulla stessa licenza.
+FireCMS PRO costa **€99 al mese per il primo progetto** e **€49 al mese per ogni progetto aggiuntivo** sulla stessa licenza, più IVA.
 
 | | Mensile | Annuale |
 |---|---|---|
