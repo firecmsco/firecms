@@ -411,6 +411,7 @@ export const es: FireCMSTranslations = {
     export_apply_filter_sort: "Exportar solo los resultados que coinciden con el filtro/orden actual",
     export_all_entities: "Todas las entidades",
     export_selected_entities: "Entidades seleccionadas ({{count}})",
+    export_error: "No se pudieron exportar los datos: {{message}}",
     submit: "Enviar",
 
     no_filterable_properties: "No hay propiedades filtrables disponibles",

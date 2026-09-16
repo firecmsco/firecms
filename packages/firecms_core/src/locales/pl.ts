@@ -403,6 +403,7 @@ export const pl: FireCMSTranslations = {
     export_apply_filter_sort: "Eksportuj tylko wyniki zgodne z aktualnym filtrem/sortowaniem",
     export_all_entities: "Wszystkie encje",
     export_selected_entities: "Zaznaczone encje ({{count}})",
+    export_error: "Nie udało się wyeksportować danych: {{message}}",
     submit: "Wyślij",
 
     no_filterable_properties: "Brak dostępnych właściwości do filtrowania",

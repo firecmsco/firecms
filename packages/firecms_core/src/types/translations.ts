@@ -449,6 +449,8 @@ export interface FireCMSTranslations {
     export_all_entities: string;
     /** Same choice; `{{count}}` is the number of selected entities */
     export_selected_entities: string;
+    /** Shown in the export dialog when the export fails; `{{message}}` is the error's message */
+    export_error: string;
     submit: string;
 
     no_filterable_properties: string;

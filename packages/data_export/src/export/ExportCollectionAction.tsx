@@ -21,13 +21,13 @@ import {
     Alert,
     BooleanSwitchWithLabel,
     Button,
-    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
     DownloadIcon,
     IconButton,
+    LoadingButton,
     ToggleButtonGroup,
     Tooltip,
     Typography
@@ -164,13 +164,20 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
     const [open, setOpen] = React.useState(false);
 
+    // Incremented by every export and every close: an export that is no longer the latest
+    // (the dialog was closed while it ran) neither downloads its file nor reports its error.
+    const exportRunRef = React.useRef(0);
+
     const handleClickOpen = useCallback(() => {
         // rows selected before opening are the likelier intent, so they are the default
         setExportScope(selectedEntities.length > 0 ? "selected" : "all");
+        setDataLoadingError(undefined);
         setOpen(true);
     }, [setOpen, selectedEntities.length]);
 
     const handleClose = useCallback(() => {
+        exportRunRef.current++;
+        setDataLoading(false);
         setOpen(false);
     }, [setOpen]);
 
@@ -210,88 +217,99 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
         return [...resolvedExportColumnsValues, ...resolvedColumnsValues];
     }, [exportConfig?.additionalFields]);
 
+    /**
+     * Fetch the data and download the file.
+     * Resolves to whether the file was downloaded; a failure is kept in `dataLoadingError`.
+     */
     const doDownload = useCallback(async (collection: ResolvedEntityCollection<M>,
-        exportConfig: ExportConfig<any> | undefined) => {
+        exportConfig: ExportConfig<any> | undefined): Promise<boolean> => {
 
         onAnalyticsEvent?.("export_collection", {
             collection: collection.path,
             scope: exportSelected ? "selected" : "all"
         });
+        const run = ++exportRunRef.current;
+        setDataLoadingError(undefined);
         setDataLoading(true);
 
-        const {
-            filter,
-            orderBy,
-            order
-        } = resolveExportFilterAndSort<M>({
-            applyFilterAndSort: filterOrSortActive && applyFilterAndSort,
-            filterValues,
-            sortBy,
-            forceFilter
-        });
-
-        const dataPromise = exportSelected
-            ? fetchSelectedEntities<M>({
-                dataSource,
-                selectedEntities,
-                tableData: tableController?.data,
-                collection,
-                path,
-                pathSegments
-            })
-            : dataSource.fetchCollection<M>({
-                path,
-                pathSegments,
-                collection,
+        try {
+            const {
                 filter,
                 orderBy,
                 order
+            } = resolveExportFilterAndSort<M>({
+                applyFilterAndSort: filterOrSortActive && applyFilterAndSort,
+                filterValues,
+                sortBy,
+                forceFilter
             });
 
-        dataPromise
-            .then(async (data) => {
-                setDataLoadingError(undefined);
-                const additionalData = await fetchAdditionalFields(data);
-                const additionalHeaders = [
-                    ...exportConfig?.additionalFields?.map(column => column.key) ?? [],
-                    ...collection.additionalFields?.map(field => field.key) ?? []
-                ];
+            const data = exportSelected
+                ? await fetchSelectedEntities<M>({
+                    dataSource,
+                    selectedEntities,
+                    tableData: tableController?.data,
+                    collection,
+                    path,
+                    pathSegments
+                })
+                : await dataSource.fetchCollection<M>({
+                    path,
+                    pathSegments,
+                    collection,
+                    filter,
+                    orderBy,
+                    order
+                });
 
-                const dataWithDefaults = includeUndefinedValues
-                    ? data.map(entity => {
-                        const defaultValues = getDefaultValuesFor(collection.properties);
-                        return {
-                            ...entity,
-                            values: { ...defaultValues, ...entity.values }
-                        };
-                    })
-                    : data;
-                downloadEntitiesExport({
-                    data: dataWithDefaults,
-                    additionalData,
-                    properties: collection.properties,
-                    propertiesOrder: collection.propertiesOrder,
-                    name: collection.name,
-                    flattenArrays,
-                    additionalHeaders,
-                    exportType,
-                    dateExportType
-                });
-                onAnalyticsEvent?.("export_collection_success", {
-                    collection: collection.path
-                });
-            })
-            .catch((e) => {
-                console.error("Error loading export data", e);
-                setDataLoadingError(e);
-            })
-            .finally(() => setDataLoading(false));
+            const additionalData = await fetchAdditionalFields(data);
+            if (run !== exportRunRef.current) return false;
+
+            const additionalHeaders = [
+                ...exportConfig?.additionalFields?.map(column => column.key) ?? [],
+                ...collection.additionalFields?.map(field => field.key) ?? []
+            ];
+
+            const dataWithDefaults = includeUndefinedValues
+                ? data.map(entity => {
+                    const defaultValues = getDefaultValuesFor(collection.properties);
+                    return {
+                        ...entity,
+                        values: { ...defaultValues, ...entity.values }
+                    };
+                })
+                : data;
+            downloadEntitiesExport({
+                data: dataWithDefaults,
+                additionalData,
+                properties: collection.properties,
+                propertiesOrder: collection.propertiesOrder,
+                name: collection.name,
+                flattenArrays,
+                additionalHeaders,
+                exportType,
+                dateExportType
+            });
+            onAnalyticsEvent?.("export_collection_success", {
+                collection: collection.path
+            });
+            return true;
+        } catch (e) {
+            console.error("Error loading export data", e);
+            if (run === exportRunRef.current)
+                setDataLoadingError(e instanceof Error ? e : new Error(String(e)));
+            return false;
+        } finally {
+            if (run === exportRunRef.current)
+                setDataLoading(false);
+        }
 
     }, [onAnalyticsEvent, dataSource, path, pathSegments, fetchAdditionalFields, includeUndefinedValues, flattenArrays, exportType, dateExportType, filterOrSortActive, applyFilterAndSort, filterValues, sortBy, forceFilter, exportSelected, selectedEntities, tableController?.data]);
 
-    const onOkClicked = useCallback(() => {
-        doDownload(collection, exportConfig);
-        handleClose();
+    const onOkClicked = useCallback(async () => {
+        // the dialog stays open while the export runs, and after a failure to show it
+        if (await doDownload(collection, exportConfig))
+            handleClose();
     }, [doDownload, collection, exportConfig, handleClose]);
 
     return <>
@@ -308,7 +326,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
         <Dialog
             open={open}
-            onOpenChange={setOpen}
+            onOpenChange={(open) => open ? setOpen(true) : handleClose()}
             maxWidth={"xl"}>
 
             <DialogTitle variant={"h6"}>{t("export_data")}</DialogTitle>
@@ -383,22 +401,26 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                         label={t("include_undefined_values")} />
                 </div>
 
+                {/* last, next to the Download button that produced it */}
+                {dataLoadingError && <Alert color={"error"}>
+                    {t("export_error", { message: dataLoadingError.message })}
+                </Alert>}
+
             </DialogContent>
 
             <DialogActions>
-
-                {dataLoading && <CircularProgress size={"smallest"} />}
 
                 <Button onClick={handleClose}
                     variant={"text"}>
                     {t("cancel")}
                 </Button>
 
-                <Button onClick={onOkClicked}
+                <LoadingButton onClick={onOkClicked}
                     color={"primary"}
-                    disabled={dataLoading || !canExport}>
+                    loading={dataLoading}
+                    disabled={!canExport}>
                     {t("download")}
-                </Button>
+                </LoadingButton>
 
             </DialogActions>
 

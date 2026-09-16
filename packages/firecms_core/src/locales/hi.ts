@@ -403,6 +403,7 @@ export const hi: FireCMSTranslations = {
     export_apply_filter_sort: "केवल वर्तमान फ़िल्टर/सॉर्ट से मेल खाने वाले परिणाम निर्यात करें",
     export_all_entities: "सभी इकाइयाँ",
     export_selected_entities: "चयनित इकाइयाँ ({{count}})",
+    export_error: "डेटा निर्यात नहीं किया जा सका: {{message}}",
     submit: "सबमिट करें",
 
     no_filterable_properties: "कोई फ़िल्टर करने योग्य गुण उपलब्ध नहीं हैं",
