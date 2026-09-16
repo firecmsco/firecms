@@ -75,7 +75,10 @@ export const productsCollection = buildCollection<Product>({
             dataType: "number",
             name: "Price",
             validation: {
-                required: true,
+                // Only while it is available: the price is cleared and the field disabled
+                // for an unavailable product below, so an always-required price could never
+                // be satisfied and such a product could not be saved at all.
+                required: values.available,
                 requiredMessage: "You must set a price between 0 and 10000",
                 min: 0,
                 max: 10000

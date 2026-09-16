@@ -281,7 +281,12 @@ export function resolveCollectionPathIds(path: string, allCollections: EntityCol
                 col,
                 match: col.id
             }])
-            .filter(p => p.match && remainingPath.startsWith(p.match))
+            // A match has to end where a path segment ends. Matching any prefix made
+            // "products-test" resolve to the "products" collection with an entity called
+            // "-test" (FirebaseError: Invalid document reference), and any collection whose
+            // path merely starts with another's — "products_archive", which the collection
+            // editor generates from "Products archive" — resolve to the wrong one.
+            .filter(p => p.match && (remainingPath === p.match || remainingPath.startsWith(p.match + "/")))
             .sort((a, b) => b.match.length - a.match.length);
 
         if (potentialMatches.length > 0) {

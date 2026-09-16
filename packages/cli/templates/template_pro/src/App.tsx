@@ -39,6 +39,7 @@ import {
 } from "@firecms/user_management";
 import { useImportPlugin } from "@firecms/data_import";
 import { useExportPlugin } from "@firecms/data_export";
+import { useEntityHistoryPlugin } from "@firecms/entity_history";
 import { ExampleCMSView } from "./views/ExampleCMSView";
 import { buildCollectionInference, useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
@@ -103,7 +104,11 @@ export function App() {
      * Delegate used for fetching and saving data in Firestore
      */
     const firestoreDelegate = useFirestoreDelegate({
-        firebaseApp
+        firebaseApp,
+        // The products collection sets `textSearchEnabled`, and without a search controller
+        // (Algolia, Typesense…) or this flag the search box is permanently disabled. Local
+        // search filters the rows already loaded, which is enough for a small collection.
+        localTextSearchEnabled: true
     })
 
     /**
@@ -172,6 +177,14 @@ export function App() {
     const importPlugin = useImportPlugin();
     const exportPlugin = useExportPlugin();
 
+    // Keeps a version of every saved entity, with who saved it, under a History tab.
+    // @firecms/entity_history is a dependency of this template and PRO pauses "history"
+    // when a licence lapses, but nothing mounted it, so the tab never appeared.
+    const entityHistoryPlugin = useEntityHistoryPlugin({
+        defaultEnabled: true,
+        getUser: userManagementController.getUser
+    });
+
     const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController,
         collectionInference: buildCollectionInference(firebaseApp),
@@ -186,6 +199,7 @@ export function App() {
         importPlugin,
         exportPlugin,
         userManagementPlugin,
+        entityHistoryPlugin,
         collectionEditorPlugin
     ];
 
