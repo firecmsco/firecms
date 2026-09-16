@@ -122,7 +122,7 @@ export const fr = {
   'pricing.community.cta': 'Voir la doc',
 
   'pricing.cloud.badge': 'Cloud',
-  'pricing.cloud.title': 'Cloud Plus',
+  'pricing.cloud.title': 'Cloud',
   'pricing.cloud.trial': 'Essai gratuit d\'1 mois, puis',
   'pricing.cloud.period': '/utilisateur/mois',
   'pricing.cloud.desc': 'Solution SaaS entièrement gérée pour la vitesse et la commodité.',
@@ -176,7 +176,7 @@ export const fr = {
   'pricing.faq.q2.a1': '**Community** est le framework principal gratuit et open-source (sous licence MIT). Il inclut toutes les fonctionnalités CMS essentielles, des capacités de personnalisation complètes via le code (React) et le support communautaire.',
   'pricing.faq.q2.a2': '**PRO** est une licence payante pour FireCMS auto-hébergé. Elle ajoute l\'éditeur de schéma visuel, l\'import/export, l\'interface de gestion des utilisateurs et des rôles, l\'historique des entités et un support prioritaire. Elle coûte €99 ($119) par mois pour le premier projet Firebase et €49 ($59) par mois pour chaque projet supplémentaire sur la même licence, avec un nombre illimité d\'utilisateurs. Chaque projet compte de la même façon, que vous l\'utilisiez pour le développement, la préproduction ou la production. PRO est gratuit pendant 30 jours en production, sans carte bancaire.',
   'pricing.faq.q3.q': 'La version Cloud est-elle gratuite ?',
-  'pricing.faq.q3.a': 'FireCMS Cloud propose un **essai gratuit d\'1 mois** pour le plan Plus. Après l\'essai, c\'est un abonnement payant par utilisateur et par mois. La version **Self-Hosted Community** est entièrement gratuite (sous licence MIT).',
+  'pricing.faq.q3.a': 'FireCMS Cloud propose un **essai gratuit d\'1 mois**. Après l\'essai, c\'est un abonnement payant par utilisateur et par mois. La version **Self-Hosted Community** est entièrement gratuite (sous licence MIT).',
   'pricing.faq.q4.q': 'Puis-je migrer entre Cloud et Auto-hébergé ?',
   'pricing.faq.q4.a': 'Oui. Vos configurations de schéma de base sont compatibles. La migration de Cloud vers Auto-hébergé implique de configurer le framework FireCMS dans votre environnement et de le pointer vers votre base de données existante. La migration d\'Auto-hébergé vers Cloud nécessite généralement de s\'assurer que votre configuration est compatible avec l\'environnement Cloud (notamment en ce qui concerne le code personnalisé).',
 
@@ -466,7 +466,7 @@ export const fr = {
   'compare.table.header.feature': "Fonctionnalité",
   'compare.table.header.community': "Community <span class=\"block text-xs font-normal text-surface-400\">(Self-Hosted)</span>",
   'compare.table.header.pro': "PRO <span class=\"block text-xs font-normal text-surface-400\">(Self-Hosted)</span>",
-  'compare.table.header.cloud': "Cloud Plus <span class=\"block text-xs font-normal text-surface-400\">(Managed)</span>",
+  'compare.table.header.cloud': "Cloud <span class=\"block text-xs font-normal text-surface-400\">(Managed)</span>",
 
   'compare.table.features.1': "Déploiement auto-hébergé",
   'compare.table.features.2': "Service Cloud géré",

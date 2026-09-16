@@ -122,7 +122,7 @@ export const es = {
   'pricing.community.cta': 'Ver Documentación',
 
   'pricing.cloud.badge': 'Cloud',
-  'pricing.cloud.title': 'Cloud Plus',
+  'pricing.cloud.title': 'Cloud',
   'pricing.cloud.trial': 'Prueba de 1 mes gratis, luego',
   'pricing.cloud.period': '/usuario/mes',
   'pricing.cloud.desc': 'Solución SaaS gestionada para velocidad y conveniencia.',
@@ -471,7 +471,7 @@ export const es = {
   'compare.table.header.feature': "Característica",
   'compare.table.header.community': "Community <span class=\"block text-xs font-normal text-surface-400\">(Autoalojado)</span>",
   'compare.table.header.pro': "PRO <span class=\"block text-xs font-normal text-surface-400\">(Autoalojado)</span>",
-  'compare.table.header.cloud': "Cloud Plus <span class=\"block text-xs font-normal text-surface-400\">(Gestionado)</span>",
+  'compare.table.header.cloud': "Cloud <span class=\"block text-xs font-normal text-surface-400\">(Gestionado)</span>",
 
   'compare.table.features.1': "Despliegue Autoalojado",
   'compare.table.features.2': "Servicio Cloud Gestionado",

@@ -134,7 +134,7 @@ const proFeatures = [
                         </div>
                     </div>
 
-                    {/* Column 2: Cloud Plus (Trial -> Paid) */}
+                    {/* Column 2: Cloud (Trial -> Paid) */}
                     <div class="relative flex flex-col rounded-2xl bg-surface-900/50 p-8 ring-2 ring-inset ring-primary"> {/* Highlighted */}
                         <div class="absolute top-0 right-0 m-4 rounded-full bg-primary/20 px-3 py-1 text-xs font-semibold text-primary">
                             {t('pricing.cloud.badge')}
@@ -213,13 +213,15 @@ const proFeatures = [
                                 {t('pricing.cloud.f8')}
                             </li>
                         </ul>
-                        <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer"
-                           aria-describedby="tier-plus"
-                            class="mt-8 block rounded-md bg-primary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-primary transition-colors duration-200 btn-glow flex-grow flex flex-col justify-end"
-                            data-track
-                            id="pricing-cloud-trial"> {/* Use flex-grow and justify-end */}
-                            {t('pricing.cloud.cta')}
-                        </a>
+                        <div class="mt-8 flex-grow flex flex-col justify-end">
+                            <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer"
+                               aria-describedby="tier-plus"
+                               class="block rounded-md bg-primary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-primary transition-colors duration-200 btn-glow"
+                               data-track
+                               id="pricing-cloud-trial">
+                                {t('pricing.cloud.cta')}
+                            </a>
+                        </div>
                     </div>
 
                     {/* Column 3: PRO (Self-Hosted PAID) */}
@@ -252,12 +254,14 @@ const proFeatures = [
                                 </li>
                             ))}
                         </ul>
-                        <a href={tp("/pro")} aria-describedby="tier-pro"
-                           data-track
-                           id="pricing-pro-license"
-                           class="mt-8 block rounded-md bg-white/10 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline-white transition-colors duration-200 flex-grow flex flex-col justify-end"> {/* Use flex-grow and justify-end */}
-                            {t('pricing.pro.cta')}
-                        </a>
+                        <div class="mt-8 flex-grow flex flex-col justify-end">
+                            <a href={tp("/pro")} aria-describedby="tier-pro"
+                               data-track
+                               id="pricing-pro-license"
+                               class="block rounded-md bg-white/10 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline-white transition-colors duration-200">
+                                {t('pricing.pro.cta')}
+                            </a>
+                        </div>
                     </div>
 
                 </div>

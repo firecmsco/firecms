@@ -106,7 +106,7 @@ export const en = {
   'pricing.community.cta': 'View Docs',
 
   'pricing.cloud.badge': 'Cloud',
-  'pricing.cloud.title': 'Cloud Plus',
+  'pricing.cloud.title': 'Cloud',
   'pricing.cloud.trial': 'Free 1-Month Trial, then',
   'pricing.cloud.period': '/user/month',
   'pricing.cloud.desc': 'Fully managed SaaS solution for speed and convenience.',
@@ -160,7 +160,7 @@ export const en = {
   'pricing.faq.q2.a1': '**Community** is the free, open-source core framework (MIT licensed). It includes all essential CMS features, full customization capabilities via code (React), and community support.',
   'pricing.faq.q2.a2': '**PRO** is a paid license for self-hosted FireCMS. It adds the visual schema editor, import/export, the user and role management UI, entity history and priority support. It costs €99 ($119) / month for the first Firebase project and €49 ($59) / month for each additional project on the same license, with unlimited seats. Every project counts the same, whether you use it for development, staging or production. PRO is free for 30 days in production, no card needed.',
   'pricing.faq.q3.q': 'Is the Cloud version free?',
-  'pricing.faq.q3.a': 'FireCMS Cloud offers a **1-month free trial** for the Plus plan. After the trial, it\'s a paid subscription per user per month. The **Self-Hosted Community** version is completely free (MIT licensed).',
+  'pricing.faq.q3.a': 'FireCMS Cloud offers a **1-month free trial**. After the trial, it\'s a paid subscription per user per month. The **Self-Hosted Community** version is completely free (MIT licensed).',
   'pricing.faq.q4.q': 'Can I migrate between Cloud and Self-Hosted?',
   'pricing.faq.q4.a': 'Yes. Your core schema configurations are compatible. Migrating from Cloud to Self-Hosted involves setting up the FireCMS framework in your environment and pointing it to your existing database. Migrating from Self-Hosted to Cloud generally requires ensuring your configuration is compatible with the Cloud environment (especially regarding custom code).',
 
@@ -467,7 +467,7 @@ export const en = {
   'compare.table.header.feature': "Feature",
   'compare.table.header.community': "Community <span class=\"block text-xs font-normal text-surface-400\">(Self-Hosted)</span>",
   'compare.table.header.pro': "PRO <span class=\"block text-xs font-normal text-surface-400\">(Self-Hosted)</span>",
-  'compare.table.header.cloud': "Cloud Plus <span class=\"block text-xs font-normal text-surface-400\">(Managed)</span>",
+  'compare.table.header.cloud': "Cloud <span class=\"block text-xs font-normal text-surface-400\">(Managed)</span>",
 
   'compare.table.features.1': "Self-hosted deployment",
   'compare.table.features.2': "Managed Cloud service",

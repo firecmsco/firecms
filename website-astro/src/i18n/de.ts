@@ -122,7 +122,7 @@ export const de = {
   'pricing.community.cta': 'Dokumentation ansehen',
 
   'pricing.cloud.badge': 'Cloud',
-  'pricing.cloud.title': 'Cloud Plus',
+  'pricing.cloud.title': 'Cloud',
   'pricing.cloud.trial': '1 Monat kostenlos testen, dann',
   'pricing.cloud.period': '/Benutzer/Monat',
   'pricing.cloud.desc': 'Vollständig verwaltete SaaS-Lösung für Geschwindigkeit und Komfort.',
@@ -176,7 +176,7 @@ export const de = {
   'pricing.faq.q2.a1': '**Community** ist das kostenlose, quelloffene Kern-Framework (MIT-lizenziert). Es enthält alle wesentlichen CMS-Funktionen, vollständige Anpassungsmöglichkeiten über Code (React) und Community-Support.',
   'pricing.faq.q2.a2': '**PRO** ist eine kostenpflichtige Lizenz für selbst gehostetes FireCMS. Sie bietet den visuellen Schema-Editor, Import/Export, die Oberfläche für Benutzer- und Rollenverwaltung, den Entitätsverlauf und Priority-Support. Sie kostet €99 ($119) pro Monat für das erste Firebase-Projekt und €49 ($59) pro Monat für jedes weitere Projekt auf derselben Lizenz, mit unbegrenzt vielen Nutzern. Jedes Projekt zählt gleich, egal ob Sie es für Entwicklung, Staging oder Produktion nutzen. PRO ist 30 Tage lang in Produktion kostenlos, ohne Kreditkarte.',
   'pricing.faq.q3.q': 'Ist die Cloud-Version kostenlos?',
-  'pricing.faq.q3.a': 'FireCMS Cloud bietet eine **1-monatige kostenlose Testphase** für den Plus-Plan. Nach der Testphase ist es ein kostenpflichtiges Abonnement pro Benutzer und Monat. Die **Self-Hosted Community**-Version ist vollständig kostenlos (MIT-lizenziert).',
+  'pricing.faq.q3.a': 'FireCMS Cloud bietet eine **1-monatige kostenlose Testphase**. Nach der Testphase ist es ein kostenpflichtiges Abonnement pro Benutzer und Monat. Die **Self-Hosted Community**-Version ist vollständig kostenlos (MIT-lizenziert).',
   'pricing.faq.q4.q': 'Kann ich zwischen Cloud und Self-Hosted migrieren?',
   'pricing.faq.q4.a': 'Ja. Ihre Kern-Schema-Konfigurationen sind kompatibel. Die Migration von Cloud zu Self-Hosted erfordert die Einrichtung des FireCMS-Frameworks in Ihrer Umgebung.',
 
@@ -473,7 +473,7 @@ export const de = {
   'compare.table.header.feature': "Funktion",
   'compare.table.header.community': "Community <span class=\"block text-xs font-normal text-surface-400\">(Self-Hosted)</span>",
   'compare.table.header.pro': "PRO <span class=\"block text-xs font-normal text-surface-400\">(Self-Hosted)</span>",
-  'compare.table.header.cloud': "Cloud Plus <span class=\"block text-xs font-normal text-surface-400\">(Verwaltet)</span>",
+  'compare.table.header.cloud': "Cloud <span class=\"block text-xs font-normal text-surface-400\">(Verwaltet)</span>",
 
   'compare.table.features.1': "Self-Hosted-Deployment",
   'compare.table.features.2': "Verwalteter Cloud-Service",

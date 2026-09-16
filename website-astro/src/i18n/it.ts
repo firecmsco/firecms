@@ -122,7 +122,7 @@ export const it = {
   'pricing.community.cta': 'Vedi la Documentazione',
 
   'pricing.cloud.badge': 'Cloud',
-  'pricing.cloud.title': 'Cloud Plus',
+  'pricing.cloud.title': 'Cloud',
   'pricing.cloud.trial': '1 mese di prova gratis, poi',
   'pricing.cloud.period': '/utente/mese',
   'pricing.cloud.desc': 'Soluzione SaaS completamente gestita per velocità e comodità.',
@@ -176,7 +176,7 @@ export const it = {
   'pricing.faq.q2.a1': '**Community** è il framework core gratuito e open-source (licenza MIT). Include tutte le funzionalità CMS essenziali, piena personalizzazione tramite codice (React) e supporto community.',
   'pricing.faq.q2.a2': '**PRO** è una licenza a pagamento per FireCMS self-hosted. Aggiunge l\'editor visuale dello schema, import/export, la UI per la gestione di utenti e ruoli, la cronologia delle entità e il supporto prioritario. Costa €99 ($119) al mese per il primo progetto Firebase e €49 ($59) al mese per ogni progetto aggiuntivo sulla stessa licenza, con utenti illimitati. Ogni progetto conta allo stesso modo, che tu lo usi per sviluppo, staging o produzione. PRO è gratuito per 30 giorni in produzione, senza carta.',
   'pricing.faq.q3.q': 'La versione Cloud è gratuita?',
-  'pricing.faq.q3.a': 'FireCMS Cloud offre **1 mese di prova gratuita** per il piano Plus. Dopo la prova è un abbonamento mensile a pagamento per utente. La versione **Community Self-Hosted** è completamente gratuita (licenza MIT).',
+  'pricing.faq.q3.a': 'FireCMS Cloud offre **1 mese di prova gratuita**. Dopo la prova è un abbonamento mensile a pagamento per utente. La versione **Community Self-Hosted** è completamente gratuita (licenza MIT).',
   'pricing.faq.q4.q': 'Posso migrare tra Cloud e Self-Hosted?',
   'pricing.faq.q4.a': 'Sì. Le configurazioni dello schema core sono compatibili. La migrazione da Cloud a Self-Hosted richiede la configurazione del framework FireCMS nel tuo ambiente.',
 
@@ -461,7 +461,7 @@ export const it = {
   'compare.table.header.feature': "Funzionalità",
   'compare.table.header.community': "Community <span class=\"block text-xs font-normal text-surface-400\">(Self-Hosted)</span>",
   'compare.table.header.pro': "PRO <span class=\"block text-xs font-normal text-surface-400\">(Self-Hosted)</span>",
-  'compare.table.header.cloud': "Cloud Plus <span class=\"block text-xs font-normal text-surface-400\">(Gestito)</span>",
+  'compare.table.header.cloud': "Cloud <span class=\"block text-xs font-normal text-surface-400\">(Gestito)</span>",
 
   'compare.table.features.1': "Deployment Self-Hosted",
   'compare.table.features.2': "Servizio Cloud gestito",
