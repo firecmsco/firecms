@@ -70,7 +70,7 @@ const SIGNED_IN = {
     pro: {
         firebaseConfig: "src/firebase_config.ts",
         appPath: "/",
-        pluginKeys: ["collection_editor", "user_management", "data_enhancement", "import", "export"],
+        pluginKeys: ["collection_editor", "user_management", "data_enhancement", "import", "export", "entity_history"],
         dragAndDrop: true,
         prepare(project, wrapper) {
             fs.writeFileSync(path.join(project, "vite.e2e.config.ts"), `import { mergeConfig } from "vite";
