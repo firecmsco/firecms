@@ -6,6 +6,16 @@ import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
 import { useFireCMSBackend, useProjectConfig } from "../hooks";
 import { RootCollectionInfo } from "../api/projects";
 import { useNavigate } from "react-router";
+import { createConcurrencyLimit } from "../utils/concurrency_limit";
+
+/**
+ * Chips set up at most this many collections at once; later clicks wait their
+ * turn. Each setup lists the project's root collections and asks the model to
+ * describe the collection. On 2026-08-23 a user clicked 30 chips in 30 seconds:
+ * the listings used up the project's Firestore admin quota (60 operations a
+ * minute), every request spent about a minute retrying, and three failed.
+ */
+const runChipSetup = createConcurrencyLimit(3);
 
 export function RootCollectionSuggestions({
     introMode,
@@ -51,10 +61,10 @@ export function RootCollectionSuggestions({
         });
 
         try {
-            const collections = await fireCMSBackend.projectsApi.setupCollections(
+            const collections = await runChipSetup(() => fireCMSBackend.projectsApi.setupCollections(
                 projectConfig.projectId,
                 [{ path: info.path, databaseId: info.databaseId }]
-            );
+            ));
             if (collections && collections.length > 0) {
                 const collectionPath = navigationController.buildUrlCollectionPath(info.path);
                 snackbarController.open({
