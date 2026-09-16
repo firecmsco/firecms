@@ -692,7 +692,7 @@ export const fr = {
   'seo.pro.title': 'FireCMS PRO — CMS Firebase Auto-hébergé',
   'seo.pro.description': 'FireCMS PRO auto-hébergé : éditeur de schéma visuel, rôles utilisateurs, import/export et historique des entités. €99/mois pour le premier projet, €49 par projet supplémentaire. 30 jours gratuits.',
   'pro.hero.badge': 'Pour les agences et les équipes produit',
-  'pro.hero.title': 'Une licence pour tous vos projets clients',
+  'pro.hero.title': 'Tous vos projets sur une seule licence',
   'pro.hero.subtitle': 'Dev, staging et prod inclus : chaque environnement est un projet de plus sur la même licence. PRO ajoute un éditeur de schéma visuel, la gestion des utilisateurs et des rôles, l\'import/export et l\'historique des entités au FireCMS que vous hébergez.',
   'pro.price.line': '{first} / mois pour votre premier projet, {additional} pour chaque projet supplémentaire',
   'pro.price.seats': 'Utilisateurs illimités.',

@@ -603,7 +603,7 @@ export const pt = {
   'seo.pro.title': 'FireCMS PRO — CMS Firebase Self-Hosted',
   'seo.pro.description': 'FireCMS PRO self-hosted: editor visual de schema, papéis de usuário, importação/exportação e histórico de entidades. €99/mês pelo primeiro projeto, €49 por adicional. 30 dias grátis.',
   'pro.hero.badge': 'Para agências e times de produto',
-  'pro.hero.title': 'Uma licença para cada projeto de cliente',
+  'pro.hero.title': 'Todos os seus projetos em uma única licença',
   'pro.hero.subtitle': 'Dev, staging e prod incluídos: cada ambiente é mais um projeto na mesma licença. O PRO adiciona um editor visual de schema, gestão de usuários e papéis, importação/exportação e histórico de entidades ao FireCMS que você hospeda.',
   'pro.price.line': '{first} / mês pelo seu primeiro projeto, {additional} por cada adicional',
   'pro.price.seats': 'Usuários ilimitados.',
