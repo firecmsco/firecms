@@ -41,7 +41,7 @@ Si un projet n'a pas de licence valide à la fin de son essai, ou quand sa licen
 
 L'application elle-même continue de fonctionner. La connexion, vos données, les collections définies dans le code et les collections enregistrées avec l'éditeur de schéma continuent de se charger et restent modifiables. La gestion des utilisateurs continue de gérer la connexion et les rôles, mais ses écrans Utilisateurs et Rôles affichent un avis indiquant qu'ils sont en pause. Une bannière dans l'application renvoie vers la page où obtenir une licence. Dès que le projet est sur une licence active, les fonctionnalités en pause reviennent au prochain chargement de l'application.
 
-Rien n'est jamais bloqué parce qu'une licence a plus de projets liés qu'elle n'en paie. L'application affiche un avis vous invitant à mettre à jour la licence.
+Une licence couvre autant de projets en production qu'elle en paie. Si davantage de ses projets tournent en production, ceux qui ont été mis en ligne en premier gardent PRO, et PRO est mis en pause sur les autres, comme décrit ci-dessus, jusqu'à ce que la licence les paie. Le développement local ne compte jamais.
 
 ## Plugins qui nécessitent une licence
 

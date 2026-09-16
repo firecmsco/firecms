@@ -41,7 +41,7 @@ Se alla fine della prova un progetto non ha una licenza valida, o quando la sua 
 
 L'app continua a funzionare. L'accesso, i tuoi dati, le collezioni definite nel codice e quelle salvate con l'editor dello schema continuano a caricarsi e si possono modificare. La gestione utenti continua a occuparsi di accesso e ruoli, ma le sue schermate Utenti e Ruoli mostrano un avviso che sono in pausa. Un banner nell'app porta alla pagina dove ottenere una licenza. Appena il progetto è su una licenza attiva, le funzioni in pausa tornano al successivo caricamento dell'app.
 
-Non viene mai bloccato nulla perché una licenza ha più progetti collegati di quelli che paga. L'app mostra un avviso che invita ad aggiornare la licenza.
+Una licenza copre tanti progetti in produzione quanti ne paga. Se più progetti della licenza sono in produzione, quelli andati online per primi mantengono PRO e sugli altri PRO viene messo in pausa, come descritto sopra, finché la licenza non li paga. Lo sviluppo in locale non conta mai.
 
 ## Plugin che richiedono una licenza
 

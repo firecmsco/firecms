@@ -3489,7 +3489,7 @@ If a project has no valid license when its trial ends, or when its license lapse
 
 The app itself keeps working. Sign-in, your data, collections defined in code and collections saved with the schema editor all keep loading and can still be edited. User management keeps handling sign-in and roles, but its Users and Roles screens show a notice that they are paused. A banner in the app links to the page where you can get a license. Once the project is on an active license, the paused features come back the next time the app loads.
 
-Nothing is ever blocked because a license has more projects linked than it pays for. The app shows a notice asking you to update the license.
+A license covers as many projects in production as it pays for. If more of its projects run in production, the ones that went live first keep PRO, and PRO pauses on the others, as above, until the license pays for them. Local development never counts.
 
 ### Plugins that need a license
 

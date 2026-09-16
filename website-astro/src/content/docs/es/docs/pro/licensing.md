@@ -41,7 +41,7 @@ Si un proyecto no tiene una licencia válida cuando termina su prueba, o cuando 
 
 La app sigue funcionando. El inicio de sesión, tus datos, las colecciones definidas en código y las colecciones guardadas con el editor de esquemas se siguen cargando y se pueden editar. La gestión de usuarios sigue encargándose del inicio de sesión y los roles, pero sus pantallas de Usuarios y Roles muestran un aviso de que están en pausa. Un banner en la app enlaza a la página donde puedes conseguir una licencia. En cuanto el proyecto está en una licencia activa, las funciones pausadas vuelven la próxima vez que se carga la app.
 
-Nunca se bloquea nada porque una licencia tenga más proyectos vinculados de los que paga. La app muestra un aviso para que actualices la licencia.
+Una licencia cubre tantos proyectos en producción como paga. Si más de sus proyectos se ejecutan en producción, los que se publicaron primero conservan PRO y en los demás PRO se pausa, como se describe arriba, hasta que la licencia los pague. El desarrollo local nunca cuenta.
 
 ## Plugins que necesitan licencia
 

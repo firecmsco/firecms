@@ -41,7 +41,7 @@ Hat ein Projekt am Ende der Testphase keine gültige Lizenz, oder läuft seine L
 
 Die App selbst funktioniert weiter. Anmeldung, Ihre Daten, im Code definierte Kollektionen und mit dem Schema-Editor gespeicherte Kollektionen werden weiterhin geladen und lassen sich bearbeiten. Die Benutzerverwaltung übernimmt weiterhin Anmeldung und Rollen, aber ihre Bildschirme für Benutzer und Rollen zeigen einen Hinweis, dass sie pausiert sind. Ein Banner in der App verlinkt auf die Seite, auf der Sie eine Lizenz erhalten. Sobald das Projekt auf einer aktiven Lizenz ist, sind die pausierten Funktionen beim nächsten Laden der App wieder da.
 
-Es wird nie etwas blockiert, weil mit einer Lizenz mehr Projekte verknüpft sind, als sie bezahlt. Die App zeigt dann einen Hinweis, die Lizenz zu aktualisieren.
+Eine Lizenz deckt so viele Projekte in Produktion ab, wie sie bezahlt. Laufen mehr ihrer Projekte in Produktion, behalten die zuerst live gegangenen PRO, und bei den übrigen wird PRO wie oben beschrieben pausiert, bis die Lizenz sie bezahlt. Lokale Entwicklung zählt nie mit.
 
 ## Plugins, die eine Lizenz benötigen
 

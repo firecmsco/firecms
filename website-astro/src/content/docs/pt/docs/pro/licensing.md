@@ -41,7 +41,7 @@ Se um projeto não tiver uma licença válida quando o teste terminar, ou quando
 
 O app continua funcionando. O login, seus dados, as coleções definidas no código e as coleções salvas com o editor de schema continuam carregando e podem ser editadas. A gestão de usuários continua cuidando do login e dos papéis, mas as telas de Usuários e Papéis mostram um aviso de que estão pausadas. Um banner no app leva à página onde você obtém uma licença. Assim que o projeto estiver em uma licença ativa, os recursos pausados voltam na próxima vez que o app carregar.
 
-Nada é bloqueado porque uma licença tem mais projetos vinculados do que paga. O app mostra um aviso pedindo que você atualize a licença.
+Uma licença cobre tantos projetos em produção quanto paga. Se mais projetos dela rodarem em produção, os que entraram no ar primeiro mantêm o PRO e, nos demais, o PRO fica em pausa, como descrito acima, até que a licença pague por eles. O desenvolvimento local nunca conta.
 
 ## Plugins que precisam de licença
 
