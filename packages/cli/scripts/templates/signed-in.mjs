@@ -344,6 +344,15 @@ async function seed(ports) {
     const check = async (res, what) => {
         if (!res.ok) throw new Error(`${what}: HTTP ${res.status} ${await res.text()}`);
     };
+    // A dead emulator surfaces here as undici's bare "TypeError: fetch failed", which says
+    // nothing about what happened. It does exit under us: another process on the machine
+    // sending SIGTERM to the emulator (a parallel run cleaning up) leaves code 143 in
+    // emulators/emulators.log.
+    const reachable = await fetch(`http://127.0.0.1:${ports.hub}/emulators`).then(res => res.ok).catch(() => false);
+    if (!reachable) {
+        throw new Error(`The emulators are not answering on the hub port ${ports.hub}: they may have exited.`
+            + " See emulators/emulators.log in the run directory (a 143 there means something killed them).");
+    }
     await check(await fetch(`http://127.0.0.1:${ports.firestore}/emulator/v1/projects/${PROJECT_ID}/databases/(default)/documents`, { method: "DELETE" }), "clearing Firestore");
     await check(await fetch(`http://127.0.0.1:${ports.auth}/emulator/v1/projects/${PROJECT_ID}/accounts`, { method: "DELETE" }), "clearing Auth");
     await check(await fetch(`http://127.0.0.1:${ports.auth}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=demo-api-key`, {
