@@ -236,67 +236,89 @@ export function useBuildProjectConfig({
         }
 
         const firestore = getFirestore(backendFirebaseApp);
-        return onSnapshot(doc(firestore, projectPath),
-            {
-                next: (snapshot) => {
-                    console.debug("Project config snapshot:", {
-                        data: snapshot.data()
-                    });
-                    setClientProjectName(snapshot.get("name"));
-                    const plan = snapshot.get("subscription_plan") ?? "free";
-                    setSubscriptionPlan(plan);
-                    setSubscriptionData(snapshot.get("subscription_data"));
-                    setSubscriptionSource(snapshot.get("subscription_source"));
-                    setLocalTextSearchEnabled(snapshot.get("local_text_search_enabled") ?? false);
-                    setTypesenseSearchConfig(snapshot.get("typesense_search_config"));
-                    setHistoryDefaultEnabled(snapshot.get("history_default_enabled") ?? false);
-                    const trialTimestamp = snapshot.get("trial_valid_until");
-                    if (trialTimestamp) {
-                        setTrialValidUntil(trialTimestamp.toDate());
-                    }
 
-                    setPrimaryColor(snapshot.get("primary_color") ?? DEFAULT_PRIMARY_COLOR);
-                    setSecondaryColor(snapshot.get("secondary_color") ?? DEFAULT_SECONDARY_COLOR);
+        // Firestore ends a listener for good once it is denied, and a project that
+        // is still being created denies reads: its members are written at the end
+        // of provisioning. Without listening again, the new-project flow never sees
+        // the service account or Firebase config arrive and waits forever.
+        let unsubscribe: (() => void) | undefined;
+        let retryTimeout: ReturnType<typeof setTimeout> | undefined;
+        let deniedAttempts = 0;
 
-                    const currentCustomizationRevision = snapshot.get("current_app_config_revision");
-                    setCustomizationRevision(currentCustomizationRevision);
-                    setCreationType(snapshot.get("creation_type"));
-                    setBlocked(snapshot.get("blocked"));
-                    setDefaultLocale(snapshot.get("default_locale"));
+        const subscribe = () => {
+            unsubscribe = onSnapshot(doc(firestore, projectPath),
+                {
+                    next: (snapshot) => {
+                        deniedAttempts = 0;
+                        console.debug("Project config snapshot:", {
+                            data: snapshot.data()
+                        });
+                        setClientProjectName(snapshot.get("name"));
+                        const plan = snapshot.get("subscription_plan") ?? "free";
+                        setSubscriptionPlan(plan);
+                        setSubscriptionData(snapshot.get("subscription_data"));
+                        setSubscriptionSource(snapshot.get("subscription_source"));
+                        setLocalTextSearchEnabled(snapshot.get("local_text_search_enabled") ?? false);
+                        setTypesenseSearchConfig(snapshot.get("typesense_search_config"));
+                        setHistoryDefaultEnabled(snapshot.get("history_default_enabled") ?? false);
+                        const trialTimestamp = snapshot.get("trial_valid_until");
+                        if (trialTimestamp) {
+                            setTrialValidUntil(trialTimestamp.toDate());
+                        }
 
-                    const updatedSerializedAppCheck = snapshot.get("app_check");
-                    if (updatedSerializedAppCheck) {
-                        const appCheckOptions = updatedSerializedAppCheck ? deserializeAppCheckOptions(updatedSerializedAppCheck) : undefined;
-                        setAppCheck(appCheckOptions);
-                        setSerializedAppCheck(updatedSerializedAppCheck);
-                    }
+                        setPrimaryColor(snapshot.get("primary_color") ?? DEFAULT_PRIMARY_COLOR);
+                        setSecondaryColor(snapshot.get("secondary_color") ?? DEFAULT_SECONDARY_COLOR);
 
-                    const firebaseConfig = snapshot.get("firebase_config");
+                        const currentCustomizationRevision = snapshot.get("current_app_config_revision");
+                        setCustomizationRevision(currentCustomizationRevision);
+                        setCreationType(snapshot.get("creation_type"));
+                        setBlocked(snapshot.get("blocked"));
+                        setDefaultLocale(snapshot.get("default_locale"));
 
-                    loadedProjectIdRef.current = projectId;
-                    if (firebaseConfig === "loading") {
-                        setClientConfigLoading(true);
-                        setClientFirebaseConfig(undefined);
-                        setClientFirebaseMissing(false);
-                    } else if (typeof firebaseConfig === "object") {
-                        setClientFirebaseConfig(firebaseConfig);
+                        const updatedSerializedAppCheck = snapshot.get("app_check");
+                        if (updatedSerializedAppCheck) {
+                            const appCheckOptions = updatedSerializedAppCheck ? deserializeAppCheckOptions(updatedSerializedAppCheck) : undefined;
+                            setAppCheck(appCheckOptions);
+                            setSerializedAppCheck(updatedSerializedAppCheck);
+                        }
+
+                        const firebaseConfig = snapshot.get("firebase_config");
+
+                        loadedProjectIdRef.current = projectId;
+                        if (firebaseConfig === "loading") {
+                            setClientConfigLoading(true);
+                            setClientFirebaseConfig(undefined);
+                            setClientFirebaseMissing(false);
+                        } else if (typeof firebaseConfig === "object") {
+                            setClientFirebaseConfig(firebaseConfig);
+                            setClientConfigLoading(false);
+                            setClientFirebaseMissing(false);
+                        } else if (firebaseConfig === undefined) {
+                            setClientConfigLoading(false);
+                            setClientFirebaseMissing(true);
+                        }
+                        setClientConfigError(undefined);
+
+                        setServiceAccountMissing(!snapshot.get("service_account"));
+                    },
+                    error: (e) => {
+                        console.error(e);
+                        setClientConfigError(e);
                         setClientConfigLoading(false);
-                        setClientFirebaseMissing(false);
-                    } else if (firebaseConfig === undefined) {
-                        setClientConfigLoading(false);
-                        setClientFirebaseMissing(true);
+                        if (e.code === "permission-denied") {
+                            const delay = Math.min(1000 * 2 ** deniedAttempts, 10000);
+                            deniedAttempts++;
+                            retryTimeout = setTimeout(subscribe, delay);
+                        }
                     }
-                    setClientConfigError(undefined);
+                });
+        };
+        subscribe();
 
-                    setServiceAccountMissing(!snapshot.get("service_account"));
-                },
-                error: (e) => {
-                    console.error(e);
-                    setClientConfigError(e);
-                    setClientConfigLoading(false);
-                }
-            }
-        );
+        return () => {
+            clearTimeout(retryTimeout);
+            unsubscribe?.();
+        };
     }, [backendFirebaseApp, projectId]);
 
     const updatePrimaryColor = useCallback(async (color?: string): Promise<void> => {
