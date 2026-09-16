@@ -18,7 +18,7 @@ export function getPriceString(price: ProductPrice) {
     if (isGraduatedProPrice(price)) {
         // Tiered, so `unit_amount` is null: the amounts are in the tiers.
         const { first, additional, interval } = describeGraduatedPrice(price);
-        return formatAmount(first, price.currency) + " first project, " + formatAmount(additional, price.currency) + " each additional /" + interval;
+        return formatAmount(first, price.currency) + " first project, " + formatAmount(additional, price.currency) + " each additional /" + interval + " + VAT";
     }
     if (price.billing_scheme === "tiered") {
         const firstFlatPrice = price.tiers?.find(p => p.flat_amount);
