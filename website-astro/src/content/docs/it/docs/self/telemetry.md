@@ -5,7 +5,7 @@ sidebar_label: Telemetria
 description: L'unica richiesta che un'app FireCMS self-hosted invia a FireCMS, cosa contiene, cosa conserviamo e perché, e come disattivarla in Community.
 ---
 
-Un'app FireCMS self-hosted legge e scrive i tuoi dati direttamente dal browser, con l'SDK di Firebase o di MongoDB. A FireCMS invia una sola richiesta: il registro degli accessi, che è anche la verifica della licenza PRO. Questa pagina elenca esattamente cosa contiene quella richiesta e cosa conserviamo.
+Un'app FireCMS self-hosted legge e scrive i tuoi dati dal browser, tramite l'SDK di Firebase o il tuo backend. A FireCMS invia una sola richiesta: il registro degli accessi, che è anche la verifica della licenza PRO. Questa pagina elenca esattamente cosa contiene quella richiesta e cosa conserviamo.
 
 ## Quando viene inviata
 
@@ -21,7 +21,7 @@ Una volta per utente autenticato ogni volta che l'app si carica: quando un utent
   - `datasource`: la chiave della sorgente dati in uso, per esempio `firestore`
   - `plugins`: le chiavi dei plugin che hai configurato, per esempio `["collection_editor", "user_management"]`
 
-La richiesta non contiene credenziali del database, né documenti o altri contenuti di Firestore o Atlas, né schemi delle collezioni.
+La richiesta non contiene credenziali del database, né documenti o altri contenuti di Firestore, né schemi delle collezioni.
 
 ## Cosa conserviamo
 

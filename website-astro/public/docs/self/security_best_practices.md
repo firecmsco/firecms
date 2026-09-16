@@ -2,7 +2,7 @@
 
 FireCMS is a **frontend-only React application**. It has no built-in server component that enforces security. This means that **all security must be implemented and enforced on your backend**. FireCMS client-side permissions (the `permissions` callback on collections) control the UI/UX — they hide buttons and disable forms — but they can be bypassed by any user with access to browser developer tools.
 
-This guide covers everything you need to know to secure your self-hosted FireCMS deployment when using **MongoDB**, **custom authentication**, and **custom file storage** — without Firebase.
+This guide covers everything you need to know to secure your self-hosted FireCMS deployment when using **your own database**, **custom authentication**, and **custom file storage** — without Firebase.
 
 :::caution[Golden Rule]
 **Never trust the client.** Every operation that reads, writes, or deletes data must be validated and authorized on your server. Client-side checks are for user experience only.
@@ -23,13 +23,13 @@ A secure self-hosted FireCMS deployment has the following architecture:
                         ┌──────────────────────┤
                         │                      │
                  ┌──────▼──────┐       ┌───────▼──────┐
-                 │   MongoDB   │       │ File Storage │
-                 │  (Database) │       │  (S3/Minio)  │
+                 │    Your     │       │ File Storage │
+                 │  Database   │       │  (S3/Minio)  │
                  └─────────────┘       └──────────────┘
 ```
 
 Key points:
-- The browser **never** talks directly to MongoDB or your storage backend.
+- The browser **never** talks directly to your database or your storage backend.
 - Your API server is the single entry point that authenticates every request, authorizes the action, validates inputs, and then interacts with the database and storage.
 
 ---
@@ -152,7 +152,7 @@ const myAuthenticator: Authenticator<CustomUser> = async ({
   if (!user?.email) return false;
 
   try {
-    // Fetch the user profile from your backend (not MongoDB directly!)
+    // Fetch the user profile from your backend (not the database directly!)
     const users = await dataSourceDelegate.fetchCollection({
       path: "cms_users",
       filter: { email: ["==", user.email] }
@@ -176,18 +176,18 @@ This callback runs on the client. **Your API server must still independently ver
 
 ---
 
-## 2. Securing Your DataSourceDelegate (MongoDB)
+## 2. Securing Your DataSourceDelegate
 
-The `DataSourceDelegate` is the interface FireCMS uses to read and write data. When backed by MongoDB, your implementation should **proxy every call through your authenticated API server**.
+The `DataSourceDelegate` is the interface FireCMS uses to read and write data. When backed by your own database, your implementation should **proxy every call through your authenticated API server**.
 
-### Never Expose MongoDB to the Browser
+### Never Expose Your Database to the Browser
 
-This is the most critical rule. Do not use the MongoDB driver, Realm SDK, or any direct database connection in the browser.
+This is the most critical rule. Do not use a database driver, a connection string, or any direct database connection in the browser.
 
 ```typescript
-// ❌ DANGEROUS — direct MongoDB access from the browser
+// ❌ DANGEROUS — database credentials shipped to the browser
 
-const client = new MongoClient("mongodb+srv://user:password@cluster...");
+const client = createClient("user:password@your-database-host...");
 
 // ✅ CORRECT — proxy through your authenticated API
 const response = await fetch("/api/data/products", {
@@ -199,7 +199,7 @@ const response = await fetch("/api/data/products", {
 
 ```typescript
 
-export function useSecureMongoDelegate(
+export function useSecureApiDelegate(
   getAuthToken: () => Promise<string>
 ): DataSourceDelegate {
 
@@ -223,7 +223,7 @@ export function useSecureMongoDelegate(
   }
 
   return {
-    key: "secure-mongo",
+    key: "secure-api",
     initialised: true,
 
     async fetchCollection<M extends Record<string, any>>({
@@ -336,42 +336,49 @@ app.delete("/api/data/:path/:id", authenticate, authorize("admin"), async (req, 
 });
 ```
 
-#### Input Validation & NoSQL Injection Prevention
+#### Input Validation & Query Injection Prevention
 
-MongoDB is vulnerable to NoSQL injection when user input is passed directly to query operators.
+Passing client input straight into a database query lets an attacker change what the query does: read other collections, match every record, or use operators you never meant to allow. This applies to SQL and NoSQL databases alike.
 
 ```typescript
-// ❌ VULNERABLE — user input goes directly into the query
+// ❌ VULNERABLE — the client's filter goes directly into the query
 app.get("/api/data/:collection", async (req, res) => {
-  const filter = JSON.parse(req.query.filter); // attacker can inject {$gt: ""}
-  const docs = await db.collection(req.params.collection).find(filter).toArray();
+  const filter = JSON.parse(req.query.filter); // the client decides what the query does
+  const docs = await db.query(req.params.collection, filter);
   res.json(docs);
 });
 
-// ✅ SECURE — sanitize and whitelist
+// ✅ SECURE — whitelist collections, fields and operators
+const allowedFields: Record<string, string[]> = {
+  products: ["name", "price", "category", "published"],
+  orders: ["status", "createdAt", "customerId"],
+  categories: ["name"]
+};
+const allowedOperators = ["==", "!=", "<", "<=", ">", ">=", "in", "not-in", "array-contains", "array-contains-any"];
 
 app.get("/api/data/:collection", authenticate, async (req, res) => {
+  const { collection } = req.params;
+
   // 1. Whitelist allowed collections
-  const allowedCollections = ["products", "orders", "categories"];
-  if (!allowedCollections.includes(req.params.collection)) {
+  if (!allowedFields[collection]) {
     return res.status(400).json({ error: "Invalid collection" });
   }
 
-  // 2. Sanitize the filter to remove any MongoDB operators
-  let filter = {};
-  if (req.query.filter) {
-    filter = mongo.sanitize(JSON.parse(req.query.filter));
+  // 2. Accept only known fields and operators, in the shape FireCMS sends: { field: [operator, value] }
+  const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
+  for (const [field, condition] of Object.entries(filter)) {
+    if (!allowedFields[collection].includes(field)
+      || !Array.isArray(condition)
+      || !allowedOperators.includes(condition[0])) {
+      return res.status(400).json({ error: "Invalid filter" });
+    }
   }
 
   // 3. Enforce limits
   const limit = Math.min(parseInt(req.query.limit) || 25, 100);
 
-  const docs = await db
-    .collection(req.params.collection)
-    .find(filter)
-    .limit(limit)
-    .toArray();
-
+  // 4. Build the query with your database client's parameterized API, never by concatenating strings
+  const docs = await db.query(collection, { filter, limit });
   res.json(docs);
 });
 ```
@@ -380,11 +387,11 @@ app.get("/api/data/:collection", authenticate, async (req, res) => {
 
 | Check | Why |
 |---|---|
-| **Whitelist collections** | Prevent access to system collections (`admin`, `local`) or internal collections |
-| **Sanitize filter operators** | Block `$where`, `$gt`, `$regex`, and other operators that can be injected |
+| **Whitelist collections** | Prevent access to system or internal tables and collections |
+| **Whitelist filter fields and operators** | Allow only known fields and the operators FireCMS sends; never pass raw query objects or strings to the database |
 | **Limit result size** | Prevent denial-of-service via unbounded queries |
 | **Validate `orderBy` fields** | Only allow sorting on indexed/known fields |
-| **Validate `entityId` format** | Ensure IDs match expected format (e.g. UUID or ObjectId pattern) |
+| **Validate `entityId` format** | Ensure IDs match expected format (e.g. a UUID pattern) |
 | **Validate `values` on save** | Run schema validation (e.g. Zod, Joi) on the server before writing |
 
 ---
@@ -688,16 +695,16 @@ Content-Security-Policy:
 |---|---|
 | Hardcode API keys in frontend code | Use environment variables on the server |
 | Commit `.env` files to Git | Use a secrets manager (Vault, AWS Secrets Manager, Doppler) |
-| Share MongoDB connection strings with the client | Keep all database connections server-side only |
+| Share database connection strings with the client | Keep all database connections server-side only |
 | Use the same JWT secret across environments | Use unique secrets per environment |
 
-### MongoDB-Specific Security
+### Database Security
 
-- **Enable authentication** on your MongoDB cluster. Never run without auth.
+- **Enable authentication** on your database. Never run it without auth.
 - **Use a dedicated database user** for your API with the minimum required permissions.
-- **Enable TLS** for connections between your API and MongoDB.
-- **Network access control**: restrict which IPs can connect to your MongoDB cluster.
-- **Enable audit logging** if your MongoDB plan supports it.
+- **Enable TLS** for connections between your API and the database.
+- **Network access control**: restrict which IPs can connect to your database.
+- **Enable audit logging** if your database supports it.
 
 ### Dependency Security
 
@@ -716,9 +723,9 @@ Content-Security-Policy:
 | **Auth** | `signOut` invalidates server-side session | ☐ |
 | **Auth** | Tokens stored in httpOnly cookies (preferred) | ☐ |
 | **Data** | All CRUD goes through authenticated API | ☐ |
-| **Data** | MongoDB never exposed to browser | ☐ |
+| **Data** | Database never exposed to browser | ☐ |
 | **Data** | Server validates and sanitizes all inputs | ☐ |
-| **Data** | NoSQL injection prevention in place | ☐ |
+| **Data** | Query injection prevention in place | ☐ |
 | **Data** | Collection access is whitelisted | ☐ |
 | **Data** | Result size limits enforced | ☐ |
 | **Storage** | Pre-signed URLs used for uploads/downloads | ☐ |
@@ -731,6 +738,6 @@ Content-Security-Policy:
 | **General** | Rate limiting on all API endpoints | ☐ |
 | **General** | CSP headers configured | ☐ |
 | **General** | No secrets in frontend code | ☐ |
-| **General** | MongoDB auth and TLS enabled | ☐ |
+| **General** | Database auth and TLS enabled | ☐ |
 | **General** | Dependencies audited regularly | ☐ |
 

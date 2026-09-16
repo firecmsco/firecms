@@ -1,6 +1,6 @@
 # FireCMS Documentation
 
-> This is the documentation for FireCMS, a headless CMS for Firebase/MongoDB. It is a powerful tool to manage your data,
+> This is the documentation for FireCMS, a headless CMS for Firebase. It is a powerful tool to manage your data,
 > with a focus on developer experience and extensibility.
 > Easy to get started, easy to customize and easy to extend.FireCMS is great both for existing projects, since it will 
 > adapt to any database structure you have, as well as for new ones.
@@ -12,7 +12,7 @@
 </video>
 
 :::important
-FireCMS is an **open-source headless CMS and admin panel framework** built with React and TypeScript. It connects directly to your **Firebase** or **MongoDB** project to provide a powerful, intuitive, and type-safe interface for managing your data.
+FireCMS is an **open-source headless CMS and admin panel framework** built with React and TypeScript. It connects directly to your **Firebase** project to provide a powerful, intuitive, and type-safe interface for managing your data.
 :::
 
 FireCMS is designed to be the fastest way to build a production-ready back-office. It generates full CRUD (Create, Read, Update, Delete) views from your data configuration, imposes **no data structure restrictions**, and can be set up in minutes.
@@ -1409,7 +1409,7 @@ Build your own **Firebase admin panel** and **headless CMS** with full control o
 
 :::tip[When to choose self-hosted?]
 - **Data sovereignty**: Your data never leaves your infrastructure
-- **Custom backends**: Use **MongoDB**, custom APIs, or any database
+- **Custom backends**: Use your own API or any database
 - **Deep customization**: Full access to extend every part of the CMS
 - **On-premise requirements**: Deploy behind firewalls or in private clouds
 :::
@@ -1432,7 +1432,7 @@ Build your own **Firebase admin panel** and **headless CMS** with full control o
 
 PRO is free for 30 days in production, no card needed. See [Licensing](/docs/pro/licensing) for how projects are counted and what pauses without a license.
 
-Both versions are built on **React**, connect to **Firebase/Firestore** (or MongoDB), and give you a production-ready **admin panel** in minutes.
+Both versions are built on **React**, connect to **Firebase/Firestore**, and give you a production-ready **admin panel** in minutes.
 
 #### Create a new project using the CLI
 
@@ -3450,218 +3450,6 @@ const {
 
 You can also create a custom provider by implementing the `AppCheckProvider` interface.
 
-## Integrating MongoDB Atlas with FireCMS
-
-This guide details the steps necessary to integrate MongoDB Atlas as both the authentication system and the primary database for your FireCMS application.
-Mongo Atlas does not support file storage, so you can optionally use Firebase for this purpose, or any
-other storage provider.
-
-### Project Setup
-
-Start by generating a new project using the FireCMS PRO starter template.
-
-```bash
-npx create-firecms-app --pro
-```
-
-or
-
-```bash
-yarn create firecms-app --pro
-```
-
-### MongoDB Atlas Configuration
-
-Begin by setting up your MongoDB Atlas project and obtaining the required configuration parameters.
-These parameters include `appId`, `appUrl`, `baseUrl`, `clientApiBaseUrl`, `dataApiBaseUrl`, `dataExplorerLink`,
-and `dataSourceName`.
-
-```js
-const atlasConfig = {
-  appId: "your-app-id",
-  appUrl: "https://services.cloud.mongodb.com/groups/your-group-id/apps/your-app-id",
-  baseUrl: "https://services.cloud.mongodb.com",
-  clientApiBaseUrl: "https://your-region.gcp.services.cloud.mongodb.com",
-  dataApiBaseUrl: "https://your-region.gcp.data.mongodb-api.com",
-  dataExplorerLink: "https://cloud.mongodb.com/links/your-group-id/explorer/Cluster0/database/collection/find",
-  dataSourceName: "mongodb-atlas"
-};
-```
-
-### Firebase Configuration (Optional)
-
-If you wish to use Firebase for file storage, configure Firebase as follows:
-
-```js
-const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-auth-domain",
-  databaseURL: "your-database-url",
-  projectId: "your-project-id",
-  storageBucket: "your-storage-bucket",
-  messagingSenderId: "your-messaging-sender-id",
-  appId: "your-app-id"
-};
-```
-
-### Implementing MongoDB in FireCMS
-
-Let's create a new `MongoDBApp` component that integrates MongoDB Atlas (and optionally Firebase).
-
-#### Initialization
-
-Initialize Firebase and MongoDB within your component:
-
-```jsx
-
-const MongoDBApp = () => {
-  const name = "My FireCMS App";
-
-  // Initialize Firebase
-  const { firebaseApp, firebaseConfigLoading, configError } = useInitialiseFirebase({ firebaseConfig });
-
-  // Initialize MongoDB
-  const { app } = useInitRealmMongodb(atlasConfig);
-
-  // ...
-};
-
-export default MongoDBApp;
-```
-
-#### Controllers and Persistence
-
-Next, set up the mode controller, user configuration persistence, and MongoDB auth controller.
-
-```jsx
-const modeController = useBuildModeController();
-const userConfigPersistence = useBuildLocalConfigurationPersistence();
-
-const authController: MongoAuthController = useMongoDBAuthController({ app });
-const mongoDataSourceDelegate = useMongoDBDelegate({
-  app,
-  cluster: "mongodb-atlas",
-  database: "todo"
-});
-```
-
-#### Firebase Storage Source
-
-If you plan to use Firebase for file storage, initialize `storageSource`.
-
-```jsx
-const storageSource = useFirebaseStorageSource({ firebaseApp });
-```
-
-#### Authenticator Validation
-
-Define the validation logic for your authenticator.
-
-```jsx
-const { authLoading, canAccessMainView, notAllowedError } = useValidateAuthenticator({
-  authController,
-  authenticator: () => true, // Replace with your logic
-  dataSourceDelegate: mongoDataSourceDelegate,
-  storageSource
-});
-```
-
-#### Navigation Controller
-
-Set up the navigation controller with your collections.
-
-```jsx
-const navigationController = useBuildNavigationController({
-  collections: [productsCollection],
-  authController,
-  dataSourceDelegate: mongoDataSourceDelegate
-});
-```
-
-#### Rendering the Application
-
-Finally, wire everything up inside the return statement of your component.
-
-```jsx
-const MongoDBApp = () => {
-  const name = "My FireCMS App";
-
-  const { firebaseApp, firebaseConfigLoading, configError } = useInitialiseFirebase({ firebaseConfig });
-  const { app } = useInitRealmMongodb(atlasConfig);
-
-  const modeController = useBuildModeController();
-  const userConfigPersistence = useBuildLocalConfigurationPersistence();
-  const authController: MongoAuthController = useMongoDBAuthController({ app });
-  const mongoDataSourceDelegate = useMongoDBDelegate({
-    app,
-    cluster: "mongodb-atlas",
-    database: "todo"
-  });
-  const storageSource = useFirebaseStorageSource({ firebaseApp });
-  const { authLoading, canAccessMainView, notAllowedError } = useValidateAuthenticator({
-    authController,
-    authenticator: () => true, // Replace with your logic
-    dataSourceDelegate: mongoDataSourceDelegate,
-    storageSource
-  });
-  const navigationController = useBuildNavigationController({
-    collections: [productsCollection],
-    authController,
-    dataSourceDelegate: mongoDataSourceDelegate
-  });
-
-  if (firebaseConfigLoading || !firebaseApp) {
-    return <CircularProgressCenter />;
-  }
-
-  if (configError) {
-    return <CenteredView>{configError}</CenteredView>;
-  }
-
-  return (
-    <SnackbarProvider>
-      <ModeControllerProvider value={modeController}>
-        <FireCMS
-          navigationController={navigationController}
-          authController={authController}
-          userConfigPersistence={userConfigPersistence}
-          dataSourceDelegate={mongoDataSourceDelegate}
-          storageSource={storageSource}
-        >
-          {({ context, loading }) => {
-            if (loading || authLoading) {
-              return <CircularProgressCenter size="large" />;
-            }
-
-            if (!canAccessMainView) {
-              return (
-                <MongoLoginView
-                  allowSkipLogin={false}
-                  authController={authController}
-                  registrationEnabled={true}
-                  notAllowedError={notAllowedError}
-                />
-              );
-            }
-
-            return (
-              <Scaffold autoOpenDrawer={false}>
-                <AppBar title={name} />
-                <Drawer />
-                <NavigationRoutes />
-                <SideDialogs />
-              </Scaffold>
-            );
-          }}
-        </FireCMS>
-      </ModeControllerProvider>
-    </SnackbarProvider>
-  );
-};
-
-export default MongoDBApp;
-```
-
 ## Licensing
 
 :::tip
@@ -3743,7 +3531,7 @@ The license check is a single request from the browser to `api.firecms.co` when 
 
 ## Telemetry and the license check
 
-A self-hosted FireCMS app reads and writes your data directly from the browser, with the Firebase or MongoDB SDK. It sends one request to FireCMS: the access log, which is also the PRO license check. This page lists exactly what that request contains and what we keep.
+A self-hosted FireCMS app reads and writes your data from the browser, through the Firebase SDK or your own backend. It sends one request to FireCMS: the access log, which is also the PRO license check. This page lists exactly what that request contains and what we keep.
 
 ### When it is sent
 
@@ -3759,7 +3547,7 @@ Once per signed-in user each time the app loads: when a user signs in, or when t
   - `datasource`: the key of the data source in use, for example `firestore`
   - `plugins`: the keys of the plugins you configured, for example `["collection_editor", "user_management"]`
 
-The request contains no database credentials, no documents or other Firestore or Atlas content, and no collection schemas.
+The request contains no database credentials, no documents or other Firestore content, and no collection schemas.
 
 ### What we store
 
@@ -5308,7 +5096,7 @@ FireCMS internally uses 3 main controllers to manage the data, file storage and 
 These controllers are designed to be easily extended and replaced with your own implementations.
 
 FireCMS provides default implementations for Firebase, Firestore and Firebase Authentication,
-but you can replace them with your own implementations. We also provide an integration with MongoDB Atlas.
+but you can replace them with your own implementations.
 
 ### DataSourceDelegate
 
@@ -5321,7 +5109,6 @@ from callbacks where there is a `context` object defined, under `context.dataSou
 FireCMS provides default implementations for:
 
 - Firebase `useFirestoreDelegate` (package `@firecms/firebase`)
-- MongoDB `useMongoDBDelegate` (package `@firecms/mongodb`)
 
 #### Creating your own DataSourceDelegate
 
@@ -5393,7 +5180,6 @@ under `context.authController`.
 FireCMS provides default implementations for:
 
 - Firebase `useFirebaseAuthController` (package `@firecms/firebase`)
-- MongoDB `useMongoDBAuthController` (package `@firecms/mongodb`)
 
 #### Description of Properties and Methods
 
@@ -5460,7 +5246,7 @@ type `ExtraData`.
 
 FireCMS is a **frontend-only React application**. It has no built-in server component that enforces security. This means that **all security must be implemented and enforced on your backend**. FireCMS client-side permissions (the `permissions` callback on collections) control the UI/UX — they hide buttons and disable forms — but they can be bypassed by any user with access to browser developer tools.
 
-This guide covers everything you need to know to secure your self-hosted FireCMS deployment when using **MongoDB**, **custom authentication**, and **custom file storage** — without Firebase.
+This guide covers everything you need to know to secure your self-hosted FireCMS deployment when using **your own database**, **custom authentication**, and **custom file storage** — without Firebase.
 
 :::caution[Golden Rule]
 **Never trust the client.** Every operation that reads, writes, or deletes data must be validated and authorized on your server. Client-side checks are for user experience only.
@@ -5481,13 +5267,13 @@ A secure self-hosted FireCMS deployment has the following architecture:
                         ┌──────────────────────┤
                         │                      │
                  ┌──────▼──────┐       ┌───────▼──────┐
-                 │   MongoDB   │       │ File Storage │
-                 │  (Database) │       │  (S3/Minio)  │
+                 │    Your     │       │ File Storage │
+                 │  Database   │       │  (S3/Minio)  │
                  └─────────────┘       └──────────────┘
 ```
 
 Key points:
-- The browser **never** talks directly to MongoDB or your storage backend.
+- The browser **never** talks directly to your database or your storage backend.
 - Your API server is the single entry point that authenticates every request, authorizes the action, validates inputs, and then interacts with the database and storage.
 
 ---
@@ -5610,7 +5396,7 @@ const myAuthenticator: Authenticator<CustomUser> = async ({
   if (!user?.email) return false;
 
   try {
-    // Fetch the user profile from your backend (not MongoDB directly!)
+    // Fetch the user profile from your backend (not the database directly!)
     const users = await dataSourceDelegate.fetchCollection({
       path: "cms_users",
       filter: { email: ["==", user.email] }
@@ -5634,18 +5420,18 @@ This callback runs on the client. **Your API server must still independently ver
 
 ---
 
-### 2. Securing Your DataSourceDelegate (MongoDB)
+### 2. Securing Your DataSourceDelegate
 
-The `DataSourceDelegate` is the interface FireCMS uses to read and write data. When backed by MongoDB, your implementation should **proxy every call through your authenticated API server**.
+The `DataSourceDelegate` is the interface FireCMS uses to read and write data. When backed by your own database, your implementation should **proxy every call through your authenticated API server**.
 
-#### Never Expose MongoDB to the Browser
+#### Never Expose Your Database to the Browser
 
-This is the most critical rule. Do not use the MongoDB driver, Realm SDK, or any direct database connection in the browser.
+This is the most critical rule. Do not use a database driver, a connection string, or any direct database connection in the browser.
 
 ```typescript
-// ❌ DANGEROUS — direct MongoDB access from the browser
+// ❌ DANGEROUS — database credentials shipped to the browser
 
-const client = new MongoClient("mongodb+srv://user:password@cluster...");
+const client = createClient("user:password@your-database-host...");
 
 // ✅ CORRECT — proxy through your authenticated API
 const response = await fetch("/api/data/products", {
@@ -5657,7 +5443,7 @@ const response = await fetch("/api/data/products", {
 
 ```typescript
 
-export function useSecureMongoDelegate(
+export function useSecureApiDelegate(
   getAuthToken: () => Promise<string>
 ): DataSourceDelegate {
 
@@ -5681,7 +5467,7 @@ export function useSecureMongoDelegate(
   }
 
   return {
-    key: "secure-mongo",
+    key: "secure-api",
     initialised: true,
 
     async fetchCollection<M extends Record<string, any>>({
@@ -5794,42 +5580,49 @@ app.delete("/api/data/:path/:id", authenticate, authorize("admin"), async (req, 
 });
 ```
 
-##### Input Validation & NoSQL Injection Prevention
+##### Input Validation & Query Injection Prevention
 
-MongoDB is vulnerable to NoSQL injection when user input is passed directly to query operators.
+Passing client input straight into a database query lets an attacker change what the query does: read other collections, match every record, or use operators you never meant to allow. This applies to SQL and NoSQL databases alike.
 
 ```typescript
-// ❌ VULNERABLE — user input goes directly into the query
+// ❌ VULNERABLE — the client's filter goes directly into the query
 app.get("/api/data/:collection", async (req, res) => {
-  const filter = JSON.parse(req.query.filter); // attacker can inject {$gt: ""}
-  const docs = await db.collection(req.params.collection).find(filter).toArray();
+  const filter = JSON.parse(req.query.filter); // the client decides what the query does
+  const docs = await db.query(req.params.collection, filter);
   res.json(docs);
 });
 
-// ✅ SECURE — sanitize and whitelist
+// ✅ SECURE — whitelist collections, fields and operators
+const allowedFields: Record<string, string[]> = {
+  products: ["name", "price", "category", "published"],
+  orders: ["status", "createdAt", "customerId"],
+  categories: ["name"]
+};
+const allowedOperators = ["==", "!=", "<", "<=", ">", ">=", "in", "not-in", "array-contains", "array-contains-any"];
 
 app.get("/api/data/:collection", authenticate, async (req, res) => {
+  const { collection } = req.params;
+
   // 1. Whitelist allowed collections
-  const allowedCollections = ["products", "orders", "categories"];
-  if (!allowedCollections.includes(req.params.collection)) {
+  if (!allowedFields[collection]) {
     return res.status(400).json({ error: "Invalid collection" });
   }
 
-  // 2. Sanitize the filter to remove any MongoDB operators
-  let filter = {};
-  if (req.query.filter) {
-    filter = mongo.sanitize(JSON.parse(req.query.filter));
+  // 2. Accept only known fields and operators, in the shape FireCMS sends: { field: [operator, value] }
+  const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
+  for (const [field, condition] of Object.entries(filter)) {
+    if (!allowedFields[collection].includes(field)
+      || !Array.isArray(condition)
+      || !allowedOperators.includes(condition[0])) {
+      return res.status(400).json({ error: "Invalid filter" });
+    }
   }
 
   // 3. Enforce limits
   const limit = Math.min(parseInt(req.query.limit) || 25, 100);
 
-  const docs = await db
-    .collection(req.params.collection)
-    .find(filter)
-    .limit(limit)
-    .toArray();
-
+  // 4. Build the query with your database client's parameterized API, never by concatenating strings
+  const docs = await db.query(collection, { filter, limit });
   res.json(docs);
 });
 ```
@@ -5838,11 +5631,11 @@ app.get("/api/data/:collection", authenticate, async (req, res) => {
 
 | Check | Why |
 |---|---|
-| **Whitelist collections** | Prevent access to system collections (`admin`, `local`) or internal collections |
-| **Sanitize filter operators** | Block `$where`, `$gt`, `$regex`, and other operators that can be injected |
+| **Whitelist collections** | Prevent access to system or internal tables and collections |
+| **Whitelist filter fields and operators** | Allow only known fields and the operators FireCMS sends; never pass raw query objects or strings to the database |
 | **Limit result size** | Prevent denial-of-service via unbounded queries |
 | **Validate `orderBy` fields** | Only allow sorting on indexed/known fields |
-| **Validate `entityId` format** | Ensure IDs match expected format (e.g. UUID or ObjectId pattern) |
+| **Validate `entityId` format** | Ensure IDs match expected format (e.g. a UUID pattern) |
 | **Validate `values` on save** | Run schema validation (e.g. Zod, Joi) on the server before writing |
 
 ---
@@ -6146,16 +5939,16 @@ Content-Security-Policy:
 |---|---|
 | Hardcode API keys in frontend code | Use environment variables on the server |
 | Commit `.env` files to Git | Use a secrets manager (Vault, AWS Secrets Manager, Doppler) |
-| Share MongoDB connection strings with the client | Keep all database connections server-side only |
+| Share database connection strings with the client | Keep all database connections server-side only |
 | Use the same JWT secret across environments | Use unique secrets per environment |
 
-#### MongoDB-Specific Security
+#### Database Security
 
-- **Enable authentication** on your MongoDB cluster. Never run without auth.
+- **Enable authentication** on your database. Never run it without auth.
 - **Use a dedicated database user** for your API with the minimum required permissions.
-- **Enable TLS** for connections between your API and MongoDB.
-- **Network access control**: restrict which IPs can connect to your MongoDB cluster.
-- **Enable audit logging** if your MongoDB plan supports it.
+- **Enable TLS** for connections between your API and the database.
+- **Network access control**: restrict which IPs can connect to your database.
+- **Enable audit logging** if your database supports it.
 
 #### Dependency Security
 
@@ -6174,9 +5967,9 @@ Content-Security-Policy:
 | **Auth** | `signOut` invalidates server-side session | ☐ |
 | **Auth** | Tokens stored in httpOnly cookies (preferred) | ☐ |
 | **Data** | All CRUD goes through authenticated API | ☐ |
-| **Data** | MongoDB never exposed to browser | ☐ |
+| **Data** | Database never exposed to browser | ☐ |
 | **Data** | Server validates and sanitizes all inputs | ☐ |
-| **Data** | NoSQL injection prevention in place | ☐ |
+| **Data** | Query injection prevention in place | ☐ |
 | **Data** | Collection access is whitelisted | ☐ |
 | **Data** | Result size limits enforced | ☐ |
 | **Storage** | Pre-signed URLs used for uploads/downloads | ☐ |
@@ -6189,7 +5982,7 @@ Content-Security-Policy:
 | **General** | Rate limiting on all API endpoints | ☐ |
 | **General** | CSP headers configured | ☐ |
 | **General** | No secrets in frontend code | ☐ |
-| **General** | MongoDB auth and TLS enabled | ☐ |
+| **General** | Database auth and TLS enabled | ☐ |
 | **General** | Dependencies audited regularly | ☐ |
 
 ## Migrating from v3.1 to v3.2
@@ -11492,7 +11285,7 @@ the controllers.
 ### `useAuthController`
 
 Hook for accessing the authentication state and performing auth-related operations.
-Works with any backend (Firebase, MongoDB, or custom implementations).
+Works with any backend (Firebase or custom implementations).
 
 The props provided by this hook are:
 
@@ -11777,7 +11570,7 @@ export function ExampleCMSView() {
 Use this hook to access the data source being used in your FireCMS application.
 
 This controller allows you to fetch and save data from your database (such
-as Firestore or MongoDB) using the abstraction of collections and entities created by FireCMS.
+as Firestore) using the abstraction of collections and entities created by FireCMS.
 
 :::note
 Please note that in order to use this hook you **must** be in

@@ -8,7 +8,7 @@ O FireCMS usa internamente 3 controllers principais para gerenciar os dados, arm
 Esses controllers são projetados para serem facilmente estendidos e substituídos com suas próprias implementações.
 
 O FireCMS fornece implementações padrão para Firebase, Firestore e Firebase Authentication,
-mas você pode substituí-las com suas próprias implementações. Também fornecemos uma integração com MongoDB Atlas.
+mas você pode substituí-las com suas próprias implementações.
 
 ## DataSourceDelegate
 
@@ -21,7 +21,6 @@ de callbacks onde há um objeto `context` definido, em `context.dataSource`.
 O FireCMS fornece implementações padrão para:
 
 - Firebase `useFirestoreDelegate` (pacote `@firecms/firebase`)
-- MongoDB `useMongoDBDelegate` (pacote `@firecms/mongodb`)
 
 ### Criando seu próprio DataSourceDelegate
 
@@ -93,7 +92,6 @@ em `context.authController`.
 O FireCMS fornece implementações padrão para:
 
 - Firebase `useFirebaseAuthController` (pacote `@firecms/firebase`)
-- MongoDB `useMongoDBAuthController` (pacote `@firecms/mongodb`)
 
 ### Descrição de Propriedades e Métodos
 

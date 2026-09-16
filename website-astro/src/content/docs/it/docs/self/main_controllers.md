@@ -6,7 +6,7 @@ description: Impara come implementare DataSourceDelegate, StorageSource e AuthCo
 
 FireCMS usa internamente 3 controller principali per gestire dati, archiviazione file e autenticazione. Questi controller sono progettati per essere facilmente estesi e sostituiti con le tue implementazioni.
 
-FireCMS fornisce implementazioni predefinite per Firebase, Firestore e Firebase Authentication, ma puoi sostituirle con le tue. Forniamo anche un'integrazione con MongoDB Atlas.
+FireCMS fornisce implementazioni predefinite per Firebase, Firestore e Firebase Authentication, ma puoi sostituirle con le tue.
 
 ## DataSourceDelegate
 
@@ -17,7 +17,6 @@ Puoi recuperare il datasource in qualsiasi componente usando l'hook `useDataSour
 FireCMS fornisce implementazioni predefinite per:
 
 - Firebase `useFirestoreDelegate` (pacchetto `@firecms/firebase`)
-- MongoDB `useMongoDBDelegate` (pacchetto `@firecms/mongodb`)
 
 ### Creare il tuo DataSourceDelegate
 
@@ -78,7 +77,6 @@ Puoi accedere al controller auth in qualsiasi componente usando l'hook `useAuthC
 FireCMS fornisce implementazioni predefinite per:
 
 - Firebase `useFirebaseAuthController` (pacchetto `@firecms/firebase`)
-- MongoDB `useMongoDBAuthController` (pacchetto `@firecms/mongodb`)
 
 ### Descrizione delle proprietà e dei metodi
 

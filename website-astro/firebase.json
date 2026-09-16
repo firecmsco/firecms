@@ -17,6 +17,36 @@
         "source": "/openai",
         "destination": "/features",
         "type": 301
+      },
+      {
+        "source": "/docs/self/mongodb{,/}",
+        "destination": "/docs/self/",
+        "type": 301
+      },
+      {
+        "source": "/de/docs/self/mongodb{,/}",
+        "destination": "/de/docs/self/",
+        "type": 301
+      },
+      {
+        "source": "/es/docs/self/mongodb{,/}",
+        "destination": "/es/docs/self/",
+        "type": 301
+      },
+      {
+        "source": "/fr/docs/self/mongodb{,/}",
+        "destination": "/fr/docs/self/",
+        "type": 301
+      },
+      {
+        "source": "/it/docs/self/mongodb{,/}",
+        "destination": "/it/docs/self/",
+        "type": 301
+      },
+      {
+        "source": "/pt/docs/self/mongodb{,/}",
+        "destination": "/pt/docs/self/",
+        "type": 301
       }
     ],
     "headers": [

@@ -5,7 +5,7 @@ sidebar_label: Telemetría
 description: La única petición que una app de FireCMS autoalojada envía a FireCMS, qué contiene, qué guardamos y por qué, y cómo desactivarla en Community.
 ---
 
-Una app de FireCMS autoalojada lee y escribe tus datos directamente desde el navegador, con el SDK de Firebase o de MongoDB. A FireCMS le envía una sola petición: el registro de acceso, que también es la comprobación de la licencia PRO. Esta página detalla exactamente qué contiene esa petición y qué guardamos.
+Una app de FireCMS autoalojada lee y escribe tus datos desde el navegador, a través del SDK de Firebase o de tu propio backend. A FireCMS le envía una sola petición: el registro de acceso, que también es la comprobación de la licencia PRO. Esta página detalla exactamente qué contiene esa petición y qué guardamos.
 
 ## Cuándo se envía
 
@@ -21,7 +21,7 @@ Una vez por usuario con sesión iniciada cada vez que se carga la app: cuando un
   - `datasource`: la clave de la fuente de datos en uso, por ejemplo `firestore`
   - `plugins`: las claves de los plugins que configuraste, por ejemplo `["collection_editor", "user_management"]`
 
-La petición no contiene credenciales de base de datos, ni documentos u otro contenido de Firestore o Atlas, ni esquemas de colecciones.
+La petición no contiene credenciales de base de datos, ni documentos u otro contenido de Firestore, ni esquemas de colecciones.
 
 ## Qué guardamos
 

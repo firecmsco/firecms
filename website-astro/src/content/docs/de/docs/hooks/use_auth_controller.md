@@ -14,7 +14,7 @@ Controller enthält.
 ## `useAuthController`
 
 Hook für den Zugriff auf den Authentifizierungsstatus und die Durchführung von authentifizierungsbezogenen Operationen.
-Funktioniert mit jedem Backend (Firebase, MongoDB oder eigene Implementierungen).
+Funktioniert mit jedem Backend (Firebase oder eigene Implementierungen).
 
 Die von diesem Hook bereitgestellten Eigenschaften sind:
 

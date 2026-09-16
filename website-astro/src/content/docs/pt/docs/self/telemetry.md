@@ -5,7 +5,7 @@ sidebar_label: Telemetria
 description: A única requisição que um app FireCMS self-hosted envia ao FireCMS, o que ela contém, o que guardamos e por quê, e como desativá-la no Community.
 ---
 
-Um app FireCMS self-hosted lê e grava seus dados direto do navegador, com o SDK do Firebase ou do MongoDB. Ao FireCMS ele envia uma única requisição: o registro de acesso, que também é a verificação da licença PRO. Esta página lista exatamente o que essa requisição contém e o que guardamos.
+Um app FireCMS self-hosted lê e grava seus dados a partir do navegador, pelo SDK do Firebase ou pelo seu próprio backend. Ao FireCMS ele envia uma única requisição: o registro de acesso, que também é a verificação da licença PRO. Esta página lista exatamente o que essa requisição contém e o que guardamos.
 
 ## Quando ela é enviada
 
@@ -21,7 +21,7 @@ Uma vez por usuário logado cada vez que o app carrega: quando um usuário faz l
   - `datasource`: a chave da fonte de dados em uso, por exemplo `firestore`
   - `plugins`: as chaves dos plugins que você configurou, por exemplo `["collection_editor", "user_management"]`
 
-A requisição não contém credenciais de banco de dados, nem documentos ou outro conteúdo do Firestore ou do Atlas, nem schemas de coleções.
+A requisição não contém credenciais de banco de dados, nem documentos ou outro conteúdo do Firestore, nem schemas de coleções.
 
 ## O que guardamos
 

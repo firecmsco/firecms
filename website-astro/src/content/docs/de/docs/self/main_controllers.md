@@ -19,7 +19,6 @@ Sie können auf die Datenquelle in jeder Komponente mit dem `useDataSource`-Hook
 
 FireCMS bietet Standard-Implementierungen für:
 - Firebase Firestore `useFirestoreDelegate` (Paket `@firecms/firebase`)
-- MongoDB `useMongoDBDelegate` (Paket `@firecms/mongodb`)
 
 ### Eigene DataSourceDelegate erstellen
 
@@ -68,7 +67,6 @@ Der `AuthController` ist der Controller für die Verwaltung der Authentifizierun
 
 FireCMS bietet Standard-Implementierungen für:
 - Firebase `useFirebaseAuthController` (Paket `@firecms/firebase`)
-- MongoDB `useMongoDBAuthController` (Paket `@firecms/mongodb`)
 
 ### Beschreibung der Eigenschaften und Methoden
 

@@ -2,13 +2,13 @@
 slug: de/docs/hooks/use_data_source
 title: useDataSource
 sidebar_label: useDataSource
-description: Zugriff auf den FireCMS-Datenquellen-Hook zum Abrufen, Speichern und Verwalten von Entitäten. Funktioniert mit Firestore, MongoDB oder jeder benutzerdefinierten Backend-Implementierung.
+description: Zugriff auf den FireCMS-Datenquellen-Hook zum Abrufen, Speichern und Verwalten von Entitäten. Funktioniert mit Firestore oder jeder benutzerdefinierten Backend-Implementierung.
 ---
 
 Verwenden Sie diesen Hook, um auf die Datenquelle zuzugreifen, die in Ihrer FireCMS-Anwendung verwendet wird.
 
 Dieser Controller ermöglicht es Ihnen, Daten aus Ihrer Datenbank (wie
-Firestore oder MongoDB) abzurufen und zu speichern, wobei die von FireCMS erstellte Abstraktion von Sammlungen und Entitäten verwendet wird.
+Firestore) abzurufen und zu speichern, wobei die von FireCMS erstellte Abstraktion von Sammlungen und Entitäten verwendet wird.
 
 :::note
 Bitte beachten Sie, dass Sie diesen Hook **nur** innerhalb

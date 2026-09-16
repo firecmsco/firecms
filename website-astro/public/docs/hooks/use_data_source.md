@@ -3,7 +3,7 @@
 Use this hook to access the data source being used in your FireCMS application.
 
 This controller allows you to fetch and save data from your database (such
-as Firestore or MongoDB) using the abstraction of collections and entities created by FireCMS.
+as Firestore) using the abstraction of collections and entities created by FireCMS.
 
 :::note
 Please note that in order to use this hook you **must** be in

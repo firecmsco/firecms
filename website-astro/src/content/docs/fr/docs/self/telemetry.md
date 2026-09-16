@@ -5,7 +5,7 @@ sidebar_label: Télémétrie
 description: La seule requête qu'une application FireCMS auto-hébergée envoie à FireCMS, ce qu'elle contient, ce que nous conservons et pourquoi, et comment la désactiver dans Community.
 ---
 
-Une application FireCMS auto-hébergée lit et écrit vos données directement depuis le navigateur, avec le SDK de Firebase ou de MongoDB. Elle envoie une seule requête à FireCMS : le journal d'accès, qui est aussi la vérification de la licence PRO. Cette page détaille exactement ce que contient cette requête et ce que nous conservons.
+Une application FireCMS auto-hébergée lit et écrit vos données depuis le navigateur, via le SDK de Firebase ou votre propre backend. Elle envoie une seule requête à FireCMS : le journal d'accès, qui est aussi la vérification de la licence PRO. Cette page détaille exactement ce que contient cette requête et ce que nous conservons.
 
 ## Quand elle est envoyée
 
@@ -21,7 +21,7 @@ Une fois par utilisateur connecté à chaque chargement de l'application : quand
   - `datasource` : la clé de la source de données utilisée, par exemple `firestore`
   - `plugins` : les clés des plugins que vous avez configurés, par exemple `["collection_editor", "user_management"]`
 
-La requête ne contient aucun identifiant de base de données, aucun document ni autre contenu de Firestore ou d'Atlas, et aucun schéma de collection.
+La requête ne contient aucun identifiant de base de données, aucun document ni autre contenu de Firestore, et aucun schéma de collection.
 
 ## Ce que nous conservons
 

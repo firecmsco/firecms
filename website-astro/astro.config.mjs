@@ -157,10 +157,6 @@ export default defineConfig({
                         },
 
                         {
-                            label: "MongoDB", translations: { es: "MongoDB", de: "MongoDB", fr: "MongoDB" , it: "MongoDB", pt: "MongoDB" },
-                            slug: "docs/self/mongodb"
-                        },
-                        {
                             label: "Licensing", translations: { es: "Licencias", de: "Lizenzierung", fr: "Licences" , it: "Licenze", pt: "Licenciamento" },
                             slug: "docs/pro/licensing",
                             badge: {

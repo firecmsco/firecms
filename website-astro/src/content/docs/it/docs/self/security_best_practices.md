@@ -2,12 +2,12 @@
 slug: it/docs/self/security_best_practices
 title: Best practice di sicurezza per FireCMS self-hosted
 sidebar_label: Best practice di sicurezza
-description: Guida completa per proteggere il tuo deployment self-hosted di FireCMS quando utilizzi un backend personalizzato con MongoDB, autenticazione personalizzata e storage di file personalizzato.
+description: Guida completa per proteggere il tuo deployment self-hosted di FireCMS quando utilizzi un backend personalizzato con il tuo database, autenticazione personalizzata e storage di file personalizzato.
 ---
 
 FireCMS è un'**applicazione React esclusivamente frontend**. Non ha alcun componente server integrato che applichi la sicurezza. Questo significa che **tutta la sicurezza deve essere implementata e applicata nel tuo backend**. I permessi lato client di FireCMS (il callback `permissions` sulle collezioni) controllano la UI/UX — nascondono pulsanti e disabilitano form — ma possono essere aggirati da qualsiasi utente con accesso agli strumenti di sviluppo del browser.
 
-Questa guida copre tutto ciò che devi sapere per proteggere il tuo deployment self-hosted di FireCMS quando utilizzi **MongoDB**, **autenticazione personalizzata** e **storage di file personalizzato** — senza Firebase.
+Questa guida copre tutto ciò che devi sapere per proteggere il tuo deployment self-hosted di FireCMS quando utilizzi **il tuo database**, **autenticazione personalizzata** e **storage di file personalizzato** — senza Firebase.
 
 :::caution[Regola d'oro]
 **Non fidarti mai del client.** Ogni operazione che legge, scrive o elimina dati deve essere validata e autorizzata sul tuo server. I controlli lato client servono solo per l'esperienza utente.
@@ -28,14 +28,14 @@ Un deployment self-hosted sicuro di FireCMS ha la seguente architettura:
                         ┌──────────────────────┤
                         │                      │
                  ┌──────▼──────┐       ┌───────▼──────┐
-                 │   MongoDB   │       │   Storage    │
-                 │  (Database) │       │  di file     │
+                 │   Il tuo    │       │   Storage    │
+                 │  database   │       │  di file     │
                  │             │       │  (S3/Minio)  │
                  └─────────────┘       └──────────────┘
 ```
 
 Punti chiave:
-- Il browser non comunica **mai** direttamente con MongoDB o il tuo backend di storage.
+- Il browser non comunica **mai** direttamente con il tuo database o il tuo backend di storage.
 - Il tuo server API è l'unico punto di ingresso che autentica ogni richiesta, autorizza l'azione, valida gli input, e poi interagisce con il database e lo storage.
 
 ---
@@ -179,18 +179,18 @@ Questo callback viene eseguito sul client. **Il tuo server API deve verificare i
 
 ---
 
-## 2. Proteggere il tuo DataSourceDelegate (MongoDB)
+## 2. Proteggere il tuo DataSourceDelegate
 
-Il `DataSourceDelegate` è l'interfaccia che FireCMS usa per leggere e scrivere dati. Quando è supportato da MongoDB, la tua implementazione deve **fare da proxy per ogni chiamata attraverso il tuo server API autenticato**.
+Il `DataSourceDelegate` è l'interfaccia che FireCMS usa per leggere e scrivere dati. Quando è supportato dal tuo database, la tua implementazione deve **fare da proxy per ogni chiamata attraverso il tuo server API autenticato**.
 
-### Non esporre mai MongoDB al browser
+### Non esporre mai il tuo database al browser
 
-Questa è la regola più critica. Non usare il driver MongoDB, l'SDK Realm, né alcuna connessione diretta al database nel browser.
+Questa è la regola più critica. Non usare un driver di database, una stringa di connessione, né alcuna connessione diretta al database nel browser.
 
 ```typescript
-// ❌ PERICOLOSO — accesso diretto a MongoDB dal browser
-import { MongoClient } from "mongodb";
-const client = new MongoClient("mongodb+srv://user:password@cluster...");
+// ❌ PERICOLOSO — credenziali del database inviate al browser
+import { createClient } from "your-database-driver";
+const client = createClient("user:password@your-database-host...");
 
 // ✅ CORRETTO — proxy attraverso la tua API autenticata
 const response = await fetch("/api/data/products", {
@@ -210,7 +210,7 @@ import type {
   DeleteEntityProps
 } from "@firecms/core";
 
-export function useSecureMongoDelegate(
+export function useSecureApiDelegate(
   getAuthToken: () => Promise<string>
 ): DataSourceDelegate {
 
@@ -234,7 +234,7 @@ export function useSecureMongoDelegate(
   }
 
   return {
-    key: "secure-mongo",
+    key: "secure-api",
     initialised: true,
 
     async fetchCollection<M extends Record<string, any>>({
@@ -343,43 +343,49 @@ app.delete("/api/data/:path/:id", authenticate, authorize("admin"), async (req, 
 });
 ```
 
-#### Validazione degli input e prevenzione dell'iniezione NoSQL
+#### Validazione degli input e prevenzione dell'iniezione nelle query
 
-MongoDB è vulnerabile all'iniezione NoSQL quando l'input dell'utente viene passato direttamente agli operatori di query.
+Passare l'input del client direttamente in una query al database permette a un attaccante di cambiare ciò che la query fa: leggere altre collezioni, selezionare tutti i record o usare operatori che non avevi intenzione di consentire. Questo vale sia per i database SQL sia per quelli NoSQL.
 
 ```typescript
-// ❌ VULNERABILE — l'input dell'utente va direttamente nella query
+// ❌ VULNERABILE — il filtro del client va direttamente nella query
 app.get("/api/data/:collection", async (req, res) => {
-  const filter = JSON.parse(req.query.filter);
-  const docs = await db.collection(req.params.collection).find(filter).toArray();
+  const filter = JSON.parse(req.query.filter); // è il client a decidere cosa fa la query
+  const docs = await db.query(req.params.collection, filter);
   res.json(docs);
 });
 
-// ✅ SICURO — sanitizzare e usare whitelist
-import mongo from "mongo-sanitize";
+// ✅ SICURO — whitelist di collezioni, campi e operatori
+const allowedFields: Record<string, string[]> = {
+  products: ["name", "price", "category", "published"],
+  orders: ["status", "createdAt", "customerId"],
+  categories: ["name"]
+};
+const allowedOperators = ["==", "!=", "<", "<=", ">", ">=", "in", "not-in", "array-contains", "array-contains-any"];
 
 app.get("/api/data/:collection", authenticate, async (req, res) => {
+  const { collection } = req.params;
+
   // 1. Whitelist delle collezioni consentite
-  const allowedCollections = ["products", "orders", "categories"];
-  if (!allowedCollections.includes(req.params.collection)) {
+  if (!allowedFields[collection]) {
     return res.status(400).json({ error: "Collezione non valida" });
   }
 
-  // 2. Sanitizzare il filtro per rimuovere gli operatori MongoDB
-  let filter = {};
-  if (req.query.filter) {
-    filter = mongo.sanitize(JSON.parse(req.query.filter));
+  // 2. Accettare solo campi e operatori conosciuti, nella forma che FireCMS invia: { field: [operator, value] }
+  const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
+  for (const [field, condition] of Object.entries(filter)) {
+    if (!allowedFields[collection].includes(field)
+      || !Array.isArray(condition)
+      || !allowedOperators.includes(condition[0])) {
+      return res.status(400).json({ error: "Filtro non valido" });
+    }
   }
 
   // 3. Applicare limiti
   const limit = Math.min(parseInt(req.query.limit) || 25, 100);
 
-  const docs = await db
-    .collection(req.params.collection)
-    .find(filter)
-    .limit(limit)
-    .toArray();
-
+  // 4. Costruire la query con l'API parametrizzata del client del tuo database, mai concatenando stringhe
+  const docs = await db.query(collection, { filter, limit });
   res.json(docs);
 });
 ```
@@ -388,11 +394,11 @@ app.get("/api/data/:collection", authenticate, async (req, res) => {
 
 | Controllo | Perché |
 |---|---|
-| **Whitelist delle collezioni** | Prevenire l'accesso a collezioni di sistema (`admin`, `local`) o interne |
-| **Sanitizzare gli operatori di filtro** | Bloccare `$where`, `$gt`, `$regex` e altri operatori iniettabili |
+| **Whitelist delle collezioni** | Prevenire l'accesso a tabelle e collezioni di sistema o interne |
+| **Whitelist di campi e operatori di filtro** | Consentire solo campi conosciuti e gli operatori che FireCMS invia; non passare mai al database oggetti o stringhe di query grezzi |
 | **Limitare la dimensione dei risultati** | Prevenire denial-of-service tramite query senza limiti |
 | **Validare i campi `orderBy`** | Consentire l'ordinamento solo su campi indicizzati/conosciuti |
-| **Validare il formato `entityId`** | Assicurarsi che gli ID corrispondano al formato atteso (es. UUID o ObjectId) |
+| **Validare il formato `entityId`** | Assicurarsi che gli ID corrispondano al formato atteso (es. un pattern UUID) |
 | **Validare i `values` al salvataggio** | Eseguire la validazione dello schema (es. Zod, Joi) sul server prima della scrittura |
 
 ---
@@ -689,16 +695,16 @@ Content-Security-Policy:
 |---|---|
 | Codificare le chiavi API nel codice frontend | Usare variabili d'ambiente sul server |
 | Fare commit di file `.env` in Git | Usare un gestore di segreti (Vault, AWS Secrets Manager, Doppler) |
-| Condividere le stringhe di connessione MongoDB con il client | Mantenere tutte le connessioni al database solo lato server |
+| Condividere le stringhe di connessione del database con il client | Mantenere tutte le connessioni al database solo lato server |
 | Usare lo stesso segreto JWT in tutti gli ambienti | Usare segreti unici per ambiente |
 
-### Sicurezza specifica di MongoDB
+### Sicurezza del database
 
-- **Abilita l'autenticazione** sul tuo cluster MongoDB. Non eseguirlo mai senza autenticazione.
+- **Abilita l'autenticazione** sul tuo database. Non eseguirlo mai senza autenticazione.
 - **Usa un utente database dedicato** per la tua API con i permessi minimi necessari.
-- **Abilita TLS** per le connessioni tra la tua API e MongoDB.
-- **Controllo d'accesso di rete**: limita quali IP possono connettersi al tuo cluster MongoDB.
-- **Abilita il logging di audit** se il tuo piano MongoDB lo supporta.
+- **Abilita TLS** per le connessioni tra la tua API e il database.
+- **Controllo d'accesso di rete**: limita quali IP possono connettersi al tuo database.
+- **Abilita il logging di audit** se il tuo database lo supporta.
 
 ### Sicurezza delle dipendenze
 
@@ -717,9 +723,9 @@ Content-Security-Policy:
 | **Auth** | `signOut` invalida la sessione lato server | ☐ |
 | **Auth** | I token sono archiviati in cookie httpOnly (preferito) | ☐ |
 | **Dati** | Tutto il CRUD passa attraverso API autenticata | ☐ |
-| **Dati** | MongoDB mai esposto al browser | ☐ |
+| **Dati** | Database mai esposto al browser | ☐ |
 | **Dati** | Il server valida e sanitizza tutti gli input | ☐ |
-| **Dati** | Prevenzione dell'iniezione NoSQL implementata | ☐ |
+| **Dati** | Prevenzione dell'iniezione nelle query implementata | ☐ |
 | **Dati** | L'accesso alle collezioni è in whitelist | ☐ |
 | **Dati** | Limiti di dimensione dei risultati applicati | ☐ |
 | **Storage** | URL pre-firmati usati per upload/download | ☐ |
@@ -732,5 +738,5 @@ Content-Security-Policy:
 | **Generale** | Rate limiting su tutti gli endpoint dell'API | ☐ |
 | **Generale** | Header CSP configurati | ☐ |
 | **Generale** | Nessun segreto nel codice frontend | ☐ |
-| **Generale** | Auth e TLS MongoDB abilitati | ☐ |
+| **Generale** | Auth e TLS del database abilitati | ☐ |
 | **Generale** | Dipendenze auditate regolarmente | ☐ |

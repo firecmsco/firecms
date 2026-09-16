@@ -1,6 +1,6 @@
 # Telemetry and the license check
 
-A self-hosted FireCMS app reads and writes your data directly from the browser, with the Firebase or MongoDB SDK. It sends one request to FireCMS: the access log, which is also the PRO license check. This page lists exactly what that request contains and what we keep.
+A self-hosted FireCMS app reads and writes your data from the browser, through the Firebase SDK or your own backend. It sends one request to FireCMS: the access log, which is also the PRO license check. This page lists exactly what that request contains and what we keep.
 
 ## When it is sent
 
@@ -16,7 +16,7 @@ Once per signed-in user each time the app loads: when a user signs in, or when t
   - `datasource`: the key of the data source in use, for example `firestore`
   - `plugins`: the keys of the plugins you configured, for example `["collection_editor", "user_management"]`
 
-The request contains no database credentials, no documents or other Firestore or Atlas content, and no collection schemas.
+The request contains no database credentials, no documents or other Firestore content, and no collection schemas.
 
 ## What we store
 

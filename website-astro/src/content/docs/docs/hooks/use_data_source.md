@@ -2,13 +2,13 @@
 slug: docs/hooks/use_data_source
 title: useDataSource
 sidebar_label: useDataSource
-description: Access the FireCMS data source hook for fetching, saving, and managing entities. Works with Firestore, MongoDB, or any custom backend implementation.
+description: Access the FireCMS data source hook for fetching, saving, and managing entities. Works with Firestore or any custom backend implementation.
 ---
 
 Use this hook to access the data source being used in your FireCMS application.
 
 This controller allows you to fetch and save data from your database (such
-as Firestore or MongoDB) using the abstraction of collections and entities created by FireCMS.
+as Firestore) using the abstraction of collections and entities created by FireCMS.
 
 :::note
 Please note that in order to use this hook you **must** be in

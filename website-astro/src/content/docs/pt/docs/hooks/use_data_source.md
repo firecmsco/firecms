@@ -2,13 +2,13 @@
 slug: pt/docs/hooks/use_data_source
 title: useDataSource
 sidebar_label: useDataSource
-description: Acesse o hook de fonte de dados do FireCMS para buscar, salvar e gerenciar entidades. Funciona com Firestore, MongoDB ou qualquer implementação de backend personalizada.
+description: Acesse o hook de fonte de dados do FireCMS para buscar, salvar e gerenciar entidades. Funciona com Firestore ou qualquer implementação de backend personalizada.
 ---
 
 Use este hook para acessar a fonte de dados utilizada na sua aplicação FireCMS.
 
 Este controlador permite buscar e salvar dados do seu banco de dados (como
-Firestore ou MongoDB) usando a abstração de coleções e entidades criada pelo FireCMS.
+Firestore) usando a abstração de coleções e entidades criada pelo FireCMS.
 
 :::note
 Observe que para usar este hook você **deve** estar dentro

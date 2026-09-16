@@ -5,7 +5,7 @@ sidebar_label: Telemetrie
 description: Die eine Anfrage, die eine selbst gehostete FireCMS-App an FireCMS sendet, was sie enthält, was wir speichern und warum, und wie Sie sie in Community abschalten.
 ---
 
-Eine selbst gehostete FireCMS-App liest und schreibt Ihre Daten direkt aus dem Browser, mit dem SDK von Firebase oder MongoDB. An FireCMS sendet sie eine einzige Anfrage: das Zugriffsprotokoll, das zugleich die PRO-Lizenzprüfung ist. Diese Seite listet genau auf, was diese Anfrage enthält und was wir aufbewahren.
+Eine selbst gehostete FireCMS-App liest und schreibt Ihre Daten aus dem Browser, über das Firebase-SDK oder Ihr eigenes Backend. An FireCMS sendet sie eine einzige Anfrage: das Zugriffsprotokoll, das zugleich die PRO-Lizenzprüfung ist. Diese Seite listet genau auf, was diese Anfrage enthält und was wir aufbewahren.
 
 ## Wann sie gesendet wird
 
@@ -21,7 +21,7 @@ Einmal pro angemeldetem Nutzer bei jedem Laden der App: Wenn sich ein Nutzer anm
   - `datasource`: der Schlüssel der verwendeten Datenquelle, zum Beispiel `firestore`
   - `plugins`: die Schlüssel der konfigurierten Plugins, zum Beispiel `["collection_editor", "user_management"]`
 
-Die Anfrage enthält keine Datenbank-Zugangsdaten, keine Dokumente oder sonstigen Inhalte aus Firestore oder Atlas und keine Kollektionsschemas.
+Die Anfrage enthält keine Datenbank-Zugangsdaten, keine Dokumente oder sonstigen Inhalte aus Firestore und keine Kollektionsschemas.
 
 ## Was wir speichern
 

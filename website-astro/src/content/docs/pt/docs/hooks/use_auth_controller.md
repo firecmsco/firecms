@@ -14,7 +14,7 @@ os controladores.
 ## `useAuthController`
 
 Hook para acessar o estado de autenticação e realizar operações relacionadas à autenticação.
-Funciona com qualquer backend (Firebase, MongoDB ou implementações personalizadas).
+Funciona com qualquer backend (Firebase ou implementações personalizadas).
 
 As propriedades fornecidas por este hook são:
 
