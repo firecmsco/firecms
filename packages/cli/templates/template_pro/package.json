@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "dependencies": {
     "@firecms/collection_editor": "^3.0.0",
     "@firecms/collection_editor_firebase": "^3.0.0",

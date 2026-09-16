@@ -45,12 +45,26 @@ import { blogCollection } from "@/app/cms/collections/blog";
 import Link from "next/link";
 import { Button, OpenInNewIcon } from "@firecms/ui";
 
+/**
+ * Shown instead of a blank page when firebase_config.ts is still the placeholder the
+ * template ships: the app used to throw while rendering, so the browser showed nothing at
+ * all and the reason was only in the console.
+ */
+function MissingFirebaseConfig({ file }: { file: string }) {
+    return <div className="flex flex-col items-center justify-center min-h-screen gap-3 p-8 text-center">
+        <h1 className="text-2xl font-bold">Firebase config missing</h1>
+        <p>Add your Firebase web app config to <code className="font-mono">{file}</code>.</p>
+        <p>You can find it in the Firebase console, under Project settings, or run{" "}
+            <code className="font-mono">npx @firecms/cli login</code> and scaffold again to have it filled in.</p>
+    </div>;
+}
+
 export function App() {
 
     const title = "FireCMS e-commerce and blog demo";
 
     if (!firebaseConfigured) {
-        throw new Error("Firebase config not found. Please check your `firebase_config.ts` file and make sure it is correctly set up.");
+        return <MissingFirebaseConfig file={"src/app/common/firebase_config.ts"}/>;
     }
 
     const {

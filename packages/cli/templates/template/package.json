@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "dependencies": {
     "@firecms/core": "^3.0.0",
     "@firecms/firebase": "^3.0.0",

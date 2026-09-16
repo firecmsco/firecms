@@ -367,8 +367,11 @@ export function scaffoldWithInit({ cliDir, template, parentDir, dirName, project
  *
  * The settings go in pnpm-workspace.yaml: pnpm 11 ignores the `pnpm` field of
  * package.json, overrides included, and would quietly install the published packages.
- * `strictDepBuilds: false` keeps pnpm 11's "approve the build scripts of esbuild, ..."
- * prompt a warning rather than a failed install; the build proves none is needed.
+ *
+ * Nothing here relaxes pnpm's build-script approval any more. It used to pass
+ * `strictDepBuilds: false`, which hid the fact that a scaffolded project could not be
+ * installed — or even started — with pnpm 11 at all: the templates now ship the approvals,
+ * and this check fails if one of them stops covering what the template needs.
  */
 export async function installWithLocalPackages(project, tarballs, { logFile } = {}) {
     const overrides = Object.entries(tarballs)
@@ -377,7 +380,7 @@ export async function installWithLocalPackages(project, tarballs, { logFile } = 
     // Appended: a template may ship a pnpm-workspace.yaml of its own (template_cloud does).
     const workspaceFile = path.join(project, "pnpm-workspace.yaml");
     const shipped = fs.existsSync(workspaceFile) ? fs.readFileSync(workspaceFile, "utf8").trimEnd() + "\n\n" : "";
-    fs.writeFileSync(workspaceFile, `${shipped}strictDepBuilds: false\noverrides:\n${overrides}`);
+    fs.writeFileSync(workspaceFile, `${shipped}overrides:\n${overrides}`);
     const [cmd, args] = await packageManager("pnpm", ["install", "--no-frozen-lockfile"]);
     return run(cmd, args, { cwd: project, env: { ...process.env, CI: "1" }, logFile });
 }

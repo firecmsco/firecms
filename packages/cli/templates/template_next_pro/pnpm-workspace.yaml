@@ -1,16 +1,5 @@
-# Read by pnpm only; npm and yarn ignore this file.
+# Read by pnpm only; npm, yarn and bun ignore this file.
 #
-# vite.config.ts shares these modules with the FireCMS Cloud app instead of bundling
-# them, but the federation plugin still resolves each one from this folder while it
-# builds. npm installs them here; pnpm keeps them nested inside @firecms/cloud and
-# firebase unless told to hoist them, and the build fails with
-#     Could not resolve entry module "@firecms/core".
-# pnpm reads settings from this file since 10.5; older versions ignore them, so
-# building with pnpm needs 10.5 or later.
-publicHoistPattern:
-  - "@firecms/*"
-  - "@firebase/*"
-
 # pnpm refuses to install until the dependencies that run install scripts are approved,
 # and it re-runs that check before `pnpm run`, so without this a scaffolded project can
 # neither be installed nor started with pnpm at all:

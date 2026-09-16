@@ -33,7 +33,37 @@ import { productsCollection } from "./collections/products";
 
 import { firebaseConfig } from "./firebase_config";
 
+/**
+ * Whether firebase_config.ts holds a real project's config, or still the placeholders the
+ * template ships. `firecms init` fills them in when you are logged in.
+ */
+function isFirebaseConfigured(config: Record<string, string>): boolean {
+    return Boolean(config.projectId) && Object.values(config).every(value =>
+        typeof value === "string"
+        && value.length > 0
+        && !value.startsWith("YOUR_")
+        && !value.includes("["));
+}
+
+/**
+ * Shown instead of a blank page when firebase_config.ts is still the placeholder the
+ * template ships: the app used to throw while rendering, so the browser showed nothing at
+ * all and the reason was only in the console.
+ */
+function MissingFirebaseConfig({ file }: { file: string }) {
+    return <div className="flex flex-col items-center justify-center min-h-screen gap-3 p-8 text-center">
+        <h1 className="text-2xl font-bold">Firebase config missing</h1>
+        <p>Add your Firebase web app config to <code className="font-mono">{file}</code>.</p>
+        <p>You can find it in the Firebase console, under Project settings, or run{" "}
+            <code className="font-mono">npx @firecms/cli login</code> and scaffold again to have it filled in.</p>
+    </div>;
+}
+
 function App() {
+
+    if (!isFirebaseConfigured(firebaseConfig)) {
+        return <MissingFirebaseConfig file={"src/firebase_config.ts"}/>;
+    }
 
     // Use your own authentication logic here
     const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
