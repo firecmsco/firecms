@@ -4,6 +4,8 @@ import { buildCollection, buildProperty } from "@firecms/core";
 export const demoCollection = buildCollection({
     id: "demo",
     name: "Demo collection",
+    // Without it, the CMS asks whether to "delete this Demo collection?"
+    singularName: "Demo entry",
     description: "This is a demo collection with many of the **available properties**",
     path: "demo",
     properties: {
@@ -26,7 +28,7 @@ export const demoCollection = buildCollection({
         // you can define this property dynamically, and modify it based on the values of other properties
         price: ({ values }) => ({
             dataType: "number",
-            title: "Price",
+            name: "Price",
             validation: {
                 requiredMessage: "You must set a price between 0 and 1000",
                 min: 0,
@@ -192,13 +194,6 @@ export const demoCollection = buildCollection({
                 }
             },
             expanded: true
-        },
-
-        // reference to another collection
-        client: {
-            dataType: "reference",
-            path: "users",
-            name: "Related client"
         },
 
         // multiple references to another collection

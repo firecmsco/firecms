@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { initializeApp, getApps } from "firebase/app";
-import { getFirestore, collection, getDocs, query, limit } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, limit, where } from "firebase/firestore";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { firebaseConfig } from "../common/firebase_config";
 
@@ -67,7 +67,8 @@ export function BlogList() {
 
         const app = getApp();
         const db = getFirestore(app);
-        const q = query(collection(db, "blog"), limit(20));
+        // Published only: the CMS keeps drafts in the same collection.
+        const q = query(collection(db, "blog"), where("status", "==", "published"), limit(20));
         getDocs(q).then(async snap => {
             const items = snap.docs.map(doc => ({ id: doc.id, data: doc.data() as BlogEntryData }));
             const withUrls: BlogEntryWithUrl[] = await Promise.all(

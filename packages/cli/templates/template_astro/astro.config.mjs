@@ -22,6 +22,13 @@ export default defineConfig({
         plugins: [
             tailwindcss()
         ],
+        // Without this, `astro dev` serves @astrojs/react's client renderer unbundled while
+        // react-dom is pre-bundled, so the island's `react-dom/client` import resolves to the
+        // untransformed CommonJS file: "does not provide an export named 'createRoot'", and
+        // every page renders blank. The production build is unaffected.
+        optimizeDeps: {
+            include: ["react-dom/client"]
+        },
         resolve: {
             alias: {
                 "@": path.resolve(__dirname, "src"),

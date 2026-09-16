@@ -29,6 +29,7 @@ import {
 } from "@firecms/firebase";
 import { CenteredView } from "@firecms/ui";
 import { demoCollection } from "./collections/demo";
+import { productsCollection } from "./collections/products";
 
 import { firebaseConfig } from "./firebase_config";
 
@@ -55,7 +56,10 @@ function App() {
     }, []);
 
     const collections = useMemo(() => [
-        demoCollection
+        demoCollection,
+        // Mounted because demoCollection references it: a reference to a collection that is
+        // not mounted shows an error in every row and in the form.
+        productsCollection
     ], []);
 
     const {
