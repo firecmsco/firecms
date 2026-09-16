@@ -143,10 +143,10 @@ afterEach(() => {
 
 describe("FireCMS under a blocked license", () => {
 
-    it.each(["expired", "invalid_project"] as const)(
+    it.each(["expired", "invalid_project", "over_quota"] as const)(
         "keeps rendering the CMS and pauses every PRO plugin except user_management (%s)",
         async (licenseState) => {
-            stubAccessLog({ blocked: true, licenseState, projectId: "demo-123" });
+            stubAccessLog({ blocked: true, licenseState, projectId: "demo-123", licensedProjects: 1, linkedProjects: 2 });
             renderApp();
 
             await waitFor(() => expect(screen.getByTestId("state").textContent).toEqual(licenseState));
@@ -201,8 +201,7 @@ describe("FireCMS when PRO is not paused", () => {
 
     it.each<[string, AccessResponse]>([
         ["trial", { blocked: false, licenseState: "trial", daysLeft: 12 }],
-        ["licensed", { blocked: false, licenseState: "licensed" }],
-        ["over_quota", { blocked: false, licenseState: "over_quota", licensedProjects: 1, linkedProjects: 2 }]
+        ["licensed", { blocked: false, licenseState: "licensed" }]
     ])("keeps every plugin for %s", async (state, response) => {
         stubAccessLog(response);
         renderApp();

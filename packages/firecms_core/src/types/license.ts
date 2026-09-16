@@ -8,8 +8,9 @@
  * - `expired`: the trial ended without a license. PRO plugins are paused.
  * - `invalid_project`: a license key was presented, but this project is not
  *   linked to that license. PRO plugins are paused.
- * - `over_quota`: the license has more projects linked than it pays for.
- *   Nothing is paused.
+ * - `over_quota`: the license links more projects than it pays for, and this
+ *   is not one of the projects it covers in production. PRO plugins are
+ *   paused.
  *
  * @group Models
  */

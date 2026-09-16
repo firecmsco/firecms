@@ -40,7 +40,7 @@ describe("filterPausedPlugins", () => {
         ]);
     });
 
-    it.each(["expired", "invalid_project", undefined])(
+    it.each(["expired", "invalid_project", "over_quota", undefined])(
         "keeps user_management and non-PRO plugins, drops the rest, when blocked (%s)",
         (licenseState) => {
             const kept = filterPausedPlugins(all, { blocked: true, licenseState: licenseState as any })!;
@@ -49,7 +49,6 @@ describe("filterPausedPlugins", () => {
 
     it.each([
         ["not blocked", { blocked: false, licenseState: "trial" as const, daysLeft: 3 }],
-        ["over quota", { blocked: false, licenseState: "over_quota" as const }],
         ["an old server's allowed response", { blocked: false }],
         ["no answer", null]
     ])("filters nothing and returns the same array when %s", (_, status) => {

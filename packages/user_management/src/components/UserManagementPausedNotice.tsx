@@ -12,7 +12,9 @@ export function UserManagementPausedNotice() {
     const licenseStatus = useLicenseStatus();
     const linkLabel = licenseStatus?.licenseState === "invalid_project"
         ? t("license_add_project_to_license")
-        : t("license_get_license");
+        : licenseStatus?.licenseState === "over_quota"
+            ? t("license_update_license")
+            : t("license_get_license");
 
     return (
         <Paper

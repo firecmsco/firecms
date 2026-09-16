@@ -99,23 +99,23 @@ describe("LicenseBanner copy", () => {
         expect(screen.getByRole("link", { name: "Add it to your license" }).getAttribute("href")).toEqual(SUBSCRIBE_URL);
     });
 
-    it("compares covered and linked projects when over quota", async () => {
+    it("says the license pays for other projects, and what is paused, when over quota", async () => {
         renderBanner({
-            blocked: false,
+            blocked: true,
             licenseState: "over_quota",
             licensedProjects: 2,
             linkedProjects: 3,
             subscribeUrl: SUBSCRIBE_URL
         });
 
-        expect(await bannerText()).toContain("This license covers 2 projects and 3 are linked to it.");
-        expect(screen.getByRole("link", { name: "Update your license" })).toBeTruthy();
+        expect(await bannerText()).toContain("This project's license pays for 2 projects in production, and this is not one of them. PRO features such as the schema editor, import/export and history are paused; your data and collections still work.");
+        expect(screen.getByRole("link", { name: "Update your license" }).getAttribute("href")).toEqual(SUBSCRIBE_URL);
     });
 
-    it("uses the singular when the license covers one project", async () => {
-        renderBanner({ blocked: false, licenseState: "over_quota", licensedProjects: 1, linkedProjects: 2 });
+    it("uses the singular when the license pays for one project", async () => {
+        renderBanner({ blocked: true, licenseState: "over_quota", licensedProjects: 1, linkedProjects: 2 });
 
-        expect(await bannerText()).toContain("This license covers 1 project and 2 are linked to it.");
+        expect(await bannerText()).toContain("This project's license pays for 1 project in production, and it is a different one.");
     });
 
     it.each<[string, AccessResponse | null]>([
@@ -185,21 +185,14 @@ describe("LicenseBanner dismissal", () => {
         fireEvent.click(screen.getByRole("button", { name: "Close" }));
 
         cleanup();
-        renderBanner({ blocked: false, licenseState: "over_quota", licensedProjects: 1, linkedProjects: 2 });
-        expect(await bannerText()).toContain("This license covers 1 project");
-    });
-
-    it("lets the over-quota banner be dismissed", async () => {
-        renderBanner({ blocked: false, licenseState: "over_quota", licensedProjects: 1, linkedProjects: 2 });
-        await bannerText();
-
-        fireEvent.click(screen.getByRole("button", { name: "Close" }));
-        expect(screen.getByTestId("host").textContent).toEqual("");
+        renderBanner({ blocked: true, licenseState: "expired" });
+        expect(await bannerText()).toContain("Your PRO trial has ended.");
     });
 
     it.each<[string, AccessResponse]>([
         ["expired", { blocked: true, licenseState: "expired", trialEndsAt: "2026-09-01T12:00:00.000Z" }],
-        ["invalid_project", { blocked: true, licenseState: "invalid_project", projectId: "demo-123" }]
+        ["invalid_project", { blocked: true, licenseState: "invalid_project", projectId: "demo-123" }],
+        ["over_quota", { blocked: true, licenseState: "over_quota", licensedProjects: 1, linkedProjects: 2 }]
     ])("cannot dismiss %s", async (_, status) => {
         renderBanner(status);
         await bannerText();

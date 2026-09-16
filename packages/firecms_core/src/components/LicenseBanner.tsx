@@ -30,9 +30,9 @@ type BannerContent = {
 
 /**
  * Tells the user where their FireCMS PRO license stands: days left in the
- * trial, a paused state, or a license that covers fewer projects than are
- * linked to it. Renders nothing when licensed, when no license is needed, and
- * while the status is unknown.
+ * trial, or why PRO is paused (the trial ended, the key is not linked to this
+ * project, or the license pays for other projects). Renders nothing when
+ * licensed, when no license is needed, and while the status is unknown.
  *
  * The default `Scaffold` already renders it above the main content. Place it
  * yourself only in a custom layout.
@@ -142,19 +142,17 @@ function buildBannerContent(status: AccessResponse,
             };
         case "over_quota": {
             const licensed = status.licensedProjects;
-            const actual = status.linkedProjects;
-            if (!isCount(licensed) || !isCount(actual)) return null;
+            if (!isCount(licensed)) return null;
             return {
                 state: "over_quota",
-                color: "info",
+                color: "warning",
                 message: t("license_over_quota_banner", {
                     count: licensed,
-                    licensed: String(licensed),
-                    actual: String(actual)
+                    licensed: String(licensed)
                 }),
                 linkLabel: t("license_update_license"),
                 href,
-                dismissible: true
+                dismissible: false
             };
         }
         default:
