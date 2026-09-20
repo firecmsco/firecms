@@ -19,7 +19,7 @@
         "axios": "^1.18.1",
         "cors": "^2.8.5",
         "dotenv": "^17.4.2",
-        "express": "^4.22.2",
+        "express": "^5.2.1",
         "fast-csv": "^4.3.6",
         "firebase-admin": "^14.2.0",
         "firebase-functions": "^7.3.2",
