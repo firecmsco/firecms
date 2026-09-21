@@ -28,7 +28,8 @@ export function CollectionSetupSelectionDialog({
     projectsApi: ProjectsApi;
     projectId: string;
     onSuccess?: () => void;
-    onError?: (error: Error) => void;
+    /** `retry` runs the same setup again, for after the user has fixed the cause. */
+    onError?: (error: Error, retry: () => void) => void;
 }) {
     const { t } = useTranslation();
     const snackbarController = useSnackbarController();
@@ -96,11 +97,9 @@ export function CollectionSetupSelectionDialog({
             onClose();
         } catch (error) {
             console.error("Error setting up collections", error);
-            snackbarController.open({
-                message: t("error_setting_up_collections"),
-                type: "error"
-            });
-            onError?.(error instanceof Error ? error : new Error(String(error)));
+            // The caller explains the failure; this dialog stays open so the
+            // selection survives a retry.
+            onError?.(error instanceof Error ? error : new Error(String(error)), handleSetup);
         } finally {
             setLoading(false);
         }

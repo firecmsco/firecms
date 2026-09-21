@@ -1,12 +1,14 @@
 import React from "react";
 import { prettifyIdentifier, useAuthController, useNavigationController, useSnackbarController, useTranslation } from "@firecms/core";
 import { AddIcon, Button, Chip, CircularProgress, Collapse, StorageIcon, Typography, } from "@firecms/ui";
-import { useCollectionEditorController, useCollectionsConfigController } from "@firecms/collection_editor";
+import { useCollectionEditorController } from "@firecms/collection_editor";
 import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
 import { useFireCMSBackend, useProjectConfig } from "../hooks";
 import { RootCollectionInfo } from "../api/projects";
 import { useNavigate } from "react-router";
 import { createConcurrencyLimit } from "../utils/concurrency_limit";
+import { useCollectionSetupErrors } from "./useCollectionSetupErrors";
+import { useCollectionsSetupOngoing } from "./useCollectionsSetupOngoing";
 
 /**
  * Chips set up at most this many collections at once; later clicks wait their
@@ -34,11 +36,10 @@ export function RootCollectionSuggestions({
     const snackbarController = useSnackbarController();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { reportSetupError, setupErrorDialog } = useCollectionSetupErrors(projectConfig.projectId);
 
     const collectionEditorController = useCollectionEditorController();
-    const configController = useCollectionsConfigController();
-    const collectionsSetupStatus = configController.collectionsSetup?.status;
-    const setupLoading = collectionsSetupStatus === "ongoing";
+    const setupLoading = useCollectionsSetupOngoing();
     const canCreateCollections = collectionEditorController.configPermissions
         ? collectionEditorController.configPermissions({
             user: authController.user
@@ -92,11 +93,11 @@ export function RootCollectionSuggestions({
             }
         } catch (error) {
             console.error("Error setting up collection", info.path, error);
-            snackbarController.open({
-                message: t("error_setting_up_collections"),
-                type: "error"
+            reportSetupError(error, () => setupSingleCollection(info));
+            onAnalyticsEvent?.("suggestion_chip_setup_error", {
+                path: info.path,
+                code: (error as { code?: string })?.code ?? null
             });
-            onAnalyticsEvent?.("suggestion_chip_setup_error", { path: info.path });
         } finally {
             setSettingUpPaths(prev => {
                 const next = new Set(prev);
@@ -109,7 +110,9 @@ export function RootCollectionSuggestions({
     const loading = filteredSuggestions === undefined;
     const showSuggestions = (filteredSuggestions ?? []).length > 0;
     const forceShowSuggestions = introMode === "existing_project";
-    return <Collapse
+    return <>
+    {setupErrorDialog}
+    <Collapse
         in={forceShowSuggestions || showSuggestions}>
 
         <div
@@ -131,7 +134,9 @@ export function RootCollectionSuggestions({
                     onClick={() => onAnalyticsEvent?.("suggestions_cols_setup_click")}
                     onSuccess={() => onAnalyticsEvent?.("suggestions_cols_setup_success")}
                     onNoCollections={() => onAnalyticsEvent?.("suggestions_cols_setup_no_cols")}
-                    onError={() => onAnalyticsEvent?.("suggestions_cols_setup_error")}
+                    onError={(error) => onAnalyticsEvent?.("suggestions_cols_setup_error", {
+                        code: (error as { code?: string })?.code ?? null
+                    })}
                 />
 
                 {loading && <CircularProgress size={"smallest"} />}
@@ -160,4 +165,5 @@ export function RootCollectionSuggestions({
             </div>
         </div>
     </Collapse>
+    </>;
 }

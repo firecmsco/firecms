@@ -2,8 +2,9 @@ import React from "react";
 import { AIIcon, ConfirmationDialog, useSnackbarController, useTranslation } from "@firecms/core";
 import { LoadingButton, Typography } from "@firecms/ui";
 import { InitialCollectionsSetupDiagnostics, ProjectsApi, RootCollectionInfo } from "../api/projects";
-import { useCollectionsConfigController } from "@firecms/collection_editor";
 import { CollectionSetupSelectionDialog } from "./CollectionSetupSelectionDialog";
+import { useCollectionSetupErrors } from "./useCollectionSetupErrors";
+import { useCollectionsSetupOngoing } from "./useCollectionsSetupOngoing";
 
 export function AutoSetUpCollectionsButton({
     projectsApi,
@@ -32,14 +33,13 @@ export function AutoSetUpCollectionsButton({
     disabled?: boolean;
 }) {
 
-    const configController = useCollectionsConfigController();
-    const collectionsSetupStatus = configController.collectionsSetup?.status;
-    const setupLoading = collectionsSetupStatus === "ongoing";
+    const setupLoading = useCollectionsSetupOngoing();
 
     const [setUpRequested, setSetupRequested] = React.useState(false);
     const snackbarController = useSnackbarController();
     const [loadingAutomaticallyCreate, setLoadingAutomaticallyCreate] = React.useState(false);
     const { t } = useTranslation();
+    const { reportSetupError, setupErrorDialog } = useCollectionSetupErrors(projectId);
 
     // Use the selection dialog when suggestions are provided (CTA in RootCollectionSuggestions)
     const useSelectionDialog = askConfirmation && suggestions && suggestions.length > 0;
@@ -72,10 +72,7 @@ export function AutoSetUpCollectionsButton({
             .catch((error) => {
                 onError?.(error instanceof Error ? error : new Error(String(error)));
                 console.error("Error setting up collections", error);
-                snackbarController.open({
-                    message: t("error_setting_up_collections"),
-                    type: "error"
-                });
+                reportSetupError(error, doCollectionSetup);
             })
             .finally(() => setLoadingAutomaticallyCreate(false));
     };
@@ -112,8 +109,9 @@ export function AutoSetUpCollectionsButton({
                     onSuccess?.();
                     setSetupRequested(false);
                 }}
-                onError={(error) => {
+                onError={(error, retry) => {
                     onError?.(error);
+                    reportSetupError(error, retry);
                 }}
             />
             : <ConfirmationDialog
@@ -131,5 +129,7 @@ export function AutoSetUpCollectionsButton({
                     </React.Fragment>
                 ))}</Typography>} />
         }
+
+        {setupErrorDialog}
     </>;
 }

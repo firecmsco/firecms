@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Alert, CircularProgress, CloseIcon, IconButton } from "@firecms/ui";
 import { useCollectionsConfigController } from "@firecms/collection_editor";
+import { useCollectionsSetupOngoing } from "./useCollectionsSetupOngoing";
 
 const ERROR_EXPIRY_MS = 30 * 60 * 1000; // 30 minutes
 
@@ -10,7 +11,7 @@ export function CollectionsSetupLoadingLabel({
 
     const configController = useCollectionsConfigController();
     const collectionsSetup = configController.collectionsSetup;
-    const setupLoading = collectionsSetup?.status === "ongoing";
+    const setupLoading = useCollectionsSetupOngoing();
     const setupError = collectionsSetup?.status === "error";
 
     const [dismissed, setDismissed] = useState(false);
