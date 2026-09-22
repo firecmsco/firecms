@@ -82,6 +82,10 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 })
             })
             .then(async (res) => {
+                // The backend has answered 304, with no body, when the web app
+                // already exists and it only wrote its config. That is success,
+                // not an error to retry.
+                if (res.status === 304) return true;
                 return handleApiResponse(res, projectId).then((_) => true);
             });
     }

@@ -38,12 +38,15 @@ export function CollectionSetupSelectionDialog({
     const [selectedPaths, setSelectedPaths] = React.useState<Set<string>>(new Set());
     const [loading, setLoading] = React.useState(false);
 
-    // Reset selection when dialog opens
+    // Reset selection when dialog opens, or when the suggested paths change.
+    // Not on every new `suggestions` array: the parent builds one per render,
+    // which threw away the user's selection whenever it re-rendered.
+    const suggestedPathsKey = JSON.stringify(suggestions.map(s => s.path));
     React.useEffect(() => {
         if (open) {
-            setSelectedPaths(new Set(suggestions.map(s => s.path)));
+            setSelectedPaths(new Set(JSON.parse(suggestedPathsKey) as string[]));
         }
-    }, [open, suggestions]);
+    }, [open, suggestedPathsKey]);
 
     const togglePath = (path: string) => {
         setSelectedPaths(prev => {

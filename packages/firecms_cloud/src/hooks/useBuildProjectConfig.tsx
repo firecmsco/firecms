@@ -8,6 +8,8 @@ import { UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
 import { darkenColor, hexToRgbaWithOpacity } from "../utils";
 import { AppCheckOptions } from "@firecms/firebase";
+import { ProjectsApi } from "../api/projects";
+import { useRetryStalledFirebaseConfig } from "./useRetryStalledFirebaseConfig";
 
 const DEFAULT_PRIMARY_COLOR = "#0070F4";
 const DEFAULT_SECONDARY_COLOR = "#FF5B79";
@@ -76,11 +78,17 @@ export type ProjectConfig = {
 interface ProjectConfigParams {
     backendFirebaseApp?: FirebaseApp;
     projectId: string;
+    /**
+     * Lets the hook ask the backend for the project's web app when its
+     * Firebase config stays pending. See `useRetryStalledFirebaseConfig`.
+     */
+    projectsApi?: ProjectsApi;
 }
 
 export function useBuildProjectConfig({
     backendFirebaseApp,
     projectId,
+    projectsApi
 }: ProjectConfigParams): ProjectConfig {
 
     const [primaryColor, setPrimaryColor] = useState<string | undefined>(() => {
@@ -110,6 +118,7 @@ export function useBuildProjectConfig({
     const [clientConfigLoading, setClientConfigLoading] = useState<boolean>(false);
     const [clientFirebaseConfig, setClientFirebaseConfig] = useState<Record<string, unknown> | undefined>();
     const [clientFirebaseMissing, setClientFirebaseMissing] = useState<boolean | undefined>();
+    const [clientFirebasePending, setClientFirebasePending] = useState<boolean>(false);
     const [serviceAccountMissing, setServiceAccountMissing] = useState<boolean | undefined>();
     const [clientConfigError, setClientConfigError] = useState<Error | undefined>();
     const [localTextSearchEnabled, setLocalTextSearchEnabled] = useState<boolean>(false);
@@ -134,16 +143,35 @@ export function useBuildProjectConfig({
         const firestore = getFirestore(backendFirebaseApp);
         if (!firestore || !configPath) return;
 
-        return onSnapshot(doc(firestore, configPath),
-            {
-                next: (snapshot) => {
-                    setLogo(snapshot.get("logo"));
-                },
-                error: (e) => {
-                    console.error(e);
-                }
-            }
-        );
+        // Denied while the project is still being created, like the project
+        // listener below, so it listens again the same way.
+        let unsubscribe: (() => void) | undefined;
+        let retryTimeout: ReturnType<typeof setTimeout> | undefined;
+        let deniedAttempts = 0;
+
+        const subscribe = () => {
+            unsubscribe = onSnapshot(doc(firestore, configPath),
+                {
+                    next: (snapshot) => {
+                        deniedAttempts = 0;
+                        setLogo(snapshot.get("logo"));
+                    },
+                    error: (e) => {
+                        console.error(e);
+                        if (e.code === "permission-denied") {
+                            const delay = Math.min(1000 * 2 ** deniedAttempts, 10000);
+                            deniedAttempts++;
+                            retryTimeout = setTimeout(subscribe, delay);
+                        }
+                    }
+                });
+        };
+        subscribe();
+
+        return () => {
+            clearTimeout(retryTimeout);
+            unsubscribe?.();
+        };
     }, [configPath]);
 
     // update css variables when colors change in :root
@@ -232,6 +260,7 @@ export function useBuildProjectConfig({
         if (loadedProjectIdRef.current !== projectId) {
             setClientConfigLoading(true);
             setClientFirebaseConfig(undefined);
+            setClientFirebasePending(false);
             loadedProjectIdRef.current = undefined;
         }
 
@@ -285,7 +314,12 @@ export function useBuildProjectConfig({
                         const firebaseConfig = snapshot.get("firebase_config");
 
                         loadedProjectIdRef.current = projectId;
-                        if (firebaseConfig === "loading") {
+                        // "error" is a web app creation that failed: still on
+                        // its way as far as the UI is concerned, since the
+                        // stalled config retry below asks for it again.
+                        const firebaseConfigPending = firebaseConfig === "loading" || firebaseConfig === "error";
+                        setClientFirebasePending(firebaseConfigPending);
+                        if (firebaseConfigPending) {
                             setClientConfigLoading(true);
                             setClientFirebaseConfig(undefined);
                             setClientFirebaseMissing(false);
@@ -320,6 +354,12 @@ export function useBuildProjectConfig({
             unsubscribe?.();
         };
     }, [backendFirebaseApp, projectId]);
+
+    useRetryStalledFirebaseConfig({
+        projectId,
+        pending: clientFirebasePending,
+        createFirebaseWebapp: projectsApi?.createFirebaseWebapp
+    });
 
     const updatePrimaryColor = useCallback(async (color?: string): Promise<void> => {
         if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
