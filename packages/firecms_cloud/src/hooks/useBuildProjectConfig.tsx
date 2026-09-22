@@ -12,6 +12,20 @@ import { ProjectsApi } from "../api/projects";
 import { useRetryStalledFirebaseConfig } from "./useRetryStalledFirebaseConfig";
 
 const DEFAULT_PRIMARY_COLOR = "#0070F4";
+
+/**
+ * How long to keep listening again after Firestore denies a project read.
+ * The denial is expected while a project is being created (about a minute at
+ * worst); past this it is a user without access, e.g. one removed from the
+ * project, and retrying every 10s for as long as the tab is open only costs.
+ */
+const PERMISSION_DENIED_RETRY_MS = 5 * 60_000;
+
+/** The wait before listening again, or undefined to give up. */
+function permissionDeniedRetryDelay(deniedSince: number, attempts: number): number | undefined {
+    if (Date.now() - deniedSince > PERMISSION_DENIED_RETRY_MS) return undefined;
+    return Math.min(1000 * 2 ** attempts, 10000);
+}
 const DEFAULT_SECONDARY_COLOR = "#FF5B79";
 
 export type TypesenseSearchConfig = {
@@ -148,18 +162,22 @@ export function useBuildProjectConfig({
         let unsubscribe: (() => void) | undefined;
         let retryTimeout: ReturnType<typeof setTimeout> | undefined;
         let deniedAttempts = 0;
+        let deniedSince: number | undefined;
 
         const subscribe = () => {
             unsubscribe = onSnapshot(doc(firestore, configPath),
                 {
                     next: (snapshot) => {
                         deniedAttempts = 0;
+                        deniedSince = undefined;
                         setLogo(snapshot.get("logo"));
                     },
                     error: (e) => {
                         console.error(e);
                         if (e.code === "permission-denied") {
-                            const delay = Math.min(1000 * 2 ** deniedAttempts, 10000);
+                            deniedSince ??= Date.now();
+                            const delay = permissionDeniedRetryDelay(deniedSince, deniedAttempts);
+                            if (delay === undefined) return;
                             deniedAttempts++;
                             retryTimeout = setTimeout(subscribe, delay);
                         }
@@ -273,12 +291,14 @@ export function useBuildProjectConfig({
         let unsubscribe: (() => void) | undefined;
         let retryTimeout: ReturnType<typeof setTimeout> | undefined;
         let deniedAttempts = 0;
+        let deniedSince: number | undefined;
 
         const subscribe = () => {
             unsubscribe = onSnapshot(doc(firestore, projectPath),
                 {
                     next: (snapshot) => {
                         deniedAttempts = 0;
+                        deniedSince = undefined;
                         console.debug("Project config snapshot:", {
                             data: snapshot.data()
                         });
@@ -337,10 +357,16 @@ export function useBuildProjectConfig({
                     },
                     error: (e) => {
                         console.error(e);
-                        setClientConfigError(e);
-                        setClientConfigLoading(false);
+                        // Once per run of denials: a new error object on every
+                        // retry re-rendered the whole client each time.
+                        if (deniedSince === undefined) {
+                            setClientConfigError(e);
+                            setClientConfigLoading(false);
+                        }
                         if (e.code === "permission-denied") {
-                            const delay = Math.min(1000 * 2 ** deniedAttempts, 10000);
+                            deniedSince ??= Date.now();
+                            const delay = permissionDeniedRetryDelay(deniedSince, deniedAttempts);
+                            if (delay === undefined) return;
                             deniedAttempts++;
                             retryTimeout = setTimeout(subscribe, delay);
                         }
