@@ -136,6 +136,21 @@
         "cd /Users/francesco/rebase/saas/frontend && node /private/tmp/claude-501/-Users-francesco-firecms/76484292-e280-48c5-9c9e-01bdab5e2c18/scratchpad/db-harness/serve.mjs"
       ],
       "port": 5190
+    },
+    {
+      "name": "example-pro",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "examples/example_pro",
+        "--",
+        "--port",
+        "5214",
+        "--strictPort"
+      ],
+      "port": 5214
     }
   ]
 }

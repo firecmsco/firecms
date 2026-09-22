@@ -1,3 +1,74 @@
+## [3.5.0] - 2026-09-16
+
+- **FireCMS PRO: a license problem pauses PRO features instead of blocking the CMS**:
+  - A failed license check used to replace the whole CMS with a "License needed" screen. That screen is gone: the app always renders. When the license check answers `blocked` (a trial that has ended, a license key used on a project its license does not list, or a project beyond the production projects a license pays for), the PRO plugins pause and everything else keeps working: sign-in, your data, collections defined in code and custom views. Paused plugins are removed both inside `FireCMS` and from the navigation controller built above it, so collection modifications, injected collections, views and home page entries go with them.
+  - `user_management` never pauses, since it provides sign-in and roles. Its Users and Roles views show a "PRO features paused" notice with a link to get or update a license instead of the editors, and the home page widget for creating roles is hidden.
+  - **New `LicenseBanner`**, rendered by the default `Scaffold` above the main content: the days left in a trial (dismissible), or why PRO is paused and what to do (an ended trial, a project missing from its license, or a license that pays for fewer projects in production). Place it yourself only in a custom layout.
+  - **New `useLicenseStatus()`** hook, also available as `FireCMSContext.licenseStatus`, plus `isProPaused(status)` and `getLicenseSubscribeUrl(status)`. The hook works inside `FireCMS` and above it, in the component that calls `useBuildNavigationController`.
+  - A license covers as many projects in production as it pays for. When more of its projects run in production, the ones that went live first keep PRO and the others pause until the license pays for them. Local development never counts.
+  - `telemetry={false}` skips the license check only in apps with no `apiKey` and no PRO plugin mounted. With one, the request is the license check itself, so skipping it would unlock PRO.
+  - A failed license request no longer rejects unhandled. `t()` accepts numbers, so i18next picks plural forms. The `license_needed` and `license_description` translation keys are removed.
+  - **Upgrade to get this.** Apps on 3.4.0 or earlier still replace the whole CMS with the block screen when a license check answers `blocked`.
+- **Smaller bundles: icons, translations and the CMS shell load on demand**:
+  - Rendering the FireCMS Cloud login form used to pull 6.5 MB of JavaScript. Every Material icon, every date-fns locale, every translation of every package, ProseMirror, the spreadsheet importer and the whole CMS shell were reached statically. Measured on a canary deployment against production with a cold cache, the last critical chunk arrives in 0.7 s instead of 3.9 s.
+  - The 2,198 icon components share one factory and are marked pure, so apps bundling from source tree-shake the ones they don't use. date-fns locales load one at a time, when a locale is set.
+  - **Nothing is removed from the public API.** Components that moved behind a lazy boundary (`FireCMSEditor`, `FireCMSCloudApp` and others) are re-exported by wrappers with the same signature and their own `Suspense`, so they stay drop-in. The built packages export more names than before, not fewer.
+  - `FireCMSPlugin.i18n` accepts a loader function for each locale (`() => import("./locales/de")`) alongside the plain object it always took.
+  - Fixed a language picked from the language toggle loading its strings but leaving the UI in English, and nested translation providers overwriting the host app's overrides. Each plugin translation bundle is now written once, rather than on every render of a component that rebuilds its plugin list.
+- **Projects install again on npm 12 and pnpm 11**:
+  - `@firecms/data_import` depended on SheetJS by URL, and every FireCMS project pulled it in through `@firecms/firebase`. npm 12 and pnpm 11 refuse URL-resolved packages by default, so no project on 3.4.0 installed on a current package manager without changing its settings. Spreadsheets are now read with `read-excel-file`, still loaded only when a spreadsheet is imported, and CSV with a built-in parser that also reads `;` and tab delimiters.
+  - `@firecms/core` no longer lists `vite-plugin-static-copy` as a dependency. It was never imported, and its peer range installed Vite 8 into every app, which Astro warns about on every start.
+  - `@firecms/cli` no longer depends on `googleapis`, which it never imported: `npx @firecms/cli` and `npx create-firecms-app` downloaded 200 MB less on first run.
+- **Data import**:
+  - A blank CSV cell is left out of the row, so collection defaults apply, instead of arriving as `""` and becoming `0`, `false`, an invalid date or a broken reference.
+  - An `.xlsx` date is read in local time: a cell showing 2024-01-15 no longer imports as the 14th west of UTC. Times no longer lose a millisecond (12:30:00 read as 12:29).
+  - CSV values are typed from the target property: `TRUE`/`FALSE` in any case, formatted numbers (`1,234.5`, `12,5`, `$5.00`, `50%`) and ISO dates. Unreadable values become `null`, never `NaN` or an invalid date, and text like `00123` stays text.
+  - Repeated headers get a suffix (`name`, `name_1`) instead of overwriting a column. A blank header column no longer shifts the columns after it. A table may start below blank rows, a lone CR ends a line (Excel for Mac), and a comma-separated list mapped into an array property maps each item.
+  - A header row with nothing under it, a legacy `.xls` or a CSV renamed `.xlsx` is refused with a message saying what to do instead. Header keys from an uploaded file can no longer reach an object's prototype.
+  - The import dialog's actions stay pinned to the bottom when the mapping list is long, and the saving step is centred.
+- **Data export**:
+  - **Export only the selected rows.** With rows selected in the collection view, the export dialog offers "All entities" or "Selected entities (n)", defaulting to the selection. The selected entities are fetched again, so edits made since they were ticked are included, and they come out in the table's order. `exportAllowed` still receives the collection's count. The `export_collection` analytics event gains a `scope` parameter (`all` or `selected`).
+  - The dialog is regrouped around segmented choices: which entities, the format (with "Flatten arrays" shown only for CSV) and how values are written, with a caption showing how a date will read in the file.
+  - The dialog stays open until the file downloads and shows progress on the Download button. A failed export (missing permissions, a dropped connection, a timeout) shows its reason in the dialog instead of doing nothing. Closing the dialog abandons an export in progress.
+- **AI autofill (`@firecms/data_enhancement`)**:
+  - Enhancing a single field replaces its value instead of appending the suggestion to the existing text.
+  - Streamed suggestions longer than one network chunk no longer fail with "Unterminated string in JSON". Failures show a snackbar ("Autofill failed", or the subscription warning on a 402) instead of an unhandled rejection.
+  - Fixed "Maximum update depth exceeded" when typing fast into a text field on React 19.
+  - Submitting the prompt closes the autofill menu, and clicking away from it no longer closes the entity side panel underneath.
+- **Entity history**: records `entity_history_opened` (once per entity) and `entity_history_reverted` through the analytics controller. `useAnalyticsController` is now exported for plugins.
+- **Core and UI fixes**:
+  - A collection matches a URL path only at a segment boundary. A collection called `products_archive` or a custom path `/products-test` no longer resolves to `products` with an entity id of `_archive` or `-test`.
+  - Disabled buttons are readable: a disabled filled button is a flat muted surface at over 6.5:1 contrast, where stacked transparency put it at 3.6:1. `InfoLabel` sets its own text colour, so it no longer turns dark on dark outside a `Scaffold`. A non-expandable `SearchBar` fills its container.
+  - The app bar keeps the same left edge and logo position with and without a drawer.
+  - Tooltips open on keyboard focus only (`:focus-visible`), so a tooltip can no longer float over a dialog after the window regains focus. Hover is unchanged.
+  - Dialogs with a `maxWidth` keep a side gutter on narrow screens again, as in Tailwind v3: 11/12 of the screen up to the maximum width. Desktop sizes are unchanged.
+  - `ToggleButtonGroup` has a new optional `fullWidth` prop.
+  - The rich text editor no longer throws when an image finishes uploading, or an AI completion arrives, after the entity was closed.
+- **CLI and templates**:
+  - **A canary CLI scaffolds its own version.** `npx @firecms/cli@canary init --pro` used to pin `^3.0.0`, which installed the latest stable release; a prerelease CLI now pins every `@firecms` package to its own version.
+  - Every template installs, builds and runs with npm, pnpm 10 and 11 and yarn 2+. pnpm 11 used to refuse to install or run any template until their install scripts were approved; each template now approves exactly what it needs. Each declares the Node version it needs, instead of failing later with "Cannot find native binding" on Node 18.
+  - The PRO templates pass their plugins to `useBuildNavigationController` instead of the deprecated `plugins` prop, so navigation-level features work (the collection editor's home page drag-and-drop and saved groups never did in the PRO template).
+  - **License keys:** the Next.js template reads `NEXT_PUBLIC_FIRECMS_API_KEY` and the Astro template `PUBLIC_FIRECMS_API_KEY`, and both pass it to `FireCMS`. Neither passed a key before, so there was nowhere to put one.
+  - The Next.js template no longer ships FireCMS's own demo Firebase project. It uses placeholders like the others, filled in by `--projectId`. It imports firebase from its public entry points, so it builds under pnpm. Its `/products` and `/blog` pages revalidate once a minute instead of never showing content edited in the CMS.
+  - The Astro template generates FireCMS's styles (its Tailwind `@source` pointed at a folder that doesn't exist), renders in `astro dev`, uses the standard login view, and its blog no longer lists drafts. The cloud template builds under pnpm.
+  - The PRO template mounts entity history, so there is a History tab. Unavailable products can be edited and imported (`price` was required and cleared at the same time). Its products collection has working text search.
+  - The community template mounts its products collection, so the demo collection's references resolve.
+  - Scaffolded projects get a `.gitignore`, which npm never packed, and the CLI tarball dropped from 1.73 MB to 0.67 MB.
+  - `firecms --help`, `-h` and `init --help` print usage. Unknown commands and usage errors exit 1. `init` works with absolute paths and missing parent folders, validates `--projectId`, and never writes "undefined" into config files. Two template flags at once is an error.
+  - `firecms init --yes` never prompts for a login. `login` prints where to sign in before opening a browser, reports a busy port, and gives up after 5 minutes. A corrupt `tokens.json` reads as logged out instead of breaking every command.
+  - `firecms deploy` says why it failed and exits 1 instead of crashing. It refuses to upload before a build (it used to replace the live deployment with an empty zip), and while logged out it only offers to log in where someone can answer.
+  - A scaffolded project that has not been given a Firebase config names the file to fill in, instead of rendering a blank page.
+- **FireCMS Cloud**:
+  - **Graduated PRO pricing:** one price per currency and interval, with the first project at one rate and each additional project on the same license at a lower one. Licenses edit their projects through a new endpoint that keeps the Stripe quantity in step. `FireCMSCloudLoginView` takes `variant: "pro"` for the PRO purchase path. Prices are shown as excluding VAT.
+  - Tenant bundles load with a short-lived asset token scoped to the revision, instead of carrying the user's Firebase ID token in the URL.
+  - When a project's service account stops working, the error names the cause (deleted, key invalid, disabled, Authentication not enabled, unreadable). "Recreate service account" is offered only where it can help, and it no longer reports success whatever the backend answered.
+  - The login buttons stay clickable before the terms are accepted and say what is missing, instead of doing nothing.
+  - `AutoSetUpCollectionsButton`'s `onError` receives the error, and `onNoCollections` receives diagnostics that tell a project with no collections apart from one whose collections could not be listed. Both are additive.
+  - DataTalk is linked from the admin section of the home page, and its background requests no longer fail as unhandled rejections.
+  - Stripe billing portal links are created when clicked, with a message when one fails, instead of on every page view.
+  - The app bar stays on screen while a project's CMS loads.
+- **Releases**: packages publish with npm provenance again. The repository URL in every `package.json` had the wrong case, so npm refused every provenance statement since August.
+
 ## [3.4.0] - 2026-08-26
 
 - **FireCMS Cloud: tenant customizations share the host's React**:

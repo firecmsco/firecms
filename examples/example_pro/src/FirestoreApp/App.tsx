@@ -387,14 +387,15 @@ export function App() {
         storageSource
     });
 
+    // The deployed demo swaps the import for a stub, so visitors can't write to its
+    // database; `vite dev` gets the real import plugin.
     const plugins = [
         userManagementPlugin,
         dataEnhancementPlugin,
-        // importPlugin,
+        import.meta.env.DEV ? importPlugin : demoPlugin,
         exportPlugin,
         entityHistoryPlugin,
         // mediaManagerPlugin,
-        demoPlugin,
         collectionEditorPlugin
     ];
 

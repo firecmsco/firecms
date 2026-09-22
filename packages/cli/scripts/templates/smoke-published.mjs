@@ -57,10 +57,13 @@ const waitMinutes = Number(opts["wait-minutes"] ?? 10);
 
 /**
  * A publish that just finished can take a few minutes to be installable everywhere, so
- * wait until npm serves every package at `version` (those that exist there at all).
+ * wait until npm serves every package at `version`. Every one, not a sample: the
+ * templates pin all of them, and on 2026-09-16 @firecms/schema_inference, published
+ * near the end of the run, was still missing when the five sampled ones were there,
+ * so every install failed with ETARGET.
  */
 async function waitForRegistry() {
-    const names = ["@firecms/cli", "@firecms/core", "@firecms/ui", "@firecms/firebase", "@firecms/cloud"];
+    const names = Object.keys(localPackages());
     const deadline = Date.now() + waitMinutes * 60_000;
     for (const name of names) {
         for (;;) {
