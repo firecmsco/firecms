@@ -512,7 +512,7 @@ export const en: FireCMSTranslations = {
     // --- SaaS Subscriptions ---
     subscriptions: "Subscriptions",
     manage_your_subscriptions_in_stripe: "Manage your subscriptions in Stripe",
-    go_to_your_stripe_portal: "Go you your user Stripe portal to view billing history. Note that you can also manage subscriptions associated with the logged in user.",
+    go_to_your_stripe_portal: "Go to your Stripe portal to view your billing history. You can also manage the subscriptions of the logged-in user there.",
     your_pro_licenses: "Your PRO licenses",
     create_new_license: "Create new license",
     create_subscriptions_in_this_section: "Create subscriptions in this section only for self hosted FireCMS PRO. If you are using FireCMS Cloud, you can upgrade your project from within the project settings.",
