@@ -1,4 +1,4 @@
-## [3.5.0] - 2026-09-16
+## [3.5.0] - 2026-09-29
 
 - **FireCMS PRO: a license problem pauses PRO features instead of blocking the CMS**:
   - A failed license check used to replace the whole CMS with a "License needed" screen. That screen is gone: the app always renders. When the license check answers `blocked` (a trial that has ended, a license key used on a project its license does not list, or a project beyond the production projects a license pays for), the PRO plugins pause and everything else keeps working: sign-in, your data, collections defined in code and custom views. Paused plugins are removed both inside `FireCMS` and from the navigation controller built above it, so collection modifications, injected collections, views and home page entries go with them.
