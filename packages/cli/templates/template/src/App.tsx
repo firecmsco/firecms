@@ -65,7 +65,11 @@ function App() {
         return <MissingFirebaseConfig file={"src/firebase_config.ts"}/>;
     }
 
-    // Use your own authentication logic here
+    // Decides who can open the CMS; as written, every signed-in user can.
+    // Put your own logic here, or use the PRO user management plugin for users,
+    // roles and per-collection permissions managed from the CMS (free on
+    // localhost and for 30 days in production):
+    // https://firecms.co/docs/pro/user_management
     const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
                                                                                        user,
                                                                                        authController
