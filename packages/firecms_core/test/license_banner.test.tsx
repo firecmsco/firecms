@@ -8,6 +8,8 @@ import { FireCMSi18nProvider } from "../src/i18n/FireCMSi18nProvider";
 import { LicenseStatusContext } from "../src/contexts/LicenseStatusContext";
 import { LicenseBanner } from "../src/components/LicenseBanner";
 import { AccessResponse } from "../src/types";
+import { CustomizationControllerContext } from "../src/contexts/CustomizationControllerContext";
+import { CustomizationController } from "../src/types";
 
 /**
  * The banner replaces the full-screen "License needed" block: it is now the only
@@ -297,6 +299,49 @@ describe("LicenseBanner PRO suggestions", () => {
         renderBanner(status);
         await waitFor(() => expect(screen.getByTestId("host")).toBeTruthy());
         expect(screen.getByTestId("host").textContent).toEqual("");
+    });
+
+    it.each<[string, string[]]>([
+        ["a PRO plugin", ["export"]],
+        ["the suggested plugin itself", ["user_management"]],
+        ["a PRO plugin among custom ones", ["my_custom_plugin", "collection_editor"]]
+    ])("shows nothing to an app that mounts %s", async (_, pluginKeys) => {
+        // The server answers `not_required` to localhost and FireCMS Cloud
+        // whatever they mount, so a suggestion can arrive at a PRO app.
+        const customization = { plugins: pluginKeys.map(key => ({ key })) } as unknown as CustomizationController;
+        render(
+            <FireCMSi18nProvider locale={"en"}>
+                <CustomizationControllerContext.Provider value={customization}>
+                    <LicenseStatusContext.Provider value={{
+                        blocked: false,
+                        licenseState: "not_required",
+                        suggestion: { plugin: "user_management", users: 7 }
+                    }}>
+                        <div data-testid="host"><LicenseBanner/></div>
+                    </LicenseStatusContext.Provider>
+                </CustomizationControllerContext.Provider>
+            </FireCMSi18nProvider>
+        );
+        await waitFor(() => expect(screen.getByTestId("host")).toBeTruthy());
+        expect(screen.getByTestId("host").textContent).toEqual("");
+    });
+
+    it("shows the suggestion to an app that mounts only its own plugins", async () => {
+        const customization = { plugins: [{ key: "my_custom_plugin" }] } as unknown as CustomizationController;
+        render(
+            <FireCMSi18nProvider locale={"en"}>
+                <CustomizationControllerContext.Provider value={customization}>
+                    <LicenseStatusContext.Provider value={{
+                        blocked: false,
+                        licenseState: "not_required",
+                        suggestion: { plugin: "entity_history" }
+                    }}>
+                        <div data-testid="host"><LicenseBanner/></div>
+                    </LicenseStatusContext.Provider>
+                </CustomizationControllerContext.Provider>
+            </FireCMSi18nProvider>
+        );
+        expect(await bannerText()).toContain("FireCMS PRO keeps a history of every change");
     });
 
     it("keeps the trial banner when a trial response also carries a suggestion", async () => {

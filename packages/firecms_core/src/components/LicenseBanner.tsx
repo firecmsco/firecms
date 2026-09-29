@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Alert, Button, CloseIcon, IconButton } from "@firecms/ui";
 import { AccessResponse, ProSuggestion } from "../types";
-import { getLicenseSubscribeUrl } from "../core/pro_plugins";
+import { getLicenseSubscribeUrl, PRO_PLUGIN_KEYS } from "../core/pro_plugins";
+import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
 import { useLicenseStatus } from "../hooks/useLicenseStatus";
 import { useTranslation } from "../hooks/useTranslation";
 
@@ -62,6 +63,12 @@ export function LicenseBanner({
     const licenseStatus = useLicenseStatus();
     const { t, i18n } = useTranslation();
 
+    // The server answers `not_required` to every localhost and FireCMS Cloud
+    // request, whatever the app mounts, so a suggestion is only shown to an
+    // app that really runs no PRO plugin.
+    const plugins = useContext(CustomizationControllerContext)?.plugins;
+    const runsProPlugin = plugins?.some(plugin => PRO_PLUGIN_KEYS.includes(plugin.key)) ?? false;
+
     // States dismissed in this browser session; a different state shows again.
     const [dismissed, setDismissed] = useState<string[]>(() => readDismissed(sessionDismissals));
     // Suggestions dismissed in this browser, for good.
@@ -70,7 +77,7 @@ export function LicenseBanner({
     // `language`, not `resolvedLanguage`: locale bundles are added after init,
     // and `resolvedLanguage` stays on the English fallback when they are.
     const content = licenseStatus
-        ? buildBannerContent(licenseStatus, t, i18n?.language)
+        ? buildBannerContent(licenseStatus, t, i18n?.language, runsProPlugin)
         : null;
 
     if (!content
@@ -123,7 +130,8 @@ type Translate = ReturnType<typeof useTranslation>["t"];
 
 function buildBannerContent(status: AccessResponse,
                             t: Translate,
-                            language: string | undefined): BannerContent | null {
+                            language: string | undefined,
+                            runsProPlugin: boolean): BannerContent | null {
     const href = getLicenseSubscribeUrl(status);
     switch (status.licenseState) {
         case "trial": {
@@ -181,7 +189,7 @@ function buildBannerContent(status: AccessResponse,
             };
         }
         case "not_required":
-            return buildSuggestionContent(status.suggestion, t);
+            return runsProPlugin ? null : buildSuggestionContent(status.suggestion, t);
         default:
             // licensed, whitelisted, and servers too old to say
             return null;

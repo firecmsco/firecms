@@ -61,7 +61,9 @@ export type AccessResponse = {
     subscribeUrl?: string;
     /**
      * A PRO plugin the server suggests for this project. Only read with
-     * `not_required`, i.e. when the app mounts no PRO plugin.
+     * `not_required`, and only shown when the app mounts no PRO plugin: the
+     * server also answers `not_required` to localhost and FireCMS Cloud,
+     * whatever they mount.
      */
     suggestion?: ProSuggestion;
     message?: string;
