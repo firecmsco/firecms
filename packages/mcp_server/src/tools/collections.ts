@@ -10,6 +10,7 @@ export function registerCollectionTools(server: McpServer, api: FireCMSApiClient
     server.registerTool(
         "generate_collection",
         {
+            title: "Generate a collection with AI",
             description: `Generate a new FireCMS collection schema using AI. Provide a natural language description 
 of the collection you want (e.g., "A blog with posts that have title, body, author, tags, 
 and a featured image"). Returns a complete FireCMS collection configuration.`,
@@ -17,6 +18,7 @@ and a featured image"). Returns a complete FireCMS collection configuration.`,
                 prompt: z.string().describe("Natural language description of the collection to generate"),
                 existingCollections: z.array(z.any()).optional().describe("Optional existing collection schemas for context"),
             },
+            annotations: { readOnlyHint: true },
         },
         async ({ prompt, existingCollections }) => {
             try {
@@ -31,6 +33,7 @@ and a featured image"). Returns a complete FireCMS collection configuration.`,
     server.registerTool(
         "modify_collection",
         {
+            title: "Modify a collection with AI",
             description: `Modify an existing FireCMS collection schema using AI. Describe the changes you want 
 (e.g., "Add a priority enum with low/medium/high" or "Make title required with max 100 chars").
 Returns the updated schema and a list of operations performed.`,
@@ -39,6 +42,7 @@ Returns the updated schema and a list of operations performed.`,
                 existingCollection: z.any().describe("The current collection schema to modify"),
                 existingCollections: z.array(z.any()).optional().describe("Optional list of all collection schemas for context"),
             },
+            annotations: { readOnlyHint: true },
         },
         async ({ prompt, existingCollection, existingCollections }) => {
             try {

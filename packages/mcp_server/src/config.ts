@@ -9,6 +9,9 @@
  */
 export const DEFAULT_API_URL = "https://api.firecms.co";
 
+/** The FireCMS Cloud web app. */
+export const DEFAULT_APP_URL = "https://app.firecms.co";
+
 /**
  * Resolve the backend URL, trimming any trailing slash so callers can concatenate
  * paths without producing a double slash.

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { createFireCMSMcpServer } from "./server.js";
+import { createFireCMSMcpServer } from "./index.js";
 import { getCurrentUserEmail } from "./auth.js";
 
 /**

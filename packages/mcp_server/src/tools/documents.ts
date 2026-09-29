@@ -13,6 +13,7 @@ export function registerDocumentTools(server: McpServer, api: FireCMSApiClient) 
     server.registerTool(
         "list_documents",
         {
+            title: "List documents",
             description: `List documents from a Firestore collection. Supports filtering, ordering, and pagination.
 Use this to browse data in your CMS collections.`,
             inputSchema: {
@@ -63,6 +64,7 @@ Use this to browse data in your CMS collections.`,
     server.registerTool(
         "get_document",
         {
+            title: "Get a document",
             description: "Get a specific document by its collection path and ID. Returns all fields of the document.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
@@ -92,14 +94,18 @@ Use this to browse data in your CMS collections.`,
     server.registerTool(
         "create_document",
         {
+            title: "Create a document",
             description: "Create a new document in a Firestore collection. Provide the field values as a JSON object.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
                 collectionPath: z.string().describe("Collection path (e.g., 'products')"),
                 data: z.record(z.any()).describe("Document fields as a JSON object"),
-                documentId: z.string().optional().describe("Optional document ID. If not provided, Firestore generates one."),
+                documentId: z.string().optional().describe("Optional document ID. If not provided, Firestore generates one. If a document with this ID exists, it is replaced."),
                 databaseId: z.string().optional().describe("Firestore database ID (default: '(default)')"),
             },
+            // With a documentId the backend writes without merging, replacing any
+            // document already there.
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionPath, data, documentId, databaseId }) => {
             try {
@@ -124,6 +130,7 @@ Use this to browse data in your CMS collections.`,
     server.registerTool(
         "update_document",
         {
+            title: "Update a document",
             description: "Update fields of an existing document. Only the specified fields are modified (partial update / merge).",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
@@ -132,6 +139,7 @@ Use this to browse data in your CMS collections.`,
                 data: z.record(z.any()).describe("Fields to update as a JSON object"),
                 databaseId: z.string().optional().describe("Firestore database ID (default: '(default)')"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionPath, documentId, data, databaseId }) => {
             try {
@@ -156,6 +164,7 @@ Use this to browse data in your CMS collections.`,
     server.registerTool(
         "delete_document",
         {
+            title: "Delete a document",
             description: "Delete a document from Firestore. This action is permanent.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
@@ -163,7 +172,7 @@ Use this to browse data in your CMS collections.`,
                 documentId: z.string().describe("Document ID to delete"),
                 databaseId: z.string().optional().describe("Firestore database ID (default: '(default)')"),
             },
-            annotations: { destructiveHint: true },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionPath, documentId, databaseId }) => {
             try {
@@ -185,6 +194,7 @@ Use this to browse data in your CMS collections.`,
     server.registerTool(
         "count_documents",
         {
+            title: "Count documents",
             description: "Count the total number of documents in a Firestore collection.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),

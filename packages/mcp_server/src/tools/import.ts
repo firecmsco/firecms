@@ -11,6 +11,7 @@ export function registerImportTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "import_documents",
         {
+            title: "Import documents",
             description: `Bulk import documents into a Firestore collection. Useful for seeding data, 
 migrations, or restoring from a backup. Each document can optionally specify an ID; 
 if omitted, Firestore generates one. Use "merge: true" to update existing documents 
@@ -27,6 +28,7 @@ Maximum 500 documents per call. For larger imports, call multiple times.`,
                 merge: z.boolean().optional().describe("If true, merge with existing documents instead of overwriting (default: false)"),
                 databaseId: z.string().optional().describe("Firestore database ID (default: '(default)')"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionPath, documents, merge, databaseId }) => {
             try {

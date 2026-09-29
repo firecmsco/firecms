@@ -10,6 +10,7 @@ export function registerExportTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "export_collection",
         {
+            title: "Export a collection",
             description: `Export documents from a Firestore collection as JSON. Useful for data backups,
 analysis, or migration. For large collections, use the limit parameter.`,
             inputSchema: {

@@ -1798,13 +1798,13 @@ importers:
         specifier: workspace:^3.4.0
         version: link:../schema_inference
       '@modelcontextprotocol/sdk':
-        specifier: ^1.12.1
+        specifier: ^1.29.0
         version: 1.29.0(zod@3.25.76)
       axios:
         specifier: 1.18.1
         version: 1.18.1(supports-color@7.2.0)
       zod:
-        specifier: ^3.24.0
+        specifier: ^3.25.0
         version: 3.25.76
     devDependencies:
       '@types/node':

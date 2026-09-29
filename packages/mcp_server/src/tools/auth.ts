@@ -9,13 +9,19 @@ import { clearBackendTokenCache } from "../backend-auth.js";
 
 /**
  * Register login/logout tools — same flow as `firecms login` CLI.
+ *
+ * Local server only: they open a browser on this machine and keep tokens in
+ * `~/.firecms/tokens.json`. The hosted server's clients sign in with OAuth when
+ * they connect, so it has nothing to log in to.
  */
 export function registerAuthTools(server: McpServer) {
 
     server.registerTool(
         "firecms_login",
         {
+            title: "Sign in to FireCMS",
             description: "Sign in to FireCMS Cloud. Opens a browser window for Google OAuth authentication. Required before using any other tools.",
+            annotations: { readOnlyHint: false, destructiveHint: false },
         },
         async () => {
             const existingEmail = getCurrentUserEmail();
@@ -52,7 +58,9 @@ export function registerAuthTools(server: McpServer) {
     server.registerTool(
         "firecms_logout",
         {
+            title: "Sign out of FireCMS",
             description: "Sign out of FireCMS Cloud. Revokes the current session.",
+            annotations: { readOnlyHint: false, destructiveHint: false },
         },
         async () => {
             if (!isLoggedIn()) {
@@ -85,30 +93,6 @@ export function registerAuthTools(server: McpServer) {
                     isError: true,
                 };
             }
-        }
-    );
-
-    server.registerTool(
-        "firecms_get_current_user",
-        {
-            description: "Get the currently authenticated FireCMS user",
-        },
-        async () => {
-            const email = getCurrentUserEmail();
-            if (!email) {
-                return {
-                    content: [{
-                        type: "text" as const,
-                        text: "Not logged in. Use firecms_login to sign in.",
-                    }],
-                };
-            }
-            return {
-                content: [{
-                    type: "text" as const,
-                    text: `Logged in as: ${email}`,
-                }],
-            };
         }
     );
 }

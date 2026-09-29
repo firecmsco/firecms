@@ -16,7 +16,8 @@
  * Firebase ID token the web app uses. The backend's security rules apply unchanged.
  */
 import axios from "axios";
-import { getBackendIdToken, getBackendFirebaseConfig } from "./backend-auth.js";
+import { getBackendFirebaseConfig } from "./backend-config.js";
+import { FireCMSSession } from "./session.js";
 
 /** A decoded Firestore document. */
 export interface FirestoreDoc {
@@ -127,14 +128,22 @@ function quoteFieldPath(path: string): string {
  */
 export class BackendFirestoreClient {
 
+    private session: FireCMSSession;
+    private apiUrl: string;
+
+    constructor({ session, apiUrl }: { session: FireCMSSession; apiUrl: string }) {
+        this.session = session;
+        this.apiUrl = apiUrl;
+    }
+
     private async documentsUrl(): Promise<string> {
-        const config = await getBackendFirebaseConfig();
+        const config = await getBackendFirebaseConfig(this.apiUrl);
         return `https://firestore.googleapis.com/v1/projects/${config.projectId}` +
             "/databases/(default)/documents";
     }
 
     private async authHeaders(): Promise<Record<string, string>> {
-        const token = await getBackendIdToken();
+        const token = await this.session.backendIdToken();
         return { Authorization: `Bearer ${token}` };
     }
 

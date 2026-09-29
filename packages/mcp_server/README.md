@@ -4,13 +4,40 @@ MCP server for [FireCMS Cloud](https://firecms.co). Lets AI assistants connect a
 
 > **Admin-only**: All write operations require the authenticated user to have the `admin` role on the target project. Read operations are available to any authenticated project member. Onboarding tools run before a project exists, so they are gated by Google Cloud access instead.
 
-## Setup
+The same server runs in two places:
+
+- **Hosted**, at `https://api.firecms.co/mcp`, for everyone. Clients sign in with OAuth in the browser; nothing to install. It holds no Google Cloud credentials, so connecting a new Firebase project is handed off to the web app. The FireCMS backend mounts it through the `@firecms/mcp-server/hosted` entry point.
+- **Local**, over stdio (`npx @firecms/mcp-server`). It signs in with your Google account (`firecms_login`), so it can also enable APIs, create Firestore databases and connect projects end to end.
+
+## Hosted server
+
+In Claude (claude.ai or Claude Desktop): Settings → Connectors → Add custom connector, and paste `https://api.firecms.co/mcp`.
+
+In Claude Code:
+
+```bash
+claude mcp add --transport http firecms https://api.firecms.co/mcp
+```
+
+Any other client that takes remote servers by URL:
+
+```json
+{
+  "mcpServers": {
+    "firecms": { "url": "https://api.firecms.co/mcp" }
+  }
+}
+```
+
+## Local server
+
+### Setup
 
 ```bash
 cd packages/mcp_server && npm install && npm run build
 ```
 
-## Claude Desktop
+### Claude Desktop
 
 Add to `claude_desktop_config.json`:
 
@@ -82,21 +109,21 @@ Step 6 is where an existing project becomes a working CMS: FireCMS samples the d
 ### Auth
 | Tool | Description |
 |------|-------------|
-| `firecms_login` | Sign in via browser (Google OAuth) |
-| `firecms_logout` | Sign out |
+| `firecms_login` 💻 | Sign in via browser (Google OAuth) |
+| `firecms_logout` 💻 | Sign out |
 | `firecms_get_current_user` | Show current user |
 
 ### Onboarding
 | Tool | Description |
 |------|-------------|
-| `list_firebase_projects` | Google Cloud projects you can access, with FireCMS readiness flags |
-| `get_project_setup_status` | Detailed readiness of one project |
-| `list_firestore_locations` | Locations available for a new Firestore database |
-| `enable_project_apis` | Enable the Google Cloud APIs FireCMS requires |
-| `enable_firestore` | Create the default Firestore database (location is permanent) |
-| `connect_project_to_firecms` | Connect an existing Firebase project, and apply the security rules it needs |
-| `apply_firestore_security_rules` | Add FireCMS's access rule to Firestore and Storage (idempotent) |
-| `create_firecms_webapp` | Retry web app creation if it failed during connect |
+| `list_firebase_projects` 💻 | Google Cloud projects you can access, with FireCMS readiness flags |
+| `get_project_setup_status` 💻 | Detailed readiness of one project |
+| `list_firestore_locations` 💻 | Locations available for a new Firestore database |
+| `enable_project_apis` 💻 | Enable the Google Cloud APIs FireCMS requires |
+| `enable_firestore` 💻 | Create the default Firestore database (location is permanent) |
+| `connect_project_to_firecms` | Connect an existing Firebase project, and apply the security rules it needs. Hosted: returns the link to connect it in the web app |
+| `apply_firestore_security_rules` 🔒 | Add FireCMS's access rule to Firestore and Storage (idempotent) |
+| `create_firecms_webapp` 🔒 | Retry web app creation if it failed during connect |
 
 ### Projects & Root Collections
 | Tool | Description |
@@ -156,7 +183,9 @@ Step 6 is where an existing project becomes a working CMS: FireCMS samples the d
 | `export_collection` | Export collection data as JSON |
 | `import_documents` 🔒 | Bulk import documents (max 500/call) |
 
-> 🔒 = Admin-only operation
+> 🔒 = Admin-only operation · 💻 = local server only
+
+Every tool declares a `title` and a `readOnlyHint`, plus a `destructiveHint` when it writes: `false` for tools that only add (create a document, invite a user), `true` for anything that can overwrite or delete.
 
 ## Resources
 
@@ -199,6 +228,13 @@ Step 6 is where an existing project becomes a working CMS: FireCMS samples the d
 
 ## Architecture
 
+### Sessions: local and hosted
+
+Nothing reads credentials from process-wide state. Every API call goes through a `FireCMSSession` (`session.ts`) — the user's email, a Firebase ID token on `firecms-backend`, and a Google access token when there is one — passed to `createFireCMSMcpServer()`:
+
+- **Local** (`cli.ts`): `localSession` reads the CLI's tokens file and exchanges the Google ID token for a backend token (below). The login/logout tools are registered by the CLI only.
+- **Hosted** (`hosted.ts`): the backend resolves each request's OAuth bearer token to a user and passes a session that mints that user's backend ID token. There is no Google token, so the Google Cloud tools are replaced by a `connect_project_to_firecms` that links to the web app. Every request gets its own server and transport (stateless Streamable HTTP), so nothing of one person's session outlives their request. `hosted.ts` never imports the CLI's login flow; a test walks its import graph to keep it that way.
+
 ### Authentication
 
 The FireCMS Cloud API expects two different tokens, and the server sends both — the same pair the web app sends:
@@ -206,7 +242,7 @@ The FireCMS Cloud API expects two different tokens, and the server sends both �
 | Header | Token | Used by |
 |--------|-------|---------|
 | `Authorization` | Firebase ID token issued by `firecms-backend` | endpoints gated by `firebaseAuthorization()` — most of the API |
-| `x-admin-authorization` | Google OAuth access token (`cloud-platform` scope) | endpoints gated by `googleCloudAuthentication()` — project listing and GCP provisioning |
+| `x-admin-authorization` | Google OAuth access token (`cloud-platform` scope) | endpoints gated by `googleCloudAuthentication()` — GCP provisioning. Local sessions only |
 
 `firecms login` only produces the Google credentials. The Google **ID token** is not a Firebase ID token — it is issued by `accounts.google.com` for the Google OAuth client, so `verifyIdToken()` rejects it. `backend-auth.ts` therefore exchanges it for a real `firecms-backend` token through Identity Toolkit `signInWithIdp`, which is the headless equivalent of the web app's `signInWithPopup(auth, GoogleAuthProvider)`. The exchanged token is cached in memory until shortly before it expires.
 
@@ -230,7 +266,8 @@ On a stdio transport, stdout carries the JSON-RPC stream, so `cli.ts` routes eve
 
 ## Security
 
-- **Authentication**: Google OAuth via browser, same as `firecms login` CLI
+- **Hosted authentication**: OAuth 2.1 with PKCE against the FireCMS backend; the person approves each client in the web app. The backend stores tokens only as hashes, rotates refresh tokens, and never holds Google Cloud credentials
+- **Local authentication**: Google OAuth via browser, same as `firecms login` CLI
 - **Authorization**: Write operations enforce admin role check per project
 - **Token storage**: `~/.firecms/tokens.json` (shared with CLI); the exchanged backend token is held in memory only and dropped on logout
 - **Admin cache**: Role checks are cached for 5 minutes per project

@@ -22,21 +22,13 @@
 import axios from "axios";
 import { getValidTokens } from "./auth.js";
 import { resolveApiUrl } from "./config.js";
+import { getBackendFirebaseConfig } from "./backend-config.js";
 
 const IDENTITY_TOOLKIT_URL = "https://identitytoolkit.googleapis.com/v1";
 const SECURE_TOKEN_URL = "https://securetoken.googleapis.com/v1/token";
 
 /** Refresh the Firebase ID token this many ms before it actually expires. */
 const EXPIRY_MARGIN_MS = 5 * 60 * 1000;
-
-export interface BackendFirebaseConfig {
-    apiKey: string;
-    authDomain: string;
-    projectId: string;
-    storageBucket?: string;
-    messagingSenderId?: string;
-    appId?: string;
-}
 
 interface CachedBackendToken {
     idToken: string;
@@ -45,29 +37,15 @@ interface CachedBackendToken {
     expiresAt: number;
 }
 
-let configCache: BackendFirebaseConfig | null = null;
 let tokenCache: CachedBackendToken | null = null;
 /** In-flight exchange, so concurrent tool calls don't each hit the network. */
 let pendingExchange: Promise<CachedBackendToken> | null = null;
 
 /**
- * Fetch the public Firebase web config of the FireCMS backend project.
- * This is the same unauthenticated endpoint the web app reads at boot.
- */
-export async function getBackendFirebaseConfig(): Promise<BackendFirebaseConfig> {
-    if (configCache) return configCache;
-    const response = await axios.get<BackendFirebaseConfig>(`${resolveApiUrl()}/config`, {
-        timeout: 30_000,
-    });
-    configCache = response.data;
-    return configCache;
-}
-
-/**
  * Exchange the Google OAuth ID token for a Firebase ID token on `firecms-backend`.
  */
 async function exchangeGoogleTokenForFirebaseToken(googleIdToken: string): Promise<CachedBackendToken> {
-    const config = await getBackendFirebaseConfig();
+    const config = await getBackendFirebaseConfig(resolveApiUrl());
 
     // `postBody` is form-encoded inside a JSON body — that is what the Identity
     // Toolkit expects for IdP sign-in.
@@ -156,7 +134,7 @@ export async function getBackendIdToken(): Promise<string> {
  * Refresh a `firecms-backend` Firebase ID token using its refresh token.
  */
 async function refreshBackendToken(refreshToken: string): Promise<CachedBackendToken> {
-    const config = await getBackendFirebaseConfig();
+    const config = await getBackendFirebaseConfig(resolveApiUrl());
     const response = await axios.post(
         `${SECURE_TOKEN_URL}?key=${config.apiKey}`,
         new URLSearchParams({

@@ -58,6 +58,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
     server.registerTool(
         "list_databases",
         {
+            title: "List Firestore databases",
             description:
                 "List the Firestore databases of a project. Only needed for projects using more " +
                 "than the '(default)' database — the resulting database IDs can be passed to the " +
@@ -88,6 +89,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
     server.registerTool(
         "preview_inferred_schema",
         {
+            title: "Preview inferred schema",
             description:
                 "Read a sample of real documents from a Firestore path and infer a FireCMS " +
                 "collection schema from them, WITHOUT saving anything.\n\n" +
@@ -162,6 +164,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
     server.registerTool(
         "infer_collections_from_data",
         {
+            title: "Create collections from data",
             description:
                 "Infer collections from the existing Firestore data at the given paths, and SAVE " +
                 "them to the project.\n\n" +
@@ -179,6 +182,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
                     databaseId: z.string().optional().describe("Firestore database ID, if not '(default)'"),
                 })).min(1).describe("The collection paths to infer and save"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: false },
         },
         async ({ projectId, paths }) => {
             try {
@@ -261,6 +265,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
     server.registerTool(
         "setup_all_collections",
         {
+            title: "Set up all collections",
             description:
                 "Discover every Firestore root collection in the project that is not yet mapped, " +
                 "infer a collection schema for each, and save them all.\n\n" +
@@ -273,6 +278,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
                 projectId: z.string().describe("Firebase project ID"),
                 databaseId: z.string().optional().describe("Firestore database ID, if not '(default)'"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: false },
         },
         async ({ projectId, databaseId }) => {
             try {

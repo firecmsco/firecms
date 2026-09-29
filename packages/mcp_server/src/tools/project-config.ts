@@ -13,6 +13,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
     server.registerTool(
         "get_project_config",
         {
+            title: "Get project settings",
             description: `Get the full configuration for a FireCMS project, including:
 - Project name, logo, and brand colors (primary/secondary)
 - Subscription plan and trial status
@@ -48,11 +49,13 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
     server.registerTool(
         "update_project_name",
         {
+            title: "Rename project",
             description: "Update the display name of a FireCMS project.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
                 name: z.string().describe("New project name"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, name }) => {
             try {
@@ -78,12 +81,14 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
     server.registerTool(
         "update_project_colors",
         {
+            title: "Change brand colors",
             description: "Update the primary and/or secondary brand colors for the CMS UI. Colors should be hex values (e.g., '#0070F4').",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
                 primaryColor: z.string().optional().describe("Primary color hex (e.g., '#0070F4')"),
                 secondaryColor: z.string().optional().describe("Secondary color hex (e.g., '#FF5B79')"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, primaryColor, secondaryColor }) => {
             try {
@@ -115,11 +120,13 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
     server.registerTool(
         "update_default_locale",
         {
+            title: "Change default locale",
             description: "Change the default locale for the CMS (affects date formatting, etc.).",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
                 locale: z.string().describe("Locale code (e.g., 'en', 'es', 'de', 'fr', 'it')"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, locale }) => {
             try {
@@ -145,11 +152,13 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
     server.registerTool(
         "toggle_text_search",
         {
+            title: "Turn text search on or off",
             description: "Enable or disable the local text search feature for a project.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
                 enabled: z.boolean().describe("true to enable, false to disable"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, enabled }) => {
             try {
@@ -175,11 +184,13 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
     server.registerTool(
         "toggle_entity_history",
         {
+            title: "Turn entity history on or off",
             description: "Enable or disable entity history tracking (audit log of document changes) for a project.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
                 enabled: z.boolean().describe("true to enable, false to disable"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, enabled }) => {
             try {

@@ -10,7 +10,9 @@ export function registerProjectTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "list_projects",
         {
+            title: "List projects",
             description: "List all FireCMS Cloud projects accessible by the authenticated user",
+            annotations: { readOnlyHint: true },
         },
         async () => {
             try {
@@ -30,6 +32,7 @@ export function registerProjectTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "get_root_collections",
         {
+            title: "List root collections",
             description: "List all Firestore root-level collections in a FireCMS project — the " +
                 "paths that can be turned into CMS collections. Read live from Firestore, so " +
                 "collections created moments ago are included.",
@@ -64,6 +67,7 @@ export function registerProjectTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "list_subcollections",
         {
+            title: "List subcollections",
             description: "List the subcollections of a specific document. Use this to explore " +
                 "nested data — the subcollection paths it returns can be passed to " +
                 "preview_inferred_schema or infer_collections_from_data.",

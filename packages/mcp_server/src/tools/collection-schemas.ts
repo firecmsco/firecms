@@ -48,6 +48,7 @@ export function registerCollectionSchemaTools(server: McpServer, api: FireCMSApi
     server.registerTool(
         "list_collection_schemas",
         {
+            title: "List collections",
             description: `List all persisted collection schemas for a FireCMS project. Returns the collection 
 configurations (name, path, properties, etc.) that define how data is displayed and edited in the CMS.`,
             inputSchema: {
@@ -79,6 +80,7 @@ configurations (name, path, properties, etc.) that define how data is displayed 
     server.registerTool(
         "get_collection_schema",
         {
+            title: "Get a collection",
             description: `Get the full schema definition for a specific collection, including all properties, 
 validation rules, display configuration, and subcollection definitions.`,
             inputSchema: {
@@ -111,6 +113,7 @@ validation rules, display configuration, and subcollection definitions.`,
     server.registerTool(
         "save_collection_schema",
         {
+            title: "Save a collection",
             description: `Create or fully replace a collection schema. This defines how a Firestore collection 
 is displayed and edited in FireCMS. Requires at minimum: id, path, and name. 
 
@@ -149,6 +152,7 @@ Example schema:
                     initialSort: z.tuple([z.string(), z.enum(["asc", "desc"])]).optional().describe("Default sort [field, direction]"),
                 }).passthrough().describe("Complete collection schema definition"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionId, schema }) => {
             try {
@@ -175,6 +179,7 @@ Example schema:
     server.registerTool(
         "update_collection_schema",
         {
+            title: "Update a collection",
             description: `Partially update an existing collection schema. Only the specified fields are modified 
 (merged with the existing schema). Use this for changes like renaming, updating the group, 
 changing display settings, or adding new properties.`,
@@ -183,6 +188,7 @@ changing display settings, or adding new properties.`,
                 collectionId: z.string().describe("Collection ID to update"),
                 data: z.record(z.any()).describe("Fields to update (merged with existing schema)"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionId, data }) => {
             try {
@@ -208,6 +214,7 @@ changing display settings, or adding new properties.`,
     server.registerTool(
         "delete_collection_schema",
         {
+            title: "Delete a collection",
             description: `Delete a collection schema from FireCMS. This removes the collection configuration 
 from the CMS — it does NOT delete the underlying Firestore data. The collection will simply 
 no longer appear in the FireCMS UI.`,
@@ -215,7 +222,7 @@ no longer appear in the FireCMS UI.`,
                 projectId: z.string().describe("Firebase project ID"),
                 collectionId: z.string().describe("Collection ID to delete"),
             },
-            annotations: { destructiveHint: true },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionId }) => {
             try {
@@ -241,6 +248,7 @@ no longer appear in the FireCMS UI.`,
     server.registerTool(
         "save_property",
         {
+            title: "Save a property",
             description: `Add or update a single property in a collection schema. This is more granular than 
 updating the entire schema — use it when you want to add a new field or modify an existing 
 one without affecting other properties.
@@ -260,6 +268,7 @@ Example property:
                 property: PropertySchema.describe("Property definition"),
                 namespace: z.string().optional().describe("Dot-separated namespace for nested properties in maps (e.g., 'address' for address.street)"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionId, propertyKey, property, namespace }) => {
             try {
@@ -285,6 +294,7 @@ Example property:
     server.registerTool(
         "delete_property",
         {
+            title: "Delete a property",
             description: `Remove a property from a collection schema. This removes the field definition from 
 the CMS configuration — it does NOT delete the field from existing Firestore documents.`,
             inputSchema: {
@@ -293,7 +303,7 @@ the CMS configuration — it does NOT delete the field from existing Firestore d
                 propertyKey: z.string().describe("Property key to remove"),
                 namespace: z.string().optional().describe("Dot-separated namespace for nested properties"),
             },
-            annotations: { destructiveHint: true },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionId, propertyKey, namespace }) => {
             try {

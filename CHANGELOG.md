@@ -70,6 +70,11 @@
   - DataTalk is linked from the admin section of the home page, and its background requests no longer fail as unhandled rejections.
   - Stripe billing portal links are created when clicked, with a message when one fails, instead of on every page view.
   - The app bar stays on screen while a project's CMS loads.
+- **MCP server (`@firecms/mcp-server`)**:
+  - **Hosted at `https://api.firecms.co/mcp`.** Add it to Claude (Settings → Connectors → Add custom connector), to Claude Code (`claude mcp add --transport http firecms https://api.firecms.co/mcp`) or to any MCP client that takes a server URL. Clients sign in with OAuth in the browser, where you approve them in FireCMS Cloud; nothing is installed. The hosted server holds no Google Cloud credentials, so `connect_project_to_firecms` answers with a link to connect the project in FireCMS Cloud, and everything after that works from the agent. The npx server is unchanged and keeps the full Google Cloud flow.
+  - Every tool declares a `title`, and whether it only reads (`readOnlyHint`), only adds, or can overwrite or delete (`destructiveHint`), so clients that ask before writing know when to ask. The server also tells agents to start with `list_projects`.
+  - New entry point `@firecms/mcp-server/hosted`: `handleHostedMcpRequest()` serves the server over Streamable HTTP for a session the caller supplies. `createFireCMSMcpServer()` with no arguments still returns the local server; pass `{ session }` to act for another session. `FireCMSApiClient` now takes `{ session, apiUrl }`.
+  - Requires `@modelcontextprotocol/sdk` 1.29 or later.
 - **Releases**: packages publish with npm provenance again. The repository URL in every `package.json` had the wrong case, so npm refused every provenance statement since August.
 
 ## [3.4.0] - 2026-08-26

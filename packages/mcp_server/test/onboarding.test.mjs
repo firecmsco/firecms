@@ -14,7 +14,8 @@ import { registerOnboardingTools } from "../dist/tools/onboarding.js";
  */
 async function withTools(api) {
     const server = new McpServer({ name: "test", version: "0.0.0" });
-    registerOnboardingTools(server, api);
+    // Every stand-in is an admin of every project unless a test says otherwise.
+    registerOnboardingTools(server, { assertAdmin: async () => {}, ...api });
 
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
     const client = new Client({ name: "test-client", version: "0.0.0" });
@@ -235,6 +236,25 @@ test("apply_firestore_security_rules applies them on demand", async () => {
     assert.deepEqual(seen, ["boda-ale-fra"]);
     assert.equal(res.isError, false);
     assert.match(res.text, /already there were kept|kept/i);
+    await close();
+});
+
+test("the repair tools refuse a non-admin before touching the project", async () => {
+    const touched = [];
+    const { call, close } = await withTools({
+        assertAdmin: async (projectId) => {
+            throw new Error(`Access denied: viewer@example.test is not an admin of project "${projectId}".`);
+        },
+        applySecurityRules: async (p) => { touched.push(["rules", p]); return {}; },
+        createWebApp: async (p) => { touched.push(["webapp", p]); return {}; },
+    });
+
+    for (const tool of ["apply_firestore_security_rules", "create_firecms_webapp"]) {
+        const res = await call(tool, { projectId: "shop" });
+        assert.equal(res.isError, true, tool);
+        assert.match(res.text, /not an admin/, tool);
+    }
+    assert.deepEqual(touched, []);
     await close();
 });
 

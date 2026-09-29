@@ -1,20 +1,20 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { getValidTokens, getCurrentUserEmail } from "./auth.js";
-import { getBackendIdToken } from "./backend-auth.js";
 import { BackendFirestoreClient } from "./backend-firestore.js";
 import { resolveApiUrl } from "./config.js";
+import { FireCMSSession } from "./session.js";
 
 
 /**
  * Typed HTTP client for the FireCMS Cloud backend REST API.
  *
- * Authentication (mirrors `packages/firecms_cloud/src/api/projects.ts`):
+ Authentication (mirrors `packages/firecms_cloud/src/api/projects.ts`), both taken
+ * from the session the client was created for — see `session.ts`:
  * - `Authorization` carries a Firebase ID token issued by the `firecms-backend`
- *   project, obtained by exchanging the Google OAuth ID token — see `backend-auth.ts`.
- *   Most endpoints are gated by `firebaseAuthorization()` and accept nothing else.
+ *   project. Most endpoints are gated by `firebaseAuthorization()` and accept
+ *   nothing else.
  * - `x-admin-authorization` carries the Google OAuth access token, used by the
- *   endpoints gated by `googleCloudAuthentication()` (project listing and the whole
- *   GCP provisioning surface).
+ *   endpoints gated by `googleCloudAuthentication()` (the GCP provisioning surface).
+ *   Only a local sign-in has one.
  *
  * Architecture notes:
  * - Collection configurations live in the BACKEND Firestore at
@@ -29,31 +29,46 @@ import { resolveApiUrl } from "./config.js";
  */
 export class FireCMSApiClient {
     private client: AxiosInstance;
+    private session: FireCMSSession;
+    /** Keyed by email and project, so a different sign-in never inherits a verdict. */
     private adminCache: Map<string, { isAdmin: boolean; checkedAt: number }> = new Map();
 
     /** Direct access to the backend Firestore, for collection configurations. */
-    readonly collections = new BackendFirestoreClient();
+    readonly collections: BackendFirestoreClient;
 
     /** Cache admin checks for 5 minutes */
     private static ADMIN_CACHE_TTL_MS = 5 * 60 * 1000;
 
-    constructor() {
+    /**
+     * @param options.session who the requests are made for
+     * @param options.apiUrl  the backend; defaults to `FIRECMS_API_URL` or FireCMS Cloud
+     */
+    constructor({ session, apiUrl = resolveApiUrl() }: { session: FireCMSSession; apiUrl?: string }) {
+        this.session = session;
         this.client = axios.create({
-            baseURL: resolveApiUrl(),
+            baseURL: apiUrl,
             timeout: 60_000,
             headers: { "Content-Type": "application/json" },
         });
+        this.collections = new BackendFirestoreClient({ session, apiUrl });
     }
 
+    /**
+     * Headers for endpoints gated by `firebaseAuthorization()`.
+     *
+     * The Google token rides along when the session has one, as it does from the web
+     * app: some of these endpoints then act on Google Cloud as the user rather than as
+     * the project's service account. Without it they fall back to the service account.
+     */
     private async authHeaders(): Promise<Record<string, string>> {
-        const tokens = await getValidTokens();
-        if (!tokens) {
-            throw new Error("Not logged in. Use the firecms_login tool first.");
-        }
-        return {
-            Authorization: `Bearer ${await getBackendIdToken()}`,
-            "x-admin-authorization": `Bearer ${tokens.access_token}`,
+        const headers: Record<string, string> = {
+            Authorization: `Bearer ${await this.session.backendIdToken()}`,
         };
+        const googleAccessToken = await this.session.googleAccessToken();
+        if (googleAccessToken) {
+            headers["x-admin-authorization"] = `Bearer ${googleAccessToken}`;
+        }
+        return headers;
     }
 
     /**
@@ -64,11 +79,11 @@ export class FireCMSApiClient {
      * account yet.
      */
     private async googleAuthHeaders(): Promise<Record<string, string>> {
-        const tokens = await getValidTokens();
-        if (!tokens) {
+        const googleAccessToken = await this.session.googleAccessToken();
+        if (!googleAccessToken) {
             throw new Error("Not logged in. Use the firecms_login tool first.");
         }
-        return { "x-admin-authorization": `Bearer ${tokens.access_token}` };
+        return { "x-admin-authorization": `Bearer ${googleAccessToken}` };
     }
 
     /**
@@ -100,30 +115,31 @@ export class FireCMSApiClient {
      * @throws Error if the user is not an admin.
      */
     async assertAdmin(projectId: string): Promise<void> {
-        const cached = this.adminCache.get(projectId);
+        const currentEmail = await this.session.email();
+        const cacheKey = `${currentEmail?.toLowerCase()}|${projectId}`;
+        const cached = this.adminCache.get(cacheKey);
         if (cached && (Date.now() - cached.checkedAt) < FireCMSApiClient.ADMIN_CACHE_TTL_MS) {
             if (!cached.isAdmin) {
-                throw this.notAdminError(projectId);
+                throw this.notAdminError(projectId, currentEmail);
             }
             return;
         }
 
         const users = await this.listUsers(projectId);
-        const currentEmail = getCurrentUserEmail();
-        const me = users.find((u: any) =>
-            u.email?.toLowerCase() === currentEmail?.toLowerCase()
-        );
+        const me = currentEmail ? users.find((u: any) =>
+            u.email?.toLowerCase() === currentEmail.toLowerCase()
+        ) : undefined;
         const isAdmin = me?.roles?.includes("admin") ?? false;
 
-        this.adminCache.set(projectId, { isAdmin, checkedAt: Date.now() });
+        this.adminCache.set(cacheKey, { isAdmin, checkedAt: Date.now() });
 
         if (!isAdmin) {
-            throw this.notAdminError(projectId);
+            throw this.notAdminError(projectId, currentEmail);
         }
     }
 
-    private notAdminError(projectId: string): Error {
-        const email = getCurrentUserEmail() ?? "unknown";
+    private notAdminError(projectId: string, currentEmail: string | undefined): Error {
+        const email = currentEmail ?? "unknown";
         return new Error(
             `Access denied: ${email} is not an admin of project "${projectId}". ` +
             `The FireCMS MCP server requires admin access for this operation.`
@@ -139,9 +155,16 @@ export class FireCMSApiClient {
      * the project's encrypted service account. The service account is stripped here:
      * it is a credential, it is never needed by any tool, and it would otherwise be
      * serialised straight into the model's context.
+     *
+     * A session with a Google token lists with it, as the local server always has,
+     * which every deployed backend accepts. A hosted session has only the Firebase
+     * token, which the backend accepts here since the hosted server shipped.
      */
     async listProjects(): Promise<any[]> {
-        const response: any = await this.googleRequest({ method: "GET", url: "/projects" });
+        const config: AxiosRequestConfig = { method: "GET", url: "/projects" };
+        const response: any = await this.session.googleAccessToken()
+            ? await this.googleRequest(config)
+            : await this.request(config);
         const projects = response?.data ?? response ?? [];
         return (Array.isArray(projects) ? projects : []).map((project: any) => {
             const { service_account, firebase_config, ...rest } = project;

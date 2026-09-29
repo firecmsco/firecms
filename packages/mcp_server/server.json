@@ -1,0 +1,29 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "co.firecms/mcp",
+  "title": "FireCMS Cloud",
+  "description": "Manage FireCMS Cloud from an AI agent: Firestore data, collections, schemas and users.",
+  "websiteUrl": "https://firecms.co/docs/cloud/mcp_server",
+  "repository": {
+    "url": "https://github.com/firecmsco/firecms",
+    "source": "github",
+    "subfolder": "packages/mcp_server"
+  },
+  "version": "3.5.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.firecms.co/mcp"
+    }
+  ],
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@firecms/mcp-server",
+      "version": "3.5.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

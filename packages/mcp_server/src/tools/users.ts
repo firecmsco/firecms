@@ -12,6 +12,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "list_users",
         {
+            title: "List users",
             description: "List all users that have access to a FireCMS project, including their roles (admin, editor, viewer)",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
@@ -31,12 +32,16 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "add_user",
         {
-            description: "Invite a new user to a FireCMS project. Sends an invitation email. Admin-only.",
+            title: "Invite a user",
+            description: "Invite a new user to a FireCMS project. Sends an invitation email. Admin-only. " +
+                "If the email already belongs to a user of the project, their roles are replaced by these.",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
                 email: z.string().email().describe("Email address of the user to invite"),
                 roles: z.array(z.enum(["admin", "editor", "viewer"])).describe("Roles to assign"),
             },
+            // Adding someone who is already a member replaces their roles.
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, email, roles }) => {
             try {
@@ -54,12 +59,14 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "update_user_roles",
         {
+            title: "Change user roles",
             description: "Update the roles of an existing user in a FireCMS project. Admin-only.",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
                 userId: z.string().describe("The user ID to update"),
                 roles: z.array(z.enum(["admin", "editor", "viewer"])).describe("New roles"),
             },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, userId, roles }) => {
             try {
@@ -77,12 +84,13 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "remove_user",
         {
+            title: "Remove a user",
             description: "Remove a user from a FireCMS project, revoking their access. Admin-only.",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
                 userId: z.string().describe("The user ID to remove"),
             },
-            annotations: { destructiveHint: true },
+            annotations: { readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, userId }) => {
             try {

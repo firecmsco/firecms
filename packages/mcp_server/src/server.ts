@@ -3,7 +3,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { FireCMSApiClient } from "./api-client.js";
-import { registerAuthTools } from "./tools/auth.js";
+import { DEFAULT_APP_URL } from "./config.js";
+import { FireCMSServerMode, FireCMSSession } from "./session.js";
+import { registerCurrentUserTool } from "./tools/current-user.js";
 import { registerProjectTools } from "./tools/projects.js";
 import { registerUserTools } from "./tools/users.js";
 import { registerCollectionTools } from "./tools/collections.js";
@@ -20,7 +22,7 @@ import { registerProjectResources } from "./resources/project.js";
  * Create and configure the FireCMS MCP server with all tools and resources.
  *
  * Tool categories:
- * - Auth:              Login/logout/current user
+ * - Auth:              Current user (login/logout are local-only, added by the CLI)
  * - Onboarding:        Connect an existing Firebase project to FireCMS Cloud
  * - Projects:          List projects, root collections
  * - Introspection:     Infer collections from the data already in Firestore
@@ -47,20 +49,41 @@ function packageVersion(): string {
     }
 }
 
-export function createFireCMSMcpServer(): McpServer {
+export interface FireCMSMcpServerOptions {
+    /** Who the server acts for. */
+    session: FireCMSSession;
+    /** Where it runs, which decides whether it can provision Google Cloud projects. Default "local". */
+    mode?: FireCMSServerMode;
+    /** The FireCMS backend. Defaults to `FIRECMS_API_URL` or FireCMS Cloud. */
+    apiUrl?: string;
+    /** The FireCMS Cloud web app, where hosted users connect new projects. */
+    appUrl?: string;
+}
+
+export function createFireCMSMcpServer({
+    session,
+    mode = "local",
+    apiUrl,
+    appUrl = DEFAULT_APP_URL,
+}: FireCMSMcpServerOptions): McpServer {
     const server = new McpServer({
         name: "FireCMS Cloud",
         version: packageVersion(),
+    }, {
+        instructions:
+            "FireCMS Cloud is a headless CMS on top of the user's own Firebase projects. " +
+            "Call list_projects first: every other tool takes a projectId from it. If it is " +
+            "empty, the user has not connected a Firebase project yet — connect_project_to_firecms " +
+            "is the way in.",
     });
 
-    const api = new FireCMSApiClient();
+    const api = new FireCMSApiClient({ session, apiUrl });
 
-    // Auth tools (login/logout)
-    registerAuthTools(server);
+    registerCurrentUserTool(server, session, mode);
 
     // Onboarding — connect an existing Firebase project. Registered before the
     // project tools because it is the first thing a new user needs.
-    registerOnboardingTools(server, api);
+    registerOnboardingTools(server, api, mode === "hosted" ? { hosted: { appUrl } } : {});
 
     // Project & user management (via backend API)
     registerProjectTools(server, api);
