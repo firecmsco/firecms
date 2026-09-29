@@ -349,62 +349,63 @@ export default appConfig;
 
 ## Connect an AI agent to FireCMS Cloud (MCP server)
 
-FireCMS Cloud ships an **MCP server**, so AI assistants like Claude Code, Claude Desktop or Cursor
+FireCMS Cloud runs an **MCP server**, so AI assistants like Claude, Claude Code or Cursor
 can work on your project directly: browse and edit data, create and change collections,
 infer schemas from the documents already in your Firestore, and manage users.
 
-It is published as [`@firecms/mcp-server`](https://www.npmjs.com/package/@firecms/mcp-server)
-and runs locally on your machine over stdio. It talks to the FireCMS Cloud API with your
-own account, so an agent can never do anything you could not do yourself in the console.
+There is one address for everyone:
+
+```
+https://api.firecms.co/mcp
+```
+
+Add it to your client and sign in to FireCMS Cloud in the browser. Nothing to install.
+The agent acts with your own account, so it can never do anything you could not do
+yourself in FireCMS Cloud.
 
 ### Before you start
 
-- **Node.js 18** or later.
-- An **MCP-capable client**: Claude Code, Claude Desktop, Cursor, or any other client
-  that speaks the Model Context Protocol.
+- An **MCP-capable client**: Claude (claude.ai or Claude Desktop), Claude Code, Cursor, or
+  any other client that speaks the Model Context Protocol.
 - A **FireCMS Cloud** account. Reading is available to any project member; creating or
   changing collections, data and users requires the `admin` role on the project.
 
 ### Add the FireCMS MCP server
 
-In **Claude Code**, run this in your terminal:
+In **Claude** (claude.ai or Claude Desktop), open **Settings → Connectors**, choose
+**Add custom connector**, name it `FireCMS` and paste:
 
-```bash
-claude mcp add firecms -- npx -y @firecms/mcp-server
+```
+https://api.firecms.co/mcp
 ```
 
-For **Claude Desktop**, **Cursor** or any other MCP client, add this to the client's
-MCP configuration file:
+In **Claude Code**, run this in your terminal, then run `/mcp` inside Claude Code and
+choose **Authenticate**:
+
+```bash
+claude mcp add --transport http firecms https://api.firecms.co/mcp
+```
+
+In **Cursor**, or any other client that takes remote servers by URL, add this to its MCP
+configuration (`.cursor/mcp.json` in your project, or `~/.cursor/mcp.json` for every project):
 
 ```json
 {
   "mcpServers": {
     "firecms": {
-      "command": "npx",
-      "args": ["-y", "@firecms/mcp-server"]
+      "url": "https://api.firecms.co/mcp"
     }
   }
 }
 ```
 
-Where that file lives:
-
-- **Claude Desktop**: `claude_desktop_config.json`
-- **Cursor**: `.cursor/mcp.json` in your project, or `~/.cursor/mcp.json` for every project
-
 ### Sign in
 
-Restart your client, then ask the agent to run the `firecms_login` tool:
+The first time your client connects, it opens FireCMS Cloud in your browser. Sign in if you
+are not already, check which app is asking and where it will send you back, and approve.
+Your client stays signed in from then on.
 
-```
-Run the firecms_login tool
-```
-
-It opens a browser for Google sign-in and stores the credentials in `~/.firecms/tokens.json`,
-the same file the [FireCMS CLI](https://www.npmjs.com/package/@firecms/cli) uses. You only
-do this once — later sessions pick the tokens up automatically.
-
-Use `firecms_get_current_user` to check who you are signed in as, and `firecms_logout` to sign out.
+To disconnect, remove the connector from your client.
 
 ### Try it
 
@@ -424,28 +425,28 @@ Add a "featured" boolean property to the products collection, shown after the ti
 
 ### Bringing an existing Firebase project into FireCMS
 
-This is the typical first session. Everything here is driven by the Google account you
-logged in with:
+Connecting a project creates a service account in your Google Cloud project, which takes
+your own Google Cloud permissions. The hosted server never holds those, so this one step
+happens in FireCMS Cloud:
 
-1. `list_firebase_projects` — see which projects you can connect, and what they still need
-2. `get_project_setup_status` — check one project in detail (optional)
-3. `enable_project_apis` — only if `apisEnabled` is false
-4. `enable_firestore` — only if `firestoreEnabled` is false (the location is permanent)
-5. `connect_project_to_firecms` — service account, admin user, and the security rules
-6. `setup_all_collections` — infer every root collection from the data already there
+1. Ask the agent to connect your project. `connect_project_to_firecms` answers with a link to
+   [app.firecms.co/new](https://app.firecms.co/new).
+2. Pick the project there and follow the steps. It takes about a minute.
+3. Back in your client, `setup_all_collections` infers every root collection from the data
+   already there.
 
 :::caution
-**Firebase Authentication** must be enabled on the project before step 5. It is the one
+**Firebase Authentication** must be enabled on the project before you connect it. It is the one
 prerequisite with no API behind it, so turn it on in the Firebase console first.
 :::
 
-Step 5 also adds FireCMS's access rule to the project's Firestore and Storage rules. Without
-it, the CMS reports *Missing Firestore Security Rules* and opens nothing. If you need to
-re-apply them later, `apply_firestore_security_rules` is idempotent.
-
-Step 6 is where an existing project becomes a working CMS: FireCMS samples the documents at
+Step 3 is where an existing project becomes a working CMS: FireCMS samples the documents at
 each root collection, infers the property types, and picks display names, a singular name,
 an icon and a navigation group.
+
+If you would rather have the agent do the whole connection itself, including enabling APIs and
+creating the Firestore database, [run the server locally](#run-the-server-locally): it signs
+in with your Google account, so it can.
 
 ### Building collections from existing data
 
@@ -470,28 +471,32 @@ a model would invent a schema from the path name alone.
 
 ### Available tools
 
-Tools marked 🔒 require the `admin` role on the project.
+Tools marked 🔒 require the `admin` role on the project. Tools marked 💻 are only offered by the
+[local server](#run-the-server-locally).
 
-#### Auth
+Every tool tells your client whether it only reads or changes something, and whether a change
+can overwrite or delete, so clients that ask before writing know when to ask.
+
+#### Account
 
 | Tool | Description |
 |------|-------------|
-| `firecms_login` | Sign in via browser (Google OAuth) |
-| `firecms_logout` | Sign out |
 | `firecms_get_current_user` | Show the current user |
+| `firecms_login` 💻 | Sign in via browser (Google OAuth) |
+| `firecms_logout` 💻 | Sign out |
 
 #### Onboarding
 
 | Tool | Description |
 |------|-------------|
-| `list_firebase_projects` | Google Cloud projects you can access, with FireCMS readiness flags |
-| `get_project_setup_status` | Detailed readiness of one project |
-| `list_firestore_locations` | Locations available for a new Firestore database |
-| `enable_project_apis` | Enable the Google Cloud APIs FireCMS requires |
-| `enable_firestore` | Create the default Firestore database (the location is permanent) |
-| `connect_project_to_firecms` | Connect an existing Firebase project, and apply the security rules it needs |
-| `apply_firestore_security_rules` | Add FireCMS's access rule to Firestore and Storage (idempotent) |
-| `create_firecms_webapp` | Retry web app creation if it failed during connect |
+| `connect_project_to_firecms` | Connect an existing Firebase project. Hosted: returns the link to do it in FireCMS Cloud. Local: connects it, and applies the security rules it needs |
+| `list_firebase_projects` 💻 | Google Cloud projects you can access, with FireCMS readiness flags |
+| `get_project_setup_status` 💻 | Detailed readiness of one project |
+| `list_firestore_locations` 💻 | Locations available for a new Firestore database |
+| `enable_project_apis` 💻 | Enable the Google Cloud APIs FireCMS requires |
+| `enable_firestore` 💻 | Create the default Firestore database (the location is permanent) |
+| `apply_firestore_security_rules` 🔒 | Add FireCMS's access rule to Firestore and Storage (idempotent) |
+| `create_firecms_webapp` 🔒 | Retry web app creation if it failed during connect |
 
 #### Projects and configuration
 
@@ -552,22 +557,67 @@ Clients that support MCP resources can also read these directly:
 | `firecms://projects/{id}/schemas` | All collection schemas (full config tree) |
 | `firecms://projects/{id}/config` | Project configuration snapshot |
 
+### Run the server locally
+
+The same server is published as [`@firecms/mcp-server`](https://www.npmjs.com/package/@firecms/mcp-server)
+and can run on your machine over stdio. It needs **Node.js 18** or later. Locally it signs in
+with your Google account instead of through FireCMS Cloud, which is what lets it also enable
+APIs, create Firestore databases and connect projects end to end.
+
+In **Claude Code**:
+
+```bash
+claude mcp add firecms -- npx -y @firecms/mcp-server
+```
+
+For **Claude Desktop**, **Cursor** or any other MCP client, add this to the client's MCP
+configuration file (`claude_desktop_config.json` for Claude Desktop):
+
+```json
+{
+  "mcpServers": {
+    "firecms": {
+      "command": "npx",
+      "args": ["-y", "@firecms/mcp-server"]
+    }
+  }
+}
+```
+
+Then restart your client and ask the agent to run the `firecms_login` tool. It opens a
+browser for Google sign-in and stores the credentials in `~/.firecms/tokens.json`, the same
+file the [FireCMS CLI](https://www.npmjs.com/package/@firecms/cli) uses. You only do this
+once. Use `firecms_logout` to sign out.
+
+With the local server, connecting a project is all done from the agent:
+
+1. `list_firebase_projects` — see which projects you can connect, and what they still need
+2. `get_project_setup_status` — check one project in detail (optional)
+3. `enable_project_apis` — only if `apisEnabled` is false
+4. `enable_firestore` — only if `firestoreEnabled` is false (the location is permanent)
+5. `connect_project_to_firecms` — service account, admin user, and the security rules
+6. `setup_all_collections` — infer every root collection from the data already there
+
 ### Permissions and security
 
-- **Authentication** is Google OAuth in your browser, the same flow as `firecms login` in the CLI.
+- **Authentication**: the hosted server uses OAuth. You approve each client in FireCMS Cloud,
+  and it receives a token for your account only. The local server uses Google OAuth in your
+  browser, the same flow as `firecms login` in the CLI.
 - **Authorization** is checked per project: every write enforces the `admin` role.
-- **Tokens** live in `~/.firecms/tokens.json`, shared with the CLI. The backend token is
-  held in memory only and dropped on logout.
+- **The hosted server holds no Google Cloud credentials.** It can do what you can do in
+  FireCMS Cloud, never what you can do on Google Cloud.
+- **Tokens**: the hosted server stores its tokens only as hashes; access tokens last an hour
+  and refresh tokens are replaced on every use. The local server keeps its tokens in
+  `~/.firecms/tokens.json`, shared with the CLI.
 - **Credentials never reach the model**: `list_projects` strips each project's service
   account from its output.
 
 ### Troubleshooting
 
-**The agent says it is not logged in.** Run the `firecms_login` tool. If the browser window
-never opens, run `npx @firecms/mcp-server --help` in a terminal to confirm the package
-installs and starts.
+**The client cannot connect, or keeps asking to sign in.** Remove the connector and add it
+again with `https://api.firecms.co/mcp`, then approve the request in the browser window it opens.
 
-**The tools do not show up after editing the config.** MCP clients read their configuration
+**The tools do not show up after editing a config file.** MCP clients read their configuration
 at startup — restart the client completely.
 
 **A write fails with a permissions error.** The account you signed in with needs the `admin`
@@ -577,6 +627,10 @@ role on that project. Check it in the project's *Users* section in
 **Collections do not appear after connecting a project.** Make sure Firebase Authentication
 is enabled and the security rules were applied (`apply_firestore_security_rules`), then run
 `setup_all_collections`.
+
+**The local server says it is not logged in.** Run the `firecms_login` tool. If the browser
+window never opens, run `npx @firecms/mcp-server --help` in a terminal to confirm the package
+installs and starts.
 
 ## Deploying your Firebase CMS and Admin UI
 
