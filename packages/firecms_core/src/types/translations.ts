@@ -88,6 +88,14 @@ export interface FireCMSTranslations {
     license_update_license: string;
     /** Link in the invalid-project banner to link this project to the license. */
     license_add_project_to_license: string;
+    /** Suggestion of the PRO user management plugin to a project without it. `{{users}}` is how many people use the CMS, always 2 or more. */
+    pro_suggestion_user_management: string;
+    /** `pro_suggestion_user_management` when the number of people is not known. */
+    pro_suggestion_user_management_uncounted: string;
+    /** Suggestion of the PRO entity history plugin to a project without it. */
+    pro_suggestion_entity_history: string;
+    /** Link in a PRO suggestion to the plugin's documentation. */
+    pro_suggestion_learn_more: string;
     /** Title of the notice a PRO view shows while PRO features are paused. */
     pro_features_paused: string;
     /** Users and Roles views while PRO features are paused. */

@@ -35,6 +35,7 @@ async function bannerText() {
 
 beforeEach(() => {
     sessionStorage.clear();
+    localStorage.clear();
 });
 
 afterEach(cleanup);
@@ -215,6 +216,169 @@ describe("LicenseBanner dismissal", () => {
         } finally {
             if (ownDescriptor) Object.defineProperty(window, "sessionStorage", ownDescriptor);
             else delete (window as any).sessionStorage;
+        }
+    });
+});
+
+describe("LicenseBanner PRO suggestions", () => {
+
+    const USER_MANAGEMENT_DOCS = "https://firecms.co/docs/pro/user_management/?utm_source=firecms&utm_medium=cms_suggestion&utm_campaign=user_management";
+
+    it("suggests user management to a team, with its size, and links to the plugin docs", async () => {
+        renderBanner({
+            blocked: false,
+            licenseState: "not_required",
+            suggestion: { plugin: "user_management", users: 7 }
+        });
+
+        expect(await bannerText()).toContain("7 people use this CMS. FireCMS PRO adds user management, with roles and per-collection permissions, free for 30 days in production.");
+        const link = screen.getByRole("link", { name: "See how to add it" });
+        expect(link.getAttribute("href")).toEqual(USER_MANAGEMENT_DOCS);
+        expect(link.getAttribute("target")).toEqual("_blank");
+    });
+
+    it.each<[string, number | undefined]>([
+        ["no count", undefined],
+        ["a single person", 1],
+        ["a count that is not a number", "7" as any]
+    ])("leaves the number out with %s", async (_, users) => {
+        renderBanner({
+            blocked: false,
+            licenseState: "not_required",
+            suggestion: { plugin: "user_management", users }
+        });
+
+        const text = await bannerText();
+        expect(text).toContain("FireCMS PRO adds user management, with roles and per-collection permissions, free for 30 days in production.");
+        expect(text).not.toContain("people use this CMS");
+    });
+
+    it("suggests entity history", async () => {
+        renderBanner({
+            blocked: false,
+            licenseState: "not_required",
+            suggestion: { plugin: "entity_history" }
+        });
+
+        expect(await bannerText()).toContain("FireCMS PRO keeps a history of every change to your content and who made it, and lets you revert it. Free for 30 days in production.");
+        expect(screen.getByRole("link", { name: "See how to add it" }).getAttribute("href"))
+            .toEqual("https://firecms.co/docs/pro/entity_history/?utm_source=firecms&utm_medium=cms_suggestion&utm_campaign=entity_history");
+    });
+
+    it("is translated", async () => {
+        renderBanner({
+            blocked: false,
+            licenseState: "not_required",
+            suggestion: { plugin: "user_management", users: 5 }
+        }, "de");
+
+        await waitFor(() => expect(screen.getByTestId("host").textContent)
+            .toContain("5 Personen nutzen dieses CMS. FireCMS PRO bringt eine Benutzerverwaltung"));
+    });
+
+    it.each<[string, AccessResponse]>([
+        ["a plugin this version has no copy for", {
+            blocked: false,
+            licenseState: "not_required",
+            suggestion: { plugin: "datatalk" as any }
+        }],
+        ["a malformed suggestion", { blocked: false, licenseState: "not_required", suggestion: "user_management" as any }],
+        ["a licensed project", {
+            blocked: false,
+            licenseState: "licensed",
+            suggestion: { plugin: "entity_history" }
+        }],
+        ["a whitelisted project", {
+            blocked: false,
+            licenseState: "whitelisted",
+            suggestion: { plugin: "entity_history" }
+        }]
+    ])("shows nothing for %s", async (_, status) => {
+        renderBanner(status);
+        await waitFor(() => expect(screen.getByTestId("host")).toBeTruthy());
+        expect(screen.getByTestId("host").textContent).toEqual("");
+    });
+
+    it("keeps the trial banner when a trial response also carries a suggestion", async () => {
+        renderBanner({
+            blocked: false,
+            licenseState: "trial",
+            daysLeft: 12,
+            suggestion: { plugin: "entity_history" }
+        });
+
+        const text = await bannerText();
+        expect(text).toContain("FireCMS PRO trial: 12 days left in production.");
+        expect(text).not.toContain("history");
+    });
+
+    it("stays dismissed in this browser after the session ends", async () => {
+        const status: AccessResponse = {
+            blocked: false,
+            licenseState: "not_required",
+            suggestion: { plugin: "user_management", users: 7 }
+        };
+        renderBanner(status);
+        await bannerText();
+
+        fireEvent.click(screen.getByRole("button", { name: "Close" }));
+        expect(screen.getByTestId("host").textContent).toEqual("");
+
+        // A later session in the same browser.
+        cleanup();
+        sessionStorage.clear();
+        renderBanner(status);
+        await waitFor(() => expect(screen.getByTestId("host")).toBeTruthy());
+        expect(screen.getByTestId("host").textContent).toEqual("");
+    });
+
+    it("shows a different suggestion after one was dismissed", async () => {
+        renderBanner({
+            blocked: false,
+            licenseState: "not_required",
+            suggestion: { plugin: "user_management", users: 7 }
+        });
+        await bannerText();
+        fireEvent.click(screen.getByRole("button", { name: "Close" }));
+
+        cleanup();
+        renderBanner({ blocked: false, licenseState: "not_required", suggestion: { plugin: "entity_history" } });
+        expect(await bannerText()).toContain("FireCMS PRO keeps a history of every change");
+    });
+
+    it("does not hide the trial banner when a suggestion was dismissed", async () => {
+        renderBanner({ blocked: false, licenseState: "not_required", suggestion: { plugin: "entity_history" } });
+        await bannerText();
+        fireEvent.click(screen.getByRole("button", { name: "Close" }));
+
+        cleanup();
+        renderBanner({ blocked: false, licenseState: "trial", daysLeft: 30 });
+        expect(await bannerText()).toContain("FireCMS PRO trial: 30 days left in production.");
+    });
+
+    it("keeps working when local storage is unavailable", async () => {
+        // Only the banner's own key fails: the i18n provider reads local storage too.
+        const getItem = Storage.prototype.getItem;
+        const setItem = Storage.prototype.setItem;
+        const failOwnKey = (key: string) => {
+            if (key === "firecms_pro_suggestions_dismissed") throw new Error("blocked");
+        };
+        Storage.prototype.getItem = function (key: string) {
+            failOwnKey(key);
+            return getItem.call(this, key);
+        };
+        Storage.prototype.setItem = function (key: string, value: string) {
+            failOwnKey(key);
+            return setItem.call(this, key, value);
+        };
+        try {
+            renderBanner({ blocked: false, licenseState: "not_required", suggestion: { plugin: "entity_history" } });
+            await bannerText();
+            fireEvent.click(screen.getByRole("button", { name: "Close" }));
+            expect(screen.getByTestId("host").textContent).toEqual("");
+        } finally {
+            Storage.prototype.getItem = getItem;
+            Storage.prototype.setItem = setItem;
         }
     });
 });

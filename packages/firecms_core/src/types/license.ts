@@ -59,5 +59,30 @@ export type AccessResponse = {
      * Where to get or update a license for this project.
      */
     subscribeUrl?: string;
+    /**
+     * A PRO plugin the server suggests for this project. Only read with
+     * `not_required`, i.e. when the app mounts no PRO plugin.
+     */
+    suggestion?: ProSuggestion;
     message?: string;
+};
+
+/**
+ * A FireCMS PRO plugin the license check suggests to a project that runs
+ * none, such as user management for a CMS that several people sign in to.
+ * The server decides which projects get one; the CMS shows it as a note the
+ * user can dismiss for good.
+ *
+ * @group Models
+ */
+export type ProSuggestion = {
+    /**
+     * Key of the suggested plugin. Keys this version of FireCMS has no copy
+     * for are ignored, so the server can add new ones safely.
+     */
+    plugin: "user_management" | "entity_history";
+    /**
+     * How many people use this CMS, when the server counted them.
+     */
+    users?: number;
 };

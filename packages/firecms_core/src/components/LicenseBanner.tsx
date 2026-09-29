@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Alert, Button, CloseIcon, IconButton } from "@firecms/ui";
-import { AccessResponse } from "../types";
+import { AccessResponse, ProSuggestion } from "../types";
 import { getLicenseSubscribeUrl } from "../core/pro_plugins";
 import { useLicenseStatus } from "../hooks/useLicenseStatus";
 import { useTranslation } from "../hooks/useTranslation";
 
 const DISMISSED_STORAGE_KEY = "firecms_license_banner_dismissed";
+const DISMISSED_SUGGESTIONS_STORAGE_KEY = "firecms_pro_suggestions_dismissed";
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /**
@@ -25,14 +26,28 @@ type BannerContent = {
     message: string;
     linkLabel: string;
     href: string;
-    dismissible: boolean;
+    /**
+     * `session` hides it until the browser session ends, `forever` in this
+     * browser for good.
+     */
+    dismissal: "none" | "session" | "forever";
+};
+
+/**
+ * Where each PRO suggestion links: the plugin's docs, which say how to add it.
+ * The UTM parameters let the website count the clicks.
+ */
+const SUGGESTION_DOCS_URLS: Record<ProSuggestion["plugin"], string> = {
+    user_management: "https://firecms.co/docs/pro/user_management/?utm_source=firecms&utm_medium=cms_suggestion&utm_campaign=user_management",
+    entity_history: "https://firecms.co/docs/pro/entity_history/?utm_source=firecms&utm_medium=cms_suggestion&utm_campaign=entity_history"
 };
 
 /**
  * Tells the user where their FireCMS PRO license stands: days left in the
  * trial, or why PRO is paused (the trial ended, the key is not linked to this
  * project, or the license pays for other projects). Renders nothing when
- * licensed, when no license is needed, and while the status is unknown.
+ * licensed and while the status is unknown. When no license is needed, it
+ * shows only a PRO plugin the license check suggests for this project, if any.
  *
  * The default `Scaffold` already renders it above the main content. Place it
  * yourself only in a custom layout.
@@ -48,7 +63,9 @@ export function LicenseBanner({
     const { t, i18n } = useTranslation();
 
     // States dismissed in this browser session; a different state shows again.
-    const [dismissed, setDismissed] = useState<string[]>(readDismissed);
+    const [dismissed, setDismissed] = useState<string[]>(() => readDismissed(sessionDismissals));
+    // Suggestions dismissed in this browser, for good.
+    const [dismissedForGood, setDismissedForGood] = useState<string[]>(() => readDismissed(browserDismissals));
 
     // `language`, not `resolvedLanguage`: locale bundles are added after init,
     // and `resolvedLanguage` stays on the English fallback when they are.
@@ -56,13 +73,21 @@ export function LicenseBanner({
         ? buildBannerContent(licenseStatus, t, i18n?.language)
         : null;
 
-    if (!content || (content.dismissible && dismissed.includes(content.state)))
+    if (!content
+        || (content.dismissal === "session" && dismissed.includes(content.state))
+        || (content.dismissal === "forever" && dismissedForGood.includes(content.state)))
         return null;
 
     const dismiss = () => {
-        const next = [...dismissed, content.state];
-        writeDismissed(next);
-        setDismissed(next);
+        if (content.dismissal === "forever") {
+            const next = [...dismissedForGood, content.state];
+            writeDismissed(browserDismissals, next);
+            setDismissedForGood(next);
+        } else {
+            const next = [...dismissed, content.state];
+            writeDismissed(sessionDismissals, next);
+            setDismissed(next);
+        }
     };
 
     return (
@@ -81,7 +106,7 @@ export function LicenseBanner({
                         rel={"noopener noreferrer"}>
                         {content.linkLabel}
                     </Button>
-                    {content.dismissible && <IconButton
+                    {content.dismissal !== "none" && <IconButton
                         size={"small"}
                         aria-label={t("close")}
                         onClick={dismiss}>
@@ -113,7 +138,7 @@ function buildBannerContent(status: AccessResponse,
                 }),
                 linkLabel: t("license_get_license"),
                 href,
-                dismissible: true
+                dismissal: "session"
             };
         }
         case "expired": {
@@ -126,7 +151,7 @@ function buildBannerContent(status: AccessResponse,
                     : t("license_expired_banner_undated"),
                 linkLabel: t("license_get_license"),
                 href,
-                dismissible: false
+                dismissal: "none"
             };
         }
         case "invalid_project":
@@ -138,7 +163,7 @@ function buildBannerContent(status: AccessResponse,
                     : t("license_invalid_project_banner_unnamed"),
                 linkLabel: t("license_add_project_to_license"),
                 href,
-                dismissible: false
+                dismissal: "none"
             };
         case "over_quota": {
             const licensed = status.licensedProjects;
@@ -152,13 +177,45 @@ function buildBannerContent(status: AccessResponse,
                 }),
                 linkLabel: t("license_update_license"),
                 href,
-                dismissible: false
+                dismissal: "none"
             };
         }
+        case "not_required":
+            return buildSuggestionContent(status.suggestion, t);
         default:
-            // licensed, not_required, whitelisted, and servers too old to say
+            // licensed, whitelisted, and servers too old to say
             return null;
     }
+}
+
+function buildSuggestionContent(suggestion: ProSuggestion | undefined,
+                                t: Translate): BannerContent | null {
+    if (!suggestion || typeof suggestion !== "object") return null;
+    let message: string;
+    switch (suggestion.plugin) {
+        case "user_management": {
+            const users = suggestion.users;
+            // The copy is plural only: one person is not a reason to suggest roles.
+            message = isCount(users) && users >= 2
+                ? t("pro_suggestion_user_management", { users: String(Math.floor(users)) })
+                : t("pro_suggestion_user_management_uncounted");
+            break;
+        }
+        case "entity_history":
+            message = t("pro_suggestion_entity_history");
+            break;
+        default:
+            // A plugin this version has no copy for.
+            return null;
+    }
+    return {
+        state: `suggestion_${suggestion.plugin}`,
+        color: "info",
+        message,
+        linkLabel: t("pro_suggestion_learn_more"),
+        href: SUGGESTION_DOCS_URLS[suggestion.plugin],
+        dismissal: "forever"
+    };
 }
 
 function isCount(value: unknown): value is number {
@@ -188,9 +245,24 @@ function formatDate(iso: string | undefined, language: string | undefined): stri
     }
 }
 
-function readDismissed(): string[] {
+type DismissedStore = {
+    storage: () => Storage;
+    key: string;
+};
+
+const sessionDismissals: DismissedStore = {
+    storage: () => sessionStorage,
+    key: DISMISSED_STORAGE_KEY
+};
+
+const browserDismissals: DismissedStore = {
+    storage: () => localStorage,
+    key: DISMISSED_SUGGESTIONS_STORAGE_KEY
+};
+
+function readDismissed(store: DismissedStore): string[] {
     try {
-        const value = sessionStorage.getItem(DISMISSED_STORAGE_KEY);
+        const value = store.storage().getItem(store.key);
         const parsed = value ? JSON.parse(value) : [];
         return Array.isArray(parsed) ? parsed.filter((s): s is string => typeof s === "string") : [];
     } catch {
@@ -198,9 +270,9 @@ function readDismissed(): string[] {
     }
 }
 
-function writeDismissed(states: string[]) {
+function writeDismissed(store: DismissedStore, states: string[]) {
     try {
-        sessionStorage.setItem(DISMISSED_STORAGE_KEY, JSON.stringify(states));
+        store.storage().setItem(store.key, JSON.stringify(states));
     } catch {
         // Private mode or storage disabled: dismissed for this page view only.
     }
