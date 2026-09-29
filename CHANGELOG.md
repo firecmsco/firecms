@@ -44,6 +44,7 @@
   - Dialogs with a `maxWidth` keep a side gutter on narrow screens again, as in Tailwind v3: 11/12 of the screen up to the maximum width. Desktop sizes are unchanged.
   - `ToggleButtonGroup` has a new optional `fullWidth` prop.
   - The rich text editor no longer throws when an image finishes uploading, or an AI completion arrives, after the entity was closed.
+  - The CMS renders where the browser blocks site storage (all cookies blocked, some embedded iframes). Reading the saved language, colour mode or local collection settings threw a SecurityError during render and left a blank page; those preferences now last only as long as the page. A corrupt stored value reads as nothing stored.
 - **CLI and templates**:
   - **A canary CLI scaffolds its own version.** `npx @firecms/cli@canary init --pro` used to pin `^3.0.0`, which installed the latest stable release; a prerelease CLI now pins every `@firecms` package to its own version.
   - Every template installs, builds and runs with npm, pnpm 10 and 11 and yarn 2+. pnpm 11 used to refuse to install or run any template until their install scripts were approved; each template now approves exactly what it needs. Each declares the Node version it needs, instead of failing later with "Cannot find native binding" on Node 18.

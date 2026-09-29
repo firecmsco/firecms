@@ -4,6 +4,7 @@ import { I18nContext, I18nextProvider, initReactI18next } from "react-i18next";
 import { en } from "../locales/en";
 import { es } from "../locales/es";
 import { FireCMSTranslations } from "../types/translations";
+import { getLocalStorageItem, setLocalStorageItem } from "../util/local_storage";
 
 const FIRECMS_NS = "firecms_core";
 
@@ -137,10 +138,8 @@ export function FireCMSi18nProvider({
         const resources = buildResourcesWithParent(translations, parentInstance);
 
         let initialLocale = parentInstance?.language ?? locale;
-        if (typeof window !== "undefined") {
-            const stored = localStorage.getItem(FIRECMS_LOCALE_STORAGE_KEY);
-            if (stored) initialLocale = stored;
-        }
+        const stored = getLocalStorageItem(FIRECMS_LOCALE_STORAGE_KEY);
+        if (stored) initialLocale = stored;
 
         // Kicked off before init so the request is in flight while i18next sets
         // itself up, rather than after it.
@@ -183,9 +182,7 @@ export function FireCMSi18nProvider({
             });
 
         instance.on("languageChanged", (lng) => {
-            if (typeof window !== "undefined") {
-                localStorage.setItem(FIRECMS_LOCALE_STORAGE_KEY, lng);
-            }
+            setLocalStorageItem(FIRECMS_LOCALE_STORAGE_KEY, lng);
             // Switching to a language whose bundle has not been fetched yet
             // renders the English fallback until it lands.
             loadLocale(lng)?.then(() => applyLoadedLocale(instance, lng, translations, parentInstance));
@@ -210,7 +207,7 @@ export function FireCMSi18nProvider({
     // ONLY if the user hasn't explicitly set a preference
     useEffect(() => {
         if (i18nRef.current && i18nRef.current.language !== locale) {
-            const hasUserPreference = typeof window !== "undefined" && Boolean(localStorage.getItem(FIRECMS_LOCALE_STORAGE_KEY));
+            const hasUserPreference = Boolean(getLocalStorageItem(FIRECMS_LOCALE_STORAGE_KEY));
             if (!hasUserPreference) {
                 i18nRef.current.changeLanguage(locale);
             }

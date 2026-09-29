@@ -25,8 +25,16 @@ const LOCAL_STORAGE_PREFIX = "entity_cache::";
 // In-memory cache to store entities for quick access
 const entityCache: Map<string, object> = new Map();
 
-// Check `localStorage` availability once during initialization
-const isLocalStorageAvailable = typeof localStorage !== "undefined";
+// Check `localStorage` availability once during initialization. Reading it
+// throws where the browser blocks site data, which would fail this module's
+// import and take the whole CMS down with it.
+const isLocalStorageAvailable = (() => {
+    try {
+        return typeof localStorage !== "undefined";
+    } catch {
+        return false;
+    }
+})();
 
 // Define custom replacer for JSON.stringify
 function customReplacer(key: string): any {

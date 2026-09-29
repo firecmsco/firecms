@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PartialEntityCollection, UserConfigurationPersistence } from "../types";
 import { mergeDeep, stripCollectionPath } from "../util";
+import { getLocalStorageJSON, setLocalStorageItem } from "../util/local_storage";
 
 export function useBuildLocalConfigurationPersistence(): UserConfigurationPersistence {
 
     const configCache = useRef<Record<string, PartialEntityCollection>>({});
 
     const getCollectionFromStorage = useCallback((storageKey: string) => {
-        const item = localStorage.getItem(storageKey);
-        return item ? JSON.parse(item) : {};
+        return getLocalStorageJSON(storageKey, {});
     }, []);
 
     const getCollectionConfig = useCallback(<M extends Record<string, any>>(path: string): PartialEntityCollection<M> => {
@@ -21,7 +21,7 @@ export function useBuildLocalConfigurationPersistence(): UserConfigurationPersis
 
     const onCollectionModified = useCallback(<M extends Record<string, any>>(path: string, data: PartialEntityCollection<M>) => {
         const storageKey = `collection_config::${stripCollectionPath(path)}`;
-        localStorage.setItem(storageKey, JSON.stringify(data));
+        setLocalStorageItem(storageKey, JSON.stringify(data));
         const cachedConfig = configCache.current[storageKey];
         const newConfig = mergeDeep(cachedConfig ?? getCollectionFromStorage(path), data);
         configCache.current[storageKey] = mergeDeep(configCache.current[storageKey], newConfig);
@@ -32,23 +32,23 @@ export function useBuildLocalConfigurationPersistence(): UserConfigurationPersis
     const [collapsedGroups, _setCollapsedGroups] = useState<string[]>([]);
 
     useEffect(() => {
-        _setRecentlyVisitedPaths(localStorage.getItem("recently_visited_paths") ? JSON.parse(localStorage.getItem("recently_visited_paths")!) : []);
-        _setFavouritePaths(localStorage.getItem("favourite_paths") ? JSON.parse(localStorage.getItem("favourite_paths")!) : []);
-        _setCollapsedGroups(localStorage.getItem("collapsed_groups") ? JSON.parse(localStorage.getItem("collapsed_groups")!) : []);
+        _setRecentlyVisitedPaths(getLocalStorageJSON("recently_visited_paths", []));
+        _setFavouritePaths(getLocalStorageJSON("favourite_paths", []));
+        _setCollapsedGroups(getLocalStorageJSON("collapsed_groups", []));
     }, []);
 
     const setRecentlyVisitedPaths = useCallback((paths: string[]) => {
-        localStorage.setItem("recently_visited_paths", JSON.stringify(paths));
+        setLocalStorageItem("recently_visited_paths", JSON.stringify(paths));
         _setRecentlyVisitedPaths(paths);
     }, []);
 
     const setFavouritePaths = useCallback((paths: string[]) => {
-        localStorage.setItem("favourite_paths", JSON.stringify(paths));
+        setLocalStorageItem("favourite_paths", JSON.stringify(paths));
         _setFavouritePaths(paths);
     }, []);
 
     const setCollapsedGroups = useCallback((paths: string[]) => {
-        localStorage.setItem("collapsed_groups", JSON.stringify(paths));
+        setLocalStorageItem("collapsed_groups", JSON.stringify(paths));
         _setCollapsedGroups(paths);
     }, []);
 

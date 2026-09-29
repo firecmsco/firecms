@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { ModeController } from "./index";
+import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "../util/local_storage";
 
 /**
  * Use this hook to build a color mode controller that determines
@@ -15,7 +16,8 @@ export function useBuildModeController(): ModeController {
         return mediaQueryList.matches;
     }, []);
 
-    const prefersDarkModeStorage: boolean | null = localStorage.getItem("prefers-dark-mode") != null ? localStorage.getItem("prefers-dark-mode") === "true" : null;
+    const storedMode = getLocalStorageItem("prefers-dark-mode");
+    const prefersDarkModeStorage: boolean | null = storedMode != null ? storedMode === "true" : null;
     const prefersDarkMode = prefersDarkModeStorage ?? prefersDarkModeQuery();
     const [mode, setMode] = useState<"light" | "dark">(prefersDarkMode ? "dark" : "light");
 
@@ -32,16 +34,16 @@ export function useBuildModeController(): ModeController {
     const setModeInternal = useCallback((mode: "light" | "dark" | "system") => {
         if (mode === "light") {
             setDocumentMode("light");
-            localStorage.setItem("prefers-dark-mode", "false");
+            setLocalStorageItem("prefers-dark-mode", "false");
             setMode("light");
         } else if (mode === "dark") {
             setDocumentMode("dark");
-            localStorage.setItem("prefers-dark-mode", "true");
+            setLocalStorageItem("prefers-dark-mode", "true");
             setMode("dark");
         } else {
             const preferredMode = prefersDarkModeQuery() ? "dark" : "light";
             setDocumentMode(preferredMode);
-            localStorage.removeItem("prefers-dark-mode");
+            removeLocalStorageItem("prefers-dark-mode");
             setMode(preferredMode);
         }
     }, [prefersDarkModeQuery]);
