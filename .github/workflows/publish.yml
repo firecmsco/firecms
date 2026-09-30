@@ -207,3 +207,48 @@ jobs:
           done
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # The MCP server's listing in the official MCP Registry, co.firecms/mcp. Stable releases
+      # only: a registry version is permanent, and canaries would crowd the listing.
+      #
+      # server.json is set to the version this run just published. The registry checks the
+      # npm package before it accepts a version, and npm can take a few minutes to show a new
+      # one, so publishing is retried. Signing in proves ownership of firecms.co: the private
+      # half of the Ed25519 key in its "v=MCPv1; k=ed25519; …" TXT record, as hex, is the
+      # MCP_REGISTRY_PRIVATE_KEY secret.
+      - name: Publish to the MCP Registry
+        if: steps.dist-tag.outputs.tag == 'latest'
+        working-directory: packages/mcp_server
+        env:
+          MCP_REGISTRY_PRIVATE_KEY: ${{ secrets.MCP_REGISTRY_PRIVATE_KEY }}
+          MCP_PUBLISHER_VERSION: v1.8.1
+          MCP_PUBLISHER_SHA256: a06c9096dcb9727c13555b6be26c7effa707b01f06a4c561ba7a3635443cf2cc
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if curl -sf -o /dev/null "https://registry.modelcontextprotocol.io/v0/servers/co.firecms%2Fmcp/versions/$VERSION"; then
+            echo "co.firecms/mcp $VERSION is already in the MCP Registry."
+            exit 0
+          fi
+          if [ -z "$MCP_REGISTRY_PRIVATE_KEY" ]; then
+            echo "::error::MCP_REGISTRY_PRIVATE_KEY is not set: npm is published, the MCP Registry is not."
+            exit 1
+          fi
+          node -e "
+            const fs = require('fs');
+            const server = JSON.parse(fs.readFileSync('server.json', 'utf8'));
+            server.version = process.argv[1];
+            for (const p of server.packages ?? []) p.version = process.argv[1];
+            fs.writeFileSync('server.json', JSON.stringify(server, null, 2) + '\n');
+          " "$VERSION"
+          curl -sSfL -o mcp-publisher.tar.gz \
+            "https://github.com/modelcontextprotocol/registry/releases/download/${MCP_PUBLISHER_VERSION}/mcp-publisher_linux_amd64.tar.gz"
+          echo "${MCP_PUBLISHER_SHA256}  mcp-publisher.tar.gz" | sha256sum -c -
+          tar xzf mcp-publisher.tar.gz mcp-publisher
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            # Signing in again each time: the registry's token is short-lived.
+            ./mcp-publisher login dns --domain firecms.co --private-key "$MCP_REGISTRY_PRIVATE_KEY" \
+              && ./mcp-publisher publish && exit 0
+            echo "Attempt $attempt failed (npm may not show $VERSION yet); retrying in 30 s."
+            sleep 30
+          done
+          echo "::error::Could not publish co.firecms/mcp $VERSION to the MCP Registry."
+          exit 1
