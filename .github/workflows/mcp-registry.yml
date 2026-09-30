@@ -1,0 +1,99 @@
+name: Publish to the MCP Registry
+
+# The MCP server's listing in the official MCP Registry, co.firecms/mcp.
+#
+# Runs after every successful "Publish NPM Packages" run, and by hand for a version already
+# on npm (Actions → Publish to the MCP Registry → Run workflow). Stable versions only: a
+# registry version is permanent, and pre-releases would crowd the listing.
+#
+# A workflow of its own so that it can be re-run without publishing to npm again. It waits
+# for npm to show the version first, because the registry checks the npm package before
+# it accepts a version, and npm can take many minutes to show a new one.
+#
+# Signing in proves ownership of firecms.co: the private half of the Ed25519 key in its
+# "v=MCPv1; k=ed25519; …" TXT record, as hex, is the MCP_REGISTRY_PRIVATE_KEY secret.
+
+on:
+  workflow_run:
+    workflows: ["Publish NPM Packages"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version already published to npm, e.g. 3.5.1'
+        required: true
+        type: string
+
+jobs:
+  mcp-registry:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Publish to the MCP Registry
+        working-directory: packages/mcp_server
+        env:
+          MCP_REGISTRY_PRIVATE_KEY: ${{ secrets.MCP_REGISTRY_PRIVATE_KEY }}
+          MCP_PUBLISHER_VERSION: v1.8.1
+          MCP_PUBLISHER_SHA256: a06c9096dcb9727c13555b6be26c7effa707b01f06a4c561ba7a3635443cf2cc
+          VERSION_INPUT: ${{ inputs.version }}
+          RELEASE_TAG: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          VERSION="${VERSION_INPUT:-${RELEASE_TAG#v}}"
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "'$VERSION' is not a stable version: nothing to publish."
+            exit 0
+          fi
+          if curl -sf -o /dev/null "https://registry.modelcontextprotocol.io/v0/servers/co.firecms%2Fmcp/versions/$VERSION"; then
+            echo "co.firecms/mcp $VERSION is already in the MCP Registry."
+            exit 0
+          fi
+          if [ -z "$MCP_REGISTRY_PRIVATE_KEY" ]; then
+            echo "::error::MCP_REGISTRY_PRIVATE_KEY is not set."
+            exit 1
+          fi
+
+          # Wait for npm, for up to 30 minutes.
+          for attempt in $(seq 1 60); do
+            curl -sf -o /dev/null "https://registry.npmjs.org/@firecms%2Fmcp-server/$VERSION" && break
+            if [ "$attempt" = 60 ]; then
+              echo "::error::npm still doesn't show @firecms/mcp-server $VERSION after 30 minutes."
+              exit 1
+            fi
+            echo "npm doesn't show @firecms/mcp-server $VERSION yet; checking again in 30 s."
+            sleep 30
+          done
+
+          node -e "
+            const fs = require('fs');
+            const server = JSON.parse(fs.readFileSync('server.json', 'utf8'));
+            server.version = process.argv[1];
+            for (const p of server.packages ?? []) p.version = process.argv[1];
+            fs.writeFileSync('server.json', JSON.stringify(server, null, 2) + '\n');
+          " "$VERSION"
+          curl -sSfL -o mcp-publisher.tar.gz \
+            "https://github.com/modelcontextprotocol/registry/releases/download/${MCP_PUBLISHER_VERSION}/mcp-publisher_linux_amd64.tar.gz"
+          echo "${MCP_PUBLISHER_SHA256}  mcp-publisher.tar.gz" | sha256sum -c -
+          tar xzf mcp-publisher.tar.gz mcp-publisher
+
+          # npm shows the version; the registry's own view of npm can still lag a little.
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            # Signing in again each time: the registry's token is short-lived.
+            ./mcp-publisher login dns --domain firecms.co --private-key "$MCP_REGISTRY_PRIVATE_KEY" \
+              && ./mcp-publisher publish && exit 0
+            echo "Attempt $attempt failed; retrying in 60 s."
+            sleep 60
+          done
+          echo "::error::Could not publish co.firecms/mcp $VERSION to the MCP Registry."
+          exit 1
