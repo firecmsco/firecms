@@ -55,7 +55,7 @@ configurations (name, path, properties, etc.) that define how data is displayed 
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "List collections", readOnlyHint: true },
         },
         async ({ projectId }) => {
             try {
@@ -88,7 +88,7 @@ validation rules, display configuration, and subcollection definitions.`,
                 projectId: z.string().describe("Firebase project ID"),
                 collectionId: z.string().describe("Collection ID (usually same as the Firestore path, e.g., 'products')"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "Get a collection", readOnlyHint: true },
         },
         async ({ projectId, collectionId }) => {
             try {
@@ -153,7 +153,7 @@ Example schema:
                     initialSort: z.tuple([z.string(), z.enum(["asc", "desc"])]).optional().describe("Default sort [field, direction]"),
                 }).passthrough().describe("Complete collection schema definition"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Save a collection", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionId, schema }) => {
             try {
@@ -181,15 +181,14 @@ Example schema:
         "update_collection_schema",
         {
             title: "Update a collection",
-            description: `Partially update an existing collection schema. Only the specified fields are modified 
-(merged with the existing schema). Use this for changes like renaming, updating the group, 
-changing display settings, or adding new properties.`,
+            description:
+                "Partially update an existing collection schema. Only the top-level fields given are changed (merged with the existing schema): for example the name, group, display settings or properties.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
                 collectionId: z.string().describe("Collection ID to update"),
                 data: z.record(z.any()).describe("Fields to update (merged with existing schema)"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Update a collection", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionId, data }) => {
             try {
@@ -223,7 +222,7 @@ no longer appear in the FireCMS UI.`,
                 projectId: z.string().describe("Firebase project ID"),
                 collectionId: z.string().describe("Collection ID to delete"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Delete a collection", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionId }) => {
             try {
@@ -250,18 +249,17 @@ no longer appear in the FireCMS UI.`,
         "save_property",
         {
             title: "Save a property",
-            description: `Add or update a single property in a collection schema. This is more granular than 
-updating the entire schema — use it when you want to add a new field or modify an existing 
-one without affecting other properties.
-
-Example property:
-{
-  "dataType": "string",
-  "name": "Description",
-  "description": "Product description",
-  "multiline": true,
-  "validation": { "required": true, "max": 500 }
-}`,
+            description:
+                "Add or update a single property in a collection schema, leaving the other properties as they are. A new property is added at the end of the display order.\n" +
+                "\n" +
+                "Example property:\n" +
+                "{\n" +
+                "  \"dataType\": \"string\",\n" +
+                "  \"name\": \"Description\",\n" +
+                "  \"description\": \"Product description\",\n" +
+                "  \"multiline\": true,\n" +
+                "  \"validation\": { \"required\": true, \"max\": 500 }\n" +
+                "}",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
                 collectionId: z.string().describe("Collection ID"),
@@ -269,7 +267,7 @@ Example property:
                 property: PropertySchema.describe("Property definition"),
                 namespace: z.string().optional().describe("Dot-separated namespace for nested properties in maps (e.g., 'address' for address.street)"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Save a property", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionId, propertyKey, property, namespace }) => {
             try {
@@ -304,7 +302,7 @@ the CMS configuration — it does NOT delete the field from existing Firestore d
                 propertyKey: z.string().describe("Property key to remove"),
                 namespace: z.string().optional().describe("Dot-separated namespace for nested properties"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Delete a property", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionId, propertyKey, namespace }) => {
             try {

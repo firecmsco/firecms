@@ -81,19 +81,13 @@ function registerConnectInWebAppTool(server: McpServer, appUrl: string) {
         {
             title: "Connect a Firebase project",
             description:
-                "Connect a Firebase project to FireCMS Cloud. Use this when the user wants to " +
-                "manage a Firebase project that list_projects does not show yet.\n\n" +
-                "Connecting creates a service account in the user's Google Cloud project, which " +
-                "takes their own Google Cloud permissions. This server does not hold those, so " +
-                "the step happens in the FireCMS Cloud web app and takes about a minute. This " +
-                "tool returns the link to give the user.\n\n" +
-                "Once connected, the project appears in list_projects and every other tool works " +
-                "on it — use infer_collections_from_data or setup_all_collections to build the " +
-                "CMS from the project's existing Firestore data.",
+                "Get the link to connect a Firebase project to FireCMS Cloud.\n" +
+                "\n" +
+                "Connecting creates a service account in the user's Google Cloud project, which takes their own Google Cloud permissions. This server holds none, so the step happens in the FireCMS Cloud web app and takes about a minute; this tool returns the link to it. Once connected, the project is listed with the user's other FireCMS projects and can be managed from here.",
             inputSchema: {
                 projectId: z.string().optional().describe("The Firebase project to connect, if the user named one"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "Connect a Firebase project", readOnlyHint: true },
         },
         async ({ projectId }) => ({
             content: [{
@@ -123,16 +117,14 @@ function registerGoogleCloudTools(server: McpServer, api: FireCMSApiClient) {
         {
             title: "List Firebase projects",
             description:
-                "List the Google Cloud / Firebase projects the signed-in user can access, and " +
-                "whether each one is ready to be connected to FireCMS Cloud. Use this first when " +
-                "connecting an existing project.\n\n" +
+                "List the Google Cloud / Firebase projects the signed-in user can access, and whether each one is ready to be connected to FireCMS Cloud.\n" +
+                "\n" +
                 "Each entry reports:\n" +
-                "- `fireCMSProject`: true if it is ALREADY connected to FireCMS Cloud\n" +
-                "- `cloudProjectConfigurationStatus.firebaseEnabled` / `firestoreEnabled` / " +
-                "`apisEnabled` / `authEnabled`: prerequisites for connecting\n\n" +
-                "A project needs Firebase and Firestore enabled before connect_project_to_firecms " +
-                "will succeed.",
-            annotations: { readOnlyHint: true },
+                "- `fireCMSProject`: true if it is already connected to FireCMS Cloud\n" +
+                "- `cloudProjectConfigurationStatus.firebaseEnabled` / `firestoreEnabled` / `apisEnabled` / `authEnabled`: what connecting requires\n" +
+                "\n" +
+                "Connecting needs Firebase, Firestore and Firebase Authentication enabled.",
+            annotations: { title: "List Firebase projects", readOnlyHint: true },
         },
         async () => {
             try {
@@ -156,13 +148,11 @@ function registerGoogleCloudTools(server: McpServer, api: FireCMSApiClient) {
         {
             title: "Check project setup",
             description:
-                "Get the detailed FireCMS readiness status of a single Google Cloud project: " +
-                "whether Firebase, Firestore, Storage, Auth and the required APIs are enabled. " +
-                "Use this to work out what is still missing before connecting a project.",
+                "Get the detailed FireCMS readiness status of a single Google Cloud project: whether Firebase, Firestore, Storage, Auth and the required APIs are enabled, and so what is still missing before it can be connected.",
             inputSchema: {
                 projectId: z.string().describe("The Google Cloud / Firebase project ID"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "Check project setup", readOnlyHint: true },
         },
         async ({ projectId }) => {
             try {
@@ -186,9 +176,8 @@ function registerGoogleCloudTools(server: McpServer, api: FireCMSApiClient) {
         {
             title: "List Firestore locations",
             description:
-                "List the locations available for creating a Firestore database. Needed as the " +
-                "`locationId` argument of enable_firestore.",
-            annotations: { readOnlyHint: true },
+                "List the locations available for a new Firestore database, as location IDs such as 'eur3' or 'us-central'.",
+            annotations: { title: "List Firestore locations", readOnlyHint: true },
         },
         async () => {
             try {
@@ -210,12 +199,11 @@ function registerGoogleCloudTools(server: McpServer, api: FireCMSApiClient) {
         {
             title: "Enable required APIs",
             description:
-                "Enable the Google Cloud APIs that FireCMS requires on a project. Run this when " +
-                "get_project_setup_status reports `apisEnabled: false`. Safe to run more than once.",
+                "Enable the Google Cloud APIs that FireCMS requires on a project (reported as `apisEnabled` in its setup status). Safe to run more than once.",
             inputSchema: {
                 projectId: z.string().describe("The Google Cloud / Firebase project ID"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: false },
+            annotations: { title: "Enable required APIs", readOnlyHint: false, destructiveHint: false },
         },
         async ({ projectId }) => {
             try {
@@ -240,15 +228,12 @@ function registerGoogleCloudTools(server: McpServer, api: FireCMSApiClient) {
         {
             title: "Create Firestore database",
             description:
-                "Create the default Firestore database in a Google Cloud project. Run this when " +
-                "get_project_setup_status reports `firestoreEnabled: false`. The location is " +
-                "permanent and cannot be changed later — use list_firestore_locations and confirm " +
-                "the choice with the user before calling this.",
+                "Create the default Firestore database in a Google Cloud project, in the given location. The location is permanent and cannot be changed later.",
             inputSchema: {
                 projectId: z.string().describe("The Google Cloud / Firebase project ID"),
                 locationId: z.string().describe("Firestore location, e.g. 'eur3' or 'us-central'. Permanent."),
             },
-            annotations: { readOnlyHint: false, destructiveHint: false },
+            annotations: { title: "Create Firestore database", readOnlyHint: false, destructiveHint: false },
         },
         async ({ projectId, locationId }) => {
             try {
@@ -275,18 +260,11 @@ function registerGoogleCloudTools(server: McpServer, api: FireCMSApiClient) {
         {
             title: "Connect a Firebase project",
             description:
-                "Connect an existing Firebase project to FireCMS Cloud. This is the main " +
-                "onboarding step.\n\n" +
-                "It creates a delegated service account in the project with the permissions " +
-                "FireCMS needs, registers the signed-in user as an admin, and creates the FireCMS " +
-                "project on the free plan.\n\n" +
-                "Prerequisites: Firebase, Firestore AND Firebase Authentication must already be " +
-                "enabled — check with list_firebase_projects or get_project_setup_status first. " +
-                "Authentication in particular cannot be enabled through any API and has to be " +
-                "switched on once in the Firebase console. Fails if the project is already " +
-                "connected.\n\n" +
-                "After this succeeds, use infer_collections_from_data or setup_all_collections to " +
-                "populate the CMS from the project's existing Firestore data.",
+                "Connect an existing Firebase project to FireCMS Cloud.\n" +
+                "\n" +
+                "It creates a delegated service account in the project with the permissions FireCMS needs, registers the signed-in user as an admin, creates the FireCMS project on the free plan, and by default adds FireCMS's access rule to the project's Firestore and Storage security rules.\n" +
+                "\n" +
+                "Firebase, Firestore and Firebase Authentication must already be enabled on the project. Authentication cannot be enabled through any API: it is switched on once in the Firebase console. Fails if the project is already connected.",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID to connect"),
                 creationType: z.enum(["existing", "new"]).optional()
@@ -295,7 +273,7 @@ function registerGoogleCloudTools(server: McpServer, api: FireCMSApiClient) {
                     .describe("Add FireCMS's Firestore and Storage access rule as part of connecting (default true). The CMS cannot open any collection without it."),
             },
             // It also adds FireCMS's rule to the project's security rules.
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Connect a Firebase project", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, creationType, applySecurityRules }) => {
             try {
@@ -374,22 +352,18 @@ function registerProjectRepairTools(server: McpServer, api: FireCMSApiClient) {
         {
             title: "Apply FireCMS security rules",
             description:
-                "Add FireCMS's access rule to a project's Firestore and Storage security rules.\n\n" +
-                "FireCMS Cloud reads the customer's Firestore from the browser using the signed-in " +
-                "user's own token, so it needs a rule granting access to users carrying the " +
-                "`fireCMSUser` claim:\n" +
-                "    match /{document=**} { allow read, write: if request.auth.token.fireCMSUser; }\n\n" +
-                "Without it the CMS shows \"Missing Firestore Security Rules\" and no collection can " +
-                "be opened — even though the tools here keep working, because they read through the " +
-                "backend's service account, which bypasses security rules.\n\n" +
-                "The rule is injected into the existing ruleset rather than replacing it, and " +
-                "projects that already have it are left alone, so this is safe to run again.\n\n" +
-                "connect_project_to_firecms already does this; use this tool for projects connected " +
-                "earlier, or to retry after a failure. Requires admin.",
+                "Add FireCMS's access rule to a project's Firestore and Storage security rules. Requires admin.\n" +
+                "\n" +
+                "FireCMS Cloud reads the customer's Firestore from the browser using the signed-in user's own token, so it needs a rule granting access to users carrying the `fireCMSUser` claim:\n" +
+                "    match /{document=**} { allow read, write: if request.auth.token.fireCMSUser; }\n" +
+                "\n" +
+                "Without it the CMS shows \"Missing Firestore Security Rules\" and no collection opens, although this server keeps working: it reads through the backend's service account, which bypasses security rules.\n" +
+                "\n" +
+                "The rule is injected into the existing ruleset rather than replacing it, and a project that already has it is left alone, so it is safe to run again. Connecting a project applies it already; this repairs projects connected earlier, or where that step failed.",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Apply FireCMS security rules", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId }) => {
             try {
@@ -424,13 +398,11 @@ function registerProjectRepairTools(server: McpServer, api: FireCMSApiClient) {
         {
             title: "Create FireCMS web app",
             description:
-                "Create the FireCMS web app inside the client's Firebase project. Normally done " +
-                "automatically by connect_project_to_firecms — use this only to retry when that " +
-                "step failed. Requires admin.",
+                "Create the FireCMS web app inside the client's Firebase project, or reuse the one already there. Connecting a project normally does this; this repairs a project where that step failed. Requires admin.",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: false },
+            annotations: { title: "Create FireCMS web app", readOnlyHint: false, destructiveHint: false },
         },
         async ({ projectId }) => {
             try {

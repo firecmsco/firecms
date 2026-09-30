@@ -1,3 +1,11 @@
+## [3.5.1] - 2026-09-30
+
+- **MCP server (`@firecms/mcp-server`)**:
+  - Tool descriptions say only what each tool does. They no longer point the model at other tools or tell it when to call them, as the Claude Connectors Directory requires.
+  - Every tool repeats its title in `annotations.title`, which is where the Connectors Directory reads it. `modify_collection`'s `existingCollection` and both tools' `existingCollections` are typed as objects.
+  - A failing tool passes on the backend's own explanation (for example "You can't add yourself to the users") instead of only "Request failed with status code 401".
+  - Stable releases publish the server to the MCP Registry (`co.firecms/mcp`) as part of the release.
+
 ## [3.5.0] - 2026-09-29
 
 - **FireCMS PRO: a license problem pauses PRO features instead of blocking the CMS**:

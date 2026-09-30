@@ -21,7 +21,7 @@ export function registerAuthTools(server: McpServer) {
         {
             title: "Sign in to FireCMS",
             description: "Sign in to FireCMS Cloud. Opens a browser window for Google OAuth authentication. Required before using any other tools.",
-            annotations: { readOnlyHint: false, destructiveHint: false },
+            annotations: { title: "Sign in to FireCMS", readOnlyHint: false, destructiveHint: false },
         },
         async () => {
             const existingEmail = getCurrentUserEmail();
@@ -60,7 +60,7 @@ export function registerAuthTools(server: McpServer) {
         {
             title: "Sign out of FireCMS",
             description: "Sign out of FireCMS Cloud. Revokes the current session.",
-            annotations: { readOnlyHint: false, destructiveHint: false },
+            annotations: { title: "Sign out of FireCMS", readOnlyHint: false, destructiveHint: false },
         },
         async () => {
             if (!isLoggedIn()) {

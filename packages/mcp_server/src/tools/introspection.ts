@@ -66,7 +66,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "List Firestore databases", readOnlyHint: true },
         },
         async ({ projectId }) => {
             try {
@@ -91,15 +91,9 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
         {
             title: "Preview inferred schema",
             description:
-                "Read a sample of real documents from a Firestore path and infer a FireCMS " +
-                "collection schema from them, WITHOUT saving anything.\n\n" +
-                "Use this to inspect what a collection would look like, to adjust it before " +
-                "persisting, or to build a schema for a subcollection or a path that " +
-                "infer_collections_from_data would skip. Feed the result to save_collection_schema " +
-                "once it looks right.\n\n" +
-                "Inference is structural only — it derives data types, enum candidates and " +
-                "validation from the sampled values. For display names and grouping chosen by an " +
-                "LLM, use infer_collections_from_data instead.",
+                "Read a sample of real documents from a Firestore path and infer a FireCMS collection schema from them, without saving anything. Works for any path, subcollections included.\n" +
+                "\n" +
+                "Inference is structural only: it derives data types, enum candidates and validation from the sampled values. The result is a complete collection schema that can be edited and saved as it is.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
                 path: z.string().describe("Firestore collection path, e.g. 'products' or 'users/{userId}/orders'"),
@@ -107,7 +101,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
                     .describe("How many documents to sample (default 30, max 200). More samples give better enum and optionality detection."),
                 databaseId: z.string().optional().describe("Firestore database ID, if not '(default)'"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "Preview inferred schema", readOnlyHint: true },
         },
         async ({ projectId, path, sampleSize, databaseId }) => {
             try {
@@ -166,15 +160,9 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
         {
             title: "Create collections from data",
             description:
-                "Infer collections from the existing Firestore data at the given paths, and SAVE " +
-                "them to the project.\n\n" +
-                "For each path the backend samples documents, infers the property types, then uses " +
-                "an LLM to pick display names, a singular name, an icon, a navigation group and " +
-                "sensible field widgets. Paths already mapped to a collection are skipped.\n\n" +
-                "This is the fastest way to bring an existing project into FireCMS. Use " +
-                "get_root_collections first to see what paths exist, or setup_all_collections to " +
-                "do every root collection at once.\n\n" +
-                "Writes to the project — requires admin.",
+                "Infer collections from the existing Firestore data at the given paths, and save them to the project. Requires admin.\n" +
+                "\n" +
+                "For each path the backend samples documents, infers the property types, then uses an LLM to pick display names, a singular name, an icon, a navigation group and field widgets. Paths already mapped to a collection, and paths with no documents, are skipped.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
                 paths: z.array(z.object({
@@ -182,7 +170,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
                     databaseId: z.string().optional().describe("Firestore database ID, if not '(default)'"),
                 })).min(1).describe("The collection paths to infer and save"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: false },
+            annotations: { title: "Create collections from data", readOnlyHint: false, destructiveHint: false },
         },
         async ({ projectId, paths }) => {
             try {
@@ -267,18 +255,14 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
         {
             title: "Set up all collections",
             description:
-                "Discover every Firestore root collection in the project that is not yet mapped, " +
-                "infer a collection schema for each, and save them all.\n\n" +
-                "This is the one-shot way to populate a newly connected project. It is the same " +
-                "inference as infer_collections_from_data, applied to every unmapped root " +
-                "collection across all databases. Collections that already exist are left alone, " +
-                "so it is safe to run again later to pick up new Firestore collections.\n\n" +
-                "Can take a while on large projects. Writes to the project — requires admin.",
+                "Discover every Firestore root collection in the project that is not yet mapped to a collection, infer a collection schema for each (display names and widgets picked by an LLM), and save them all. Requires admin.\n" +
+                "\n" +
+                "Covers every database of the project. Collections that already exist are left alone, so it is safe to run again later to pick up new Firestore collections. Can take a while on large projects.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
                 databaseId: z.string().optional().describe("Firestore database ID, if not '(default)'"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: false },
+            annotations: { title: "Set up all collections", readOnlyHint: false, destructiveHint: false },
         },
         async ({ projectId, databaseId }) => {
             try {

@@ -24,7 +24,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "Get project settings", readOnlyHint: true },
         },
         async ({ projectId }) => {
             try {
@@ -56,7 +56,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
                 projectId: z.string().describe("Firebase project ID"),
                 name: z.string().describe("New project name"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Rename project", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, name }) => {
             try {
@@ -89,7 +89,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
                 primaryColor: z.string().optional().describe("Primary color hex (e.g., '#0070F4')"),
                 secondaryColor: z.string().optional().describe("Secondary color hex (e.g., '#FF5B79')"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Change brand colors", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, primaryColor, secondaryColor }) => {
             try {
@@ -127,7 +127,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
                 projectId: z.string().describe("Firebase project ID"),
                 locale: z.string().describe("Locale code (e.g., 'en', 'es', 'de', 'fr', 'it')"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Change default locale", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, locale }) => {
             try {
@@ -159,7 +159,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
                 projectId: z.string().describe("Firebase project ID"),
                 enabled: z.boolean().describe("true to enable, false to disable"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Turn text search on or off", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, enabled }) => {
             try {
@@ -191,7 +191,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
                 projectId: z.string().describe("Firebase project ID"),
                 enabled: z.boolean().describe("true to enable, false to disable"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Turn entity history on or off", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, enabled }) => {
             try {

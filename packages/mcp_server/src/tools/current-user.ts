@@ -11,7 +11,7 @@ export function registerCurrentUserTool(server: McpServer, session: FireCMSSessi
         {
             title: "Current user",
             description: "Get the currently authenticated FireCMS user",
-            annotations: { readOnlyHint: true },
+            annotations: { title: "Current user", readOnlyHint: true },
         },
         async () => {
             const email = await session.email();

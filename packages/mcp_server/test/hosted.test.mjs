@@ -187,6 +187,8 @@ test("every tool, local or hosted, has a title and says whether it changes anyth
         assert.ok(tools.length > 20);
         for (const tool of tools) {
             assert.ok(tool.title, `${tool.name} has a title`);
+            // The Connectors Directory reads the title from the annotations.
+            assert.equal(tool.annotations?.title, tool.title, `${tool.name} repeats its title in annotations`);
             assert.equal(typeof tool.annotations?.readOnlyHint, "boolean", `${tool.name} sets readOnlyHint`);
             if (!tool.annotations.readOnlyHint) {
                 assert.equal(typeof tool.annotations.destructiveHint, "boolean", `${tool.name} sets destructiveHint`);
@@ -264,4 +266,27 @@ test("a tool that fails passes on the backend's explanation, not just the HTTP s
     assert.equal(result.isError, true);
     assert.match(result.content[0].text, /You can't add yourself to the users/);
     await client.close();
+});
+
+test("no tool description tells the model what to call or do: each says what its tool does", async () => {
+    // The Connectors Directory's policy: tool descriptions carry no instructions about
+    // model behavior or other tools.
+    const local = createLocalServer();
+    const hosted = createFireCMSMcpServer({
+        session: sessionFor("alice"), mode: "hosted", apiUrl: "http://127.0.0.1:1", appUrl: APP_URL,
+    });
+    for (const server of [local, hosted]) {
+        const client = await connectInMemory(server);
+        const { tools } = await client.listTools();
+        const names = tools.map((tool) => tool.name);
+        for (const tool of tools) {
+            const texts = [tool.description, ...Object.values(tool.inputSchema?.properties ?? {}).map((p) => p.description ?? "")];
+            for (const text of texts) {
+                const named = names.filter((name) => name !== tool.name && text.includes(name));
+                assert.deepEqual(named, [], `${tool.name} names other tools: ${named.join(", ")}`);
+                assert.doesNotMatch(text, /\b(use this|use it when|you must|always call|call this|confirm .* with the user)\b/i, `${tool.name}: ${text.slice(0, 80)}`);
+            }
+        }
+        await client.close();
+    }
 });

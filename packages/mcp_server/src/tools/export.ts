@@ -20,7 +20,7 @@ analysis, or migration. For large collections, use the limit parameter.`,
                 limit: z.number().optional().describe("Max documents to export (default: 100, max: 500)"),
                 databaseId: z.string().optional().describe("Firestore database ID (default: '(default)')"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "Export a collection", readOnlyHint: true },
         },
         async ({ projectId, collectionPath, limit, databaseId }) => {
             try {

@@ -18,7 +18,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "List users", readOnlyHint: true },
         },
         async ({ projectId }) => {
             try {
@@ -42,7 +42,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
                 roles: z.array(z.enum(["admin", "editor", "viewer"])).describe("Roles to assign"),
             },
             // Adding someone who is already a member replaces their roles.
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Invite a user", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, email, roles }) => {
             try {
@@ -67,7 +67,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
                 userId: z.string().describe("The user ID to update"),
                 roles: z.array(z.enum(["admin", "editor", "viewer"])).describe("New roles"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Change user roles", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, userId, roles }) => {
             try {
@@ -91,7 +91,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
                 projectId: z.string().describe("The Firebase project ID"),
                 userId: z.string().describe("The user ID to remove"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Remove a user", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, userId }) => {
             try {

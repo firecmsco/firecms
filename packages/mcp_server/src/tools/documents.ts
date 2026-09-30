@@ -15,8 +15,8 @@ export function registerDocumentTools(server: McpServer, api: FireCMSApiClient) 
         "list_documents",
         {
             title: "List documents",
-            description: `List documents from a Firestore collection. Supports filtering, ordering, and pagination.
-Use this to browse data in your CMS collections.`,
+            description:
+                "List documents from a Firestore collection, with optional filters, ordering and a limit.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
                 collectionPath: z.string().describe("Collection path (e.g., 'products', 'users', 'blog/posts')"),
@@ -33,7 +33,7 @@ Use this to browse data in your CMS collections.`,
                 })).optional().describe("Optional filters to apply"),
                 databaseId: z.string().optional().describe("Firestore database ID (default: '(default)')"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "List documents", readOnlyHint: true },
         },
         async ({ projectId, collectionPath, limit, orderBy, orderDirection, filters, databaseId }) => {
             try {
@@ -73,7 +73,7 @@ Use this to browse data in your CMS collections.`,
                 documentId: z.string().describe("Document ID"),
                 databaseId: z.string().optional().describe("Firestore database ID (default: '(default)')"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "Get a document", readOnlyHint: true },
         },
         async ({ projectId, collectionPath, documentId, databaseId }) => {
             try {
@@ -106,7 +106,7 @@ Use this to browse data in your CMS collections.`,
             },
             // With a documentId the backend writes without merging, replacing any
             // document already there.
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Create a document", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionPath, data, documentId, databaseId }) => {
             try {
@@ -140,7 +140,7 @@ Use this to browse data in your CMS collections.`,
                 data: z.record(z.any()).describe("Fields to update as a JSON object"),
                 databaseId: z.string().optional().describe("Firestore database ID (default: '(default)')"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Update a document", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionPath, documentId, data, databaseId }) => {
             try {
@@ -173,7 +173,7 @@ Use this to browse data in your CMS collections.`,
                 documentId: z.string().describe("Document ID to delete"),
                 databaseId: z.string().optional().describe("Firestore database ID (default: '(default)')"),
             },
-            annotations: { readOnlyHint: false, destructiveHint: true },
+            annotations: { title: "Delete a document", readOnlyHint: false, destructiveHint: true },
         },
         async ({ projectId, collectionPath, documentId, databaseId }) => {
             try {
@@ -202,7 +202,7 @@ Use this to browse data in your CMS collections.`,
                 collectionPath: z.string().describe("Collection path (e.g., 'products')"),
                 databaseId: z.string().optional().describe("Firestore database ID (default: '(default)')"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "Count documents", readOnlyHint: true },
         },
         async ({ projectId, collectionPath, databaseId }) => {
             try {

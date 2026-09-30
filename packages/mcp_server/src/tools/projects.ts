@@ -13,7 +13,7 @@ export function registerProjectTools(server: McpServer, api: FireCMSApiClient) {
         {
             title: "List projects",
             description: "List all FireCMS Cloud projects accessible by the authenticated user",
-            annotations: { readOnlyHint: true },
+            annotations: { title: "List projects", readOnlyHint: true },
         },
         async () => {
             try {
@@ -41,7 +41,7 @@ export function registerProjectTools(server: McpServer, api: FireCMSApiClient) {
                 projectId: z.string().describe("The Firebase project ID"),
                 databaseId: z.string().optional().describe("Firestore database ID, if not '(default)'"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "List root collections", readOnlyHint: true },
         },
         async ({ projectId, databaseId }) => {
             try {
@@ -69,15 +69,14 @@ export function registerProjectTools(server: McpServer, api: FireCMSApiClient) {
         "list_subcollections",
         {
             title: "List subcollections",
-            description: "List the subcollections of a specific document. Use this to explore " +
-                "nested data — the subcollection paths it returns can be passed to " +
-                "preview_inferred_schema or infer_collections_from_data.",
+            description:
+                "List the subcollections of a specific document, with their full paths: nested data that can be turned into CMS collections.",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
                 parentDocumentPath: z.string().describe("Full path of the parent document, e.g. 'users/abc123'"),
                 databaseId: z.string().optional().describe("Firestore database ID, if not '(default)'"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "List subcollections", readOnlyHint: true },
         },
         async ({ projectId, parentDocumentPath, databaseId }) => {
             try {

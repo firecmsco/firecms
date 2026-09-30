@@ -17,9 +17,9 @@ of the collection you want (e.g., "A blog with posts that have title, body, auth
 and a featured image"). Returns a complete FireCMS collection configuration.`,
             inputSchema: {
                 prompt: z.string().describe("Natural language description of the collection to generate"),
-                existingCollections: z.array(z.any()).optional().describe("Optional existing collection schemas for context"),
+                existingCollections: z.array(z.record(z.any())).optional().describe("Optional existing collection schemas for context"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "Generate a collection with AI", readOnlyHint: true },
         },
         async ({ prompt, existingCollections }) => {
             try {
@@ -40,10 +40,10 @@ and a featured image"). Returns a complete FireCMS collection configuration.`,
 Returns the updated schema and a list of operations performed.`,
             inputSchema: {
                 prompt: z.string().describe("Description of the modifications"),
-                existingCollection: z.any().describe("The current collection schema to modify"),
-                existingCollections: z.array(z.any()).optional().describe("Optional list of all collection schemas for context"),
+                existingCollection: z.record(z.any()).describe("The current collection schema to modify"),
+                existingCollections: z.array(z.record(z.any())).optional().describe("Optional list of all collection schemas for context"),
             },
-            annotations: { readOnlyHint: true },
+            annotations: { title: "Modify a collection with AI", readOnlyHint: true },
         },
         async ({ prompt, existingCollection, existingCollections }) => {
             try {
