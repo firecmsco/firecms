@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
+import { describeError } from "./errors.js";
 
 /**
  * Register data import tools — bulk operations for Firestore documents.
@@ -58,7 +59,7 @@ Maximum 500 documents per call. For larger imports, call multiple times.`,
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error importing: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error importing: ${describeError(error)}` }],
                     isError: true,
                 };
             }

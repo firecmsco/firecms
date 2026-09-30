@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
+import { describeError } from "./errors.js";
 
 /**
  * Property schema definition for collection properties.
@@ -68,7 +69,7 @@ configurations (name, path, properties, etc.) that define how data is displayed 
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -101,7 +102,7 @@ validation rules, display configuration, and subcollection definitions.`,
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -167,7 +168,7 @@ Example schema:
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -202,7 +203,7 @@ changing display settings, or adding new properties.`,
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -236,7 +237,7 @@ no longer appear in the FireCMS UI.`,
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -282,7 +283,7 @@ Example property:
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -317,7 +318,7 @@ the CMS configuration — it does NOT delete the field from existing Firestore d
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }

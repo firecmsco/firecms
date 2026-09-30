@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
+import { describeError } from "./errors.js";
 
 /**
  * Register data export tool.
@@ -43,7 +44,7 @@ analysis, or migration. For large collections, use the limit parameter.`,
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error exporting: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error exporting: ${describeError(error)}` }],
                     isError: true,
                 };
             }

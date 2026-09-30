@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
+import { describeError } from "./errors.js";
 
 /**
  * Register collection schema tools.
@@ -25,7 +26,7 @@ and a featured image"). Returns a complete FireCMS collection configuration.`,
                 const result = await api.generateCollection(prompt, existingCollections ?? []);
                 return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
             } catch (error: any) {
-                return { content: [{ type: "text" as const, text: `Error: ${error.message}` }], isError: true };
+                return { content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }], isError: true };
             }
         }
     );
@@ -49,7 +50,7 @@ Returns the updated schema and a list of operations performed.`,
                 const result = await api.generateCollection(prompt, existingCollections ?? [], existingCollection);
                 return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
             } catch (error: any) {
-                return { content: [{ type: "text" as const, text: `Error: ${error.message}` }], isError: true };
+                return { content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }], isError: true };
             }
         }
     );

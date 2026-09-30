@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
+import { describeError } from "./errors.js";
 
 /**
  * Register project management tools.
@@ -22,7 +23,7 @@ export function registerProjectTools(server: McpServer, api: FireCMSApiClient) {
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error listing projects: ${error.message}` }],
+                    content: [{ type: "text" as const, text: `Error listing projects: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -57,7 +58,7 @@ export function registerProjectTools(server: McpServer, api: FireCMSApiClient) {
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.message ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -95,7 +96,7 @@ export function registerProjectTools(server: McpServer, api: FireCMSApiClient) {
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.message ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }

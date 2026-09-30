@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
+import { describeError } from "./errors.js";
 
 /**
  * Register user management tools.
@@ -24,7 +25,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
                 const result = await api.listUsers(projectId);
                 return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
             } catch (error: any) {
-                return { content: [{ type: "text" as const, text: `Error: ${error.message}` }], isError: true };
+                return { content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }], isError: true };
             }
         }
     );
@@ -51,7 +52,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
                     content: [{ type: "text" as const, text: `Invited ${email} with roles: ${roles.join(", ")}\n\n${JSON.stringify(result, null, 2)}` }],
                 };
             } catch (error: any) {
-                return { content: [{ type: "text" as const, text: `Error: ${error.message}` }], isError: true };
+                return { content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }], isError: true };
             }
         }
     );
@@ -76,7 +77,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
                     content: [{ type: "text" as const, text: `Updated user ${userId} roles to: ${roles.join(", ")}\n\n${JSON.stringify(result, null, 2)}` }],
                 };
             } catch (error: any) {
-                return { content: [{ type: "text" as const, text: `Error: ${error.message}` }], isError: true };
+                return { content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }], isError: true };
             }
         }
     );
@@ -100,7 +101,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
                     content: [{ type: "text" as const, text: `Removed user ${userId}\n\n${JSON.stringify(result, null, 2)}` }],
                 };
             } catch (error: any) {
-                return { content: [{ type: "text" as const, text: `Error: ${error.message}` }], isError: true };
+                return { content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }], isError: true };
             }
         }
     );

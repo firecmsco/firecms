@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
+import { describeError } from "./errors.js";
 
 /**
  * Register Firestore document CRUD tools — the core CMS operations.
@@ -52,7 +53,7 @@ Use this to browse data in your CMS collections.`,
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -82,7 +83,7 @@ Use this to browse data in your CMS collections.`,
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -118,7 +119,7 @@ Use this to browse data in your CMS collections.`,
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -152,7 +153,7 @@ Use this to browse data in your CMS collections.`,
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -182,7 +183,7 @@ Use this to browse data in your CMS collections.`,
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -211,7 +212,7 @@ Use this to browse data in your CMS collections.`,
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }

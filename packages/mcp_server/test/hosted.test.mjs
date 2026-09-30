@@ -250,3 +250,18 @@ test("the hosted entry point never loads the CLI's login flow or the local token
     assert.ok(![...packages].some((name) => name.startsWith("@firecms/cli")),
         `hosted.js imports ${[...packages].join(", ")}`);
 });
+
+test("a tool that fails passes on the backend's explanation, not just the HTTP status", async () => {
+    const { registerUserTools } = await import("../dist/tools/users.js");
+    const { McpServer } = await import("@modelcontextprotocol/sdk/server/mcp.js");
+    const refused = Object.assign(new Error("Request failed with status code 401"), {
+        response: { status: 401, data: { message: "You can't add yourself to the users", code: "cant-add-yourself-to-users" } },
+    });
+    const server = new McpServer({ name: "test", version: "0.0.0" });
+    registerUserTools(server, { assertAdmin: async () => {}, createUser: async () => { throw refused; } });
+    const client = await connectInMemory(server);
+    const result = await client.callTool({ name: "add_user", arguments: { projectId: "p", email: "me@example.test", roles: ["admin"] } });
+    assert.equal(result.isError, true);
+    assert.match(result.content[0].text, /You can't add yourself to the users/);
+    await client.close();
+});

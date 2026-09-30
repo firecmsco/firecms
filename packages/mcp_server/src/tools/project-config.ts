@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
+import { describeError } from "./errors.js";
 
 /**
  * Register project configuration tools — manage project settings like
@@ -37,7 +38,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -69,7 +70,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -108,7 +109,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -140,7 +141,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -172,7 +173,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
@@ -204,7 +205,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
                 };
             } catch (error: any) {
                 return {
-                    content: [{ type: "text" as const, text: `Error: ${error.response?.data?.error ?? error.message}` }],
+                    content: [{ type: "text" as const, text: `Error: ${describeError(error)}` }],
                     isError: true,
                 };
             }
