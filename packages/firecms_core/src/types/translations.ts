@@ -708,6 +708,7 @@ export interface FireCMSTranslations {
     editor_cancel: string;
     editor_remove_link: string;
     editor_paste_or_type_link: string;
+    editor_invalid_url: string;
     editor_open_in_new_window: string;
     editor_bold: string;
     editor_italic: string;
