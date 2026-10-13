@@ -1,5 +1,5 @@
-import { useEffect, useRef, } from "react";
-import { Button, CheckIcon, cls, DeleteIcon, focusedDisabled, Popover } from "@firecms/ui";
+import { useEffect, useRef, useState} from "react";
+import { Button, CheckIcon, cls, DeleteIcon, focusedDisabled, Popover, Typography } from "@firecms/ui";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
 import { getMarkAttributes, isMarkActive, setMark, unsetMark } from "../utils/prosemirror-utils";
@@ -39,25 +39,36 @@ export const LinkSelector = ({
     const { state, view } = useProseMirrorContext();
     const { t } = useTranslation();
 
-    // Autofocus on input by default
+    const [error, setError] = useState<string | null>(null);
+    const isInputInvalid = !!error;
+
     useEffect(() => {
-        if (open && inputRef.current) {
-            inputRef.current.focus();
-        }
+        setError(null);
     }, [open]);
 
     if (!state || !view) return null;
 
-    const handleSubmit = (e: any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLFormElement>) => {
+        if (isInputInvalid) setError(null);
+    };
+
+    const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
+        e.stopPropagation();
+        setError(null);
+
         const value = inputRef.current?.value;
         if (!value) return;
         const url = getUrlFromString(value);
-        if (url) {
-            setMark(schema.marks.link, { href: url })(view.state, view.dispatch);
-            view.focus();
-            onOpenChange(false);
+
+        if (!url) {
+            setError(t("editor_invalid_url"));
+            return;
         }
+
+        setMark(schema.marks.link, { href: url })(view.state, view.dispatch);
+        view.focus();
+        onOpenChange(false);
     };
 
     const handleRemoveLink = () => {
@@ -86,13 +97,15 @@ export const LinkSelector = ({
             <form
                 onSubmit={handleSubmit}
                 className="flex p-1 gap-1"
+                onChange={handleChange}
             >
                 <input
                     ref={inputRef}
                     autoFocus={open}
                     placeholder={t("editor_paste_or_type_link")}
                     defaultValue={href}
-                    className={cls("text-surface-900 dark:text-white flex-grow bg-transparent p-1 text-sm outline-none", focusedDisabled)} />
+                    className={cls("text-surface-900 dark:text-white flex-grow bg-transparent p-1 text-sm outline-none", focusedDisabled)}
+                    aria-invalid={isInputInvalid} />
 
                 {href ? (
                     <Button
@@ -113,6 +126,18 @@ export const LinkSelector = ({
                     </Button>
                 )}
             </form>
+            {error && (
+                <div className="p-2">
+                    <Typography
+                        variant="caption"
+                        color="error"
+                        role="alert"
+                        aria-live="polite"
+                    >
+                        {error}
+                    </Typography>
+                </div>
+            )}
         </Popover>
     );
 };

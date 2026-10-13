@@ -660,6 +660,7 @@ export const pt: FireCMSTranslations = {
     editor_cancel: "Cancelar",
     editor_remove_link: "Remover ligação",
     editor_paste_or_type_link: "Cole ou escreva a ligação",
+    editor_invalid_url: "URL inválido",
     editor_open_in_new_window: "Abrir numa nova janela",
     editor_bold: "Negrito",
     editor_italic: "Itálico",
