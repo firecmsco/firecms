@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useSideDialogsController } from "../hooks";
 import { EntitySidePanelProps, SideDialogPanelProps } from "../types";
 import { Sheet } from "@firecms/ui";
-import { useNavigationUnsavedChangesDialog } from "../internal/useUnsavedChangesDialog";
+import { useLeavePageConfirmation } from "../internal/useLeavePageConfirmation";
 import { ErrorBoundary } from "../components";
 import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
 import { EntitySidePanel } from "./EntitySidePanel";
@@ -123,14 +123,7 @@ function SideDialogView({
 
     const sideDialogsController = useSideDialogsController();
 
-    const {
-        navigationWasBlocked,
-        handleOk: handleNavigationOk,
-        handleCancel: handleNavigationCancel
-    } = useNavigationUnsavedChangesDialog(
-        blocked && !drawerCloseRequested,
-        () => setBlocked(false)
-    );
+    useLeavePageConfirmation(blocked && !drawerCloseRequested);
 
     useEffect(() => {
         if (panel)
@@ -212,8 +205,8 @@ function SideDialogView({
 
             <UnsavedChangesDialog
                 open={drawerCloseRequested}
-                handleOk={drawerCloseRequested ? handleDrawerCloseOk : handleNavigationOk}
-                handleCancel={drawerCloseRequested ? handleDrawerCloseCancel : handleNavigationCancel}
+                handleOk={handleDrawerCloseOk}
+                handleCancel={handleDrawerCloseCancel}
                 body={blockedNavigationMessage} />
 
         </SideDialogContext.Provider>
