@@ -67,10 +67,12 @@ const cloneItemsForDnd = (items: { name: string; entries: NavigationEntry[] }[])
 /* ─────────────────────────────────────────────────────────── */
 export function SortableNavigationCard({
     entry,
-    onClick
+    onClick,
+    disabled
 }: {
     entry: NavigationEntry;
     onClick?: () => void;
+    disabled?: boolean;
 }) {
     const {
         setNodeRef,
@@ -82,7 +84,8 @@ export function SortableNavigationCard({
     } =
         useSortable({
             id: entry.url,
-            animateLayoutChanges
+            animateLayoutChanges,
+            disabled
         });
 
     const style = {
@@ -102,14 +105,19 @@ export function NavigationGroupDroppable({
     id,
     itemIds,
     children,
-    isPotentialCardDropTarget = false
+    isPotentialCardDropTarget = false,
+    disabled
 }: {
     id: UniqueIdentifier;
     itemIds: UniqueIdentifier[];
     children: React.ReactNode;
     isPotentialCardDropTarget?: boolean;
+    disabled?: boolean;
 }) {
-    const { setNodeRef } = useDroppable({ id });
+    const { setNodeRef } = useDroppable({
+        id,
+        disabled
+    });
 
     return (
         <div
