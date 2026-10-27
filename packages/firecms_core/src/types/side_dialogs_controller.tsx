@@ -8,9 +8,11 @@ import { EntityFormProps } from "../form";
 export interface SideDialogsController {
 
     /**
-     * Close the last panel
+     * Close the last panel.
+     * When the `key` of a panel without a URL is given, that panel is closed
+     * instead, even if other panels are open on top of it.
      */
-    close: () => void;
+    close: (key?: string) => void;
 
     /**
      * List of side panels currently open

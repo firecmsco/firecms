@@ -133,7 +133,7 @@ function SideDialogView({
     const handleDrawerCloseOk = () => {
         setBlocked(false);
         setDrawerCloseRequested(false);
-        sideDialogsController.close();
+        sideDialogsController.close(panel?.key);
         panel?.onClose?.();
     };
 
@@ -145,7 +145,7 @@ function SideDialogView({
         if (blocked && !force) {
             setDrawerCloseRequested(true);
         } else {
-            sideDialogsController.close();
+            sideDialogsController.close(panel?.key);
             panel?.onClose?.();
         }
     };

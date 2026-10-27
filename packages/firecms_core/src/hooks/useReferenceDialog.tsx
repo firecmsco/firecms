@@ -45,8 +45,8 @@ export function useReferenceDialog<M extends Record<string, any>>(referenceDialo
     }, [navigation, referenceDialogProps, sideDialogsController]);
 
     const close = useCallback(() => {
-        sideDialogsController.close();
-    }, [sideDialogsController]);
+        sideDialogsController.close(`reference_${referenceDialogProps.path}`);
+    }, [sideDialogsController, referenceDialogProps.path]);
 
     return {
         open,
