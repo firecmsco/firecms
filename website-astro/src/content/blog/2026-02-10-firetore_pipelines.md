@@ -6,6 +6,7 @@ description: Explore Firestore's new Pipeline Operations API for Enterprise Edit
 seoTitle: "Firestore Pipelines Tested: Enterprise vs Standard"
 seoDescription: "I ran Firestore's new Pipeline Operations against a live Enterprise instance: grouping, array unnesting, post-aggregation filtering and index-free queries. What works, what does not, and how Enterprise Edition differs from Standard."
 pubDate: 2026-02-10
+updatedDate: 2026-10-27
 image: /img/blog/pipeline.webp
 authors: francesco
 ---
@@ -122,8 +123,15 @@ This is the part that requires careful evaluation.
 | **Query engine** | Core operations only | Core + Pipeline operations |
 If your workload consists of reading small documents by ID, Standard is likely cheaper. If you're scanning collections for analytics, Enterprise's unit-based billing can be more predictable—but large unindexed scans will consume units proportional to the total data volume.
 ## Current Limitations
-The API is in preview. A few constraints to be aware of:
-- **No emulator support.** You must test against a live Enterprise database.
+
+> **Update, October 2026:** Pipelines are now generally available, and the Firestore emulator
+> runs Enterprise edition (set `"edition": "enterprise"` under `emulators.firestore` in
+> `firebase.json`), so you can try all of this locally. `firebase-admin` 14 ships
+> `@google-cloud/firestore` 9, which includes pipelines, so the separate install under
+> Setting Up is no longer needed. Pipelines have also gained subqueries, which work like
+> joins; I tested them in [SQL Connect vs Firestore](/blog/sql_connect_vs_firestore).
+
+A few constraints to be aware of:
 - **No realtime listeners or offline support** for pipeline queries (use Core operations for those).
 - **No native pagination cursors** (`startAt` / `startAfter`). You need to implement cursor-based pagination manually using `where()` + `sort()`.
 - **`array-contains` and vector indexes** are not yet leveraged by the pipeline engine. These queries work but fall back to less efficient index types.
