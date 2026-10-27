@@ -17,3 +17,9 @@ export function saveSearchedIdsLocally(key: string, ids: string[]) {
 export function getRecentIds(key: string): string[] {
     return getLocalStorageJSON("recent_id_searches::" + key, []);
 }
+
+export function removeRecentIds(key: string, ids: string[]) {
+    const remaining = getRecentIds(key).filter(id => !ids.includes(id));
+    saveSearchedIdsLocally(key, remaining);
+    return remaining;
+}
