@@ -21,6 +21,8 @@ import { User } from "../types";
 import { useApp } from "../app/useApp";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { DrawerLogo } from "./DefaultDrawer";
+import { CollectionCountBadge } from "../components/EntityCollectionView/CollectionCountBadge";
+import { PathTitle } from "../components/EntityCollectionView/CollectionPathTitle";
 
 export type DefaultAppBarProps<ADDITIONAL_PROPS = object> = {
 
@@ -81,6 +83,7 @@ export const DefaultAppBar = function DefaultAppBar({
     const navigation = useNavigationController();
 
     const breadcrumbs = useBreadcrumbsController();
+    const lastBreadcrumb = breadcrumbs.breadcrumbs?.[breadcrumbs.breadcrumbs.length - 1];
 
     const authController = useAuthController();
     const {
@@ -177,21 +180,21 @@ export const DefaultAppBar = function DefaultAppBar({
                                         {breadcrumb.title}
                                     </Typography>
                                     {/* Show count badge for collection breadcrumbs: undefined = not applicable, null = loading, number = count */}
-                                    {breadcrumb.count !== undefined && (
-                                        breadcrumb.count !== null ? (
-                                            <span className="text-xs text-surface-accent-500 dark:text-surface-accent-400 bg-surface-100 dark:bg-surface-700 px-1 py-0 rounded">
-                                                {breadcrumb.count}
-                                            </span>
-                                        ) : (
-                                            <Skeleton className="w-8 h-4 rounded-md" />
-                                        )
-                                    )}
+                                    <CollectionCountBadge count={breadcrumb.count}/>
                                 </div>
                             </Link>
                         </React.Fragment>;
                     })}
                 </div>
             </div>}
+
+            {/* A row of breadcrumbs does not fit a small screen, but where you are and how
+                many entities are there still matter, so they are folded on two lines. */}
+            {lastBreadcrumb && <PathTitle
+                className={"lg:hidden min-w-0 mr-2"}
+                parents={breadcrumbs.breadcrumbs.slice(0, -1).map(breadcrumb => breadcrumb.title)}
+                name={lastBreadcrumb.title}
+                count={lastBreadcrumb.count}/>}
 
 
             {startAdornment}

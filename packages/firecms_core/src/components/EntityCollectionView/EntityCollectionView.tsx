@@ -126,6 +126,12 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
      */
     updateUrl?: boolean;
 
+    /**
+     * Called with the number of entities in the collection, with the current filters
+     * applied, each time it is counted: the count the breadcrumbs show.
+     */
+    onCountChange?: (count: number) => void;
+
 } & EntityCollection<M>;
 
 /**
@@ -161,6 +167,7 @@ export const EntityCollectionView = React.memo(
         isSubCollection,
         className,
         updateUrl,
+        onCountChange,
         ...collectionProp
     }: EntityCollectionViewProps<M>
     ) {
@@ -790,8 +797,9 @@ export const EntityCollectionView = React.memo(
         useEffect(() => {
             if (docsCount !== undefined) {
                 breadcrumbs.updateCount(fullPath, docsCount);
+                onCountChange?.(docsCount);
             }
-        }, [docsCount, fullPath, breadcrumbs.updateCount]);
+        }, [docsCount, fullPath, breadcrumbs.updateCount, onCountChange]);
 
         // EntitiesCount fetches count and updates breadcrumb - no visual rendering needed here
         const countFetcher = <EntitiesCount

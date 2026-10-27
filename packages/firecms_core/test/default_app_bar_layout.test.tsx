@@ -3,7 +3,7 @@
  */
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 
 /**
@@ -29,8 +29,9 @@ jest.mock("../src/hooks", () => ({
     useTranslation: () => ({ t: (key: string) => key, i18n: { language: "en" } })
 }));
 
+let breadcrumbs: { title: string, url: string, id?: string, count?: number | null }[] = [];
 jest.mock("../src/hooks/useBreadcrumbsController", () => ({
-    useBreadcrumbsController: () => ({ breadcrumbs: [] })
+    useBreadcrumbsController: () => ({ breadcrumbs })
 }));
 
 // Also keeps the DefaultAppBar -> DefaultDrawer -> ../components import cycle
@@ -44,7 +45,7 @@ jest.mock("../src/components", () => ({
     LanguageToggle: () => null
 }));
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const { DefaultAppBar } = require("../src/core/DefaultAppBar");
 
 function renderBar() {
@@ -66,6 +67,7 @@ describe("DefaultAppBar layout", () => {
     beforeEach(() => {
         appState = { hasDrawer: false, drawerOpen: false, logo: undefined };
         largeLayout = true;
+        breadcrumbs = [];
     });
 
     it("reserves the same left edge with a collapsed drawer and with none", () => {
@@ -119,5 +121,114 @@ describe("DefaultAppBar layout", () => {
     it("renders the title", () => {
         renderBar();
         expect(screen.getByText("FireCMS Cloud")).toBeTruthy();
+    });
+});
+
+describe("DefaultAppBar breadcrumbs", () => {
+
+    beforeEach(() => {
+        appState = { hasDrawer: false, drawerOpen: false, logo: undefined };
+        largeLayout = true;
+    });
+
+    /** The row of breadcrumbs large screens show. */
+    const row = (bar: HTMLElement) => bar.querySelector(".hidden.lg\\:block.mr-8") as HTMLElement;
+    /** The breadcrumbs folded on two lines, which small screens show instead. */
+    const folded = (bar: HTMLElement) => bar.querySelector(".lg\\:hidden") as HTMLElement | null;
+
+    /** What follows a breadcrumb's title in the row: its count, if any. */
+    const countInRow = (bar: HTMLElement, title: string) =>
+        within(row(bar)).getByText(title).nextElementSibling as HTMLElement | null;
+
+    const subcollection = [
+        { title: "Products", url: "/c/products", id: "products" },
+        { title: "p1", url: "/c/products/p1" },
+        { title: "Locales", url: "/c/products/p1/locales", id: "products/p1/locales", count: 3 }
+    ];
+
+    describe("in a row, on large screens", () => {
+
+        it("shows the count of the collection being viewed", () => {
+            breadcrumbs = [{ title: "Products", url: "/c/products", id: "products", count: 42 }];
+            expect(countInRow(renderBar(), "Products")?.textContent).toBe("42");
+        });
+
+        it("shows a count of zero", () => {
+            breadcrumbs = [{ title: "Products", url: "/c/products", id: "products", count: 0 }];
+            expect(countInRow(renderBar(), "Products")?.textContent).toBe("0");
+        });
+
+        it("shows a placeholder while the count loads", () => {
+            breadcrumbs = [{ title: "Products", url: "/c/products", id: "products", count: null }];
+            const placeholder = countInRow(renderBar(), "Products");
+            expect(placeholder).toBeTruthy();
+            expect(placeholder!.textContent).toBe("");
+        });
+
+        it("shows no count for entities and parent collections", () => {
+            breadcrumbs = subcollection;
+            const bar = renderBar();
+            expect(countInRow(bar, "Products")).toBeNull();
+            expect(countInRow(bar, "p1")).toBeNull();
+            expect(countInRow(bar, "Locales")?.textContent).toBe("3");
+        });
+
+        it("links every breadcrumb", () => {
+            breadcrumbs = subcollection;
+            const links = within(row(renderBar())).getAllByRole("link").map(a => a.getAttribute("href"));
+            expect(links).toEqual(["/c/products", "/c/products/p1", "/c/products/p1/locales"]);
+        });
+
+        it("is hidden on small screens", () => {
+            breadcrumbs = subcollection;
+            expect(row(renderBar()).className).toContain("hidden");
+        });
+    });
+
+    describe("folded, on small screens", () => {
+
+        it("shows a subcollection's name and count under its parents", () => {
+            breadcrumbs = subcollection;
+            const title = folded(renderBar())!;
+            expect(title.firstElementChild!.textContent).toBe("Products / p1");
+            expect(within(title).getByText("Locales").nextElementSibling?.textContent).toBe("3");
+        });
+
+        it("shows a top level collection's name and count alone", () => {
+            breadcrumbs = [{ title: "Products", url: "/c/products", id: "products", count: 2 }];
+            const title = folded(renderBar())!;
+            expect(title.children.length).toBe(1);
+            expect(within(title).getByText("Products").nextElementSibling?.textContent).toBe("2");
+        });
+
+        it("shows an entity without a count", () => {
+            breadcrumbs = subcollection.slice(0, 2);
+            const title = folded(renderBar())!;
+            expect(title.firstElementChild!.textContent).toBe("Products");
+            expect(within(title).getByText("p1").nextElementSibling).toBeNull();
+        });
+
+        it("shows a placeholder while the count loads", () => {
+            breadcrumbs = [{ title: "Products", url: "/c/products", id: "products", count: null }];
+            const placeholder = within(folded(renderBar())!).getByText("Products").nextElementSibling;
+            expect(placeholder).toBeTruthy();
+            expect(placeholder!.textContent).toBe("");
+        });
+
+        it("is hidden on large screens, which show the row", () => {
+            breadcrumbs = subcollection;
+            expect(folded(renderBar())!.className).toContain("lg:hidden");
+        });
+
+        /** A row of them on a phone pushed the account menu, with "Log out", out of the bar. */
+        it("can shrink rather than push the buttons after it out of the bar", () => {
+            breadcrumbs = subcollection;
+            expect(folded(renderBar())!.className).toContain("min-w-0");
+        });
+
+        it("is not there without breadcrumbs", () => {
+            breadcrumbs = [];
+            expect(folded(renderBar())).toBeNull();
+        });
     });
 });

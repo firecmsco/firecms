@@ -24,6 +24,7 @@ import {
 import {
     useAuthController,
     useCustomizationController,
+    useDataSource,
     useEntityFetch,
     useFireCMSContext,
     useLargeLayout
@@ -35,6 +36,7 @@ import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
 import { createFormexStub } from "../util/createFormexStub";
 import { useTranslation } from "../hooks/useTranslation";
+import { CollectionPathTitle } from "../components/EntityCollectionView/CollectionPathTitle";
 
 export const MAIN_TAB_VALUE = "__main_##Q$SC^#S6";
 export const JSON_TAB_VALUE = "__json";
@@ -238,6 +240,11 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const subcollections = (collection.subcollections ?? []).filter(c => !c.hideFromNavigation);
     const subcollectionsCount = subcollections?.length ?? 0;
+
+    // The number of entities in each subcollection tab, as its collection view counts them.
+    const [subcollectionCounts, setSubcollectionCounts] = useState<Record<string, number>>({});
+    const selectedSubcollection = subcollections.find(subcollection => (subcollection.id ?? subcollection.path) === selectedTab);
+    const selectedSubcollectionDataSource = useDataSource(selectedSubcollection ?? collection);
     const customViews = collection.entityViews ?? [];
     const customViewsCount = customViews?.length ?? 0;
     const includeJsonView = collection.includeJsonView === undefined ? true : collection.includeJsonView;
@@ -386,7 +393,9 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                             isSubCollection={true}
                             updateUrl={false}
                             {...subcollection}
-                            openEntityMode={layout} />
+                            openEntityMode={layout}
+                            onCountChange={(count) => setSubcollectionCounts(counts =>
+                                counts[subcollectionId] === count ? counts : { ...counts, [subcollectionId]: count })} />
                         : <div className="flex items-center justify-center w-full h-full p-3">
                             <Typography variant={"label"}>
                                 {t("youd_need_to_save_before_additional_collections")}
@@ -534,6 +543,20 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const shouldShowTopBar = Boolean(barActions) || hasAdditionalViews;
 
+    // A side panel covers the app bar's breadcrumbs, which show where a collection is and
+    // how many entities it has, so the panel shows its subcollection's in its own top bar.
+    const subcollectionTitle = layout === "side_panel" && selectedSubcollection && usedEntity
+        ? (() => {
+            const subcollectionId = selectedSubcollection.id ?? selectedSubcollection.path;
+            return <CollectionPathTitle
+                path={fullIdPath
+                    ? `${fullIdPath}/${encodeEntityId(usedEntity.id)}/${removeInitialAndTrailingSlashes(subcollectionId)}`
+                    : `${path}/${usedEntity.id}/${removeInitialAndTrailingSlashes(selectedSubcollection.path)}`}
+                name={selectedSubcollection.name}
+                count={subcollectionCounts[subcollectionId] ?? (selectedSubcollectionDataSource.countEntities ? null : undefined)}/>;
+        })()
+        : null;
+
     let result = <div className="relative flex flex-col h-full w-full bg-white dark:bg-surface-900">
 
         {shouldShowTopBar && <div
@@ -545,6 +568,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 values: formContext?.values ?? usedEntity?.values ?? {},
                 status
             })}
+
+            {subcollectionTitle}
 
             <div className={"flex-grow"} />
 
