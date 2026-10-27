@@ -1,19 +1,19 @@
 import { getLocalStorageJSON, setLocalStorageItem } from "../../util/local_storage";
 
-export function addRecentId(collectionId: string, id: string) {
-    const recentIds = getRecentIds(collectionId);
+export function addRecentId(key: string, id: string) {
+    const recentIds = getRecentIds(key);
     const newRecentIds = [id, ...recentIds.filter(i => i !== id)];
     if (newRecentIds.length > 5) {
         newRecentIds.pop();
     }
-    saveSearchedIdsLocally(collectionId, newRecentIds);
+    saveSearchedIdsLocally(key, newRecentIds);
     return newRecentIds;
 }
 
-export function saveSearchedIdsLocally(collectionId: string, ids: string[]) {
-    setLocalStorageItem("recent_id_searches::" + collectionId, JSON.stringify(ids));
+export function saveSearchedIdsLocally(key: string, ids: string[]) {
+    setLocalStorageItem("recent_id_searches::" + key, JSON.stringify(ids));
 }
 
-export function getRecentIds(collectionId: string): string[] {
-    return getLocalStorageJSON("recent_id_searches::" + collectionId, []);
+export function getRecentIds(key: string): string[] {
+    return getLocalStorageJSON("recent_id_searches::" + key, []);
 }

@@ -38,7 +38,8 @@ export const editEntityAction: EntityAction = {
         });
 
         if (collection) {
-            addRecentId(collection.id, entity.id);
+            // the same key the collection view's "find by id" reads them with
+            addRecentId(fullIdPath ?? fullPath ?? collection.id, entity.id);
         }
 
         const path = collection?.collectionGroup ? entity.path : (fullPath ?? collection?.path ?? entity.path);
