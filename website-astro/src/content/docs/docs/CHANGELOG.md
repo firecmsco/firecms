@@ -2,12 +2,21 @@
 slug: docs/changelog
 title: Changelog
 ---
-## [3.5.0] - 2026-09-16
+## [3.5.1] - 2026-09-30
+
+- **MCP server (`@firecms/mcp-server`)**:
+  - Tool descriptions say only what each tool does. They no longer point the model at other tools or tell it when to call them, as the Claude Connectors Directory requires.
+  - Every tool repeats its title in `annotations.title`, which is where the Connectors Directory reads it. `modify_collection`'s `existingCollection` and both tools' `existingCollections` are typed as objects.
+  - A failing tool passes on the backend's own explanation (for example "You can't add yourself to the users") instead of only "Request failed with status code 401".
+  - Stable releases publish the server to the MCP Registry (`co.firecms/mcp`) as part of the release.
+
+## [3.5.0] - 2026-09-29
 
 - **FireCMS PRO: a license problem pauses PRO features instead of blocking the CMS**:
   - A failed license check used to replace the whole CMS with a "License needed" screen. That screen is gone: the app always renders. When the license check answers `blocked` (a trial that has ended, a license key used on a project its license does not list, or a project beyond the production projects a license pays for), the PRO plugins pause and everything else keeps working: sign-in, your data, collections defined in code and custom views. Paused plugins are removed both inside `FireCMS` and from the navigation controller built above it, so collection modifications, injected collections, views and home page entries go with them.
   - `user_management` never pauses, since it provides sign-in and roles. Its Users and Roles views show a "PRO features paused" notice with a link to get or update a license instead of the editors, and the home page widget for creating roles is hidden.
   - **New `LicenseBanner`**, rendered by the default `Scaffold` above the main content: the days left in a trial (dismissible), or why PRO is paused and what to do (an ended trial, a project missing from its license, or a license that pays for fewer projects in production). Place it yourself only in a custom layout.
+  - **PRO suggestions.** In an app with no PRO plugin, the license check can suggest one that fits the project, such as user management for a CMS that several people use. `LicenseBanner` shows it as a note linking to the plugin's docs; once dismissed, it stays hidden in that browser. It arrives as `AccessResponse.suggestion`. The server decides which projects get one, and `telemetry={false}` turns it off with the rest of the check.
   - **New `useLicenseStatus()`** hook, also available as `FireCMSContext.licenseStatus`, plus `isProPaused(status)` and `getLicenseSubscribeUrl(status)`. The hook works inside `FireCMS` and above it, in the component that calls `useBuildNavigationController`.
   - A license covers as many projects in production as it pays for. When more of its projects run in production, the ones that went live first keep PRO and the others pause until the license pays for them. Local development never counts.
   - `telemetry={false}` skips the license check only in apps with no `apiKey` and no PRO plugin mounted. With one, the request is the license check itself, so skipping it would unlock PRO.
@@ -48,6 +57,7 @@ title: Changelog
   - Dialogs with a `maxWidth` keep a side gutter on narrow screens again, as in Tailwind v3: 11/12 of the screen up to the maximum width. Desktop sizes are unchanged.
   - `ToggleButtonGroup` has a new optional `fullWidth` prop.
   - The rich text editor no longer throws when an image finishes uploading, or an AI completion arrives, after the entity was closed.
+  - The CMS renders where the browser blocks site storage (all cookies blocked, some embedded iframes). Reading the saved language, colour mode or local collection settings threw a SecurityError during render and left a blank page; those preferences now last only as long as the page. A corrupt stored value reads as nothing stored.
 - **CLI and templates**:
   - **A canary CLI scaffolds its own version.** `npx @firecms/cli@canary init --pro` used to pin `^3.0.0`, which installed the latest stable release; a prerelease CLI now pins every `@firecms` package to its own version.
   - Every template installs, builds and runs with npm, pnpm 10 and 11 and yarn 2+. pnpm 11 used to refuse to install or run any template until their install scripts were approved; each template now approves exactly what it needs. Each declares the Node version it needs, instead of failing later with "Cannot find native binding" on Node 18.
@@ -57,6 +67,7 @@ title: Changelog
   - The Astro template generates FireCMS's styles (its Tailwind `@source` pointed at a folder that doesn't exist), renders in `astro dev`, uses the standard login view, and its blog no longer lists drafts. The cloud template builds under pnpm.
   - The PRO template mounts entity history, so there is a History tab. Unavailable products can be edited and imported (`price` was required and cleared at the same time). Its products collection has working text search.
   - The community template mounts its products collection, so the demo collection's references resolve.
+  - The community, PRO, Next.js and Astro templates ship an `AGENTS.md` for coding agents, and a `CLAUDE.md` that imports it: the project layout, the commands, the docs as Markdown, and what PRO costs. In the community template it also lists the PRO plugins for users and roles, history, import/export and the collection editor, so an agent asked for one of those features can offer the plugin before writing its own. Its `authenticator` now says that it lets every signed-in user in, and where user management is.
   - Scaffolded projects get a `.gitignore`, which npm never packed, and the CLI tarball dropped from 1.73 MB to 0.67 MB.
   - `firecms --help`, `-h` and `init --help` print usage. Unknown commands and usage errors exit 1. `init` works with absolute paths and missing parent folders, validates `--projectId`, and never writes "undefined" into config files. Two template flags at once is an error.
   - `firecms init --yes` never prompts for a login. `login` prints where to sign in before opening a browser, reports a busy port, and gives up after 5 minutes. A corrupt `tokens.json` reads as logged out instead of breaking every command.
@@ -71,6 +82,11 @@ title: Changelog
   - DataTalk is linked from the admin section of the home page, and its background requests no longer fail as unhandled rejections.
   - Stripe billing portal links are created when clicked, with a message when one fails, instead of on every page view.
   - The app bar stays on screen while a project's CMS loads.
+- **MCP server (`@firecms/mcp-server`)**:
+  - **Hosted at `https://api.firecms.co/mcp`.** Add it to Claude (Settings → Connectors → Add custom connector), to Claude Code (`claude mcp add --transport http firecms https://api.firecms.co/mcp`) or to any MCP client that takes a server URL. Clients sign in with OAuth in the browser, where you approve them in FireCMS Cloud; nothing is installed. The hosted server holds no Google Cloud credentials, so `connect_project_to_firecms` answers with a link to connect the project in FireCMS Cloud, and everything after that works from the agent. The npx server is unchanged and keeps the full Google Cloud flow.
+  - Every tool declares a `title`, and whether it only reads (`readOnlyHint`), only adds, or can overwrite or delete (`destructiveHint`), so clients that ask before writing know when to ask. The server also tells agents to start with `list_projects`.
+  - New entry point `@firecms/mcp-server/hosted`: `handleHostedMcpRequest()` serves the server over Streamable HTTP for a session the caller supplies. `createFireCMSMcpServer()` with no arguments still returns the local server; pass `{ session }` to act for another session. `FireCMSApiClient` now takes `{ session, apiUrl }`.
+  - Requires `@modelcontextprotocol/sdk` 1.29 or later.
 - **Releases**: packages publish with npm provenance again. The repository URL in every `package.json` had the wrong case, so npm refused every provenance statement since August.
 
 ## [3.4.0] - 2026-08-26
