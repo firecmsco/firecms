@@ -30,6 +30,7 @@ import {
 } from "../util";
 
 import {
+    EntitySaveError,
     saveEntityWithCallbacks,
     useAuthController,
     useCustomizationController,
@@ -587,7 +588,6 @@ export function EntityForm<M extends Record<string, any>>({
 
     const lastSavedValues = useRef<EntityValues<M> | undefined>(entity?.values);
     const save = (values: EntityValues<M>): Promise<void> => {
-        lastSavedValues.current = values;
         return onSaveEntityRequest({
             collection: resolvedCollection,
             path,
@@ -597,13 +597,19 @@ export function EntityForm<M extends Record<string, any>>({
             previousValues: entity?.values,
             autoSave: autoSave ?? false
         }).then(() => {
+            lastSavedValues.current = values;
             const eventName: CMSAnalyticsEvent = status === "new"
                 ? "new_entity_saved"
                 : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
             analyticsController.onAnalyticsEvent?.(eventName, { path });
         }).catch(e => {
             console.error(e);
-            setSavingError(e);
+            if (!(e instanceof EntitySaveError)) {
+                setSavingError(e);
+            } else if (e.stage === "save") {
+                setSavingError(e.cause instanceof Error ? e.cause : e);
+            }
+            throw e;
         });
     };
 
