@@ -96,6 +96,7 @@ export function BlockFieldBinding<T extends Array<any>>({
         </div>
     );
 
+    const canAddElements = !property.disabled && !isSubmitting && !disabled && (property.canAddElements ?? true);
     const firstOneOfKey = Object.keys(property.oneOf.properties)[0];
     const body = <ArrayContainer value={value}
                                  className={"flex flex-col gap-3"}
@@ -104,7 +105,7 @@ export function BlockFieldBinding<T extends Array<any>>({
                                  buildEntry={buildEntry}
                                  onInternalIdAdded={setLastAddedId}
                                  disabled={isSubmitting || Boolean(property.disabled)}
-                                 canAddElements={!property.disabled}
+                                 canAddElements={canAddElements}
                                  onValueChange={(value) => setFieldValue(propertyKey, value)}
                                  newDefaultEntry={{
                                      [property.oneOf!.typeField ?? DEFAULT_ONE_OF_TYPE]: firstOneOfKey,
