@@ -232,5 +232,8 @@ function listOrDash(values: string[]) {
 }
 
 function escapeCell(text: string) {
-    return text.replace(/\|/g, "\\|").replace(/\n/g, " ");
+    return text
+        .replace(/\\/g, "\\\\")
+        .replace(/\|/g, "\\|")
+        .replace(/\n/g, " ");
 }
