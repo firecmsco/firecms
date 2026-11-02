@@ -19,6 +19,30 @@ firecms init
 firecms deploy
 ```
 
+```bash
+firecms migrate rowy --project=your-project-id
+```
+
+### Migrating from Rowy
+
+`firecms migrate rowy` reads the table settings Rowy keeps in Firestore under `_rowy_` and writes:
+
+- `collections/`: one FireCMS collection per Rowy table, and an `index.ts` exporting `rowyCollections`
+- `rowy-scripts/`: the derivative, action, default value, formula, extension and webhook code Rowy ran, to port
+- `MIGRATION_REPORT.md`: what each column became, and what is left to do
+
+It only reads Rowy's configuration. It does not read documents and writes nothing to your project.
+It signs in with your gcloud account (`gcloud auth login`), so no service account key is needed.
+Webhook verification secrets are never copied.
+
+```bash
+firecms migrate rowy --project=your-project-id --target=cloud        # imports from @firecms/cloud
+firecms migrate rowy --project=your-project-id --target=self-hosted  # imports from @firecms/core (default)
+firecms migrate rowy --input=rowy-config.json                         # offline, from { settings, schemas, groupSchemas }
+```
+
+Other options: `--out <folder>` (default `./rowy-migration`), `--tables <id,id>`, `--force`.
+
 ### Using different templates
 
 You can initialize a new project using different templates. Please not that these templates can't
