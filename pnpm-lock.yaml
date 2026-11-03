@@ -115,22 +115,22 @@ importers:
     dependencies:
       '@firecms/collection_editor':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/core':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_enhancement':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_export':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_import':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_import_export':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/schema_inference':
         specifier: ^3.0.1
         version: 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
@@ -139,7 +139,7 @@ importers:
         version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/user_management':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@fontsource/jetbrains-mono':
         specifier: ^5.2.8
         version: 5.2.8
@@ -166,7 +166,7 @@ importers:
         version: 6.30.4(react@19.2.7)
       react-router-dom:
         specifier: ^6.30.2
-        version: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       typeface-rubik:
         specifier: ^1.1.13
         version: 1.1.13
@@ -242,22 +242,22 @@ importers:
         version: 4.4.2(@types/node@26.1.1)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tsx@4.22.4)(yaml@2.9.0)
       '@firecms/collection_editor':
         specifier: file:../../packages/collection_editor
-        version: file:packages/collection_editor(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)
+        version: file:packages/collection_editor(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)
       '@firecms/collection_editor_firebase':
         specifier: file:../../packages/collection_editor_firebase
         version: file:packages/collection_editor_firebase(firebase@12.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@firecms/core':
         specifier: file:../../packages/firecms_core
-        version: file:packages/firecms_core(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
+        version: file:packages/firecms_core(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       '@firecms/data_enhancement':
         specifier: file:../../packages/data_enhancement
-        version: file:packages/data_enhancement(firebase@12.15.0)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)
+        version: file:packages/data_enhancement(firebase@12.15.0)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)
       '@firecms/data_export':
         specifier: file:../../packages/data_export
-        version: file:packages/data_export(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)
+        version: file:packages/data_export(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)
       '@firecms/data_import':
         specifier: file:../../packages/data_import
-        version: file:packages/data_import(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)
+        version: file:packages/data_import(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)
       '@firecms/firebase':
         specifier: file:../../packages/firebase_firecms
         version: file:packages/firebase_firecms(firebase@12.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typesense@1.8.2(@babel/runtime@7.29.7))
@@ -305,7 +305,7 @@ importers:
         version: 6.30.4(react@18.3.1)
       react-router-dom:
         specifier: ^6.30.2
-        version: 6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwindcss:
         specifier: ^4.1.17
         version: 4.3.1
@@ -382,7 +382,7 @@ importers:
     dependencies:
       '@firecms/core':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/ui':
         specifier: ^3.3.0
         version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -400,7 +400,7 @@ importers:
         version: 6.30.4(react@19.2.7)
       react-router-dom:
         specifier: ^6.30.2
-        version: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       typeface-rubik:
         specifier: ^1.1.13
         version: 1.1.13
@@ -434,22 +434,22 @@ importers:
     dependencies:
       '@firecms/collection_editor':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/collection_editor_firebase':
         specifier: ^3.3.0
-        version: 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/core':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_enhancement':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_export':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_import':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/firebase':
         specifier: ^3.3.0
         version: 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
@@ -461,7 +461,7 @@ importers:
         version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/user_management':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@fontsource/jetbrains-mono':
         specifier: ^5.2.8
         version: 5.2.8
@@ -497,7 +497,7 @@ importers:
         version: 6.30.4(react@19.2.7)
       react-router-dom:
         specifier: ^6.30.2
-        version: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       typeface-rubik:
         specifier: ^1.1.13
         version: 1.1.13
@@ -537,28 +537,28 @@ importers:
         version: 3.14.1(@types/react@19.2.17)(graphql@16.14.2)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/collection_editor':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/collection_editor_firebase':
         specifier: ^3.3.0
-        version: 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/core':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_enhancement':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_export':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_import':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/datatalk':
         specifier: ^3.3.0
-        version: 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/entity_history':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex':
         specifier: ^3.0.1
         version: 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -570,7 +570,7 @@ importers:
         version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/user_management':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@fontsource/comic-neue':
         specifier: ^5.2.7
         version: 5.2.7
@@ -603,7 +603,7 @@ importers:
         version: 6.30.4(react@19.2.7)
       react-router-dom:
         specifier: ^6.30.2
-        version: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react18-json-view:
         specifier: ^0.2.9
         version: 0.2.10(react@19.2.7)
@@ -822,7 +822,7 @@ importers:
         version: 6.30.4(react@19.2.7)
       react-router-dom:
         specifier: ^6.30.2
-        version: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       ts-jest:
         specifier: ^29.4.5
         version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.1.1))(typescript@5.9.3)
@@ -1386,7 +1386,7 @@ importers:
         version: 6.30.4(react@19.2.7)
       react-router-dom:
         specifier: ^6.30.2
-        version: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     devDependencies:
       '@types/node':
         specifier: ^26.1.1
@@ -1490,7 +1490,7 @@ importers:
         version: 6.30.4(react@19.2.7)
       react-router-dom:
         specifier: ^6.30.2
-        version: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     devDependencies:
       '@types/node':
         specifier: ^26.1.1
@@ -1723,7 +1723,7 @@ importers:
         version: 6.30.4(react@19.2.7)
       react-router-dom:
         specifier: ^6.30.2
-        version: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       ts-jest:
         specifier: ^29.4.5
         version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@29.7.0(@babel/core@7.29.7))(jest-util@30.4.1)(jest@29.7.0(@types/node@26.1.1))(typescript@5.9.3)
@@ -3446,6 +3446,9 @@ packages:
   '@firecms/schema_inference@3.3.0':
     resolution: {integrity: sha512-QXyA4NAOzdqi1HZNDGSpA/9fNls0OvlirC3Ocww2y0ghNxFo8i+oOP/tyf67LVC/8OtnpN0tfymktIVdEZbjbA==}
 
+  '@firecms/schema_inference@3.4.0':
+    resolution: {integrity: sha512-D2MRCZCbANj2EPcdtf2uVlzarfFRfxJ0NMemHMlW6BeqCPsFvReRizKVR36JD3zi8RGSE6k0BU6KmfpjNOYwsQ==}
+
   '@firecms/ui@3.3.0':
     resolution: {integrity: sha512-Ie7ISHcRkcwOjqRnrGiu0O2UtHeNaDITLx6Bl58Atjf9qLV683FfxQgYkw9Ev9NfPBRkWz5y2BesCv896IEULA==}
     engines: {node: '>=14'}
@@ -4901,6 +4904,10 @@ packages:
 
   '@remix-run/router@1.23.3':
     resolution: {integrity: sha512-4An71tdz9X8+3sI4Qqqd2LWd9vS39J7sqd9EU4Scw7TJE/qB10Flv/UuqbPVgfQV9XoK8Np6jNquZitnZq5i+Q==}
+    engines: {node: '>=14.0.0'}
+
+  '@remix-run/router@1.23.4':
+    resolution: {integrity: sha512-q7j5geK7xs3UJSdm9/iytUNclBnLmYx1EnSeCFXHPeutdqgIMeFeHtUZgS3EhlKxdBEAu8OwtJCwmLrEzpSs7Q==}
     engines: {node: '>=14.0.0'}
 
   '@rolldown/pluginutils@1.0.0-beta.27':
@@ -10823,8 +10830,8 @@ packages:
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
-  react-is@19.2.8:
-    resolution: {integrity: sha512-s5un28nYxKJw5gvUHyW5PCC28CvBqLu9r3cWgzHT4Vo/5fqqkFcdRYsGcKf50WMPpjjFZS5d76fn3YCo2njKwQ==}
+  react-is@19.3.0:
+    resolution: {integrity: sha512-UpMYezM4v5/18F28aC66AEsjXIgE02kyEMH6yLdgLXu/UTfa1Ntwck/nNLrbqJsEXW7gPb0coNO9FQse9WTovA==}
 
   react-markdown@9.1.0:
     resolution: {integrity: sha512-xaijuJB0kzGiUdG7nc2MOMDUDBWPyGAjZtUrow9XxUeua8IqeP+VlIfAZ3bphpcLTnSZXz6z9jcVC/TCwbfgdw==}
@@ -10866,8 +10873,21 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
+  react-router-dom@6.30.6:
+    resolution: {integrity: sha512-0RHKZz7wwffvkU+2MFVT2NnjK44ssLEV+m0CAJaS2Ksmorrwj7WxH00jO0SOCW26/tINUnJHToXblDs33I38YQ==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+
   react-router@6.30.4:
     resolution: {integrity: sha512-SVUsDe+DybHM/WmYKIVYhZh1o5Dcuf16yM6WjG02Q9XVFMZIJyHYhwrr6bFBXZkVP6z69kNkMyBCujt8FaFLJA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+
+  react-router@6.30.6:
+    resolution: {integrity: sha512-5HfK7k5im7LTOB0EqCQmfvy4C13G92Ssj1VTmouTK3AJvyjKTnFuCV0vcMAD/JS+JC4DvDIBRrlAeJIFjh5VWg==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: '>=16.8'
@@ -14039,24 +14059,24 @@ snapshots:
   '@firecms/cloud@3.3.0(@firebase/app@0.15.0)(@types/node@26.1.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@firecms/cli': 3.3.0(@types/node@26.1.1)
-      '@firecms/collection_editor': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/collection_editor_firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_enhancement': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/datatalk': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/entity_history': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/collection_editor': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/collection_editor_firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_enhancement': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/datatalk': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/entity_history': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/firebase_admin': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/firebase_admin': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/user_management': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/schema_inference': 3.4.0
+      '@firecms/user_management': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       firebase: 12.15.0
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       react-router: 6.30.4(react@19.2.7)
-      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-router-dom: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     transitivePeerDependencies:
       - '@firebase/app'
       - '@react-native-async-storage/async-storage'
@@ -14078,11 +14098,11 @@ snapshots:
       - zen-observable
       - zenObservable
 
-  '@firecms/collection_editor@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/collection_editor@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -14091,7 +14111,7 @@ snapshots:
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       react-router: 6.30.4(react@19.2.7)
-      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-router-dom: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
@@ -14101,7 +14121,7 @@ snapshots:
       - supports-color
       - vite
 
-  '@firecms/collection_editor@file:packages/collection_editor(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)':
+  '@firecms/collection_editor@file:packages/collection_editor(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@firecms/core': link:packages/firecms_core
       '@firecms/data_export': link:packages/data_export
@@ -14115,12 +14135,12 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-router: 6.30.4(react@18.3.1)
-      react-router-dom: 6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-router-dom: 6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
-  '@firecms/collection_editor_firebase@3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/collection_editor_firebase@3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      '@firecms/collection_editor': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/collection_editor': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       firebase: 12.15.0
       react: 19.2.7
@@ -14149,7 +14169,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@firecms/core@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/core@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@dnd-kit/core': 6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@dnd-kit/modifiers': 9.0.0(@dnd-kit/core@6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
@@ -14197,7 +14217,7 @@ snapshots:
       react-markdown: 9.1.0(@types/react@19.2.17)(react@19.2.7)
       react-moveable: 0.56.0
       react-router: 6.30.4(react@19.2.7)
-      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-router-dom: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react-transition-group: 4.4.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react-use-measure: 2.1.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react-window: 1.8.11(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -14211,7 +14231,7 @@ snapshots:
       - supports-color
       - vite
 
-  '@firecms/core@file:packages/firecms_core(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
+  '@firecms/core@file:packages/firecms_core(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
     dependencies:
       '@dnd-kit/core': 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@dnd-kit/modifiers': 9.0.0(@dnd-kit/core@6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
@@ -14259,7 +14279,7 @@ snapshots:
       react-markdown: 9.1.0(@types/react@18.3.31)(react@18.3.1)
       react-moveable: 0.56.0
       react-router: 6.30.4(react@18.3.1)
-      react-router-dom: 6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-router-dom: 6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-transition-group: 4.4.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-use-measure: 2.1.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-window: 1.8.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -14272,14 +14292,14 @@ snapshots:
       - supports-color
       - typescript
 
-  '@firecms/data_enhancement@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/data_enhancement@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       firebase: 12.15.0
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       react-router: 6.30.4(react@19.2.7)
-      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-router-dom: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
@@ -14288,7 +14308,7 @@ snapshots:
       - supports-color
       - vite
 
-  '@firecms/data_enhancement@file:packages/data_enhancement(firebase@12.15.0)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)':
+  '@firecms/data_enhancement@file:packages/data_enhancement(firebase@12.15.0)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@firecms/core': link:packages/firecms_core
       '@firecms/ui': link:packages/ui
@@ -14296,18 +14316,18 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-router: 6.30.4(react@18.3.1)
-      react-router-dom: 6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-router-dom: 6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
-  '@firecms/data_export@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/data_export@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       react-router: 6.30.4(react@19.2.7)
-      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-router-dom: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
@@ -14317,7 +14337,7 @@ snapshots:
       - supports-color
       - vite
 
-  '@firecms/data_export@file:packages/data_export(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)':
+  '@firecms/data_export@file:packages/data_export(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@firecms/core': link:packages/firecms_core
       '@firecms/formex': link:packages/formex
@@ -14326,18 +14346,18 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-router: 6.30.4(react@18.3.1)
-      react-router-dom: 6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-router-dom: 6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
-  '@firecms/data_import@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/data_import@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       react-router: 6.30.4(react@19.2.7)
-      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-router-dom: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       xlsx: https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz
     transitivePeerDependencies:
       - '@types/react'
@@ -14348,7 +14368,7 @@ snapshots:
       - supports-color
       - vite
 
-  '@firecms/data_import@file:packages/data_import(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)':
+  '@firecms/data_import@file:packages/data_import(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@firecms/core': link:packages/firecms_core
       '@firecms/formex': link:packages/formex
@@ -14357,18 +14377,18 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-router: 6.30.4(react@18.3.1)
-      react-router-dom: 6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-router-dom: 6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       read-excel-file: 9.3.10
 
-  '@firecms/data_import_export@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/data_import_export@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       react-router: 6.30.4(react@19.2.7)
-      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-router-dom: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
@@ -14378,16 +14398,16 @@ snapshots:
       - supports-color
       - vite
 
-  '@firecms/datatalk@3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/datatalk@3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      '@firecms/collection_editor_firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/collection_editor_firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/firebase': 3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/schema_inference': 3.4.0
       '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@monaco-editor/react': 4.7.0(monaco-editor@0.55.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react: 19.2.7
@@ -14408,9 +14428,9 @@ snapshots:
       - typesense
       - vite
 
-  '@firecms/entity_history@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/entity_history@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react: 19.2.7
@@ -14428,19 +14448,19 @@ snapshots:
   '@firecms/firebase@3.3.0(@firebase/app@0.15.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@firebase/auth': 1.13.3(@firebase/app@0.15.0)
-      '@firecms/collection_editor': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_enhancement': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/data_import_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
-      '@firecms/schema_inference': 3.3.0(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/collection_editor': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_enhancement': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(firebase@12.15.0)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/data_import_export': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/schema_inference': 3.4.0
       '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       firebase: 12.15.0
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       react-router: 6.30.4(react@19.2.7)
-      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-router-dom: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     optionalDependencies:
       typesense: 1.8.2(@babel/runtime@7.29.7)
     transitivePeerDependencies:
@@ -14468,23 +14488,23 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-router: 6.30.4(react@18.3.1)
-      react-router-dom: 6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-router-dom: 6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     optionalDependencies:
       typesense: 1.8.2(@babel/runtime@7.29.7)
 
-  '@firecms/firebase_admin@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/firebase_admin@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@dnd-kit/core': 6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@dnd-kit/modifiers': 9.0.0(@dnd-kit/core@6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
       '@dnd-kit/sortable': 10.0.0(@dnd-kit/core@6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
       '@dnd-kit/utilities': 3.2.2(react@19.2.7)
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       react-router: 6.30.4(react@19.2.7)
-      react-router-dom: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react-router-dom: 6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
@@ -14508,6 +14528,8 @@ snapshots:
       - debug
       - supports-color
       - vite
+
+  '@firecms/schema_inference@3.4.0': {}
 
   '@firecms/ui@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
@@ -14575,9 +14597,9 @@ snapshots:
       - '@types/react'
       - '@types/react-dom'
 
-  '@firecms/user_management@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/user_management@3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@firecms/core': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-router@6.30.4(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/formex': 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@firecms/ui': 3.3.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       date-fns: 3.6.0
@@ -16722,6 +16744,8 @@ snapshots:
   '@radix-ui/rect@1.1.2': {}
 
   '@remix-run/router@1.23.3': {}
+
+  '@remix-run/router@1.23.4': {}
 
   '@rolldown/pluginutils@1.0.0-beta.27': {}
 
@@ -23869,7 +23893,7 @@ snapshots:
       '@jest/schemas': 30.4.1
       ansi-styles: 5.2.0
       react-is-18: react-is@18.3.1
-      react-is-19: react-is@19.2.8
+      react-is-19: react-is@19.3.0
 
   pretty-ms@9.3.0:
     dependencies:
@@ -24229,7 +24253,7 @@ snapshots:
 
   react-is@18.3.1: {}
 
-  react-is@19.2.8: {}
+  react-is@19.3.0: {}
 
   react-markdown@9.1.0(@types/react@18.3.31)(react@18.3.1):
     dependencies:
@@ -24323,19 +24347,26 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.17
 
-  react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      '@remix-run/router': 1.23.3
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-router: 6.30.4(react@18.3.1)
-
   react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
       '@remix-run/router': 1.23.3
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       react-router: 6.30.4(react@19.2.7)
+
+  react-router-dom@6.30.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      '@remix-run/router': 1.23.4
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-router: 6.30.6(react@18.3.1)
+
+  react-router-dom@6.30.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
+    dependencies:
+      '@remix-run/router': 1.23.4
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      react-router: 6.30.6(react@19.2.7)
 
   react-router@6.30.4(react@18.3.1):
     dependencies:
@@ -24345,6 +24376,16 @@ snapshots:
   react-router@6.30.4(react@19.2.7):
     dependencies:
       '@remix-run/router': 1.23.3
+      react: 19.2.7
+
+  react-router@6.30.6(react@18.3.1):
+    dependencies:
+      '@remix-run/router': 1.23.4
+      react: 18.3.1
+
+  react-router@6.30.6(react@19.2.7):
+    dependencies:
+      '@remix-run/router': 1.23.4
       react: 19.2.7
 
   react-selecto@1.26.3:
