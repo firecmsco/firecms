@@ -12,7 +12,7 @@ overrides:
   brace-expansion@^5.0.0: 5.0.7
   undici@^6.0.0: 6.28.0
   ip-address: 10.3.1
-  axios: 1.18.1
+  axios: 1.20.0
   fast-uri: 3.1.5
   postcss: 8.5.23
   dompurify: 3.4.13
@@ -687,8 +687,8 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2
       axios:
-        specifier: 1.18.1
-        version: 1.18.1(supports-color@7.2.0)
+        specifier: 1.20.0
+        version: 1.20.0(supports-color@7.2.0)
       chalk:
         specifier: ^4.1.2
         version: 4.1.2
@@ -1801,8 +1801,8 @@ importers:
         specifier: ^1.29.0
         version: 1.32.0(zod@3.25.76)
       axios:
-        specifier: 1.18.1
-        version: 1.18.1(supports-color@7.2.0)
+        specifier: 1.20.0
+        version: 1.20.0(supports-color@7.2.0)
       zod:
         specifier: ^3.25.0
         version: 3.25.76
@@ -6262,8 +6262,8 @@ packages:
     resolution: {integrity: sha512-s7iGf5GaVMxEG0ENN9x+xTr7GFZCb1ZP/1uATUpCEK2X78nDB3RwbtFCo9pGAf9ru+VwoQ464DkaLEeRM08wJA==}
     engines: {node: '>=4'}
 
-  axios@1.18.1:
-    resolution: {integrity: sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==}
+  axios@1.20.0:
+    resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -7938,6 +7938,15 @@ packages:
 
   follow-redirects@1.16.0:
     resolution: {integrity: sha512-y5rN/uOsadFT/JfYwhxRS5R7Qce+g3zG97+JrtFZlC9klX/W5hD7iiLzScI4nZqUS7DNUdhPgw4xI8W2LuXlUw==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+
+  follow-redirects@1.16.2:
+    resolution: {integrity: sha512-/kVP2U8z596Ia0gwFrwyIeo74ta5aVmSeU1FfAUMAmcEP5EP7zydmag3SLiN64NaRKef3lxsq7i/g7ltJQDGow==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -14368,7 +14377,7 @@ snapshots:
     dependencies:
       archiver: 7.0.1
       arg: 5.0.2
-      axios: 1.18.1(supports-color@7.2.0)
+      axios: 1.20.0(supports-color@7.2.0)
       chalk: 4.1.2
       execa: 4.1.0
       form-data: 4.0.6
@@ -14860,7 +14869,7 @@ snapshots:
 
   '@firecms/schema_inference@3.3.0(vite@7.3.7(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
-      axios: 1.18.1(supports-color@7.2.0)
+      axios: 1.20.0(supports-color@7.2.0)
       vite-plugin-static-copy: 3.1.4(vite@7.3.7(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
     transitivePeerDependencies:
       - debug
@@ -18387,9 +18396,9 @@ snapshots:
 
   axe-core@4.12.1: {}
 
-  axios@1.18.1(supports-color@7.2.0):
+  axios@1.20.0(supports-color@7.2.0):
     dependencies:
-      follow-redirects: 1.16.0
+      follow-redirects: 1.16.2
       form-data: 4.0.6
       https-proxy-agent: 5.0.1(supports-color@7.2.0)
       proxy-from-env: 2.1.0
@@ -20634,6 +20643,8 @@ snapshots:
   fn.name@1.1.0: {}
 
   follow-redirects@1.16.0: {}
+
+  follow-redirects@1.16.2: {}
 
   fontace@0.4.1:
     dependencies:
@@ -23712,7 +23723,7 @@ snapshots:
       ansi-styles: 4.3.0
       argparse: 2.0.1
       asynckit: 0.4.0
-      axios: 1.18.1(supports-color@7.2.0)
+      axios: 1.20.0(supports-color@7.2.0)
       balanced-match: 4.0.3
       base64-js: 1.5.1
       bl: 4.1.0
@@ -26270,7 +26281,7 @@ snapshots:
   typesense@1.8.2(@babel/runtime@7.29.10):
     dependencies:
       '@babel/runtime': 7.29.10
-      axios: 1.18.1(supports-color@7.2.0)
+      axios: 1.20.0(supports-color@7.2.0)
       loglevel: 1.9.2
     transitivePeerDependencies:
       - debug
@@ -26279,7 +26290,7 @@ snapshots:
   typesense@2.1.0(@babel/runtime@7.29.10):
     dependencies:
       '@babel/runtime': 7.29.10
-      axios: 1.18.1(supports-color@7.2.0)
+      axios: 1.20.0(supports-color@7.2.0)
       loglevel: 1.9.2
       tslib: 2.8.1
     transitivePeerDependencies:
