@@ -9,6 +9,12 @@ authors: marian
 
 ![Dark mode](/img/mongo_header.png)
 
+> **Update:** MongoDB has since retired Atlas App Services and the Data API, which this
+> integration was built on. `@firecms/mongodb` is no longer maintained (its last release is
+> 3.2.0), and the links below point to the code and guide as they were in that release. To
+> connect FireCMS to MongoDB or any other database today, see
+> [Building a custom backend](/docs/self/controllers).
+
 
 ## Say Hi to MongoDB!
 
@@ -30,7 +36,7 @@ We implemented the necessary **utilities** to connect and consume Atlas MongoDB 
 
 So that means that you can use **all the features already available** in FireCMS. From the collection editor to the LLM based content generation, you can use all of them.
 
-As you may already know, MongoDB Atlas doesn't provide a Storage service, such as [AWS S3](https://aws.amazon.com/s3/) or [Firebase Storage](https://firebase.google.com/docs/storage). But no worry, you can fill the gap with FireCMS's extensibility. You're free to integrate any storage solution you prefer, take inspiration from our [Custom Storage Documentation](https://firecms.co/docs/pro/custom_storage) which details the interface and a sample for an AWS S3 integration.
+As you may already know, MongoDB Atlas doesn't provide a Storage service, such as [AWS S3](https://aws.amazon.com/s3/) or [Firebase Storage](https://firebase.google.com/docs/storage). But no worry, you can fill the gap with FireCMS's extensibility. You're free to integrate any storage solution you prefer, take inspiration from our [Custom Storage Documentation](/docs/self/custom_storage) which details the interface and a sample for an AWS S3 integration.
 
 
 ### Only MongoDB?
@@ -39,7 +45,7 @@ While this announcement focuses on MongoDB, it's crucial to remember that FireCM
 
 ### How to get started?
 
-We recommend you take a look ath the documentation regarding [FireCMS Controller](https://firecms.co/docs/pro/Controllers). We also dropped an example in our Github: [FireCMS MongoDB Example](https://github.com/firecmsco/firecms/blob/main/examples/example_pro/src/MongoDBApp/MongoDBApp.tsx).
+We recommend you take a look ath the documentation regarding [FireCMS Controller](/docs/self/controllers). We also dropped an example in our Github: [FireCMS MongoDB Example](https://github.com/firecmsco/firecms/blob/v3.2.0/examples/example_pro/src/MongoDBApp/MongoDBApp.tsx).
 
 But here are the steps if you want to jump on it:
  - Install the package `yarn add @firecms/mongodb` or `npm install @firecms/mongodb`
@@ -76,7 +82,7 @@ const mongoDataSourceDelegate = useMongoDBDelegate({
 ``` 
 
 And that's it. The rest of the job it's identical to any other FireCMS project.
-Check the complete instruction in the [FireCMS MongoDB Documentation](https://firecms.co/docs/pro/mongodb).
+Check the complete instruction in the [FireCMS MongoDB Documentation](https://github.com/firecmsco/firecms/blob/v3.2.0/website-astro/src/content/docs/docs/self/mongodb.mdx) (archived with FireCMS 3.2.0).
 
 
 ### What are you going to build?

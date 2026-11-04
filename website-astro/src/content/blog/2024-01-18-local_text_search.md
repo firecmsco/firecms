@@ -60,4 +60,4 @@ So, when your team is small, sometimes it's helpful to build and release fast. T
 development effort may satisfy a problem your customers are having.
 
 Anyway, if you need a hand setting up a project, you have any issue, or you need help building a feature, reach us out
-at hello@firecms.co.[2023-09-19-openai_code_migration.md](2023-09-19-openai_code_migration.md)
+at hello@firecms.co.
