@@ -7,7 +7,7 @@ Selbst-gehostetes FireCMS kann Firebase App Check bei jeder Anfrage erzwingen, d
 
 App Check ist ein Firebase-Dienst. Diese Seite beschreibt die Einbindung in FireCMS; was App Check leistet und welche Attestierungsanbieter es gibt, steht in [Firebases eigener App-Check-Dokumentation](https://firebase.google.com/docs/app-check).
 
-:::important
+:::caution
 Denken Sie daran, die Domain, auf der Sie Ihre Anwendung deployen, zur Liste der erlaubten Domains in der AppCheck-Anbieter-Konfiguration hinzuzufügen.
 :::
 
@@ -63,7 +63,7 @@ Sie können einen der folgenden Anbieter verwenden:
 Um den ReCaptchaEnterpriseProvider einzurichten, müssen Sie einen neuen reCAPTCHA Enterprise-Site-Schlüssel erstellen.
 Folgen Sie den Anweisungen in der [Firebase-Dokumentation](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider).
 
-:::important
+:::caution
 Stellen Sie sicher, dass Sie die Domain `app.firecms.co` zur Liste der erlaubten Domains in der reCAPTCHA Enterprise-Konsole hinzugefügt haben.
 :::
 

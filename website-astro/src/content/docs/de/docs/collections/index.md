@@ -27,7 +27,7 @@ Sie können Kollektionen auf zwei Arten definieren:
 
 Sie können Ihre Kollektionen **in der UI oder mit Code** erstellen. Sie können auch beide Ansätze mischen, aber beachten Sie, dass Kollektionen, die in der UI definiert sind, Vorrang haben.
 
-:::important
+:::note
 Sie können dieselbe Kollektion auf beide Arten definieren. In diesem Fall hat die in der UI definierte Kollektion Vorrang.
 
 Es wird ein Deep-Merge durchgeführt, sodass Sie einige Eigenschaften im Code definieren und sie in der UI überschreiben können.

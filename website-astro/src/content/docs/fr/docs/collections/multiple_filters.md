@@ -7,7 +7,7 @@ sidebar_label: Filtres multiples
 Firestore est un peu limité lors du filtrage et du tri, limité à une seule clause `where` par requête par défaut.
 Cela signifie que le filtrage par plusieurs champs n'est pas possible nativement. Il s'agit d'une limitation de Firestore, pas de FireCMS.
 
-:::important
+:::note
 Depuis FireCMS 3.0, si vous ne définissez pas les indexes manuellement, FireCMS tentera quand même d'exécuter votre requête. En cas d'échec,
 il affichera un lien vers la console Firestore pour créer les indexes requis.
 :::

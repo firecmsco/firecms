@@ -625,7 +625,7 @@ app.put("/api/data/:path/:id", authenticate, requirePermission("edit"), handler)
 app.delete("/api/data/:path/:id", authenticate, requirePermission("delete"), handler);
 ```
 
-:::important
+:::caution
 Se um usuário pode modificar seu próprio papel no banco de dados (ex. definir `role: "admin"` no seu próprio documento de usuário), seu sistema de permissões está comprometido. **Sempre restrinja as escritas às coleções de usuário/papéis apenas a operações de administrador.**
 :::
 

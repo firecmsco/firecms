@@ -27,7 +27,7 @@ Você pode definir coleções de duas formas:
 
 Você pode criar suas coleções **na UI ou usando código**. Você também pode misturar as duas abordagens, mas lembre-se de que as coleções definidas na UI terão precedência. Por exemplo, você pode ter uma propriedade enum com 2 valores definidos no código e um valor extra definido na UI. Quando mesclados, o enum resultante terá 3 valores.
 
-:::important
+:::note
 Você pode ter a mesma coleção definida de ambas as formas. Nesse caso, a coleção definida na UI terá precedência.
 
 Uma mesclagem profunda é realizada, portanto você pode definir algumas propriedades no código e sobrescrevê-las na UI. Por exemplo, você pode definir uma propriedade de string enum e os valores serão mesclados de ambas as definições.

@@ -29,7 +29,7 @@ You can create your collections **in the UI or using code**. You can also mix bo
 collections defined in the UI will take precedence. For example, you might have an enum property with 2 values defined
 in code, and one extra value defined in the UI. When merged, the resulting enum will have 3 values.
 
-:::important
+:::note
 You can have the same collection defined in both ways. In that case, the collection defined in the UI will
 take precedence.
 

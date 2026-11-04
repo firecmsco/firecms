@@ -8,7 +8,7 @@ Firestore ist etwas eingeschränkt beim Filtern und Sortieren – standardmäßi
 Das bedeutet, dass das Filtern nach mehreren Feldern nicht von Haus aus möglich ist. Dies ist eine Einschränkung von Firestore, nicht von
 FireCMS.
 
-:::important
+:::note
 Seit FireCMS 3.0 versucht FireCMS, Ihre Abfrage trotzdem auszuführen, wenn Sie keine Indexes manuell definieren. Wenn sie fehlschlägt,
 wird ein Link zur Firestore-Konsole angezeigt, um die erforderlichen Indexes zu erstellen.
 :::

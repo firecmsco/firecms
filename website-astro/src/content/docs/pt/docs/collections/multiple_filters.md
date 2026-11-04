@@ -6,7 +6,7 @@ sidebar_label: Filtros múltiplos
 
 O Firestore tem algumas limitações com filtragem e ordenação, limitado a uma única cláusula `where` por consulta por padrão. Isso significa que filtrar por múltiplos campos não é possível nativamente. Esta é uma limitação do Firestore, não do FireCMS.
 
-:::important
+:::note
 A partir do FireCMS 3.0, se você não definir os índices manualmente, o FireCMS tentará executar sua consulta mesmo assim; se falhar, mostrará um link para o console do Firestore para criar os índices necessários.
 :::
 

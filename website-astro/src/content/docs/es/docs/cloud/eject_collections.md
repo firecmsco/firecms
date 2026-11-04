@@ -29,7 +29,7 @@ A continuación, pega el código copiado en tu editor de código preferido.
 
 ![codigo_editar_coleccion](/img/docs/collections/eject_collections_code.png)
 
-:::important
+:::note
 Esta función está disponible en todos los planes, incluidas las suscripciones **gratuitas** y plus. Creemos en el poder del código y
 queremos hacerlo accesible a todos.
 :::

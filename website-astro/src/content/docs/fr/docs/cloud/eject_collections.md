@@ -29,7 +29,7 @@ Ensuite, collez le code copié dans votre éditeur de code préféré.
 
 ![edit_collection_code_button](/img/docs/collections/eject_collections_code.png)
 
-:::important
+:::note
 Cette fonctionnalité est disponible sur tous les plans, y compris les abonnements gratuits et plus. Nous croyons au pouvoir du code et
 voulons le rendre accessible à tous.
 :::

@@ -8,7 +8,7 @@ Firestore is a bit limited when filtering and sorting. limited to a single `wher
 This means that filtering by multiple fields is not possible out of the box. This is a limitation of Firestore, not of
 FireCMS.
 
-:::important
+:::note
 Since FireCMS 3.0, if you don't define indexes manually, FireCMS will attempt to run your query anyway, if it fails
 it will show a link to the Firestore console to create the required indexes.
 :::

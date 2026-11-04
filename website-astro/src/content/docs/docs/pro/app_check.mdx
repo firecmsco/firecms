@@ -7,7 +7,7 @@ Self-hosted FireCMS can enforce Firebase App Check on every request your admin p
 
 App Check itself is a Firebase service. This page covers wiring it into FireCMS; for what App Check does and which attestation providers exist, see [Firebase's own App Check documentation](https://firebase.google.com/docs/app-check).
 
-:::important
+:::caution
 Remember to add the domain where you will be deploying your app to the list of allowed domains in AppCheck provider
 configuration.
 :::
@@ -64,7 +64,7 @@ You can use one of the following providers:
 In order to set up the ReCaptchaEnterpriseProvider, you need to create a new reCAPTCHA Enterprise site key.
 Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider).
 
-:::important
+:::caution
 Make sure you have added the domain `app.firecms.co` to the list of allowed domains in the reCAPTCHA Enterprise console.
 :::
 

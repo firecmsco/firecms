@@ -29,7 +29,7 @@ Puedes crear tus colecciones **en la interfaz de usuario (UI) o usando código**
 las colecciones definidas en la interfaz de usuario tendrán prioridad. Por ejemplo, podrías tener una propiedad `enum` con 2 valores definidos
 en el código y un valor adicional definido en la interfaz de usuario. Cuando se combinan, el `enum` resultante tendrá 3 valores.
 
-:::important
+:::note
 Puedes tener la misma colección definida de ambas formas. En ese caso, la colección definida en la interfaz de usuario
 tendrá prioridad.
 

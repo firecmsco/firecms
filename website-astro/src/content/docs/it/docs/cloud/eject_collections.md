@@ -21,7 +21,7 @@ Poi, incolla il codice copiato nel tuo editor di codice preferito.
 
 ![edit_collection_code_button](/img/docs/collections/eject_collections_code.png)
 
-:::important
+:::note
 Questa funzionalità è disponibile in tutti i piani, incluse le sottoscrizioni gratuita e plus. Crediamo nel potere del codice e vogliamo renderlo accessibile a tutti.
 :::
 

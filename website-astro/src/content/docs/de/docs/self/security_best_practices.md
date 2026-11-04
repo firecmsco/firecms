@@ -624,7 +624,7 @@ app.put("/api/data/:path/:id", authenticate, requirePermission("edit"), handler)
 app.delete("/api/data/:path/:id", authenticate, requirePermission("delete"), handler);
 ```
 
-:::important
+:::caution
 Wenn ein Benutzer seine eigene Rolle in der Datenbank ändern kann (z.B. `role: "admin"` auf seinem eigenen Benutzerdokument setzen), ist Ihr Berechtigungssystem kompromittiert. **Beschränken Sie Schreibvorgänge auf Benutzer-/Rollensammlungen immer auf Administratoroperationen.**
 :::
 

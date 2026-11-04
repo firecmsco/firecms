@@ -6,7 +6,7 @@ sidebar_label: Filtri multipli
 
 Firestore ha alcune limitazioni con il filtraggio e l'ordinamento, limitato a una singola clausola `where` per query per impostazione predefinita. Questo significa che filtrare per più campi non è possibile di base. Questa è una limitazione di Firestore, non di FireCMS.
 
-:::important
+:::note
 Da FireCMS 3.0, se non definisci gli indici manualmente, FireCMS tenterà comunque di eseguire la tua query; se fallisce, mostrerà un link alla console Firestore per creare gli indici richiesti.
 :::
 

@@ -123,7 +123,7 @@ FireCMS uses **react-router**, so we need to configure Next.js to delegate all t
 In our `app` folder, we create a folder called `cms` and inside it another one called `[[...path]]`. This will match any route starting with `/cms`.
 
 Then create the file `cms/[[...path]]/page.tsx` with the following content:
-:::important
+:::caution
 If you are not running FireCMS in the root path of your app, you need to set the `basePath` prop to the path where you are running it. In this case, we are running it in `/cms`.
 :::
 

@@ -27,7 +27,7 @@ Puoi definire le collezioni in due modi:
 
 Puoi creare le tue collezioni **nell'UI o usando il codice**. Puoi anche mescolare entrambi gli approcci, ma tieni presente che le collezioni definite nell'UI avranno la precedenza. Ad esempio, potresti avere una proprietà enum con 2 valori definiti nel codice e un valore extra definito nell'UI. Quando fusi, l'enum risultante avrà 3 valori.
 
-:::important
+:::note
 Puoi avere la stessa collezione definita in entrambi i modi. In tal caso, la collezione definita nell'UI avrà la precedenza.
 
 Viene eseguita una fusione profonda, quindi puoi definire alcune proprietà nel codice e sovrascriverle nell'UI. Ad esempio, puoi definire una proprietà stringa enum e i valori verranno fusi da entrambe le definizioni.

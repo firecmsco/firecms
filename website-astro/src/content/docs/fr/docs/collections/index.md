@@ -29,7 +29,7 @@ Vous pouvez créer vos collections **dans l'interface ou en utilisant du code**.
 les collections définies dans l'interface auront la priorité. Par exemple, vous pourriez avoir une propriété enum avec 2 valeurs définies
 en code, et une valeur supplémentaire définie dans l'interface. Lors de la fusion, l'enum résultant aura 3 valeurs.
 
-:::important
+:::note
 Vous pouvez avoir la même collection définie des deux façons. Dans ce cas, la collection définie dans l'interface
 aura la priorité.
 
