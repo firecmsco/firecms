@@ -11,6 +11,7 @@ import ora from "ora";
 import chalk from "chalk";
 import { createWriteStream } from "fs";
 import { authCommand, describeRequestError, isLoginRejected } from "../util/request_error";
+import { checkBuild } from "../util/bundle_check";
 
 export async function deploy(projectId: string, env: "prod" | "dev", debug: boolean) {
     const currentUser = await getCurrentUser(env, debug);
@@ -45,12 +46,19 @@ export async function deploy(projectId: string, env: "prod" | "dev", debug: bool
 
 export const BUILD_DIR = "./dist/assets";
 
-export async function createZipFromBuild(): Promise<string> {
+export async function createZipFromBuild(buildDir: string = path.resolve(BUILD_DIR)): Promise<string> {
     // `archive.directory` on a missing folder adds nothing and raises nothing, so a deploy
     // run before the build uploaded an empty zip — over whatever was already deployed.
-    const buildDir = path.resolve(BUILD_DIR);
     if (!fs.existsSync(buildDir) || fs.readdirSync(buildDir).length === 0) {
         throw new Error(`Nothing to deploy: ${BUILD_DIR} is missing or empty. Run \`npm run build\` first.`);
+    }
+    // A build that cannot load still uploads cleanly, and replaces whatever was deployed.
+    const check = checkBuild(buildDir);
+    if (check.error) {
+        throw new Error(`${check.error}\nNothing was uploaded.`);
+    }
+    if (check.warning) {
+        console.warn("%s %s", chalk.yellow.bold("WARNING"), check.warning);
     }
     return new Promise((resolve, reject) => {
         const tmpdir = os.tmpdir();
@@ -62,7 +70,7 @@ export async function createZipFromBuild(): Promise<string> {
         archive.on("error", (err) => reject(err));
         archive.pipe(output);
 
-        archive.directory("./dist/assets", false);
+        archive.directory(buildDir, false);
         archive.finalize();
     })
 }

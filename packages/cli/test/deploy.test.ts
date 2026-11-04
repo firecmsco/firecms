@@ -27,7 +27,7 @@ jest.mock("../src/commands/auth", () => ({
 
 import axios from "axios";
 import { refreshCredentials } from "../src/commands/auth";
-import { uploadZip } from "../src/commands/deploy";
+import { createZipFromBuild, uploadZip } from "../src/commands/deploy";
 
 const post = axios.post as jest.MockedFunction<typeof axios.post>;
 const refresh = refreshCredentials as jest.MockedFunction<typeof refreshCredentials>;
@@ -132,6 +132,28 @@ describe("uploadZip", () => {
         expect(post.mock.calls[0][0]).toEqual("https://api.firecms.co/projects/my-project/upload_config");
         expect(printed()).toContain("Successfully uploaded new build");
         expect(process.exitCode).toBeUndefined();
+    });
+
+});
+
+describe("createZipFromBuild", () => {
+
+    let assets: string;
+
+    beforeEach(() => {
+        assets = fs.mkdtempSync(path.join(os.tmpdir(), "firecms_deploy_build_"));
+    });
+
+    afterEach(() => {
+        fs.rmSync(assets, { recursive: true, force: true });
+    });
+
+    it("refuses to package a build that imports a shared chunk it never produced", async () => {
+        // What a `firebase/functions` import compiles to with the template's `generate: false`.
+        fs.writeFileSync(path.join(assets, "remoteEntry.js"), `__federation_import("./__federation_expose_Config-C3oPbsyZ.js")`);
+        fs.writeFileSync(path.join(assets, "__federation_expose_Config-C3oPbsyZ.js"), `import { getFunctions } from "./__federation_shared_@firebase/functions-CxA6bbek.js";`);
+
+        await expect(createZipFromBuild(assets)).rejects.toThrow(/won't load in FireCMS Cloud[\s\S]*"firebase\/functions"  →  import … from "@firebase\/functions"[\s\S]*Nothing was uploaded\.$/);
     });
 
 });
