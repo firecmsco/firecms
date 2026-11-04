@@ -3,15 +3,15 @@ slug: "docs/api/functions/mergeEntityActions"
 title: "mergeEntityActions"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / mergeEntityActions
+[@firecms/core](/docs/api/README) / mergeEntityActions
 
 # Function: mergeEntityActions()
 
-> **mergeEntityActions**(`currentActions`, `newActions`): [`EntityAction`](../type-aliases/EntityAction)[]
+> **mergeEntityActions**(`currentActions`, `newActions`): [`EntityAction`](/docs/api/type-aliases/EntityAction)[]
 
 Defined in: [util/entity\_actions.ts:5](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/entity_actions.ts)
 
@@ -19,12 +19,12 @@ Defined in: [util/entity\_actions.ts:5](https://github.com/firecmsco/firecms/blo
 
 ### currentActions
 
-[`EntityAction`](../type-aliases/EntityAction)[]
+[`EntityAction`](/docs/api/type-aliases/EntityAction)[]
 
 ### newActions
 
-[`EntityAction`](../type-aliases/EntityAction)[]
+[`EntityAction`](/docs/api/type-aliases/EntityAction)[]
 
 ## Returns
 
-[`EntityAction`](../type-aliases/EntityAction)[]
+[`EntityAction`](/docs/api/type-aliases/EntityAction)[]

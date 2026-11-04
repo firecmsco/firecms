@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/SelectedCellProps"
 title: "SelectedCellProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SelectedCellProps
+[@firecms/core](/docs/api/README) / SelectedCellProps
 
 # Type Alias: SelectedCellProps\<M\>
 

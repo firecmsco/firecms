@@ -1,6 +1,6 @@
 # Repeat
 
-![Field](/img/fields/Repeat.png)
+![Field](https://firecms.co/img/fields/Repeat.png)
 
 You can use a repeat field when you want to save multiple values in a property.
 For example, you may want to save multiple pieces of text, like tags.
@@ -29,9 +29,9 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](https://firecms.co/docs/config/array).
+The data type is [`array`](https://firecms.co/docs/properties/config/array).
 
 Internally the component used
-is [`RepeatFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/RepeatFieldBinding).
+is [`RepeatFieldBinding`](https://firecms.co/docs/api/functions/RepeatFieldBinding).
 
 

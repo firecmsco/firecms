@@ -146,12 +146,12 @@ When set to `true`, displays the child properties directly without being wrapped
 ---
 
 Based on your configuration the form field widgets that are created are:
-- [`RepeatFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/RepeatFieldBinding) generic array field that allows reordering and renders
+- [`RepeatFieldBinding`](https://firecms.co/docs/api/functions/RepeatFieldBinding) generic array field that allows reordering and renders
   the child property as nodes.
-- [`StorageUploadFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/StorageUploadFieldBinding) if the `of` property is a `string` with storage configuration.
-- [`ArrayOfReferencesFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/ArrayOfReferencesFieldBinding) if the `of` property is a `reference`
-- [`BlockFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/BlockFieldBinding) if the `oneOf` property is specified
+- [`StorageUploadFieldBinding`](https://firecms.co/docs/api/functions/StorageUploadFieldBinding) if the `of` property is a `string` with storage configuration.
+- [`ArrayOfReferencesFieldBinding`](https://firecms.co/docs/api/functions/ArrayOfReferencesFieldBinding) if the `of` property is a `reference`
+- [`BlockFieldBinding`](https://firecms.co/docs/api/functions/BlockFieldBinding) if the `oneOf` property is specified
 
 Links:
-- [API](https://firecms.co/docs/https://firecms.co/docs/api/interfaces/ArrayProperty)
+- [API](https://firecms.co/docs/api/interfaces/ArrayProperty)
 

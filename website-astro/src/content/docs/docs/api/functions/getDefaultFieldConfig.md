@@ -3,15 +3,15 @@ slug: "docs/api/functions/getDefaultFieldConfig"
 title: "getDefaultFieldConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getDefaultFieldConfig
+[@firecms/core](/docs/api/README) / getDefaultFieldConfig
 
 # Function: getDefaultFieldConfig()
 
-> **getDefaultFieldConfig**(`property`): [`PropertyConfig`](../type-aliases/PropertyConfig) \| `undefined`
+> **getDefaultFieldConfig**(`property`): [`PropertyConfig`](/docs/api/type-aliases/PropertyConfig) \| `undefined`
 
 Defined in: [core/field\_configs.tsx:340](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/core/field_configs.tsx)
 
@@ -19,8 +19,8 @@ Defined in: [core/field\_configs.tsx:340](https://github.com/firecmsco/firecms/b
 
 ### property
 
-[`ArrayProperty`](../interfaces/ArrayProperty)\<`any`, `any`\> | [`MapProperty`](../interfaces/MapProperty)\<`any`\> | `AnyProperty` | [`ResolvedProperty`](../type-aliases/ResolvedProperty)
+[`ArrayProperty`](/docs/api/interfaces/ArrayProperty)\<`any`, `any`\> | [`MapProperty`](/docs/api/interfaces/MapProperty)\<`any`\> | `AnyProperty` | [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)
 
 ## Returns
 
-[`PropertyConfig`](../type-aliases/PropertyConfig) \| `undefined`
+[`PropertyConfig`](/docs/api/type-aliases/PropertyConfig) \| `undefined`

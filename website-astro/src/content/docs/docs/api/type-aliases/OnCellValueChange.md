@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/OnCellValueChange"
 title: "OnCellValueChange"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / OnCellValueChange
+[@firecms/core](/docs/api/README) / OnCellValueChange
 
 # Type Alias: OnCellValueChange()\<T, M\>
 
@@ -31,7 +31,7 @@ Callback when a cell has changed in a table
 
 ### params
 
-[`OnCellValueChangeParams`](../interfaces/OnCellValueChangeParams)\<`T`, `M`\>
+[`OnCellValueChangeParams`](/docs/api/interfaces/OnCellValueChangeParams)\<`T`, `M`\>
 
 ## Returns
 

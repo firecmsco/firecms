@@ -3,11 +3,11 @@ slug: "docs/api/functions/ReferenceFieldBinding"
 title: "ReferenceFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ReferenceFieldBinding
+[@firecms/core](/docs/api/README) / ReferenceFieldBinding
 
 # Function: ReferenceFieldBinding()
 
@@ -24,7 +24,7 @@ and tables to the specified properties.
 
 ### props
 
-[`FieldProps`](../interfaces/FieldProps)
+[`FieldProps`](/docs/api/interfaces/FieldProps)
 
 ## Returns
 

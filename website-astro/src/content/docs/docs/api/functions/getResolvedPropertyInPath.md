@@ -3,15 +3,15 @@ slug: "docs/api/functions/getResolvedPropertyInPath"
 title: "getResolvedPropertyInPath"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getResolvedPropertyInPath
+[@firecms/core](/docs/api/README) / getResolvedPropertyInPath
 
 # Function: getResolvedPropertyInPath()
 
-> **getResolvedPropertyInPath**(`properties`, `path`): [`ResolvedProperty`](../type-aliases/ResolvedProperty) \| `undefined`
+> **getResolvedPropertyInPath**(`properties`, `path`): [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty) \| `undefined`
 
 Defined in: [util/property\_utils.tsx:93](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/property_utils.tsx)
 
@@ -19,7 +19,7 @@ Defined in: [util/property\_utils.tsx:93](https://github.com/firecmsco/firecms/b
 
 ### properties
 
-`Record`\<`string`, [`ResolvedProperty`](../type-aliases/ResolvedProperty)\>
+`Record`\<`string`, [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\>
 
 ### path
 
@@ -27,4 +27,4 @@ Defined in: [util/property\_utils.tsx:93](https://github.com/firecmsco/firecms/b
 
 ## Returns
 
-[`ResolvedProperty`](../type-aliases/ResolvedProperty) \| `undefined`
+[`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty) \| `undefined`

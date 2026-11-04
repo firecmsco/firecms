@@ -3,11 +3,11 @@ slug: "docs/api/functions/RepeatFieldBinding"
 title: "RepeatFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / RepeatFieldBinding
+[@firecms/core](/docs/api/README) / RepeatFieldBinding
 
 # Function: RepeatFieldBinding()
 
@@ -31,7 +31,7 @@ and tables to the specified properties.
 
 ### \_\_namedParameters
 
-[`FieldProps`](../interfaces/FieldProps)\<`T`\>
+[`FieldProps`](/docs/api/interfaces/FieldProps)\<`T`\>
 
 ## Returns
 

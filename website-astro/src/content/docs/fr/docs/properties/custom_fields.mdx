@@ -30,7 +30,7 @@ Utilisez un champ personnalisé lorsque vous avez besoin d'un (ou plusieurs) des
 - Interface composite combinant plusieurs propriétés (ex. sélecteur de carte lat/lng écrivant dans deux champs numériques)
 - Intégrations (téléversement vers une API externe, récupération de suggestions, géocodage, etc.)
 
-Si vous avez seulement besoin de validation ou de transformation simple, préférez d'abord les options `validation` au niveau de la propriété pour garder les choses simples. Si vous avez besoin d'un comportement dynamique dépendant d'autres valeurs, envisagez d'utiliser les [champs conditionnels](./conditional_fields.md) à la place.
+Si vous avez seulement besoin de validation ou de transformation simple, préférez d'abord les options `validation` au niveau de la propriété pour garder les choses simples. Si vous avez besoin d'un comportement dynamique dépendant d'autres valeurs, envisagez d'utiliser les [champs conditionnels](/fr/docs/properties/conditional_fields) à la place.
 
 
 ## Exemple de champ personnalisé
@@ -113,7 +113,7 @@ Bonnes pratiques recommandées :
 - Afficher le libellé et l'erreur (utilisez votre propre UI ou `<FieldHelperText>` / les composants intégrés)
 - Éviter les effets de bord lourds à chaque frappe (déferer les appels réseau)
 
-Interface complète : [`FieldProps`](../api/interfaces/FieldProps) (inclut des commentaires détaillés).
+Interface complète : [`FieldProps`](/fr/docs/api/interfaces/FieldProps) (inclut des commentaires détaillés).
 
 ## Passage de props personnalisées
 Fournissez un objet `customProps` dans la définition de la propriété. L'objet est fortement typé via le second générique de `FieldProps<T, CustomProps>`.
@@ -220,7 +220,7 @@ function GeoPointField({ context }: FieldProps<any>) {
 - **Besoin du mode lecture seule** : Respectez `disabled` des props ou `context.disabled`.
 
 ## Prochaines étapes
-- Explorer d'autres personnalisations : [Aperçus personnalisés](./custom_previews.md)
+- Explorer d'autres personnalisations : [Aperçus personnalisés](/fr/docs/properties/custom_previews)
 - Réutiliser la logique à travers de nombreuses propriétés : créez un composant de champ partagé et passez différents `customProps`.
 
 En exploitant les champs personnalisés, vous pouvez créer des expériences de création riches étroitement alignées sur le domaine de votre produit tout en gardant la validation, l'état et la persistance centralisés dans FireCMS.

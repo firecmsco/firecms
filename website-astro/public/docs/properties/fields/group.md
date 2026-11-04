@@ -1,6 +1,6 @@
 # Group
 
-![Field](/img/fields/Group.png)
+![Field](https://firecms.co/img/fields/Group.png)
 
 Use this field to group other groups into a single one, represented by an
 expandable panel. This is useful for bundling together data into logical fields,
@@ -28,9 +28,9 @@ buildProperty({
 });
 ```
 
-The data type is [`map`](https://firecms.co/docs/config/map).
+The data type is [`map`](https://firecms.co/docs/properties/config/map).
 
 Internally the component used
-is [`MapFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/MapFieldBinding).
+is [`MapFieldBinding`](https://firecms.co/docs/api/functions/MapFieldBinding).
 
 

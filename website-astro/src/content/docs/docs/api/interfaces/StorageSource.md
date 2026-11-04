@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/StorageSource"
 title: "StorageSource"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / StorageSource
+[@firecms/core](/docs/api/README) / StorageSource
 
 # Interface: StorageSource
 
@@ -41,7 +41,7 @@ Delete a file.
 
 ### getDownloadURL()
 
-> **getDownloadURL**: (`pathOrUrl`, `bucket?`) => `Promise`\<[`DownloadConfig`](DownloadConfig)\>
+> **getDownloadURL**: (`pathOrUrl`, `bucket?`) => `Promise`\<[`DownloadConfig`](/docs/api/interfaces/DownloadConfig)\>
 
 Defined in: [types/storage.ts:96](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
 
@@ -59,7 +59,7 @@ Convert a storage path or URL into a download configuration
 
 #### Returns
 
-`Promise`\<[`DownloadConfig`](DownloadConfig)\>
+`Promise`\<[`DownloadConfig`](/docs/api/interfaces/DownloadConfig)\>
 
 ***
 
@@ -90,7 +90,7 @@ It returns null if the file does not exist.
 
 ### list()
 
-> **list**: (`path`, `options?`) => `Promise`\<[`StorageListResult`](StorageListResult)\>
+> **list**: (`path`, `options?`) => `Promise`\<[`StorageListResult`](/docs/api/interfaces/StorageListResult)\>
 
 Defined in: [types/storage.ts:118](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
 
@@ -118,13 +118,13 @@ List the contents of a path.
 
 #### Returns
 
-`Promise`\<[`StorageListResult`](StorageListResult)\>
+`Promise`\<[`StorageListResult`](/docs/api/interfaces/StorageListResult)\>
 
 ***
 
 ### uploadFile()
 
-> **uploadFile**: (`file`) => `Promise`\<[`UploadFileResult`](UploadFileResult)\>
+> **uploadFile**: (`file`) => `Promise`\<[`UploadFileResult`](/docs/api/interfaces/UploadFileResult)\>
 
 Defined in: [types/storage.ts:83](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
 
@@ -134,8 +134,8 @@ Upload a file, specifying a name and a path
 
 ##### file
 
-[`UploadFileProps`](UploadFileProps)
+[`UploadFileProps`](/docs/api/interfaces/UploadFileProps)
 
 #### Returns
 
-`Promise`\<[`UploadFileResult`](UploadFileResult)\>
+`Promise`\<[`UploadFileResult`](/docs/api/interfaces/UploadFileResult)\>

@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/OnCellValueChangeParams"
 title: "OnCellValueChangeParams"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / OnCellValueChangeParams
+[@firecms/core](/docs/api/README) / OnCellValueChangeParams
 
 # Interface: OnCellValueChangeParams\<T, D\>
 

@@ -22,8 +22,8 @@ buildProperty({
 });
 ```
 
-The data type is [`map`](../config/map).
+The data type is [`map`](/docs/properties/config/map).
 
 Internally the component used
-is [`KeyValueFieldBinding`](../../api/functions/KeyValueFieldBinding).
+is [`KeyValueFieldBinding`](/docs/api/functions/KeyValueFieldBinding).
 

@@ -4,7 +4,7 @@
 Get a fully fledged CMS with an e-commerce/blog template ready to be adapted to your logic
 :::
 
-![next_js_frontend.png](/img/next_js_frontend.png)
+![next_js_frontend.png](https://firecms.co/img/next_js_frontend.png)
 
 You can check a **demo** of this template:
 - [**Admin panel**](https://next.firecms.co/cms)
@@ -119,7 +119,7 @@ FireCMS uses **react-router**, so we need to configure Next.js to delegate all t
 In our `app` folder, we create a folder called `cms` and inside it another one called `[[...path]]`. This will match any route starting with `/cms`.
 
 Then create the file `cms/[[...path]]/page.tsx` with the following content:
-:::important
+:::caution
 If you are not running FireCMS in the root path of your app, you need to set the `basePath` prop to the path where you are running it. In this case, we are running it in `/cms`.
 :::
 

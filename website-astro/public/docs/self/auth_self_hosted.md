@@ -14,7 +14,7 @@ Before implementing custom authentication, we strongly recommend considering **F
 
 These solutions provide a complete authentication and authorization system out of the box, saving you significant development time and ensuring security best practices.
 
-[Learn more about User Management in FireCMS Pro →](/docs/pro/user_management)
+[Learn more about User Management in FireCMS Pro →](https://firecms.co/docs/pro/user_management)
 
 [Try FireCMS Cloud →](https://app.firecms.co)
 

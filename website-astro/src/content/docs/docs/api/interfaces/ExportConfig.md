@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/ExportConfig"
 title: "ExportConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ExportConfig
+[@firecms/core](/docs/api/README) / ExportConfig
 
 # Interface: ExportConfig\<USER\>
 
@@ -20,12 +20,12 @@ exports
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
 ### additionalFields
 
-> **additionalFields**: [`ExportMappingFunction`](ExportMappingFunction)\<`USER`\>[]
+> **additionalFields**: [`ExportMappingFunction`](/docs/api/interfaces/ExportMappingFunction)\<`USER`\>[]
 
 Defined in: [types/export\_import.ts:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/export_import.ts)

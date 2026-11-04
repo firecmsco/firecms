@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/ReferenceProperty"
 title: "ReferenceProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ReferenceProperty
+[@firecms/core](/docs/api/README) / ReferenceProperty
 
 # Interface: ReferenceProperty
 
@@ -15,7 +15,7 @@ Defined in: [types/properties.ts:639](https://github.com/firecmsco/firecms/blob/
 
 ## Extends
 
-- [`BaseProperty`](BaseProperty)\<[`EntityReference`](../classes/EntityReference)\>
+- [`BaseProperty`](/docs/api/interfaces/BaseProperty)\<[`EntityReference`](/docs/api/classes/EntityReference)\>
 
 ## Properties
 
@@ -30,7 +30,7 @@ the width is inferred based on the other configurations
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`columnWidth`](BaseProperty.md#columnwidth)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`columnWidth`](/docs/api/interfaces/BaseProperty#columnwidth)
 
 ***
 
@@ -45,7 +45,7 @@ or in `preview`.
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`customProps`](BaseProperty.md#customprops-1)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`customProps`](/docs/api/interfaces/BaseProperty#customprops-1)
 
 ***
 
@@ -59,13 +59,13 @@ Datatype of the property
 
 #### Overrides
 
-[`BaseProperty`](BaseProperty).[`dataType`](BaseProperty.md#datatype)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`dataType`](/docs/api/interfaces/BaseProperty#datatype)
 
 ***
 
 ### defaultValue?
 
-> `optional` **defaultValue**: [`EntityReference`](../classes/EntityReference) \| `null`
+> `optional` **defaultValue**: [`EntityReference`](/docs/api/classes/EntityReference) \| `null`
 
 Defined in: [types/properties.ts:153](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 
@@ -73,7 +73,7 @@ This value will be set by default for new entities.
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`defaultValue`](BaseProperty.md#defaultvalue)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`defaultValue`](/docs/api/interfaces/BaseProperty#defaultvalue)
 
 ***
 
@@ -87,13 +87,13 @@ Property description, always displayed under the field
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`description`](BaseProperty.md#description)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`description`](/docs/api/interfaces/BaseProperty#description)
 
 ***
 
 ### disabled?
 
-> `optional` **disabled**: `boolean` \| [`PropertyDisabledConfig`](PropertyDisabledConfig)
+> `optional` **disabled**: `boolean` \| [`PropertyDisabledConfig`](/docs/api/interfaces/PropertyDisabledConfig)
 
 Defined in: [types/properties.ts:121](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 
@@ -105,7 +105,7 @@ disabled or hide the field completely)
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`disabled`](BaseProperty.md#disabled)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`disabled`](/docs/api/interfaces/BaseProperty#disabled)
 
 ***
 
@@ -120,13 +120,13 @@ save the new config. The saved config will then become the source of truth.
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`editable`](BaseProperty.md#editable)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`editable`](/docs/api/interfaces/BaseProperty#editable)
 
 ***
 
 ### Field?
 
-> `optional` **Field**: `ComponentType`\<[`FieldProps`](FieldProps)\<[`EntityReference`](../classes/EntityReference), `any`, `any`\>\>
+> `optional` **Field**: `ComponentType`\<[`FieldProps`](/docs/api/interfaces/FieldProps)\<[`EntityReference`](/docs/api/classes/EntityReference), `any`, `any`\>\>
 
 Defined in: [types/properties.ts:135](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 
@@ -138,13 +138,13 @@ in the component.
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`Field`](BaseProperty.md#field)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`Field`](/docs/api/interfaces/BaseProperty#field)
 
 ***
 
 ### forceFilter?
 
-> `optional` **forceFilter**: `Partial`\<`Record`\<`string`, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
+> `optional` **forceFilter**: `Partial`\<`Record`\<`string`, \[[`WhereFilterOp`](/docs/api/type-aliases/WhereFilterOp), `any`\]\>\>
 
 Defined in: [types/properties.ts:659](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 
@@ -163,7 +163,7 @@ Do not show this property in the collection view
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`hideFromCollection`](BaseProperty.md#hidefromcollection)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`hideFromCollection`](/docs/api/interfaces/BaseProperty#hidefromcollection)
 
 ***
 
@@ -197,7 +197,7 @@ Longer description of a field, displayed under a popover
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`longDescription`](BaseProperty.md#longdescription)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`longDescription`](/docs/api/interfaces/BaseProperty#longdescription)
 
 ***
 
@@ -211,7 +211,7 @@ Property name (e.g. Product)
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`name`](BaseProperty.md#name)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`name`](/docs/api/interfaces/BaseProperty#name)
 
 ***
 
@@ -234,7 +234,7 @@ Note that you can also use a collection id.
 
 ### Preview?
 
-> `optional` **Preview**: `ComponentType`\<[`PropertyPreviewProps`](PropertyPreviewProps)\<[`EntityReference`](../classes/EntityReference), `any`\>\>
+> `optional` **Preview**: `ComponentType`\<[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<[`EntityReference`](/docs/api/classes/EntityReference), `any`\>\>
 
 Defined in: [types/properties.ts:142](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 
@@ -244,7 +244,7 @@ in the component.
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`Preview`](BaseProperty.md#preview)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`Preview`](/docs/api/interfaces/BaseProperty#preview)
 
 ***
 
@@ -273,7 +273,7 @@ overwritten by the current property config.
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`propertyConfig`](BaseProperty.md#propertyconfig)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`propertyConfig`](/docs/api/interfaces/BaseProperty#propertyconfig)
 
 ***
 
@@ -288,13 +288,13 @@ preview.
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`readOnly`](BaseProperty.md#readonly)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`readOnly`](/docs/api/interfaces/BaseProperty#readonly)
 
 ***
 
 ### validation?
 
-> `optional` **validation**: [`PropertyValidationSchema`](PropertyValidationSchema)
+> `optional` **validation**: [`PropertyValidationSchema`](/docs/api/interfaces/PropertyValidationSchema)
 
 Defined in: [types/properties.ts:126](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 
@@ -302,7 +302,7 @@ Rules for validating this property
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`validation`](BaseProperty.md#validation)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`validation`](/docs/api/interfaces/BaseProperty#validation)
 
 ***
 
@@ -317,4 +317,4 @@ It defaults to 100, but you can set it to 50 to have two fields in the same row.
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`widthPercentage`](BaseProperty.md#widthpercentage)
+[`BaseProperty`](/docs/api/interfaces/BaseProperty).[`widthPercentage`](/docs/api/interfaces/BaseProperty#widthpercentage)

@@ -7,7 +7,7 @@ Consider the Books collection from our [demo](https://demo.firecms.co). The coll
 Subtitle, Authors, Rating, Category, etc. You can create this collection using the UI, and then manage it from the UI.
 Any text, dates, images, list of text or other fields that you may think of.
 
-![edit_collection_in_ui](/img/docs/collections/eject_collections_book_collection.png)
+![edit_collection_in_ui](https://firecms.co/img/docs/collections/eject_collections_book_collection.png)
 
 But what if you need to **customize** the view **further**, or prefer to use code to create the collection? FireCMS
 allows you to do just that. You can start a customization process with
@@ -18,13 +18,13 @@ A common question we receive is how to import the code of a collection. It's as 
 Editor, clicking the Code button, and copying the generated code. You can then **eject the collection** and manage it
 directly from your codebase.
 
-![edit_collection_code_button](/img/docs/collections/eject_collections_code_button.png)
+![edit_collection_code_button](https://firecms.co/img/docs/collections/eject_collections_code_button.png)
 
 Next, paste the copied code into your preferred Code Editor.
 
-![edit_collection_code_button](/img/docs/collections/eject_collections_code.png)
+![edit_collection_code_button](https://firecms.co/img/docs/collections/eject_collections_code.png)
 
-:::important
+:::note
 This feature is available across all plans, including free and plus subscriptions. We believe in the power of code and
 want to make it accessible to everyone.
 :::

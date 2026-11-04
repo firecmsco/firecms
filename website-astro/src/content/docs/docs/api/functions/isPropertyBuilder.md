@@ -3,11 +3,11 @@ slug: "docs/api/functions/isPropertyBuilder"
 title: "isPropertyBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / isPropertyBuilder
+[@firecms/core](/docs/api/README) / isPropertyBuilder
 
 # Function: isPropertyBuilder()
 
@@ -19,7 +19,7 @@ Defined in: [util/entities.ts:35](https://github.com/firecmsco/firecms/blob/main
 
 ### T
 
-`T` *extends* [`CMSType`](../type-aliases/CMSType)
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType)
 
 ### M
 
@@ -29,7 +29,7 @@ Defined in: [util/entities.ts:35](https://github.com/firecmsco/firecms/blob/main
 
 ### propertyOrBuilder?
 
-[`PropertyOrBuilder`](../type-aliases/PropertyOrBuilder)\<`T`, `M`\> | [`Property`](../type-aliases/Property)\<`T`\> | [`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\>
+[`PropertyOrBuilder`](/docs/api/type-aliases/PropertyOrBuilder)\<`T`, `M`\> | [`Property`](/docs/api/type-aliases/Property)\<`T`\> | [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\<`T`\>
 
 ## Returns
 

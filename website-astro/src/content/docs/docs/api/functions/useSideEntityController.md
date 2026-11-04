@@ -3,15 +3,15 @@ slug: "docs/api/functions/useSideEntityController"
 title: "useSideEntityController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useSideEntityController
+[@firecms/core](/docs/api/README) / useSideEntityController
 
 # Function: useSideEntityController()
 
-> **useSideEntityController**(): [`SideEntityController`](../interfaces/SideEntityController)
+> **useSideEntityController**(): [`SideEntityController`](/docs/api/interfaces/SideEntityController)
 
 Defined in: [hooks/useSideEntityController.tsx:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useSideEntityController.tsx)
 
@@ -23,7 +23,7 @@ Consider that in order to use this hook you need to have a parent
 
 ## Returns
 
-[`SideEntityController`](../interfaces/SideEntityController)
+[`SideEntityController`](/docs/api/interfaces/SideEntityController)
 
 ## See
 

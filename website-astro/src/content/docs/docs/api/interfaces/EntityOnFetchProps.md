@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/EntityOnFetchProps"
 title: "EntityOnFetchProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityOnFetchProps
+[@firecms/core](/docs/api/README) / EntityOnFetchProps
 
 # Interface: EntityOnFetchProps\<M, USER\>
 
@@ -23,13 +23,13 @@ Parameters passed to hooks when an entity is fetched
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
 ### collection
 
-> **collection**: [`EntityCollection`](EntityCollection)\<`M`, `USER`\>
+> **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`, `USER`\>
 
 Defined in: [types/entity\_callbacks.ts:81](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -39,7 +39,7 @@ Collection of the entity
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+> **context**: [`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`USER`\>
 
 Defined in: [types/entity\_callbacks.ts:97](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -49,7 +49,7 @@ Context of the app status
 
 ### entity
 
-> **entity**: [`Entity`](Entity)\<`M`\>
+> **entity**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 Defined in: [types/entity\_callbacks.ts:92](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 

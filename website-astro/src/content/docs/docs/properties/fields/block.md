@@ -53,8 +53,8 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](../config/array).
+The data type is [`array`](/docs/properties/config/array).
 
 Internally the component used
-is [`BlockFieldBinding`](../../api/functions/BlockFieldBinding).
+is [`BlockFieldBinding`](/docs/api/functions/BlockFieldBinding).
 

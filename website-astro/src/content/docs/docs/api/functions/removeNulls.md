@@ -3,11 +3,11 @@ slug: "docs/api/functions/removeNulls"
 title: "removeNulls"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / removeNulls
+[@firecms/core](/docs/api/README) / removeNulls
 
 # Function: removeNulls()
 

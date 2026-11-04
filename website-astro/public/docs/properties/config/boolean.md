@@ -17,8 +17,8 @@ const availableProperty = buildProperty({
 ---
 
 The widget that gets created is
-- [`SwitchFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/SwitchFieldBinding)  simple boolean switch
+- [`SwitchFieldBinding`](https://firecms.co/docs/api/functions/SwitchFieldBinding)  simple boolean switch
 
 Links:
-- [API](https://firecms.co/docs/https://firecms.co/docs/api/interfaces/BooleanProperty)
+- [API](https://firecms.co/docs/api/interfaces/BooleanProperty)
 

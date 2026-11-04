@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/PropertyDisabledConfig"
 title: "PropertyDisabledConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyDisabledConfig
+[@firecms/core](/docs/api/README) / PropertyDisabledConfig
 
 # Interface: PropertyDisabledConfig
 

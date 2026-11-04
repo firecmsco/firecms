@@ -22,7 +22,7 @@ buildProperty({
 });
 ```
 
-Il tipo di dato è [`map`](../config/map).
+Il tipo di dato è [`map`](/it/docs/properties/config/map).
 
 Il componente utilizzato internamente
-è [`KeyValueFieldBinding`](../../api/functions/KeyValueFieldBinding).
+è [`KeyValueFieldBinding`](/it/docs/api/functions/KeyValueFieldBinding).

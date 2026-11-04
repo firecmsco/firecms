@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/BaseProperty"
 title: "BaseProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / BaseProperty
+[@firecms/core](/docs/api/README) / BaseProperty
 
 # Interface: BaseProperty\<T, CustomProps\>
 
@@ -17,20 +17,20 @@ Interface including all common properties of a CMS property
 
 ## Extended by
 
-- [`NumberProperty`](NumberProperty)
-- [`BooleanProperty`](BooleanProperty)
-- [`StringProperty`](StringProperty)
-- [`ArrayProperty`](ArrayProperty)
-- [`MapProperty`](MapProperty)
-- [`DateProperty`](DateProperty)
-- [`GeopointProperty`](GeopointProperty)
-- [`ReferenceProperty`](ReferenceProperty)
+- [`NumberProperty`](/docs/api/interfaces/NumberProperty)
+- [`BooleanProperty`](/docs/api/interfaces/BooleanProperty)
+- [`StringProperty`](/docs/api/interfaces/StringProperty)
+- [`ArrayProperty`](/docs/api/interfaces/ArrayProperty)
+- [`MapProperty`](/docs/api/interfaces/MapProperty)
+- [`DateProperty`](/docs/api/interfaces/DateProperty)
+- [`GeopointProperty`](/docs/api/interfaces/GeopointProperty)
+- [`ReferenceProperty`](/docs/api/interfaces/ReferenceProperty)
 
 ## Type Parameters
 
 ### T
 
-`T` *extends* [`CMSType`](../type-aliases/CMSType)
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType)
 
 ### CustomProps
 
@@ -92,7 +92,7 @@ Property description, always displayed under the field
 
 ### disabled?
 
-> `optional` **disabled**: `boolean` \| [`PropertyDisabledConfig`](PropertyDisabledConfig)
+> `optional` **disabled**: `boolean` \| [`PropertyDisabledConfig`](/docs/api/interfaces/PropertyDisabledConfig)
 
 Defined in: [types/properties.ts:121](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 
@@ -117,7 +117,7 @@ save the new config. The saved config will then become the source of truth.
 
 ### Field?
 
-> `optional` **Field**: `ComponentType`\<[`FieldProps`](FieldProps)\<`T`, `CustomProps`, `any`\>\>
+> `optional` **Field**: `ComponentType`\<[`FieldProps`](/docs/api/interfaces/FieldProps)\<`T`, `CustomProps`, `any`\>\>
 
 Defined in: [types/properties.ts:135](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 
@@ -161,7 +161,7 @@ Property name (e.g. Product)
 
 ### Preview?
 
-> `optional` **Preview**: `ComponentType`\<[`PropertyPreviewProps`](PropertyPreviewProps)\<`T`, `CustomProps`\>\>
+> `optional` **Preview**: `ComponentType`\<[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<`T`, `CustomProps`\>\>
 
 Defined in: [types/properties.ts:142](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 
@@ -197,7 +197,7 @@ preview.
 
 ### validation?
 
-> `optional` **validation**: [`PropertyValidationSchema`](PropertyValidationSchema)
+> `optional` **validation**: [`PropertyValidationSchema`](/docs/api/interfaces/PropertyValidationSchema)
 
 Defined in: [types/properties.ts:126](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 

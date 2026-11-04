@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityFormProps"
 title: "EntityFormProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityFormProps
+[@firecms/core](/docs/api/README) / EntityFormProps
 
 # Type Alias: EntityFormProps\<M\>
 
@@ -25,7 +25,7 @@ Defined in: [form/EntityForm.tsx:67](https://github.com/firecmsco/firecms/blob/m
 
 ### Builder?
 
-> `optional` **Builder**: `React.ComponentType`\<[`EntityCustomViewParams`](../interfaces/EntityCustomViewParams)\<`M`\>\>
+> `optional` **Builder**: `React.ComponentType`\<[`EntityCustomViewParams`](/docs/api/interfaces/EntityCustomViewParams)\<`M`\>\>
 
 Defined in: [form/EntityForm.tsx:102](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
 
@@ -49,7 +49,7 @@ Defined in: [form/EntityForm.tsx:80](https://github.com/firecmsco/firecms/blob/m
 
 ### collection
 
-> **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
+> **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 Defined in: [form/EntityForm.tsx:70](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
 
@@ -75,7 +75,7 @@ If true, the form will be disabled and no actions will be available
 
 ### entity?
 
-> `optional` **entity**: [`Entity`](../interfaces/Entity)\<`M`\>
+> `optional` **entity**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 Defined in: [form/EntityForm.tsx:72](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
 
@@ -131,7 +131,7 @@ Defined in: [form/EntityForm.tsx:77](https://github.com/firecmsco/firecms/blob/m
 
 ### initialStatus
 
-> **initialStatus**: [`EntityStatus`](EntityStatus)
+> **initialStatus**: [`EntityStatus`](/docs/api/type-aliases/EntityStatus)
 
 Defined in: [form/EntityForm.tsx:81](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
 
@@ -147,7 +147,7 @@ Defined in: [form/EntityForm.tsx:83](https://github.com/firecmsco/firecms/blob/m
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 #### Returns
 
@@ -165,7 +165,7 @@ Defined in: [form/EntityForm.tsx:78](https://github.com/firecmsco/firecms/blob/m
 
 ##### formContext
 
-[`FormContext`](../interfaces/FormContext)
+[`FormContext`](/docs/api/interfaces/FormContext)
 
 #### Returns
 
@@ -219,7 +219,7 @@ Defined in: [form/EntityForm.tsx:82](https://github.com/firecmsco/firecms/blob/m
 
 ##### status
 
-[`EntityStatus`](EntityStatus)
+[`EntityStatus`](/docs/api/type-aliases/EntityStatus)
 
 #### Returns
 

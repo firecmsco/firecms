@@ -3,11 +3,11 @@ slug: "docs/api/functions/EntityForm"
 title: "EntityForm"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityForm
+[@firecms/core](/docs/api/README) / EntityForm
 
 # Function: EntityForm()
 
@@ -25,7 +25,7 @@ Defined in: [form/EntityForm.tsx:123](https://github.com/firecmsco/firecms/blob/
 
 ### \_\_namedParameters
 
-[`EntityFormProps`](../type-aliases/EntityFormProps)\<`M`\>
+[`EntityFormProps`](/docs/api/type-aliases/EntityFormProps)\<`M`\>
 
 ## Returns
 

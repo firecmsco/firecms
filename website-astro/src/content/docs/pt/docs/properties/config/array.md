@@ -122,10 +122,10 @@ Quando definido como `true`, exibe as propriedades filhas diretamente sem serem 
 ---
 
 Com base na sua configuração, os widgets de campo de formulário criados são:
-- [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding) campo de array genérico
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) se a propriedade `of` for um `string` com configuração de armazenamento.
-- [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding) se a propriedade `of` for uma `reference`
-- [`BlockFieldBinding`](../../api/functions/BlockFieldBinding) se a propriedade `oneOf` for especificada
+- [`RepeatFieldBinding`](/pt/docs/api/functions/RepeatFieldBinding) campo de array genérico
+- [`StorageUploadFieldBinding`](/pt/docs/api/functions/StorageUploadFieldBinding) se a propriedade `of` for um `string` com configuração de armazenamento.
+- [`ArrayOfReferencesFieldBinding`](/pt/docs/api/functions/ArrayOfReferencesFieldBinding) se a propriedade `of` for uma `reference`
+- [`BlockFieldBinding`](/pt/docs/api/functions/BlockFieldBinding) se a propriedade `oneOf` for especificada
 
 Links:
-- [API](../../api/interfaces/ArrayProperty)
+- [API](/pt/docs/api/interfaces/ArrayProperty)

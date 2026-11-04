@@ -70,9 +70,9 @@ const property = buildProperty({
 ---
 
 Los widgets que se crean son
-- [`TextFieldBinding`](../../api/functions/TextFieldBinding) campo de texto genérico
-- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) si se establecen `enumValues` en la configuración del string, este campo renderiza un select
+- [`TextFieldBinding`](/es/docs/api/functions/TextFieldBinding) campo de texto genérico
+- [`SelectFieldBinding`](/es/docs/api/functions/SelectFieldBinding) si se establecen `enumValues` en la configuración del string, este campo renderiza un select
   donde cada opción es un chip coloreado.
 
 Enlaces:
-- [API](../../api/interfaces/NumberProperty)
+- [API](/es/docs/api/interfaces/NumberProperty)

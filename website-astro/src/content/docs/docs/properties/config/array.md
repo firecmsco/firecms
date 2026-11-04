@@ -153,11 +153,11 @@ When set to `true`, displays the child properties directly without being wrapped
 ---
 
 Based on your configuration the form field widgets that are created are:
-- [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding) generic array field that allows reordering and renders
+- [`RepeatFieldBinding`](/docs/api/functions/RepeatFieldBinding) generic array field that allows reordering and renders
   the child property as nodes.
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) if the `of` property is a `string` with storage configuration.
-- [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding) if the `of` property is a `reference`
-- [`BlockFieldBinding`](../../api/functions/BlockFieldBinding) if the `oneOf` property is specified
+- [`StorageUploadFieldBinding`](/docs/api/functions/StorageUploadFieldBinding) if the `of` property is a `string` with storage configuration.
+- [`ArrayOfReferencesFieldBinding`](/docs/api/functions/ArrayOfReferencesFieldBinding) if the `of` property is a `reference`
+- [`BlockFieldBinding`](/docs/api/functions/BlockFieldBinding) if the `oneOf` property is specified
 
 Links:
-- [API](../../api/interfaces/ArrayProperty)
+- [API](/docs/api/interfaces/ArrayProperty)

@@ -3,15 +3,15 @@ slug: "docs/api/functions/joinCollectionLists"
 title: "joinCollectionLists"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / joinCollectionLists
+[@firecms/core](/docs/api/README) / joinCollectionLists
 
 # Function: joinCollectionLists()
 
-> **joinCollectionLists**(`targetCollections`, `sourceCollections`, `parentPaths`, `modifyCollection?`): [`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>[]
+> **joinCollectionLists**(`targetCollections`, `sourceCollections`, `parentPaths`, `modifyCollection?`): [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>[]
 
 Defined in: [util/join\_collections.ts:36](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/join_collections.ts)
 
@@ -19,11 +19,11 @@ Defined in: [util/join\_collections.ts:36](https://github.com/firecmsco/firecms/
 
 ### targetCollections
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>[]
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>[]
 
 ### sourceCollections
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>[] | `undefined`
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>[] | `undefined`
 
 ### parentPaths
 
@@ -31,8 +31,8 @@ Defined in: [util/join\_collections.ts:36](https://github.com/firecmsco/firecms/
 
 ### modifyCollection?
 
-(`props`) => `void` \| [`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>
+(`props`) => `void` \| [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>
 
 ## Returns
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>[]
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>[]

@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/CMSViewsBuilder"
 title: "CMSViewsBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / CMSViewsBuilder
+[@firecms/core](/docs/api/README) / CMSViewsBuilder
 
 # Type Alias: CMSViewsBuilder()
 
-> **CMSViewsBuilder** = (`params`) => [`CMSView`](../interfaces/CMSView)[] \| `Promise`\<[`CMSView`](../interfaces/CMSView)[]\>
+> **CMSViewsBuilder** = (`params`) => [`CMSView`](/docs/api/interfaces/CMSView)[] \| `Promise`\<[`CMSView`](/docs/api/interfaces/CMSView)[]\>
 
 Defined in: [types/firecms.tsx:43](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 
@@ -28,16 +28,16 @@ APIs directly, or a REST API.
 
 #### authController
 
-[`AuthController`](AuthController)
+[`AuthController`](/docs/api/type-aliases/AuthController)
 
 #### dataSource
 
-[`DataSourceDelegate`](../interfaces/DataSourceDelegate)
+[`DataSourceDelegate`](/docs/api/interfaces/DataSourceDelegate)
 
 #### user
 
-[`User`](User) \| `null`
+[`User`](/docs/api/type-aliases/User) \| `null`
 
 ## Returns
 
-[`CMSView`](../interfaces/CMSView)[] \| `Promise`\<[`CMSView`](../interfaces/CMSView)[]\>
+[`CMSView`](/docs/api/interfaces/CMSView)[] \| `Promise`\<[`CMSView`](/docs/api/interfaces/CMSView)[]\>

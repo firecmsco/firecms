@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/SmallNavigationCardProps"
 title: "SmallNavigationCardProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SmallNavigationCardProps
+[@firecms/core](/docs/api/README) / SmallNavigationCardProps
 
 # Type Alias: SmallNavigationCardProps
 

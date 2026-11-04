@@ -3,11 +3,11 @@ slug: "docs/api/functions/toSnakeCase"
 title: "toSnakeCase"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / toSnakeCase
+[@firecms/core](/docs/api/README) / toSnakeCase
 
 # Function: toSnakeCase()
 

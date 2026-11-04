@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/FetchEntityProps"
 title: "FetchEntityProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FetchEntityProps
+[@firecms/core](/docs/api/README) / FetchEntityProps
 
 # Interface: FetchEntityProps\<M\>
 
@@ -23,7 +23,7 @@ Defined in: [types/datasource.ts:9](https://github.com/firecmsco/firecms/blob/ma
 
 ### collection?
 
-> `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\>
+> `optional` **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`, `any`\>
 
 Defined in: [types/datasource.ts:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 

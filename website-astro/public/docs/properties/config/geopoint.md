@@ -75,9 +75,9 @@ console.log(sanFrancisco.longitude); // -122.4194
 ---
 
 The widget that gets created is
-- [`GeopointFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/GeopointFieldBinding) Field that allows editing latitude and longitude
+- [`GeopointFieldBinding`](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/field_bindings/GeopointFieldBinding.tsx) Field that allows editing latitude and longitude
 
 Links:
-- [API](https://firecms.co/docs/https://firecms.co/docs/api/interfaces/GeopointProperty)
+- [API](https://firecms.co/docs/api/interfaces/GeopointProperty)
 
 

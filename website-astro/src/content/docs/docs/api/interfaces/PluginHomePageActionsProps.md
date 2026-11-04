@@ -3,17 +3,17 @@ slug: "docs/api/interfaces/PluginHomePageActionsProps"
 title: "PluginHomePageActionsProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PluginHomePageActionsProps
+[@firecms/core](/docs/api/README) / PluginHomePageActionsProps
 
 # Interface: PluginHomePageActionsProps\<EP, M, USER, EC\>
 
 Defined in: [types/plugins.tsx:211](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
 
-Props passed to the [FireCMSPlugin.homePage.CollectionActions](../type-aliases/FireCMSPlugin.md#homepage) method.
+Props passed to the [FireCMSPlugin.homePage.CollectionActions](/docs/api/type-aliases/FireCMSPlugin#homepage) method.
 You can use it to add custom actions to the navigation card of each collection.
 
 ## Type Parameters
@@ -28,11 +28,11 @@ You can use it to add custom actions to the navigation card of each collection.
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ### EC
 
-`EC` *extends* [`EntityCollection`](EntityCollection)\<`M`\> = [`EntityCollection`](EntityCollection)\<`M`\>
+`EC` *extends* [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\> = [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 ## Properties
 
@@ -48,7 +48,7 @@ The collection configuration
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+> **context**: [`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`USER`\>
 
 Defined in: [types/plugins.tsx:226](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
 

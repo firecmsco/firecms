@@ -3,11 +3,11 @@ slug: "docs/api/functions/DrawerLogo"
 title: "DrawerLogo"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DrawerLogo
+[@firecms/core](/docs/api/README) / DrawerLogo
 
 # Function: DrawerLogo()
 

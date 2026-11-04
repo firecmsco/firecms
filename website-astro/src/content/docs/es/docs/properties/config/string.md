@@ -178,7 +178,7 @@ const assignedUserProperty = buildProperty({
 Puedes usar los valores de enumeración proporcionando un mapa de posibles valores exclusivos que la
 propiedad puede tomar, mapeados a la etiqueta que se muestra en el desplegable. Puedes
 usar un objeto simple con el formato `valor` => `etiqueta`, o con el formato `valor`
-=> [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig) si necesitas
+=> [`EnumValueConfig`](/es/docs/api/type-aliases/EnumValueConfig) si necesitas
 personalización adicional, (como deshabilitar opciones específicas o asignar colores). Si
 necesitas garantizar el orden de los elementos, puedes pasar un `Map` en lugar de un
 objeto simple.
@@ -281,17 +281,17 @@ const property = buildProperty({
 
 Según tu configuración, los widgets de campo de formulario que se crean son:
 
-- [`TextFieldBinding`](../../api/functions/TextFieldBinding) campo de texto genérico
-- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) si se establecen `enumValues`
+- [`TextFieldBinding`](/es/docs/api/functions/TextFieldBinding) campo de texto genérico
+- [`SelectFieldBinding`](/es/docs/api/functions/SelectFieldBinding) si se establecen `enumValues`
   en la configuración del string, este campo renderiza un selector
   donde cada opción es una chip coloreada.
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding)
+- [`StorageUploadFieldBinding`](/es/docs/api/functions/StorageUploadFieldBinding)
   la propiedad tiene una
   configuración de almacenamiento.
-- [`MarkdownEditorFieldBinding.`](../../api/functions/MarkdownEditorFieldBinding) la
+- [`MarkdownEditorFieldBinding.`](/es/docs/api/functions/MarkdownEditorFieldBinding) la
   propiedad tiene una
   configuración markdown.
 
 Enlaces:
 
-- [API](../../api/interfaces/StringProperty)
+- [API](/es/docs/api/interfaces/StringProperty)

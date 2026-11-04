@@ -36,7 +36,7 @@ Es wird ein Deep-Merge durchgeführt, sodass Sie einige Eigenschaften im Code de
 ### Beispiel-Kollektion in Code
 
 :::note
-FireCMS bietet etwa 20 verschiedene Felder (wie Textfelder, Auswahllisten und komplexe Felder wie Referenz oder sortierbare Array-Felder). Wenn Ihr Anwendungsfall nicht durch eines der bereitgestellten Felder abgedeckt ist, können Sie Ihr eigenes [benutzerdefiniertes Feld](../properties/custom_fields.mdx) erstellen.
+FireCMS bietet etwa 20 verschiedene Felder (wie Textfelder, Auswahllisten und komplexe Felder wie Referenz oder sortierbare Array-Felder). Wenn Ihr Anwendungsfall nicht durch eines der bereitgestellten Felder abgedeckt ist, können Sie Ihr eigenes [benutzerdefiniertes Feld](/de/docs/properties/custom_fields) erstellen.
 :::
 
 :::tip

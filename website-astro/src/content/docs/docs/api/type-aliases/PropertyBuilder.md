@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/PropertyBuilder"
 title: "PropertyBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyBuilder
+[@firecms/core](/docs/api/README) / PropertyBuilder
 
 # Type Alias: PropertyBuilder()\<T, M\>
 
@@ -19,7 +19,7 @@ title: "PropertyBuilder"
          path,
          entityId,
          authController
-     }`) => [`Property`](Property)\<`T`\> \| `null`
+     }`) => [`Property`](/docs/api/type-aliases/Property)\<`T`\> \| `null`
 
 Defined in: [types/properties.ts:287](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 
@@ -31,7 +31,7 @@ current value of the property, as well as the path and entity ID.
 
 ### T
 
-`T` *extends* [`CMSType`](CMSType) = `any`
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType) = `any`
 
 ### M
 
@@ -49,8 +49,8 @@ current value of the property, as well as the path and entity ID.
          authController
      \}
 
-[`PropertyBuilderProps`](PropertyBuilderProps)\<`M`\>
+[`PropertyBuilderProps`](/docs/api/type-aliases/PropertyBuilderProps)\<`M`\>
 
 ## Returns
 
-[`Property`](Property)\<`T`\> \| `null`
+[`Property`](/docs/api/type-aliases/Property)\<`T`\> \| `null`

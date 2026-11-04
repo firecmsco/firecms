@@ -3,15 +3,15 @@ slug: "docs/api/functions/useSelectionController"
 title: "useSelectionController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useSelectionController
+[@firecms/core](/docs/api/README) / useSelectionController
 
 # Function: useSelectionController()
 
-> **useSelectionController**\<`M`\>(`onSelectionChange?`): [`SelectionController`](../type-aliases/SelectionController)\<`M`\>
+> **useSelectionController**\<`M`\>(`onSelectionChange?`): [`SelectionController`](/docs/api/type-aliases/SelectionController)\<`M`\>
 
 Defined in: [components/EntityCollectionView/useSelectionController.tsx:4](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/useSelectionController.tsx)
 
@@ -29,4 +29,4 @@ Defined in: [components/EntityCollectionView/useSelectionController.tsx:4](https
 
 ## Returns
 
-[`SelectionController`](../type-aliases/SelectionController)\<`M`\>
+[`SelectionController`](/docs/api/type-aliases/SelectionController)\<`M`\>

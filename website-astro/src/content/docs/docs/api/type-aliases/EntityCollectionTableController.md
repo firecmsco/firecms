@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityCollectionTableController"
 title: "EntityCollectionTableController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionTableController
+[@firecms/core](/docs/api/README) / EntityCollectionTableController
 
 # Type Alias: EntityCollectionTableController\<M\>
 
@@ -35,7 +35,7 @@ Callback used when the value of a cell has changed.
 
 ##### params
 
-[`OnCellValueChangeParams`](../interfaces/OnCellValueChangeParams)\<`any`, `M`\>
+[`OnCellValueChangeParams`](/docs/api/interfaces/OnCellValueChangeParams)\<`any`, `M`\>
 
 #### Returns
 
@@ -55,7 +55,7 @@ Select a table cell
 
 ##### cell?
 
-[`SelectedCellProps`](SelectedCellProps)\<`M`\>
+[`SelectedCellProps`](/docs/api/type-aliases/SelectedCellProps)\<`M`\>
 
 #### Returns
 
@@ -65,7 +65,7 @@ Select a table cell
 
 ### selectedCell?
 
-> `optional` **selectedCell**: [`SelectedCellProps`](SelectedCellProps)\<`any`\>
+> `optional` **selectedCell**: [`SelectedCellProps`](/docs/api/type-aliases/SelectedCellProps)\<`any`\>
 
 Defined in: [components/common/types.tsx:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
 
@@ -85,7 +85,7 @@ The cell that is displayed as a popup view.
 
 ##### cell?
 
-[`SelectedCellProps`](SelectedCellProps)\<`M`\>
+[`SelectedCellProps`](/docs/api/type-aliases/SelectedCellProps)\<`M`\>
 
 #### Returns
 
@@ -95,7 +95,7 @@ The cell that is displayed as a popup view.
 
 ### size
 
-> **size**: [`CollectionSize`](CollectionSize)
+> **size**: [`CollectionSize`](/docs/api/type-aliases/CollectionSize)
 
 Defined in: [components/common/types.tsx:27](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
 

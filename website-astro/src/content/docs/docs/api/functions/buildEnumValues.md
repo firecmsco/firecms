@@ -3,15 +3,15 @@ slug: "docs/api/functions/buildEnumValues"
 title: "buildEnumValues"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / buildEnumValues
+[@firecms/core](/docs/api/README) / buildEnumValues
 
 # Function: buildEnumValues()
 
-> **buildEnumValues**(`enumValues`): [`EnumValues`](../type-aliases/EnumValues)
+> **buildEnumValues**(`enumValues`): [`EnumValues`](/docs/api/type-aliases/EnumValues)
 
 Defined in: [util/builders.ts:89](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/builders.ts)
 
@@ -22,8 +22,8 @@ the properties keys.
 
 ### enumValues
 
-[`EnumValues`](../type-aliases/EnumValues)
+[`EnumValues`](/docs/api/type-aliases/EnumValues)
 
 ## Returns
 
-[`EnumValues`](../type-aliases/EnumValues)
+[`EnumValues`](/docs/api/type-aliases/EnumValues)

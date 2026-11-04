@@ -35,7 +35,7 @@ const collectionsBuilder: EntityCollectionsBuilder = async ({
 
 :::note
 Si vous souhaitez uniquement faire des personnalisations au niveau des propriétés, consultez la
-section [champs conditionnels](../properties/conditional_fields). Mais notez que les champs conditionnels ne sont pas
+section [champs conditionnels](/fr/docs/properties/conditional_fields). Mais notez que les champs conditionnels ne sont pas
 adaptés aux opérations asynchrones.
 :::
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/FormEntry"
 title: "FormEntry"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FormEntry
+[@firecms/core](/docs/api/README) / FormEntry
 
 # Function: FormEntry()
 

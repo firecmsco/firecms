@@ -68,10 +68,10 @@ const productsReferenceProperty = buildProperty({
 
 The widget that gets created is
 
-- [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding) Field
+- [`ReferenceFieldBinding`](/docs/api/functions/ReferenceFieldBinding) Field
   that opens a
   reference selection dialog
 
 Links:
 
-- [API](../../api/interfaces/ReferenceProperty)
+- [API](/docs/api/interfaces/ReferenceProperty)

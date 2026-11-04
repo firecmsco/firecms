@@ -1,6 +1,6 @@
 # Entity views
 
-![Custom entity view](/img/entity_view.png)
+![Custom entity view](https://firecms.co/img/entity_view.png)
 
 FireCMS offers default form and table fields for common use cases and also allows
 overriding fields if you need a custom implementation, but that might be not
@@ -45,7 +45,7 @@ const sampleView: EntityCustomView = {
 
 ### Building a secondary form
 
-![Custom entity view](/img/entity_view_secondary_form.png)
+![Custom entity view](https://firecms.co/img/entity_view_secondary_form.png)
 
 In your custom views, you can also add fields that are mapped directly to the entity.
 This is useful if you want to add a secondary form to your entity view.

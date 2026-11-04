@@ -1,6 +1,6 @@
 # Data Import
 
-![data_import.png](/img/data_import.png)
+![data_import.png](https://firecms.co/img/data_import.png)
 
 The **Data Import Plugin** for FireCMS enables you to import collection data from JSON, CSV, XLSL (Excel) files directly
 into your

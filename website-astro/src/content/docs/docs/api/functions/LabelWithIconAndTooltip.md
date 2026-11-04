@@ -3,11 +3,11 @@ slug: "docs/api/functions/LabelWithIconAndTooltip"
 title: "LabelWithIconAndTooltip"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / LabelWithIconAndTooltip
+[@firecms/core](/docs/api/README) / LabelWithIconAndTooltip
 
 # Function: LabelWithIconAndTooltip()
 

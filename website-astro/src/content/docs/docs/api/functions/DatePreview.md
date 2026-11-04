@@ -3,11 +3,11 @@ slug: "docs/api/functions/DatePreview"
 title: "DatePreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DatePreview
+[@firecms/core](/docs/api/README) / DatePreview
 
 # Function: DatePreview()
 

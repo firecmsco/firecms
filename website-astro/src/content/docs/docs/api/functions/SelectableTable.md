@@ -3,11 +3,11 @@ slug: "docs/api/functions/SelectableTable"
 title: "SelectableTable"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SelectableTable
+[@firecms/core](/docs/api/README) / SelectableTable
 
 # Function: SelectableTable()
 
@@ -18,20 +18,20 @@ Defined in: [components/SelectableTable/SelectableTable.tsx:122](https://github.
 This component is in charge of rendering a collection table with a high
 degree of customization.
 
-This component is used internally by [EntityCollectionView](../variables/EntityCollectionView) and
-[useReferenceDialog](useReferenceDialog)
+This component is used internally by [EntityCollectionView](/docs/api/variables/EntityCollectionView) and
+[useReferenceDialog](/docs/api/functions/useReferenceDialog)
 
 Please note that you only need to use this component if you are building
 a custom view. If you just need to create a default view you can do it
 exclusively with config options.
 
-If you want to bind a [EntityCollection](../interfaces/EntityCollection) to a table with the default
+If you want to bind a [EntityCollection](/docs/api/interfaces/EntityCollection) to a table with the default
 options you see in collections in the top level navigation, you can
-check [EntityCollectionView](../variables/EntityCollectionView).
+check [EntityCollectionView](/docs/api/variables/EntityCollectionView).
 
-The data displayed in the table is managed by a [EntityTableController](../type-aliases/EntityTableController).
+The data displayed in the table is managed by a [EntityTableController](/docs/api/type-aliases/EntityTableController).
 You can build the default, bound to a path in the datasource, by using the hook
-[useDataSourceTableController](useDataSourceTableController)
+[useDataSourceTableController](/docs/api/functions/useDataSourceTableController)
 
 ## Type Parameters
 
@@ -43,7 +43,7 @@ You can build the default, bound to a path in the datasource, by using the hook
 
 ### \_\_namedParameters
 
-[`SelectableTableProps`](../type-aliases/SelectableTableProps)\<`M`\>
+[`SelectableTableProps`](/docs/api/type-aliases/SelectableTableProps)\<`M`\>
 
 ## Returns
 

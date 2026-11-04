@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/PreviewSize"
 title: "PreviewSize"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PreviewSize
+[@firecms/core](/docs/api/README) / PreviewSize
 
 # Type Alias: PreviewSize
 

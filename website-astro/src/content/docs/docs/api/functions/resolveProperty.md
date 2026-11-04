@@ -3,15 +3,15 @@ slug: "docs/api/functions/resolveProperty"
 title: "resolveProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolveProperty
+[@firecms/core](/docs/api/README) / resolveProperty
 
 # Function: resolveProperty()
 
-> **resolveProperty**\<`T`, `M`\>(`propertyOrBuilder`): [`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\> \| `null`
+> **resolveProperty**\<`T`, `M`\>(`propertyOrBuilder`): [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\<`T`\> \| `null`
 
 Defined in: [util/resolutions.ts:104](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/resolutions.ts)
 
@@ -21,7 +21,7 @@ Resolve property builders, enums and arrays.
 
 ### T
 
-`T` *extends* [`CMSType`](../type-aliases/CMSType) = [`CMSType`](../type-aliases/CMSType)
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType) = [`CMSType`](/docs/api/type-aliases/CMSType)
 
 ### M
 
@@ -33,7 +33,7 @@ Resolve property builders, enums and arrays.
 
 #### authController
 
-[`AuthController`](../type-aliases/AuthController)
+[`AuthController`](/docs/api/type-aliases/AuthController)
 
 #### entityId?
 
@@ -61,7 +61,7 @@ Resolve property builders, enums and arrays.
 
 #### propertyConfigs?
 
-`Record`\<`string`, [`PropertyConfig`](../type-aliases/PropertyConfig)\<`any`\>\>
+`Record`\<`string`, [`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\<`any`\>\>
 
 #### propertyKey?
 
@@ -69,7 +69,7 @@ Resolve property builders, enums and arrays.
 
 #### propertyOrBuilder
 
-[`PropertyOrBuilder`](../type-aliases/PropertyOrBuilder)\<`T`, `M`\> \| [`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\>
+[`PropertyOrBuilder`](/docs/api/type-aliases/PropertyOrBuilder)\<`T`, `M`\> \| [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\<`T`\>
 
 #### values?
 
@@ -77,4 +77,4 @@ Resolve property builders, enums and arrays.
 
 ## Returns
 
-[`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\> \| `null`
+[`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\<`T`\> \| `null`

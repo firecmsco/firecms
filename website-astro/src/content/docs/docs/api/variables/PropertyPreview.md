@@ -3,11 +3,11 @@ slug: "docs/api/variables/PropertyPreview"
 title: "PropertyPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyPreview
+[@firecms/core](/docs/api/README) / PropertyPreview
 
 # Variable: PropertyPreview
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/getColumnKeysForProperty"
 title: "getColumnKeysForProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getColumnKeysForProperty
+[@firecms/core](/docs/api/README) / getColumnKeysForProperty
 
 # Function: getColumnKeysForProperty()
 
@@ -19,7 +19,7 @@ Defined in: [components/common/useColumnsIds.tsx:88](https://github.com/firecmsc
 
 ### property
 
-[`ResolvedProperty`](../type-aliases/ResolvedProperty)
+[`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)
 
 ### key
 

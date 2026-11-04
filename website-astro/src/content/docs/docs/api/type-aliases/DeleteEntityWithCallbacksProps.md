@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/DeleteEntityWithCallbacksProps"
 title: "DeleteEntityWithCallbacksProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DeleteEntityWithCallbacksProps
+[@firecms/core](/docs/api/README) / DeleteEntityWithCallbacksProps
 
 # Type Alias: DeleteEntityWithCallbacksProps\<M, USER\>
 
-> **DeleteEntityWithCallbacksProps**\<`M`, `USER`\> = [`DeleteEntityProps`](../interfaces/DeleteEntityProps)\<`M`\> & `object`
+> **DeleteEntityWithCallbacksProps**\<`M`, `USER`\> = [`DeleteEntityProps`](/docs/api/interfaces/DeleteEntityProps)\<`M`\> & `object`
 
 Defined in: [hooks/data/delete.ts:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/delete.ts)
 
@@ -19,7 +19,7 @@ Defined in: [hooks/data/delete.ts:15](https://github.com/firecmsco/firecms/blob/
 
 ### callbacks?
 
-> `optional` **callbacks**: [`EntityCallbacks`](EntityCallbacks)\<`M`, `USER`\>
+> `optional` **callbacks**: [`EntityCallbacks`](/docs/api/type-aliases/EntityCallbacks)\<`M`, `USER`\>
 
 ### onDeleteFailure()?
 
@@ -29,7 +29,7 @@ Defined in: [hooks/data/delete.ts:15](https://github.com/firecmsco/firecms/blob/
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 ##### e
 
@@ -47,7 +47,7 @@ Defined in: [hooks/data/delete.ts:15](https://github.com/firecmsco/firecms/blob/
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 #### Returns
 
@@ -61,7 +61,7 @@ Defined in: [hooks/data/delete.ts:15](https://github.com/firecmsco/firecms/blob/
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 ##### e
 
@@ -79,7 +79,7 @@ Defined in: [hooks/data/delete.ts:15](https://github.com/firecmsco/firecms/blob/
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 ##### e
 
@@ -97,4 +97,4 @@ Defined in: [hooks/data/delete.ts:15](https://github.com/firecmsco/firecms/blob/
 
 ### USER
 
-`USER` *extends* [`User`](User) = [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)

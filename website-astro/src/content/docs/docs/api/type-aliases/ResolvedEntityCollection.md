@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/ResolvedEntityCollection"
 title: "ResolvedEntityCollection"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ResolvedEntityCollection
+[@firecms/core](/docs/api/README) / ResolvedEntityCollection
 
 # Type Alias: ResolvedEntityCollection\<M\>
 
-> **ResolvedEntityCollection**\<`M`\> = `Omit`\<[`EntityCollection`](../interfaces/EntityCollection)\<`M`\>, `"properties"`\> & `object`
+> **ResolvedEntityCollection**\<`M`\> = `Omit`\<[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>, `"properties"`\> & `object`
 
 Defined in: [types/resolved\_entities.ts:21](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
 
@@ -26,11 +26,11 @@ are resolved to regular `Property` objects.
 
 ### originalCollection
 
-> **originalCollection**: [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
+> **originalCollection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 ### properties
 
-> **properties**: [`ResolvedProperties`](ResolvedProperties)\<`M`\>
+> **properties**: [`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)\<`M`\>
 
 ## Type Parameters
 

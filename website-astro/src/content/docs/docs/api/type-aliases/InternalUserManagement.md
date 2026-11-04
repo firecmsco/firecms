@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/InternalUserManagement"
 title: "InternalUserManagement"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / InternalUserManagement
+[@firecms/core](/docs/api/README) / InternalUserManagement
 
 # Type Alias: InternalUserManagement\<USER\>
 
@@ -19,7 +19,7 @@ Defined in: [types/internal\_user\_management.ts:3](https://github.com/firecmsco
 
 ### USER
 
-`USER` *extends* [`User`](User) = [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 

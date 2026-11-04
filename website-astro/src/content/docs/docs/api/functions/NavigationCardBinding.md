@@ -3,11 +3,11 @@ slug: "docs/api/functions/NavigationCardBinding"
 title: "NavigationCardBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NavigationCardBinding
+[@firecms/core](/docs/api/README) / NavigationCardBinding
 
 # Function: NavigationCardBinding()
 
@@ -22,7 +22,7 @@ collection or view.
 
 ### view
 
-[`NavigationEntry`](../interfaces/NavigationEntry) & `object`
+[`NavigationEntry`](/docs/api/interfaces/NavigationEntry) & `object`
 
 ## Returns
 

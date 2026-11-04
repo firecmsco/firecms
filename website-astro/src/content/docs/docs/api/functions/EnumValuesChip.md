@@ -3,11 +3,11 @@ slug: "docs/api/functions/EnumValuesChip"
 title: "EnumValuesChip"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EnumValuesChip
+[@firecms/core](/docs/api/README) / EnumValuesChip
 
 # Function: EnumValuesChip()
 
@@ -19,7 +19,7 @@ Defined in: [preview/components/EnumValuesChip.tsx:17](https://github.com/firecm
 
 ### \_\_namedParameters
 
-[`EnumValuesChipProps`](../interfaces/EnumValuesChipProps)
+[`EnumValuesChipProps`](/docs/api/interfaces/EnumValuesChipProps)
 
 ## Returns
 

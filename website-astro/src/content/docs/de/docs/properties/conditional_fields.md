@@ -6,7 +6,7 @@ description: In FireCMS ermöglichen bedingte Felder dynamische Eigenschaftskonf
 ---
 
 Beim Definieren der Eigenschaften einer Kollektion können Sie einen Builder
-[`PropertyBuilder`](../api/type-aliases/PermissionsBuilder) verwenden, anstatt die
+[`PropertyBuilder`](/de/docs/api/type-aliases/PermissionsBuilder) verwenden, anstatt die
 Eigenschaftskonfiguration direkt zuzuweisen.
 
 Dies ist nützlich, um Eigenschaftskonfigurationen wie verfügbare Werte dynamisch zu ändern,

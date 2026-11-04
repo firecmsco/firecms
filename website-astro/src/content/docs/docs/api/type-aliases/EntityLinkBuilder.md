@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityLinkBuilder"
 title: "EntityLinkBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityLinkBuilder
+[@firecms/core](/docs/api/README) / EntityLinkBuilder
 
 # Type Alias: EntityLinkBuilder()\<M\>
 
@@ -27,7 +27,7 @@ Defined in: [types/entity\_link\_builder.ts:6](https://github.com/firecmsco/fire
 
 #### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 ## Returns
 

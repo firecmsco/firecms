@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/UserConfigurationPersistence"
 title: "UserConfigurationPersistence"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / UserConfigurationPersistence
+[@firecms/core](/docs/api/README) / UserConfigurationPersistence
 
 # Interface: UserConfigurationPersistence
 
@@ -37,7 +37,7 @@ Defined in: [types/local\_config\_persistence.tsx:19](https://github.com/firecms
 
 ### getCollectionConfig()
 
-> **getCollectionConfig**: \<`M`\>(`path`) => [`PartialEntityCollection`](../type-aliases/PartialEntityCollection)\<`M`\>
+> **getCollectionConfig**: \<`M`\>(`path`) => [`PartialEntityCollection`](/docs/api/type-aliases/PartialEntityCollection)\<`M`\>
 
 Defined in: [types/local\_config\_persistence.tsx:16](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/local_config_persistence.tsx)
 
@@ -55,7 +55,7 @@ Defined in: [types/local\_config\_persistence.tsx:16](https://github.com/firecms
 
 #### Returns
 
-[`PartialEntityCollection`](../type-aliases/PartialEntityCollection)\<`M`\>
+[`PartialEntityCollection`](/docs/api/type-aliases/PartialEntityCollection)\<`M`\>
 
 ***
 
@@ -79,7 +79,7 @@ Defined in: [types/local\_config\_persistence.tsx:15](https://github.com/firecms
 
 ##### partialCollection
 
-[`PartialEntityCollection`](../type-aliases/PartialEntityCollection)\<`M`\>
+[`PartialEntityCollection`](/docs/api/type-aliases/PartialEntityCollection)\<`M`\>
 
 #### Returns
 

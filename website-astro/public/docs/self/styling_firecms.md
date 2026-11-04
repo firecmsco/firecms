@@ -18,9 +18,9 @@ Your `index.css` file should look like this:
 
 @plugin "@tailwindcss/typography";
 
-@source "https://firecms.co/docs/index.html";
-@source "https://firecms.co/docs/src/**/*.{js,ts,jsx,tsx}";
-@source "https://firecms.co/docs/https://firecms.co/docs/https://firecms.co/docs/node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
+@source "../index.html";
+@source "../src/**/*.{js,ts,jsx,tsx}";
+@source "../../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
 
 :root {
     --color-primary: #0070F4;

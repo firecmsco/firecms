@@ -16,4 +16,4 @@ buildProperty({
 });
 ```
 
-Der Datentyp ist [`boolean`](../config/boolean).
+Der Datentyp ist [`boolean`](/de/docs/properties/config/boolean).

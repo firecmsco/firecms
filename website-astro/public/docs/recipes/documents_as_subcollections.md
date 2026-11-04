@@ -9,12 +9,12 @@ imagine we are modeling the structure for a course.
 
 In the units collection we will create a document for each unit:
 
-![dynamic_navigation_collection](/img/recipes/dynamic_navigation_collection.png)
+![dynamic_navigation_collection](https://firecms.co/img/recipes/dynamic_navigation_collection.png)
 
 And each of those documents will generate a new navigation item. In this case
 we will have 3 navigation items, one for each unit:
 
-![dynamic_navigation_home](/img/recipes/dynamic_navigation_home.png)
+![dynamic_navigation_home](https://firecms.co/img/recipes/dynamic_navigation_home.png)
 
 ### Declare the main collection
 

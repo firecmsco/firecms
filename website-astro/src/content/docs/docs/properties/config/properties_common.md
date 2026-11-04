@@ -25,7 +25,7 @@ Each property in the CMS has its own API, but they all share some **common props
   disabled field. You can also specify a configuration for defining the
   behaviour of disabled properties (including custom messages, clear value on
   disabled or hide the field completely)
-  [PropertyDisabledConfig](../../api/interfaces/PropertyDisabledConfig)
+  [PropertyDisabledConfig](/docs/api/interfaces/PropertyDisabledConfig)
 
 * `Field`
   If you need to render a custom field, you can create a component that
@@ -33,13 +33,13 @@ Each property in the CMS has its own API, but they all share some **common props
   the value and additional utility props such as if there is an error. You
   can customize it by passing custom props that are received in the
   component. More details about how to
-  implement [custom fields](../custom_fields.mdx)
+  implement [custom fields](/docs/properties/custom_fields)
 
 * `Preview`
   Configure how a property is displayed as a preview, e.g. in the collection
   view. You can customize it by passing custom props that are received in
   the component. More details about how to
-  implement [custom previews](../custom_previews)
+  implement [custom previews](/docs/properties/custom_previews)
 
 * `customProps`
   Additional props that are passed to the components defined in `Field` or

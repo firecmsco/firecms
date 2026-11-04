@@ -3,15 +3,15 @@ slug: "docs/api/variables/VirtualTable"
 title: "VirtualTable"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / VirtualTable
+[@firecms/core](/docs/api/README) / VirtualTable
 
 # Variable: VirtualTable
 
-> `const` **VirtualTable**: `NamedExoticComponent`\<[`VirtualTableProps`](../interfaces/VirtualTableProps)\<`any`\>\>
+> `const` **VirtualTable**: `NamedExoticComponent`\<[`VirtualTableProps`](/docs/api/interfaces/VirtualTableProps)\<`any`\>\>
 
 Defined in: [components/VirtualTable/VirtualTable.tsx:90](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTable.tsx)
 

@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/useClipboardReturnType"
 title: "useClipboardReturnType"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useClipboardReturnType
+[@firecms/core](/docs/api/README) / useClipboardReturnType
 
 # Interface: useClipboardReturnType
 

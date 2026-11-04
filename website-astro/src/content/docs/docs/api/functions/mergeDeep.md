@@ -3,11 +3,11 @@ slug: "docs/api/functions/mergeDeep"
 title: "mergeDeep"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / mergeDeep
+[@firecms/core](/docs/api/README) / mergeDeep
 
 # Function: mergeDeep()
 

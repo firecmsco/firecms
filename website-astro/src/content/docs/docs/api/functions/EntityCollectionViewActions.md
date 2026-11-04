@@ -3,11 +3,11 @@ slug: "docs/api/functions/EntityCollectionViewActions"
 title: "EntityCollectionViewActions"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionViewActions
+[@firecms/core](/docs/api/README) / EntityCollectionViewActions
 
 # Function: EntityCollectionViewActions()
 
@@ -25,7 +25,7 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:23]
 
 ### \_\_namedParameters
 
-[`EntityCollectionViewActionsProps`](../type-aliases/EntityCollectionViewActionsProps)\<`M`\>
+[`EntityCollectionViewActionsProps`](/docs/api/type-aliases/EntityCollectionViewActionsProps)\<`M`\>
 
 ## Returns
 

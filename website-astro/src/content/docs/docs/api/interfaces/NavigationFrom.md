@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/NavigationFrom"
 title: "NavigationFrom"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NavigationFrom
+[@firecms/core](/docs/api/README) / NavigationFrom
 
 # Interface: NavigationFrom\<M\>
 
@@ -23,7 +23,7 @@ Defined in: [hooks/useResolvedNavigationFrom.tsx:117](https://github.com/firecms
 
 ### data?
 
-> `optional` **data**: [`ResolvedNavigationEntry`](../type-aliases/ResolvedNavigationEntry)\<`M`\>[]
+> `optional` **data**: [`ResolvedNavigationEntry`](/docs/api/type-aliases/ResolvedNavigationEntry)\<`M`\>[]
 
 Defined in: [hooks/useResolvedNavigationFrom.tsx:118](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
 

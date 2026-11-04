@@ -75,5 +75,5 @@ When you add a new project, such as a staging environment or a new client, add i
 
 ## Telemetry
 
-The license check is a single request from the browser to `api.firecms.co` when a signed-in user opens the app. [Telemetry](/docs/self/telemetry) lists exactly what it sends, what we store and why.
+The license check is a single request from the browser to `api.firecms.co` when a signed-in user opens the app. [Telemetry](https://firecms.co/docs/self/telemetry) lists exactly what it sends, what we store and why.
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/DrawerNavigationItem"
 title: "DrawerNavigationItem"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DrawerNavigationItem
+[@firecms/core](/docs/api/README) / DrawerNavigationItem
 
 # Function: DrawerNavigationItem()
 

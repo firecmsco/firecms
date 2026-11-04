@@ -165,6 +165,20 @@ function setAsideFencedCode(content) {
 }
 
 /**
+ * Turns the links in a page into full URLs, resolved the way the browser resolves them on the site:
+ * against the page URL with its trailing slash (`docs/collections/index` is served at `/docs/collections/`).
+ * @param {string} content - The page markdown.
+ * @param {string} slug - The page slug, e.g. `docs/collections/index`.
+ * @returns {string} - The markdown with `](/...)`, `](./...)` and `](../...)` links made absolute.
+ */
+function absoluteLinks(content, slug) {
+    const pageUrl = `https://firecms.co/${slug.replace(/(^|\/)index$/, "")}/`;
+    // Links inside code samples are code, not links
+    const { text, restore } = setAsideFencedCode(content);
+    return restore(text.replace(/\]\((\/(?!\/)[^)\s]*|\.\.?\/[^)\s]*)/g, (match, target) => `](${new URL(target, pageUrl).href}`));
+}
+
+/**
  * Extracts all document slugs from the sidebar in astro.config.mjs in order.
  * @param {string} configFilePath - The path to the astro.config.mjs file.
  * @returns {Promise<string[]>} - An array of document slugs in the order they appear in the sidebar.
@@ -269,18 +283,14 @@ async function buildSlugMap(directoryPath, slugMap) {
                 try {
                     const resolvedMdx = await resolveCodeBlocks(mdxFilePath);
                     // Prepend the title in H1 format
-                    const contentToAppend = `# ${title}\n${resolvedMdx}\n`;
+                    const contentToAppend = absoluteLinks(`# ${title}\n${resolvedMdx}\n`, slug);
                     // Append the resolved content to the output file
                     result += contentToAppend;
-                    
+
                     // Write the individual .md file for direct access
                     const individualMdPath = path.join("./public", `${slug}.md`);
                     fs.mkdirSync(path.dirname(individualMdPath), { recursive: true });
-                    // Process relative links for the individual file to be absolute
-                    let individualContent = contentToAppend;
-                    individualContent = individualContent.replaceAll("](./", "](https://firecms.co/docs/");
-                    individualContent = individualContent.replaceAll("../", "https://firecms.co/docs/");
-                    fs.writeFileSync(individualMdPath, individualContent, "utf-8");
+                    fs.writeFileSync(individualMdPath, contentToAppend, "utf-8");
                     
                     processedCount++;
                 } catch (error) {
@@ -293,8 +303,6 @@ async function buildSlugMap(directoryPath, slugMap) {
 
         result = result.replaceAll("# ", "## "); // Convert H1 to H2 and so on
         result = intro + result; // Add the intro to the beginning
-        result = result.replaceAll("](./", "](https://firecms.co/docs/"); // Replace relative links with absolute links
-        result = result.replaceAll("](../", "](https://firecms.co/docs/"); // Replace relative links with absolute links
 
         await fs.promises.appendFile(outputFilePath, result, "utf-8");
 

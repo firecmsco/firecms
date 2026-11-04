@@ -1,6 +1,6 @@
 # Block
 
-![Field](/img/fields/Block.png)
+![Field](https://firecms.co/img/fields/Block.png)
 
 Block is a special field that allows you to build repeat fields where the
 entries are dynamic. Each entry has a `type` selector that allows the end user
@@ -50,9 +50,9 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](https://firecms.co/docs/config/array).
+The data type is [`array`](https://firecms.co/docs/properties/config/array).
 
 Internally the component used
-is [`BlockFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/BlockFieldBinding).
+is [`BlockFieldBinding`](https://firecms.co/docs/api/functions/BlockFieldBinding).
 
 

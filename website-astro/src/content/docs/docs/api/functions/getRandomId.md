@@ -3,11 +3,11 @@ slug: "docs/api/functions/getRandomId"
 title: "getRandomId"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getRandomId
+[@firecms/core](/docs/api/README) / getRandomId
 
 # Function: getRandomId()
 

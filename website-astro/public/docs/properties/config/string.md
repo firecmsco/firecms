@@ -175,7 +175,7 @@ You can use the enum values providing a map of possible exclusive values the
 property can take, mapped to the label that it is displayed in the dropdown. You
 can use a simple object with the format
 `value` => `label`, or with the format `value`
-=> [`EnumValueConfig`](https://firecms.co/docs/https://firecms.co/docs/api/type-aliases/EnumValueConfig) if you need extra
+=> [`EnumValueConfig`](https://firecms.co/docs/api/type-aliases/EnumValueConfig) if you need extra
 customization, (like disabling specific options or assigning colors). If you
 need to ensure the order of the elements, you can pass a `Map` instead of a
 plain object.
@@ -279,18 +279,18 @@ const property = buildProperty({
 
 Based on your configuration the form field widgets that are created are:
 
-- [`TextFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/TextFieldBinding) generic text field
-- [`SelectFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/SelectFieldBinding) if `enumValues`
+- [`TextFieldBinding`](https://firecms.co/docs/api/functions/TextFieldBinding) generic text field
+- [`SelectFieldBinding`](https://firecms.co/docs/api/functions/SelectFieldBinding) if `enumValues`
   are set in the string config, this field renders a select
   where each option is a colored chip.
-- [`StorageUploadFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/StorageUploadFieldBinding)
+- [`StorageUploadFieldBinding`](https://firecms.co/docs/api/functions/StorageUploadFieldBinding)
   the property has a
   storage configuration.
-- [`MarkdownEditorFieldBinding.`](https://firecms.co/docs/https://firecms.co/docs/api/functions/MarkdownEditorFieldBinding) the
+- [`MarkdownEditorFieldBinding.`](https://firecms.co/docs/api/functions/MarkdownEditorFieldBinding) the
   property has a
   markdown configuration.
 
 Links:
 
-- [API](https://firecms.co/docs/https://firecms.co/docs/api/interfaces/StringProperty)
+- [API](https://firecms.co/docs/api/interfaces/StringProperty)
 

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/NavigationController"
 title: "NavigationController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NavigationController
+[@firecms/core](/docs/api/README) / NavigationController
 
 # Type Alias: NavigationController\<EC\>
 
@@ -23,13 +23,13 @@ This controller holds the state of the navigation including the collections.
 
 ### EC
 
-`EC` *extends* [`EntityCollection`](../interfaces/EntityCollection) = [`EntityCollection`](../interfaces/EntityCollection)\<`any`\>
+`EC` *extends* [`EntityCollection`](/docs/api/interfaces/EntityCollection) = [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`\>
 
 ## Properties
 
 ### adminViews?
 
-> `optional` **adminViews**: [`CMSView`](../interfaces/CMSView)[]
+> `optional` **adminViews**: [`CMSView`](/docs/api/interfaces/CMSView)[]
 
 Defined in: [types/navigation.ts:32](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
 
@@ -84,7 +84,7 @@ Build a URL collection path from a data path
 
 ### collections?
 
-> `optional` **collections**: [`EntityCollection`](../interfaces/EntityCollection)[]
+> `optional` **collections**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)[]
 
 Defined in: [types/navigation.ts:20](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
 
@@ -222,7 +222,7 @@ Retrieve all the related parent collection ids for a given path
 
 ### getParentReferencesFromPath()
 
-> **getParentReferencesFromPath**: (`path`) => [`EntityReference`](../classes/EntityReference)[]
+> **getParentReferencesFromPath**: (`path`) => [`EntityReference`](/docs/api/classes/EntityReference)[]
 
 Defined in: [types/navigation.ts:134](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
 
@@ -236,7 +236,7 @@ Retrieve all the related parent references for a given path
 
 #### Returns
 
-[`EntityReference`](../classes/EntityReference)[]
+[`EntityReference`](/docs/api/classes/EntityReference)[]
 
 ***
 
@@ -309,7 +309,7 @@ The target route or URL to navigate to.
 
 ##### options?
 
-[`NavigateOptions`](../interfaces/NavigateOptions)
+[`NavigateOptions`](/docs/api/interfaces/NavigateOptions)
 
 Optional configuration settings for navigation, such as replace behavior or state data.
 
@@ -331,7 +331,7 @@ Was there an error while loading the navigation data
 
 ### plugins?
 
-> `optional` **plugins**: [`FireCMSPlugin`](FireCMSPlugin)\<`any`, `any`, `any`\>[]
+> `optional` **plugins**: [`FireCMSPlugin`](/docs/api/type-aliases/FireCMSPlugin)\<`any`, `any`, `any`\>[]
 
 Defined in: [types/navigation.ts:159](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
 
@@ -376,7 +376,7 @@ The ids (typically used in urls) will be replaced with relative paths (typically
 
 ### topLevelNavigation?
 
-> `optional` **topLevelNavigation**: [`NavigationResult`](NavigationResult)
+> `optional` **topLevelNavigation**: [`NavigationResult`](/docs/api/type-aliases/NavigationResult)
 
 Defined in: [types/navigation.ts:39](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
 
@@ -411,7 +411,7 @@ Convert a URL path to a collection or entity path
 
 ### views?
 
-> `optional` **views**: [`CMSView`](../interfaces/CMSView)[]
+> `optional` **views**: [`CMSView`](/docs/api/interfaces/CMSView)[]
 
 Defined in: [types/navigation.ts:26](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
 

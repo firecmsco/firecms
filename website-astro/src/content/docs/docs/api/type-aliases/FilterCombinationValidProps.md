@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/FilterCombinationValidProps"
 title: "FilterCombinationValidProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FilterCombinationValidProps
+[@firecms/core](/docs/api/README) / FilterCombinationValidProps
 
 # Type Alias: FilterCombinationValidProps
 
@@ -19,7 +19,7 @@ Defined in: [types/datasource.ts:239](https://github.com/firecmsco/firecms/blob/
 
 ### collection
 
-> **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`any`\>
+> **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`\>
 
 Defined in: [types/datasource.ts:241](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 
@@ -27,7 +27,7 @@ Defined in: [types/datasource.ts:241](https://github.com/firecmsco/firecms/blob/
 
 ### filterValues
 
-> **filterValues**: [`FilterValues`](FilterValues)\<`any`\>
+> **filterValues**: [`FilterValues`](/docs/api/type-aliases/FilterValues)\<`any`\>
 
 Defined in: [types/datasource.ts:242](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 

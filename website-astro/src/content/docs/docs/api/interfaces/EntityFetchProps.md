@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/EntityFetchProps"
 title: "EntityFetchProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityFetchProps
+[@firecms/core](/docs/api/README) / EntityFetchProps
 
 # Interface: EntityFetchProps\<M, USER\>
 
@@ -21,13 +21,13 @@ Defined in: [hooks/data/useEntityFetch.tsx:10](https://github.com/firecmsco/fire
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
 ### collection
 
-> **collection**: [`EntityCollection`](EntityCollection)\<`M`, `USER`\>
+> **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`, `USER`\>
 
 Defined in: [hooks/data/useEntityFetch.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useEntityFetch.tsx)
 

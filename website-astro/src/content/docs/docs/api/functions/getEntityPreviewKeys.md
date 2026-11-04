@@ -3,11 +3,11 @@ slug: "docs/api/functions/getEntityPreviewKeys"
 title: "getEntityPreviewKeys"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getEntityPreviewKeys
+[@firecms/core](/docs/api/README) / getEntityPreviewKeys
 
 # Function: getEntityPreviewKeys()
 
@@ -19,15 +19,15 @@ Defined in: [util/references.ts:6](https://github.com/firecmsco/firecms/blob/mai
 
 ### authController
 
-[`AuthController`](../type-aliases/AuthController)
+[`AuthController`](/docs/api/type-aliases/AuthController)
 
 ### targetCollection
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`any`\>
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`\>
 
 ### fields
 
-`Record`\<`string`, [`PropertyConfig`](../type-aliases/PropertyConfig)\>
+`Record`\<`string`, [`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\>
 
 ### previewProperties?
 

@@ -5,7 +5,7 @@ sidebar_label: Campi condizionali
 description: In FireCMS, i campi condizionali consentono configurazioni di proprietà dinamiche all'interno degli schemi delle collezioni.
 ---
 
-Quando si definiscono le proprietà di una collezione, puoi scegliere di usare un builder [`PropertyBuilder`](../api/type-aliases/PermissionsBuilder), invece di assegnare direttamente la configurazione della proprietà.
+Quando si definiscono le proprietà di una collezione, puoi scegliere di usare un builder [`PropertyBuilder`](/it/docs/api/type-aliases/PermissionsBuilder), invece di assegnare direttamente la configurazione della proprietà.
 
 Questo è utile per cambiare le configurazioni delle proprietà come i valori disponibili al volo, in base ad altri valori.
 

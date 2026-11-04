@@ -179,7 +179,7 @@ Vous pouvez utiliser les valeurs enum en fournissant un map de valeurs exclusive
 propriété peut prendre, mappées à l'étiquette affichée dans le dropdown. Vous
 pouvez utiliser un objet simple au format
 `value` => `label`, ou au format `value`
-=> [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig) si vous avez besoin de plus de
+=> [`EnumValueConfig`](/fr/docs/api/type-aliases/EnumValueConfig) si vous avez besoin de plus de
 personnalisation (comme désactiver des options spécifiques ou assigner des couleurs). Si vous
 avez besoin de garantir l'ordre des éléments, vous pouvez passer un `Map` au lieu d'un
 objet simple.
@@ -282,17 +282,17 @@ const property = buildProperty({
 
 En fonction de votre configuration, les widgets de champ de formulaire créés sont :
 
-- [`TextFieldBinding`](../../api/functions/TextFieldBinding) champ de texte générique
-- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) si les `enumValues`
+- [`TextFieldBinding`](/fr/docs/api/functions/TextFieldBinding) champ de texte générique
+- [`SelectFieldBinding`](/fr/docs/api/functions/SelectFieldBinding) si les `enumValues`
   sont définies dans la configuration du string, ce champ rend un select
   où chaque option est un chip coloré.
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding)
+- [`StorageUploadFieldBinding`](/fr/docs/api/functions/StorageUploadFieldBinding)
   la propriété a une
   configuration de stockage.
-- [`MarkdownEditorFieldBinding.`](../../api/functions/MarkdownEditorFieldBinding) la
+- [`MarkdownEditorFieldBinding.`](/fr/docs/api/functions/MarkdownEditorFieldBinding) la
   propriété a une
   configuration markdown.
 
 Liens :
 
-- [API](../../api/interfaces/StringProperty)
+- [API](/fr/docs/api/interfaces/StringProperty)

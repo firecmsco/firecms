@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/PropertiesOrBuilders"
 title: "PropertiesOrBuilders"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertiesOrBuilders
+[@firecms/core](/docs/api/README) / PropertiesOrBuilders
 
 # Type Alias: PropertiesOrBuilders\<M\>
 

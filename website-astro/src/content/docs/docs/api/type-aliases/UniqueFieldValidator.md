@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/UniqueFieldValidator"
 title: "UniqueFieldValidator"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / UniqueFieldValidator
+[@firecms/core](/docs/api/README) / UniqueFieldValidator
 
 # Type Alias: UniqueFieldValidator()
 
@@ -29,7 +29,7 @@ Defined in: [components/common/types.tsx:45](https://github.com/firecmsco/firecm
 
 #### property
 
-[`ResolvedProperty`](ResolvedProperty)
+[`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)
 
 #### value
 

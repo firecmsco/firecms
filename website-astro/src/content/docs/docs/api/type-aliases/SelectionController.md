@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/SelectionController"
 title: "SelectionController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SelectionController
+[@firecms/core](/docs/api/README) / SelectionController
 
 # Type Alias: SelectionController\<M\>
 
@@ -16,7 +16,7 @@ title: "SelectionController"
 Defined in: [types/collections.ts:427](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
 Use this controller to retrieve the selected entities or modify them in
-an [EntityCollection](../interfaces/EntityCollection)
+an [EntityCollection](/docs/api/interfaces/EntityCollection)
 
 ## Type Parameters
 
@@ -36,7 +36,7 @@ Defined in: [types/collections.ts:430](https://github.com/firecmsco/firecms/blob
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 #### Returns
 
@@ -46,7 +46,7 @@ Defined in: [types/collections.ts:430](https://github.com/firecmsco/firecms/blob
 
 ### selectedEntities
 
-> **selectedEntities**: [`Entity`](../interfaces/Entity)\<`M`\>[]
+> **selectedEntities**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>[]
 
 Defined in: [types/collections.ts:428](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -54,7 +54,7 @@ Defined in: [types/collections.ts:428](https://github.com/firecmsco/firecms/blob
 
 ### setSelectedEntities
 
-> **setSelectedEntities**: `Dispatch`\<`SetStateAction`\<[`Entity`](../interfaces/Entity)\<`M`\>[]\>\>
+> **setSelectedEntities**: `Dispatch`\<`SetStateAction`\<[`Entity`](/docs/api/interfaces/Entity)\<`M`\>[]\>\>
 
 Defined in: [types/collections.ts:429](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -70,7 +70,7 @@ Defined in: [types/collections.ts:431](https://github.com/firecmsco/firecms/blob
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 ##### newSelectedState?
 

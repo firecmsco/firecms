@@ -3,11 +3,11 @@ slug: "docs/api/functions/resolveDefaultSelectedView"
 title: "resolveDefaultSelectedView"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolveDefaultSelectedView
+[@firecms/core](/docs/api/README) / resolveDefaultSelectedView
 
 # Function: resolveDefaultSelectedView()
 
@@ -19,11 +19,11 @@ Defined in: [util/collections.ts:41](https://github.com/firecmsco/firecms/blob/m
 
 ### defaultSelectedView
 
-`string` | [`DefaultSelectedViewBuilder`](../type-aliases/DefaultSelectedViewBuilder) | `undefined`
+`string` | [`DefaultSelectedViewBuilder`](/docs/api/type-aliases/DefaultSelectedViewBuilder) | `undefined`
 
 ### params
 
-[`DefaultSelectedViewParams`](../type-aliases/DefaultSelectedViewParams)
+[`DefaultSelectedViewParams`](/docs/api/type-aliases/DefaultSelectedViewParams)
 
 ## Returns
 

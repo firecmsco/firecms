@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/NavigationBlocker"
 title: "NavigationBlocker"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NavigationBlocker
+[@firecms/core](/docs/api/README) / NavigationBlocker
 
 # Type Alias: NavigationBlocker
 

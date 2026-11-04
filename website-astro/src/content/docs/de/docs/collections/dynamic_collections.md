@@ -35,7 +35,7 @@ const collectionsBuilder: EntityCollectionsBuilder = async ({
 
 :::note
 Wenn Sie nur auf Eigenschaftsebene Anpassungen vornehmen möchten, lesen Sie den Abschnitt
-[Bedingte Felder](../properties/conditional_fields). Beachten Sie, dass bedingte Felder jedoch nicht
+[Bedingte Felder](/de/docs/properties/conditional_fields). Beachten Sie, dass bedingte Felder jedoch nicht
 für asynchrone Operationen geeignet sind.
 :::
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/useTraceUpdate"
 title: "useTraceUpdate"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useTraceUpdate
+[@firecms/core](/docs/api/README) / useTraceUpdate
 
 # Function: useTraceUpdate()
 

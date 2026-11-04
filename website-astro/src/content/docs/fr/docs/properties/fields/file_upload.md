@@ -41,9 +41,9 @@ buildProperty({
 });
 ```
 
-Le type de données est [`string`](../config/string).
+Le type de données est [`string`](/fr/docs/properties/config/string).
 
-En interne, le composant utilisé est [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
+En interne, le composant utilisé est [`StorageUploadFieldBinding`](/fr/docs/api/functions/StorageUploadFieldBinding).
 
 ### Téléversement de fichiers multiples
 
@@ -69,9 +69,9 @@ buildProperty({
 });
 ```
 
-Le type de données est [`array`](../config/array).
+Le type de données est [`array`](/fr/docs/properties/config/array).
 
-En interne, le composant utilisé est [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
+En interne, le composant utilisé est [`StorageUploadFieldBinding`](/fr/docs/api/functions/StorageUploadFieldBinding).
 
 ### Support personnalisé pour les images, vidéos et audio
 

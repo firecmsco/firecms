@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/SelectableTableProps"
 title: "SelectableTableProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SelectableTableProps
+[@firecms/core](/docs/api/README) / SelectableTableProps
 
 # Type Alias: SelectableTableProps\<M\>
 
@@ -33,7 +33,7 @@ Defined in: [components/SelectableTable/SelectableTable.tsx:95](https://github.c
 
 ### cellRenderer
 
-> **cellRenderer**: `React.ComponentType`\<[`CellRendererParams`](CellRendererParams)\<[`Entity`](../interfaces/Entity)\<`M`\>\>\>
+> **cellRenderer**: `React.ComponentType`\<[`CellRendererParams`](/docs/api/type-aliases/CellRendererParams)\<[`Entity`](/docs/api/interfaces/Entity)\<`M`\>\>\>
 
 Defined in: [components/SelectableTable/SelectableTable.tsx:31](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/SelectableTable/SelectableTable.tsx)
 
@@ -41,7 +41,7 @@ Defined in: [components/SelectableTable/SelectableTable.tsx:31](https://github.c
 
 ### columns
 
-> **columns**: [`VirtualTableColumn`](../interfaces/VirtualTableColumn)[]
+> **columns**: [`VirtualTableColumn`](/docs/api/interfaces/VirtualTableColumn)[]
 
 Defined in: [components/SelectableTable/SelectableTable.tsx:29](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/SelectableTable/SelectableTable.tsx)
 
@@ -73,7 +73,7 @@ Defined in: [components/SelectableTable/SelectableTable.tsx:67](https://github.c
 
 ### forceFilter?
 
-> `optional` **forceFilter**: [`FilterValues`](FilterValues)\<keyof `M` *extends* `string` ? keyof `M` : `never`\>
+> `optional` **forceFilter**: [`FilterValues`](/docs/api/type-aliases/FilterValues)\<keyof `M` *extends* `string` ? keyof `M` : `never`\>
 
 Defined in: [components/SelectableTable/SelectableTable.tsx:73](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/SelectableTable/SelectableTable.tsx)
 
@@ -89,7 +89,7 @@ Defined in: [components/SelectableTable/SelectableTable.tsx:75](https://github.c
 
 ##### data
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 #### Returns
 
@@ -155,7 +155,7 @@ Callback when the table is scrolled
 
 ### onValueChange?
 
-> `optional` **onValueChange**: [`OnCellValueChange`](OnCellValueChange)\<`any`, `M`\>
+> `optional` **onValueChange**: [`OnCellValueChange`](/docs/api/type-aliases/OnCellValueChange)\<`any`, `M`\>
 
 Defined in: [components/SelectableTable/SelectableTable.tsx:27](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/SelectableTable/SelectableTable.tsx)
 
@@ -165,7 +165,7 @@ Callback when a cell value changes.
 
 ### size?
 
-> `optional` **size**: [`CollectionSize`](CollectionSize)
+> `optional` **size**: [`CollectionSize`](/docs/api/type-aliases/CollectionSize)
 
 Defined in: [components/SelectableTable/SelectableTable.tsx:77](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/SelectableTable/SelectableTable.tsx)
 
@@ -181,13 +181,13 @@ Defined in: [components/SelectableTable/SelectableTable.tsx:69](https://github.c
 
 ### tableController
 
-> **tableController**: [`EntityTableController`](EntityTableController)\<`M`\>
+> **tableController**: [`EntityTableController`](/docs/api/type-aliases/EntityTableController)\<`M`\>
 
 Defined in: [components/SelectableTable/SelectableTable.tsx:65](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/SelectableTable/SelectableTable.tsx)
 
 Controller holding the logic for the table
-[useDataSourceTableController](../functions/useDataSourceTableController)
-[EntityTableController](EntityTableController)
+[useDataSourceTableController](/docs/api/functions/useDataSourceTableController)
+[EntityTableController](/docs/api/type-aliases/EntityTableController)
 
 ***
 
@@ -205,7 +205,7 @@ Builder for creating the buttons in each row
 
 ###### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 ###### frozen?
 
@@ -213,7 +213,7 @@ Builder for creating the buttons in each row
 
 ###### size
 
-[`CollectionSize`](CollectionSize)
+[`CollectionSize`](/docs/api/type-aliases/CollectionSize)
 
 ###### width
 
@@ -237,7 +237,7 @@ Callback when a column is resized
 
 ##### params
 
-[`OnColumnResizeParams`](OnColumnResizeParams)
+[`OnColumnResizeParams`](/docs/api/type-aliases/OnColumnResizeParams)
 
 #### Returns
 
@@ -257,7 +257,7 @@ Callback when anywhere on the table is clicked
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 #### Returns
 

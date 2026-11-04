@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/VirtualTableProps"
 title: "VirtualTableProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / VirtualTableProps
+[@firecms/core](/docs/api/README) / VirtualTableProps
 
 # Interface: VirtualTableProps\<T\>
 
@@ -39,7 +39,7 @@ If adding this callback, a button to add a new column is displayed.
 
 ### cellRenderer
 
-> **cellRenderer**: `ComponentType`\<[`CellRendererParams`](../type-aliases/CellRendererParams)\<`T`\>\>
+> **cellRenderer**: `ComponentType`\<[`CellRendererParams`](/docs/api/type-aliases/CellRendererParams)\<`T`\>\>
 
 Defined in: [components/VirtualTable/VirtualTableProps.tsx:32](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
 
@@ -61,7 +61,7 @@ of filter combinations only.
 
 ##### filterValues
 
-[`VirtualTableFilterValues`](../type-aliases/VirtualTableFilterValues)\<`Extract`\<keyof `T`, `string`\>\>
+[`VirtualTableFilterValues`](/docs/api/type-aliases/VirtualTableFilterValues)\<`Extract`\<keyof `T`, `string`\>\>
 
 ##### sortBy?
 
@@ -85,7 +85,7 @@ Class name applied to the table
 
 ### columns
 
-> **columns**: [`VirtualTableColumn`](VirtualTableColumn)\<`any`\>[]
+> **columns**: [`VirtualTableColumn`](/docs/api/interfaces/VirtualTableColumn)\<`any`\>[]
 
 Defined in: [components/VirtualTable/VirtualTableProps.tsx:26](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
 
@@ -167,7 +167,7 @@ displayed instead of the content
 
 ### filter?
 
-> `optional` **filter**: `Partial`\<`Record`\<`any`, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
+> `optional` **filter**: `Partial`\<`Record`\<`any`, \[[`WhereFilterOp`](/docs/api/type-aliases/WhereFilterOp), `any`\]\>\>
 
 Defined in: [components/VirtualTable/VirtualTableProps.tsx:77](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
 
@@ -217,7 +217,7 @@ Callback when a column is resized
 
 ##### params
 
-[`OnVirtualTableColumnResizeParams`](../type-aliases/OnVirtualTableColumnResizeParams)
+[`OnVirtualTableColumnResizeParams`](/docs/api/type-aliases/OnVirtualTableColumnResizeParams)
 
 #### Returns
 
@@ -251,7 +251,7 @@ Callback used when filters are updated
 
 ##### filter?
 
-`Partial`\<`Record`\<`any`, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
+`Partial`\<`Record`\<`any`, \[[`WhereFilterOp`](/docs/api/type-aliases/WhereFilterOp), `any`\]\>\>
 
 #### Returns
 
@@ -286,7 +286,7 @@ Callback when a row is clicked
 
 ##### props
 
-[`OnRowClickParams`](../type-aliases/OnRowClickParams)\<`T`\>
+[`OnRowClickParams`](/docs/api/type-aliases/OnRowClickParams)\<`T`\>
 
 #### Returns
 

@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/SideEntityController"
 title: "SideEntityController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SideEntityController
+[@firecms/core](/docs/api/README) / SideEntityController
 
 # Interface: SideEntityController
 
@@ -54,7 +54,7 @@ to edit. You can set an entityId if you would like to edit and existing one
 
 ##### props
 
-[`EntitySidePanelProps`](EntitySidePanelProps)\<`M`\>
+[`EntitySidePanelProps`](/docs/api/interfaces/EntitySidePanelProps)\<`M`\>
 
 #### Returns
 
@@ -80,7 +80,7 @@ Replace the last open entity panel with the given one.
 
 ##### props
 
-[`EntitySidePanelProps`](EntitySidePanelProps)\<`M`\>
+[`EntitySidePanelProps`](/docs/api/interfaces/EntitySidePanelProps)\<`M`\>
 
 #### Returns
 

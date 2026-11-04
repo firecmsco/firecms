@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/PreviewType"
 title: "PreviewType"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PreviewType
+[@firecms/core](/docs/api/README) / PreviewType
 
 # Type Alias: PreviewType
 

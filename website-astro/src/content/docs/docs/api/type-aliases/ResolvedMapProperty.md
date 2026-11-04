@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/ResolvedMapProperty"
 title: "ResolvedMapProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ResolvedMapProperty
+[@firecms/core](/docs/api/README) / ResolvedMapProperty
 
 # Type Alias: ResolvedMapProperty\<T\>
 
-> **ResolvedMapProperty**\<`T`\> = `Omit`\<[`MapProperty`](../interfaces/MapProperty), `"properties"` \| `"dataType"` \| `"propertiesOrder"`\> & `object`
+> **ResolvedMapProperty**\<`T`\> = `Omit`\<[`MapProperty`](/docs/api/interfaces/MapProperty), `"properties"` \| `"dataType"` \| `"propertiesOrder"`\> & `object`
 
 Defined in: [types/resolved\_entities.ts:140](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
 
@@ -27,7 +27,7 @@ Defined in: [types/resolved\_entities.ts:140](https://github.com/firecmsco/firec
 
 ### properties?
 
-> `optional` **properties**: [`ResolvedProperties`](ResolvedProperties)\<`T`\>
+> `optional` **properties**: [`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)\<`T`\>
 
 ### propertiesOrder?
 

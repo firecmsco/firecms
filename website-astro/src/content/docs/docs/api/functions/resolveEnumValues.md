@@ -3,15 +3,15 @@ slug: "docs/api/functions/resolveEnumValues"
 title: "resolveEnumValues"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolveEnumValues
+[@firecms/core](/docs/api/README) / resolveEnumValues
 
 # Function: resolveEnumValues()
 
-> **resolveEnumValues**(`input`): [`EnumValueConfig`](../type-aliases/EnumValueConfig)[] \| `undefined`
+> **resolveEnumValues**(`input`): [`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig)[] \| `undefined`
 
 Defined in: [util/resolutions.ts:418](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/resolutions.ts)
 
@@ -19,8 +19,8 @@ Defined in: [util/resolutions.ts:418](https://github.com/firecmsco/firecms/blob/
 
 ### input
 
-[`EnumValues`](../type-aliases/EnumValues)
+[`EnumValues`](/docs/api/type-aliases/EnumValues)
 
 ## Returns
 
-[`EnumValueConfig`](../type-aliases/EnumValueConfig)[] \| `undefined`
+[`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig)[] \| `undefined`

@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/PropertyPreviewProps"
 title: "PropertyPreviewProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyPreviewProps
+[@firecms/core](/docs/api/README) / PropertyPreviewProps
 
 # Interface: PropertyPreviewProps\<T, CustomProps\>
 
@@ -17,7 +17,7 @@ Defined in: [preview/PropertyPreviewProps.tsx:11](https://github.com/firecmsco/f
 
 ### T
 
-`T` *extends* [`CMSType`](../type-aliases/CMSType) = `any`
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType) = `any`
 
 ### CustomProps
 
@@ -59,7 +59,7 @@ This applies only to videos.
 
 ### property
 
-> **property**: [`Property`](../type-aliases/Property)\<`T`\> \| [`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\>
+> **property**: [`Property`](/docs/api/type-aliases/Property)\<`T`\> \| [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\<`T`\>
 
 Defined in: [preview/PropertyPreviewProps.tsx:25](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/PropertyPreviewProps.tsx)
 
@@ -79,7 +79,7 @@ Name of the property
 
 ### size
 
-> **size**: [`PreviewSize`](../type-aliases/PreviewSize)
+> **size**: [`PreviewSize`](/docs/api/type-aliases/PreviewSize)
 
 Defined in: [preview/PropertyPreviewProps.tsx:30](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/PropertyPreviewProps.tsx)
 

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityPreviewContainerProps"
 title: "EntityPreviewContainerProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityPreviewContainerProps
+[@firecms/core](/docs/api/README) / EntityPreviewContainerProps
 
 # Type Alias: EntityPreviewContainerProps
 
@@ -69,7 +69,7 @@ Defined in: [components/EntityPreview.tsx:200](https://github.com/firecmsco/fire
 
 ### size?
 
-> `optional` **size**: [`PreviewSize`](PreviewSize)
+> `optional` **size**: [`PreviewSize`](/docs/api/type-aliases/PreviewSize)
 
 Defined in: [components/EntityPreview.tsx:197](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityPreview.tsx)
 

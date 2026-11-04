@@ -1,6 +1,6 @@
 # Creating a project from a service account
 
-:::important
+:::note
 You **only** need to create a service account manually for FireCMS Cloud projects, in case you don't want
 to grant FireCMS admin permissions. In the app, you can create a new project or link existing projects
 without the need to create a service account manually.
@@ -85,7 +85,7 @@ Find the newly created Service account, and in the dropdown menu, click on `Mana
 
 Now you can **upload this JSON key** to **FireCMS Cloud** and link it to your project.
 
-:::important[Security]
+:::caution[Security]
 A service account is a special type of Google account that allows non-human users to authenticate and authorize
 Google Cloud Platform (GCP) services. It is important to keep the service account key secure, as it can be used to
 access your GCP resources. FireCMS Cloud uses this service account to manage your project resources.

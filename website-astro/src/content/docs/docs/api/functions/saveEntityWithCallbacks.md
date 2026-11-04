@@ -3,11 +3,11 @@ slug: "docs/api/functions/saveEntityWithCallbacks"
 title: "saveEntityWithCallbacks"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / saveEntityWithCallbacks
+[@firecms/core](/docs/api/README) / saveEntityWithCallbacks
 
 # Function: saveEntityWithCallbacks()
 
@@ -22,7 +22,7 @@ errors.
 
 If you just want to save the data without running the `onSaveSuccess`,
 `onSaveFailure` and `onPreSave` callbacks, you can use the `saveEntity` method
-in the datasource ([useDataSource](useDataSource)).
+in the datasource ([useDataSource](/docs/api/functions/useDataSource)).
 
 ## Type Parameters
 
@@ -32,13 +32,13 @@ in the datasource ([useDataSource](useDataSource)).
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User)
 
 ## Parameters
 
 ### collection
 
-[`SaveEntityProps`](../interfaces/SaveEntityProps)\<`M`\> & `object` & `object`
+[`SaveEntityProps`](/docs/api/interfaces/SaveEntityProps)\<`M`\> & `object` & `object`
 
 ## Returns
 

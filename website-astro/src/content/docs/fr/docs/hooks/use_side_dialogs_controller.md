@@ -14,7 +14,7 @@ C'est le mécanisme de bas niveau utilisé par FireCMS pour ouvrir :
 Vous pouvez l'utiliser pour ouvrir vos propres panneaux latéraux personnalisés.
 
 :::tip
-Si vous souhaitez simplement ouvrir un formulaire d'entité, utilisez plutôt **[`useSideEntityController`](./use_side_entity_controller)**.
+Si vous souhaitez simplement ouvrir un formulaire d'entité, utilisez plutôt **[`useSideEntityController`](/fr/docs/hooks/use_side_entity_controller)**.
 :::
 
 ### Utilisation

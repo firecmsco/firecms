@@ -3,11 +3,11 @@ slug: "docs/api/functions/useAuthController"
 title: "useAuthController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useAuthController
+[@firecms/core](/docs/api/README) / useAuthController
 
 # Function: useAuthController()
 
@@ -24,11 +24,11 @@ Consider that in order to use this hook you need to have a parent
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ### AuthControllerType
 
-`AuthControllerType` *extends* [`AuthController`](../type-aliases/AuthController)\<`USER`\> = [`AuthController`](../type-aliases/AuthController)\<`USER`\>
+`AuthControllerType` *extends* [`AuthController`](/docs/api/type-aliases/AuthController)\<`USER`\> = [`AuthController`](/docs/api/type-aliases/AuthController)\<`USER`\>
 
 ## Returns
 

@@ -25,7 +25,7 @@ Chaque propriété dans le CMS a sa propre API, mais elles partagent toutes cert
   champ désactivé. Vous pouvez aussi spécifier une configuration pour définir le
   comportement des propriétés désactivées (incluant des messages personnalisés, effacer la valeur lors de la
   désactivation ou masquer complètement le champ)
-  [PropertyDisabledConfig](../../api/interfaces/PropertyDisabledConfig)
+  [PropertyDisabledConfig](/fr/docs/api/interfaces/PropertyDisabledConfig)
 
 * `Field`
   Si vous avez besoin de rendre un champ personnalisé, vous pouvez créer un composant qui
@@ -33,13 +33,13 @@ Chaque propriété dans le CMS a sa propre API, mais elles partagent toutes cert
   la valeur et des props utilitaires supplémentaires comme s'il y a une erreur. Vous
   pouvez le personnaliser en passant des props personnalisées qui sont reçues dans le
   composant. Plus de détails sur comment
-  implémenter des [champs personnalisés](../custom_fields.mdx)
+  implémenter des [champs personnalisés](/fr/docs/properties/custom_fields)
 
 * `Preview`
   Configurez comment une propriété est affichée en aperçu, par ex. dans la vue de collection.
   Vous pouvez la personnaliser en passant des props personnalisées qui sont reçues dans
   le composant. Plus de détails sur comment
-  implémenter des [aperçus personnalisés](../custom_previews)
+  implémenter des [aperçus personnalisés](/fr/docs/properties/custom_previews)
 
 * `customProps`
   Props supplémentaires passées aux composants définis dans `Field` ou

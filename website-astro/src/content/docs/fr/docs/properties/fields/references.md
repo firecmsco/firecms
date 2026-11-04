@@ -21,9 +21,9 @@ buildProperty({
 });
 ```
 
-Le type de données est [`reference`](../config/reference).
+Le type de données est [`reference`](/fr/docs/properties/config/reference).
 
-En interne, le composant utilisé est [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding).
+En interne, le composant utilisé est [`ReferenceFieldBinding`](/fr/docs/api/functions/ReferenceFieldBinding).
 
 
 ### Champ de références multiples
@@ -43,6 +43,6 @@ buildProperty({
 });
 ```
 
-Le type de données est [`array`](../config/array) avec une propriété de référence comme prop `of`.
+Le type de données est [`array`](/fr/docs/properties/config/array) avec une propriété de référence comme prop `of`.
 
-En interne, le composant utilisé est [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding).
+En interne, le composant utilisé est [`ArrayOfReferencesFieldBinding`](/fr/docs/api/functions/ArrayOfReferencesFieldBinding).

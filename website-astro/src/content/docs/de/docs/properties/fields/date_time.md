@@ -5,7 +5,7 @@ slug: de/docs/properties/fields/date_time
 
 Verwenden Sie die Datum/Uhrzeit-Felder, damit Benutzer Datumsangaben setzen können, die als Firestore-Timestamps gespeichert werden.
 
-Der Datentyp ist [`date`](../config/date).
+Der Datentyp ist [`date`](/de/docs/properties/config/date).
 
 #### Datumsfeld
 

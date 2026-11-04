@@ -3,11 +3,11 @@ slug: "docs/api/functions/traverseValuesProperties"
 title: "traverseValuesProperties"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / traverseValuesProperties
+[@firecms/core](/docs/api/README) / traverseValuesProperties
 
 # Function: traverseValuesProperties()
 
@@ -25,11 +25,11 @@ Defined in: [util/entities.ts:148](https://github.com/firecmsco/firecms/blob/mai
 
 ### inputValues
 
-`Partial`\<[`EntityValues`](../type-aliases/EntityValues)\<`M`\>\>
+`Partial`\<[`EntityValues`](/docs/api/type-aliases/EntityValues)\<`M`\>\>
 
 ### properties
 
-[`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
+[`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)\<`M`\>
 
 ### operation
 

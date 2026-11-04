@@ -1,6 +1,6 @@
 # User Management
 
-![user_management.png](/img/user_management.png)
+![user_management.png](https://firecms.co/img/user_management.png)
 
 Control who can access your **Firebase admin panel** and what they can do. The User Management Plugin provides a complete **role-based access control (RBAC)** system for your FireCMS project.
 
@@ -13,7 +13,7 @@ Building authentication and permissions from scratch is time-consuming and error
 :::
 
 :::note[Free to try]
-This is a FireCMS PRO plugin. It is always free on `localhost`, and free for 30 days in production with no card or license key needed. [Licensing](/docs/pro/licensing) explains what it costs after that.
+This is a FireCMS PRO plugin. It is always free on `localhost`, and free for 30 days in production with no card or license key needed. [Licensing](https://firecms.co/docs/pro/licensing) explains what it costs after that.
 :::
 
 ## Installation

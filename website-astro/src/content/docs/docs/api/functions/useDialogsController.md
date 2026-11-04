@@ -3,11 +3,11 @@ slug: "docs/api/functions/useDialogsController"
 title: "useDialogsController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useDialogsController
+[@firecms/core](/docs/api/README) / useDialogsController
 
 # Function: useDialogsController()
 

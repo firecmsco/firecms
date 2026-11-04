@@ -3,11 +3,11 @@ slug: "docs/api/functions/removeInitialAndTrailingSlashes"
 title: "removeInitialAndTrailingSlashes"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / removeInitialAndTrailingSlashes
+[@firecms/core](/docs/api/README) / removeInitialAndTrailingSlashes
 
 # Function: removeInitialAndTrailingSlashes()
 

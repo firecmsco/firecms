@@ -164,7 +164,7 @@ const assignedUserProperty = buildProperty({
 Puoi usare i valori enum fornendo una mappa di possibili valori esclusivi che la
 proprietà può assumere, mappati all'etichetta visualizzata nel menu a discesa.
 Puoi usare un semplice oggetto con il formato `valore` => `etichetta`, o con il formato `valore`
-=> [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig) per personalizzazione extra
+=> [`EnumValueConfig`](/it/docs/api/type-aliases/EnumValueConfig) per personalizzazione extra
 (come disabilitare opzioni specifiche o assegnare colori). Se hai bisogno di garantire
 l'ordine degli elementi, puoi passare una `Map` invece di un oggetto semplice.
 
@@ -263,11 +263,11 @@ const property = buildProperty({
 
 In base alla configurazione, i widget del campo form creati sono:
 
-- [`TextFieldBinding`](../../api/functions/TextFieldBinding) campo di testo generico
-- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) se `enumValues` sono impostati, questo campo renderizza un select dove ogni opzione è un chip colorato.
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) se la proprietà ha una configurazione di archiviazione.
-- [`MarkdownEditorFieldBinding`](../../api/functions/MarkdownEditorFieldBinding) se la proprietà ha una configurazione markdown.
+- [`TextFieldBinding`](/it/docs/api/functions/TextFieldBinding) campo di testo generico
+- [`SelectFieldBinding`](/it/docs/api/functions/SelectFieldBinding) se `enumValues` sono impostati, questo campo renderizza un select dove ogni opzione è un chip colorato.
+- [`StorageUploadFieldBinding`](/it/docs/api/functions/StorageUploadFieldBinding) se la proprietà ha una configurazione di archiviazione.
+- [`MarkdownEditorFieldBinding`](/it/docs/api/functions/MarkdownEditorFieldBinding) se la proprietà ha una configurazione markdown.
 
 Link:
 
-- [API](../../api/interfaces/StringProperty)
+- [API](/it/docs/api/interfaces/StringProperty)

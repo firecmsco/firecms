@@ -153,11 +153,11 @@ Cuando se establece en `true`, muestra las propiedades hijas directamente sin es
 ---
 
 Según tu configuración, los widgets de campo de formulario que se crean son:
-- [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding) campo de array genérico que permite reordenar y renderiza
+- [`RepeatFieldBinding`](/es/docs/api/functions/RepeatFieldBinding) campo de array genérico que permite reordenar y renderiza
   la propiedad hija como nodos.
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) si la propiedad `of` es un `string` con configuración de almacenamiento.
-- [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding) si la propiedad `of` es una `reference`
-- [`BlockFieldBinding`](../../api/functions/BlockFieldBinding) si la propiedad `oneOf` está especificada
+- [`StorageUploadFieldBinding`](/es/docs/api/functions/StorageUploadFieldBinding) si la propiedad `of` es un `string` con configuración de almacenamiento.
+- [`ArrayOfReferencesFieldBinding`](/es/docs/api/functions/ArrayOfReferencesFieldBinding) si la propiedad `of` es una `reference`
+- [`BlockFieldBinding`](/es/docs/api/functions/BlockFieldBinding) si la propiedad `oneOf` está especificada
 
 Enlaces:
-- [API](../../api/interfaces/ArrayProperty)
+- [API](/es/docs/api/interfaces/ArrayProperty)

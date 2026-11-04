@@ -3,11 +3,11 @@ slug: "docs/api/functions/traverseValueProperty"
 title: "traverseValueProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / traverseValueProperty
+[@firecms/core](/docs/api/README) / traverseValueProperty
 
 # Function: traverseValueProperty()
 
@@ -23,7 +23,7 @@ Defined in: [util/entities.ts:167](https://github.com/firecmsco/firecms/blob/mai
 
 ### property
 
-[`ArrayProperty`](../interfaces/ArrayProperty)\<`any`, `any`\> | [`MapProperty`](../interfaces/MapProperty)\<`any`\> | `AnyProperty`
+[`ArrayProperty`](/docs/api/interfaces/ArrayProperty)\<`any`, `any`\> | [`MapProperty`](/docs/api/interfaces/MapProperty)\<`any`\> | `AnyProperty`
 
 ### operation
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/isHidden"
 title: "isHidden"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / isHidden
+[@firecms/core](/docs/api/README) / isHidden
 
 # Function: isHidden()
 
@@ -19,7 +19,7 @@ Defined in: [util/entities.ts:31](https://github.com/firecmsco/firecms/blob/main
 
 ### property
 
-[`ArrayProperty`](../interfaces/ArrayProperty)\<`any`, `any`\> | [`MapProperty`](../interfaces/MapProperty)\<`any`\> | `AnyProperty` | [`ResolvedProperty`](../type-aliases/ResolvedProperty)
+[`ArrayProperty`](/docs/api/interfaces/ArrayProperty)\<`any`, `any`\> | [`MapProperty`](/docs/api/interfaces/MapProperty)\<`any`\> | `AnyProperty` | [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)
 
 ## Returns
 

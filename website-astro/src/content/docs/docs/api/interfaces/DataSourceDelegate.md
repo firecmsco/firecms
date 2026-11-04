@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/DataSourceDelegate"
 title: "DataSourceDelegate"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DataSourceDelegate
+[@firecms/core](/docs/api/README) / DataSourceDelegate
 
 # Interface: DataSourceDelegate
 
@@ -87,11 +87,11 @@ Defined in: [types/datasource.ts:400](https://github.com/firecmsco/firecms/blob/
 
 ###### collection
 
-[`EntityCollection`](EntityCollection)
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 ###### context
 
-[`FireCMSContext`](../type-aliases/FireCMSContext)
+[`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)
 
 ###### databaseId?
 
@@ -166,7 +166,7 @@ of the property
 
 ##### collection?
 
-[`EntityCollection`](EntityCollection)\<`any`, `any`\>
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>
 
 #### Returns
 
@@ -194,7 +194,7 @@ Count the number of entities in a collection
 
 ##### props
 
-[`FetchCollectionDelegateProps`](../type-aliases/FetchCollectionDelegateProps)\<`M`\>
+[`FetchCollectionDelegateProps`](/docs/api/type-aliases/FetchCollectionDelegateProps)\<`M`\>
 
 #### Returns
 
@@ -220,7 +220,7 @@ Delete an entity
 
 ##### entity
 
-[`DeleteEntityProps`](DeleteEntityProps)\<`M`\>
+[`DeleteEntityProps`](/docs/api/interfaces/DeleteEntityProps)\<`M`\>
 
 #### Returns
 
@@ -232,7 +232,7 @@ was the whole deletion flow successful
 
 ### fetchCollection()
 
-> **fetchCollection**\<`M`\>(`path`): `Promise`\<[`Entity`](Entity)\<`M`\>[]\>
+> **fetchCollection**\<`M`\>(`path`): `Promise`\<[`Entity`](/docs/api/interfaces/Entity)\<`M`\>[]\>
 
 Defined in: [types/datasource.ts:276](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 
@@ -248,11 +248,11 @@ Fetch data from a collection
 
 ##### path
 
-[`FetchCollectionDelegateProps`](../type-aliases/FetchCollectionDelegateProps)\<`M`\>
+[`FetchCollectionDelegateProps`](/docs/api/type-aliases/FetchCollectionDelegateProps)\<`M`\>
 
 #### Returns
 
-`Promise`\<[`Entity`](Entity)\<`M`\>[]\>
+`Promise`\<[`Entity`](/docs/api/interfaces/Entity)\<`M`\>[]\>
 
 Function to cancel subscription
 
@@ -264,7 +264,7 @@ useCollectionFetch if you need this functionality implemented as a hook
 
 ### fetchEntity()
 
-> **fetchEntity**\<`M`\>(`path`): `Promise`\<[`Entity`](Entity)\<`M`\> \| `undefined`\>
+> **fetchEntity**\<`M`\>(`path`): `Promise`\<[`Entity`](/docs/api/interfaces/Entity)\<`M`\> \| `undefined`\>
 
 Defined in: [types/datasource.ts:318](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 
@@ -280,11 +280,11 @@ Retrieve an entity given a path and a collection
 
 ##### path
 
-[`FetchEntityProps`](FetchEntityProps)\<`M`\>
+[`FetchEntityProps`](/docs/api/interfaces/FetchEntityProps)\<`M`\>
 
 #### Returns
 
-`Promise`\<[`Entity`](Entity)\<`M`\> \| `undefined`\>
+`Promise`\<[`Entity`](/docs/api/interfaces/Entity)\<`M`\> \| `undefined`\>
 
 ***
 
@@ -304,7 +304,7 @@ Generate an id for a new entity
 
 ##### collection?
 
-[`EntityCollection`](EntityCollection)\<`any`, `any`\>
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>
 
 #### Returns
 
@@ -324,7 +324,7 @@ Check if the given filter combination is valid
 
 ##### props
 
-`Omit`\<[`FilterCombinationValidProps`](../type-aliases/FilterCombinationValidProps), `"collection"`\> & `object`
+`Omit`\<[`FilterCombinationValidProps`](/docs/api/type-aliases/FilterCombinationValidProps), `"collection"`\> & `object`
 
 #### Returns
 
@@ -351,7 +351,7 @@ Listen to a collection in a given path. If you don't implement this method
 
 ##### path
 
-[`ListenCollectionDelegateProps`](../type-aliases/ListenCollectionDelegateProps)\<`M`\>
+[`ListenCollectionDelegateProps`](/docs/api/type-aliases/ListenCollectionDelegateProps)\<`M`\>
 
 #### Returns
 
@@ -387,7 +387,7 @@ Get realtime updates on one entity.
 
 ##### path
 
-[`ListenEntityProps`](../type-aliases/ListenEntityProps)\<`M`\>
+[`ListenEntityProps`](/docs/api/type-aliases/ListenEntityProps)\<`M`\>
 
 #### Returns
 
@@ -403,7 +403,7 @@ Function to cancel subscription
 
 ### saveEntity()
 
-> **saveEntity**\<`M`\>(`path`): `Promise`\<[`Entity`](Entity)\<`M`\>\>
+> **saveEntity**\<`M`\>(`path`): `Promise`\<[`Entity`](/docs/api/interfaces/Entity)\<`M`\>\>
 
 Defined in: [types/datasource.ts:346](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 
@@ -419,8 +419,8 @@ Save entity to the specified path
 
 ##### path
 
-[`SaveEntityDelegateProps`](../type-aliases/SaveEntityDelegateProps)\<`M`\>
+[`SaveEntityDelegateProps`](/docs/api/type-aliases/SaveEntityDelegateProps)\<`M`\>
 
 #### Returns
 
-`Promise`\<[`Entity`](Entity)\<`M`\>\>
+`Promise`\<[`Entity`](/docs/api/interfaces/Entity)\<`M`\>\>

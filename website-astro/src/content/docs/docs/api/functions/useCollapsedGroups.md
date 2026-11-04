@@ -3,11 +3,11 @@ slug: "docs/api/functions/useCollapsedGroups"
 title: "useCollapsedGroups"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useCollapsedGroups
+[@firecms/core](/docs/api/README) / useCollapsedGroups
 
 # Function: useCollapsedGroups()
 

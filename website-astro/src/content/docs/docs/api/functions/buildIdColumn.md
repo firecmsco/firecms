@@ -3,15 +3,15 @@ slug: "docs/api/functions/buildIdColumn"
 title: "buildIdColumn"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / buildIdColumn
+[@firecms/core](/docs/api/README) / buildIdColumn
 
 # Function: buildIdColumn()
 
-> **buildIdColumn**(`largeLayout?`): [`VirtualTableColumn`](../interfaces/VirtualTableColumn)
+> **buildIdColumn**(`largeLayout?`): [`VirtualTableColumn`](/docs/api/interfaces/VirtualTableColumn)
 
 Defined in: [components/EntityCollectionTable/column\_utils.tsx:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/column_utils.tsx)
 
@@ -23,4 +23,4 @@ Defined in: [components/EntityCollectionTable/column\_utils.tsx:8](https://githu
 
 ## Returns
 
-[`VirtualTableColumn`](../interfaces/VirtualTableColumn)
+[`VirtualTableColumn`](/docs/api/interfaces/VirtualTableColumn)

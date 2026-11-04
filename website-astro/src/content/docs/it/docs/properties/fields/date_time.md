@@ -9,10 +9,10 @@ Puoi scegliere tra l'uso di date o campi data/ora.
 Puoi anche creare campi in sola lettura che si aggiornano automaticamente quando
 le entità vengono create o aggiornate.
 
-Il tipo di dato è [`date`](../config/date).
+Il tipo di dato è [`date`](/it/docs/properties/config/date).
 
 Il componente utilizzato internamente
-è [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding).
+è [`DateTimeFieldBinding`](/it/docs/api/functions/DateTimeFieldBinding).
 
 #### Campo data
 

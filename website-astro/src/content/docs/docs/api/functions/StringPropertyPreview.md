@@ -3,11 +3,11 @@ slug: "docs/api/functions/StringPropertyPreview"
 title: "StringPropertyPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / StringPropertyPreview
+[@firecms/core](/docs/api/README) / StringPropertyPreview
 
 # Function: StringPropertyPreview()
 
@@ -19,7 +19,7 @@ Defined in: [preview/property\_previews/StringPropertyPreview.tsx:14](https://gi
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`string`\>
+[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<`string`\>
 
 ## Returns
 

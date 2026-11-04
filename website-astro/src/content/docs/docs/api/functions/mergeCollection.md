@@ -3,15 +3,15 @@ slug: "docs/api/functions/mergeCollection"
 title: "mergeCollection"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / mergeCollection
+[@firecms/core](/docs/api/README) / mergeCollection
 
 # Function: mergeCollection()
 
-> **mergeCollection**(`target`, `source`, `parentPaths`, `modifyCollection?`): [`EntityCollection`](../interfaces/EntityCollection)
+> **mergeCollection**(`target`, `source`, `parentPaths`, `modifyCollection?`): [`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 Defined in: [util/join\_collections.ts:75](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/join_collections.ts)
 
@@ -19,11 +19,11 @@ Defined in: [util/join\_collections.ts:75](https://github.com/firecmsco/firecms/
 
 ### target
 
-[`EntityCollection`](../interfaces/EntityCollection)
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 ### source
 
-[`EntityCollection`](../interfaces/EntityCollection)
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 ### parentPaths
 
@@ -31,8 +31,8 @@ Defined in: [util/join\_collections.ts:75](https://github.com/firecmsco/firecms/
 
 ### modifyCollection?
 
-(`props`) => `void` \| [`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>
+(`props`) => `void` \| [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>
 
 ## Returns
 
-[`EntityCollection`](../interfaces/EntityCollection)
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)

@@ -68,8 +68,8 @@ Quando definido como `true`, exibe as propriedades filhas diretamente sem serem 
 ---
 
 O widget criado é
-- [`MapFieldBinding`](../../api/functions/MapFieldBinding) Campo que renderiza os campos
+- [`MapFieldBinding`](/pt/docs/api/functions/MapFieldBinding) Campo que renderiza os campos
   de propriedades filhas
 
 Links:
-- [API](../../api/interfaces/MapProperty)
+- [API](/pt/docs/api/interfaces/MapProperty)

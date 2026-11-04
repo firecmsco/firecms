@@ -3,11 +3,11 @@ slug: "docs/api/functions/KeyValueFieldBinding"
 title: "KeyValueFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / KeyValueFieldBinding
+[@firecms/core](/docs/api/README) / KeyValueFieldBinding
 
 # Function: KeyValueFieldBinding()
 
@@ -21,7 +21,7 @@ Field that allows edition of key value pairs.
 
 ### \_\_namedParameters
 
-[`FieldProps`](../interfaces/FieldProps)\<`Record`\<`string`, `any`\>\>
+[`FieldProps`](/docs/api/interfaces/FieldProps)\<`Record`\<`string`, `any`\>\>
 
 ## Returns
 

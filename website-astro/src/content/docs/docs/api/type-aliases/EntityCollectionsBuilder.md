@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityCollectionsBuilder"
 title: "EntityCollectionsBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionsBuilder
+[@firecms/core](/docs/api/README) / EntityCollectionsBuilder
 
 # Type Alias: EntityCollectionsBuilder()\<EC\>
 
@@ -27,7 +27,7 @@ APIs directly, or a REST API.
 
 ### EC
 
-`EC` *extends* [`EntityCollection`](../interfaces/EntityCollection) = [`EntityCollection`](../interfaces/EntityCollection)
+`EC` *extends* [`EntityCollection`](/docs/api/interfaces/EntityCollection) = [`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 ## Parameters
 
@@ -35,15 +35,15 @@ APIs directly, or a REST API.
 
 #### authController
 
-[`AuthController`](AuthController)
+[`AuthController`](/docs/api/type-aliases/AuthController)
 
 #### dataSource
 
-[`DataSourceDelegate`](../interfaces/DataSourceDelegate)
+[`DataSourceDelegate`](/docs/api/interfaces/DataSourceDelegate)
 
 #### user
 
-[`User`](User) \| `null`
+[`User`](/docs/api/type-aliases/User) \| `null`
 
 ## Returns
 

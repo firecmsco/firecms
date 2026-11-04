@@ -3,11 +3,11 @@ slug: "docs/api/functions/MapPropertyPreview"
 title: "MapPropertyPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / MapPropertyPreview
+[@firecms/core](/docs/api/README) / MapPropertyPreview
 
 # Function: MapPropertyPreview()
 
@@ -25,7 +25,7 @@ Defined in: [preview/property\_previews/MapPropertyPreview.tsx:13](https://githu
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`T`\>
+[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<`T`\>
 
 ## Returns
 

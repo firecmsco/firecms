@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/EntityCustomViewParams"
 title: "EntityCustomViewParams"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityCustomViewParams
+[@firecms/core](/docs/api/README) / EntityCustomViewParams
 
 # Interface: EntityCustomViewParams\<M\>
 
@@ -26,7 +26,7 @@ an entity view.
 
 ### collection
 
-> **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
+> **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 Defined in: [types/collections.ts:583](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -36,7 +36,7 @@ collection used by this entity
 
 ### entity?
 
-> `optional` **entity**: [`Entity`](Entity)\<`M`\>
+> `optional` **entity**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 Defined in: [types/collections.ts:588](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -46,7 +46,7 @@ Entity that this view refers to. It can be undefined if the entity is new
 
 ### formContext
 
-> **formContext**: [`FormContext`](FormContext)
+> **formContext**: [`FormContext`](/docs/api/interfaces/FormContext)
 
 Defined in: [types/collections.ts:600](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 

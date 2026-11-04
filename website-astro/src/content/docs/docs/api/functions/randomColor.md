@@ -3,11 +3,11 @@ slug: "docs/api/functions/randomColor"
 title: "randomColor"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / randomColor
+[@firecms/core](/docs/api/README) / randomColor
 
 # Function: randomColor()
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayOfReferencesPreview"
 title: "ArrayOfReferencesPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayOfReferencesPreview
+[@firecms/core](/docs/api/README) / ArrayOfReferencesPreview
 
 # Function: ArrayOfReferencesPreview()
 
@@ -19,7 +19,7 @@ Defined in: [preview/property\_previews/ArrayOfReferencesPreview.tsx:10](https:/
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`any`[]\>
+[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<`any`[]\>
 
 ## Returns
 

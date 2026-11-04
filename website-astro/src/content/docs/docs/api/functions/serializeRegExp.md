@@ -3,11 +3,11 @@ slug: "docs/api/functions/serializeRegExp"
 title: "serializeRegExp"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / serializeRegExp
+[@firecms/core](/docs/api/README) / serializeRegExp
 
 # Function: serializeRegExp()
 

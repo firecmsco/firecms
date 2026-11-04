@@ -3,11 +3,11 @@ slug: "docs/api/functions/getDefaultFieldId"
 title: "getDefaultFieldId"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getDefaultFieldId
+[@firecms/core](/docs/api/README) / getDefaultFieldId
 
 # Function: getDefaultFieldId()
 
@@ -19,7 +19,7 @@ Defined in: [core/field\_configs.tsx:361](https://github.com/firecmsco/firecms/b
 
 ### property
 
-[`ArrayProperty`](../interfaces/ArrayProperty)\<`any`, `any`\> | [`MapProperty`](../interfaces/MapProperty)\<`any`\> | `AnyProperty` | [`ResolvedProperty`](../type-aliases/ResolvedProperty)
+[`ArrayProperty`](/docs/api/interfaces/ArrayProperty)\<`any`, `any`\> | [`MapProperty`](/docs/api/interfaces/MapProperty)\<`any`\> | `AnyProperty` | [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)
 
 ## Returns
 

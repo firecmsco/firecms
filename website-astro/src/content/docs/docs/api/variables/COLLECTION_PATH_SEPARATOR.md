@@ -3,11 +3,11 @@ slug: "docs/api/variables/COLLECTION_PATH_SEPARATOR"
 title: "COLLECTION_PATH_SEPARATOR"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / COLLECTION\_PATH\_SEPARATOR
+[@firecms/core](/docs/api/README) / COLLECTION\_PATH\_SEPARATOR
 
 # Variable: COLLECTION\_PATH\_SEPARATOR
 

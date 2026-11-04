@@ -6,7 +6,7 @@ description: En FireCMS, los campos condicionales permiten configuraciones diná
 ---
 
 Al definir las propiedades de una colección, puedes elegir utilizar un constructor (builder)
-[`PropertyBuilder`](../api/type-aliases/PermissionsBuilder), en lugar de asignar la
+[`PropertyBuilder`](/es/docs/api/type-aliases/PermissionsBuilder), en lugar de asignar la
 configuración de la propiedad directamente. 
 
 Esto es útil para cambiar configuraciones de propiedades como valores disponibles sobre la

@@ -3,11 +3,11 @@ slug: "docs/api/functions/FireCMS"
 title: "FireCMS"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FireCMS
+[@firecms/core](/docs/api/README) / FireCMS
 
 # Function: FireCMS()
 
@@ -27,13 +27,13 @@ You only need to use this component if you are building a custom app.
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User)
 
 ## Parameters
 
 ### props
 
-[`FireCMSProps`](../type-aliases/FireCMSProps)\<`USER`\>
+[`FireCMSProps`](/docs/api/type-aliases/FireCMSProps)\<`USER`\>
 
 ## Returns
 

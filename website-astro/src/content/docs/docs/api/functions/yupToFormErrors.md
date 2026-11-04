@@ -3,11 +3,11 @@ slug: "docs/api/functions/yupToFormErrors"
 title: "yupToFormErrors"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / yupToFormErrors
+[@firecms/core](/docs/api/README) / yupToFormErrors
 
 # Function: yupToFormErrors()
 

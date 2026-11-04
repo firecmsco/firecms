@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/ResolvedNumberProperty"
 title: "ResolvedNumberProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ResolvedNumberProperty
+[@firecms/core](/docs/api/README) / ResolvedNumberProperty
 
 # Type Alias: ResolvedNumberProperty
 
-> **ResolvedNumberProperty** = `Omit`\<[`NumberProperty`](../interfaces/NumberProperty), `"enumValues"` \| `"dataType"`\> & `object`
+> **ResolvedNumberProperty** = `Omit`\<[`NumberProperty`](/docs/api/interfaces/NumberProperty), `"enumValues"` \| `"dataType"`\> & `object`
 
 Defined in: [types/resolved\_entities.ts:65](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
 
@@ -23,7 +23,7 @@ Defined in: [types/resolved\_entities.ts:65](https://github.com/firecmsco/firecm
 
 ### enumValues?
 
-> `optional` **enumValues**: [`EnumValueConfig`](EnumValueConfig)[]
+> `optional` **enumValues**: [`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig)[]
 
 ### fromBuilder
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/renderSkeletonCaptionText"
 title: "renderSkeletonCaptionText"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / renderSkeletonCaptionText
+[@firecms/core](/docs/api/README) / renderSkeletonCaptionText
 
 # Function: renderSkeletonCaptionText()
 

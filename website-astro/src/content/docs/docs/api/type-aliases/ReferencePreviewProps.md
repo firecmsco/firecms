@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/ReferencePreviewProps"
 title: "ReferencePreviewProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ReferencePreviewProps
+[@firecms/core](/docs/api/README) / ReferencePreviewProps
 
 # Type Alias: ReferencePreviewProps
 
@@ -77,7 +77,7 @@ Defined in: [preview/components/ReferencePreview.tsx:14](https://github.com/fire
 
 ### reference
 
-> **reference**: [`EntityReference`](../classes/EntityReference)
+> **reference**: [`EntityReference`](/docs/api/classes/EntityReference)
 
 Defined in: [preview/components/ReferencePreview.tsx:12](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/ReferencePreview.tsx)
 
@@ -85,6 +85,6 @@ Defined in: [preview/components/ReferencePreview.tsx:12](https://github.com/fire
 
 ### size?
 
-> `optional` **size**: [`PreviewSize`](PreviewSize)
+> `optional` **size**: [`PreviewSize`](/docs/api/type-aliases/PreviewSize)
 
 Defined in: [preview/components/ReferencePreview.tsx:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/ReferencePreview.tsx)

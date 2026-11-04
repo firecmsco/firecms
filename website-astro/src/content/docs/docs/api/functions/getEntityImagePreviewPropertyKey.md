@@ -3,11 +3,11 @@ slug: "docs/api/functions/getEntityImagePreviewPropertyKey"
 title: "getEntityImagePreviewPropertyKey"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getEntityImagePreviewPropertyKey
+[@firecms/core](/docs/api/README) / getEntityImagePreviewPropertyKey
 
 # Function: getEntityImagePreviewPropertyKey()
 
@@ -25,7 +25,7 @@ Defined in: [util/references.ts:45](https://github.com/firecmsco/firecms/blob/ma
 
 ### collection
 
-[`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+[`ResolvedEntityCollection`](/docs/api/type-aliases/ResolvedEntityCollection)\<`M`\>
 
 ## Returns
 

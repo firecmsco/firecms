@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/NavigationRoutesProps"
 title: "NavigationRoutesProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NavigationRoutesProps
+[@firecms/core](/docs/api/README) / NavigationRoutesProps
 
 # Type Alias: NavigationRoutesProps
 

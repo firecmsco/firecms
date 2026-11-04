@@ -3,15 +3,15 @@ slug: "docs/api/functions/getCollectionByPathOrId"
 title: "getCollectionByPathOrId"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getCollectionByPathOrId
+[@firecms/core](/docs/api/README) / getCollectionByPathOrId
 
 # Function: getCollectionByPathOrId()
 
-> **getCollectionByPathOrId**(`pathOrId`, `collections`): [`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\> \| `undefined`
+> **getCollectionByPathOrId**(`pathOrId`, `collections`): [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\> \| `undefined`
 
 Defined in: [util/navigation\_utils.ts:127](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/navigation_utils.ts)
 
@@ -26,8 +26,8 @@ Note that path or segments of the paths can be collection aliases.
 
 ### collections
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>[]
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>[]
 
 ## Returns
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\> \| `undefined`
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\> \| `undefined`

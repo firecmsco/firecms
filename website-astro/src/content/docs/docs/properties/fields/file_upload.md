@@ -83,10 +83,10 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](../config/string).
+The data type is [`string`](/docs/properties/config/string).
 
 Internally the component used
-is [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
+is [`StorageUploadFieldBinding`](/docs/api/functions/StorageUploadFieldBinding).
 
 ### Multiple file upload
 
@@ -112,10 +112,10 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](../config/array).
+The data type is [`array`](/docs/properties/config/array).
 
 Internally the component used
-is [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
+is [`StorageUploadFieldBinding`](/docs/api/functions/StorageUploadFieldBinding).
 
 ### Custom support for images, videos and audio
 

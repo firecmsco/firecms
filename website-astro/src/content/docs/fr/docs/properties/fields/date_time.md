@@ -7,9 +7,9 @@ Utilisez les champs de date/heure pour permettre aux utilisateurs de définir de
 
 Vous pouvez choisir entre utiliser des champs de dates ou de date/heure. Vous pouvez également créer des champs en lecture seule qui se mettent à jour automatiquement lorsque les entités sont créées ou mises à jour.
 
-Le type de données est [`date`](../config/date).
+Le type de données est [`date`](/fr/docs/properties/config/date).
 
-En interne, le composant utilisé est [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding).
+En interne, le composant utilisé est [`DateTimeFieldBinding`](/fr/docs/api/functions/DateTimeFieldBinding).
 
 #### Champ de date
 

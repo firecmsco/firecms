@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/UploadedFileContext"
 title: "UploadedFileContext"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / UploadedFileContext
+[@firecms/core](/docs/api/README) / UploadedFileContext
 
 # Interface: UploadedFileContext
 
@@ -47,7 +47,7 @@ Entity path. E.g. `products/PID/locales`
 
 ### property
 
-> **property**: [`ResolvedStringProperty`](../type-aliases/ResolvedStringProperty) \| [`ResolvedArrayProperty`](../type-aliases/ResolvedArrayProperty)\<`T`, `ArrayT`\>
+> **property**: [`ResolvedStringProperty`](/docs/api/type-aliases/ResolvedStringProperty) \| [`ResolvedArrayProperty`](/docs/api/type-aliases/ResolvedArrayProperty)\<`T`, `ArrayT`\>
 
 Defined in: [types/properties.ts:873](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 
@@ -67,7 +67,7 @@ Property field name
 
 ### storage
 
-> **storage**: [`StorageConfig`](../type-aliases/StorageConfig)
+> **storage**: [`StorageConfig`](/docs/api/type-aliases/StorageConfig)
 
 Defined in: [types/properties.ts:893](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 

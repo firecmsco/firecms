@@ -1,6 +1,6 @@
 # Key/Value
 
-![Field](/img/fields/KeyValue.png)
+![Field](https://firecms.co/img/fields/KeyValue.png)
 
 Key/Value is a special field that allows you to input arbitrary key/value pairs.
 You are able to use string as keys and any primitive type as value (including maps
@@ -19,9 +19,9 @@ buildProperty({
 });
 ```
 
-The data type is [`map`](https://firecms.co/docs/config/map).
+The data type is [`map`](https://firecms.co/docs/properties/config/map).
 
 Internally the component used
-is [`KeyValueFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/KeyValueFieldBinding).
+is [`KeyValueFieldBinding`](https://firecms.co/docs/api/functions/KeyValueFieldBinding).
 
 

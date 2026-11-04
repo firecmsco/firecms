@@ -14,7 +14,7 @@ Este es el mecanismo de bajo nivel utilizado por FireCMS para abrir:
 Puede usarlo para abrir sus propios paneles laterales personalizados.
 
 :::tip
-Si solo desea abrir un formulario de entidad, use **[`useSideEntityController`](./use_side_entity_controller)** en su lugar.
+Si solo desea abrir un formulario de entidad, use **[`useSideEntityController`](/es/docs/hooks/use_side_entity_controller)** en su lugar.
 :::
 
 ### Uso

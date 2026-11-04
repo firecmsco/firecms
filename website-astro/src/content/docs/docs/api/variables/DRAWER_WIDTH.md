@@ -3,11 +3,11 @@ slug: "docs/api/variables/DRAWER_WIDTH"
 title: "DRAWER_WIDTH"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DRAWER\_WIDTH
+[@firecms/core](/docs/api/README) / DRAWER\_WIDTH
 
 # Variable: DRAWER\_WIDTH
 

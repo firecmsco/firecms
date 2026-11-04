@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/UploadFileProps"
 title: "UploadFileProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / UploadFileProps
+[@firecms/core](/docs/api/README) / UploadFileProps
 
 # Interface: UploadFileProps
 

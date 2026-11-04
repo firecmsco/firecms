@@ -3,11 +3,11 @@ slug: "docs/api/functions/SelectFieldBinding"
 title: "SelectFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SelectFieldBinding
+[@firecms/core](/docs/api/README) / SelectFieldBinding
 
 # Function: SelectFieldBinding()
 
@@ -25,7 +25,7 @@ and tables to the specified properties.
 
 ### T
 
-`T` *extends* [`EnumType`](../type-aliases/EnumType)
+`T` *extends* [`EnumType`](/docs/api/type-aliases/EnumType)
 
 ## Parameters
 

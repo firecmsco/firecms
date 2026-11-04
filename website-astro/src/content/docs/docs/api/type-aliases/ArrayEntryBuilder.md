@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/ArrayEntryBuilder"
 title: "ArrayEntryBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayEntryBuilder
+[@firecms/core](/docs/api/README) / ArrayEntryBuilder
 
 # Type Alias: ArrayEntryBuilder()
 
@@ -19,7 +19,7 @@ Defined in: [components/ArrayContainer.tsx:40](https://github.com/firecmsco/fire
 
 ### params
 
-[`ArrayEntryParams`](ArrayEntryParams)
+[`ArrayEntryParams`](/docs/api/type-aliases/ArrayEntryParams)
 
 ## Returns
 

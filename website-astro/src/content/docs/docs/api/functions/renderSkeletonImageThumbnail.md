@@ -3,11 +3,11 @@ slug: "docs/api/functions/renderSkeletonImageThumbnail"
 title: "renderSkeletonImageThumbnail"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / renderSkeletonImageThumbnail
+[@firecms/core](/docs/api/README) / renderSkeletonImageThumbnail
 
 # Function: renderSkeletonImageThumbnail()
 
@@ -19,7 +19,7 @@ Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:227](https
 
 ### size
 
-[`PreviewSize`](../type-aliases/PreviewSize)
+[`PreviewSize`](/docs/api/type-aliases/PreviewSize)
 
 ## Returns
 

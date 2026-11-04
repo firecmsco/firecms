@@ -66,4 +66,4 @@ const property = buildProperty({
 ---
 
 Links:
-- [API](../../api/interfaces/NumberProperty)
+- [API](/de/docs/api/interfaces/NumberProperty)

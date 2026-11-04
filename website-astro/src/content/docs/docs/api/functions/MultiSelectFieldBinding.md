@@ -3,11 +3,11 @@ slug: "docs/api/functions/MultiSelectFieldBinding"
 title: "MultiSelectFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / MultiSelectFieldBinding
+[@firecms/core](/docs/api/README) / MultiSelectFieldBinding
 
 # Function: MultiSelectFieldBinding()
 
@@ -24,7 +24,7 @@ and tables to the specified properties.
 
 ### \_\_namedParameters
 
-[`FieldProps`](../interfaces/FieldProps)\<[`EnumType`](../type-aliases/EnumType)[], `any`, `any`\>
+[`FieldProps`](/docs/api/interfaces/FieldProps)\<[`EnumType`](/docs/api/type-aliases/EnumType)[], `any`, `any`\>
 
 ## Returns
 

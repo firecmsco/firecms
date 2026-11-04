@@ -3,11 +3,11 @@ slug: "docs/api/functions/resolveStoragePathString"
 title: "resolveStoragePathString"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolveStoragePathString
+[@firecms/core](/docs/api/README) / resolveStoragePathString
 
 # Function: resolveStoragePathString()
 

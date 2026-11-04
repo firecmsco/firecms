@@ -3,15 +3,15 @@ slug: "docs/api/functions/resolveNavigationFrom"
 title: "resolveNavigationFrom"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolveNavigationFrom
+[@firecms/core](/docs/api/README) / resolveNavigationFrom
 
 # Function: resolveNavigationFrom()
 
-> **resolveNavigationFrom**\<`M`, `USER`\>(`path`): `Promise`\<[`ResolvedNavigationEntry`](../type-aliases/ResolvedNavigationEntry)\<`M`\>[]\>
+> **resolveNavigationFrom**\<`M`, `USER`\>(`path`): `Promise`\<[`ResolvedNavigationEntry`](/docs/api/type-aliases/ResolvedNavigationEntry)\<`M`\>[]\>
 
 Defined in: [hooks/useResolvedNavigationFrom.tsx:58](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
 
@@ -29,7 +29,7 @@ It will take into account the `navigation` provided at the `FireCMS` level.
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User)
 
 ## Parameters
 
@@ -37,7 +37,7 @@ It will take into account the `navigation` provided at the `FireCMS` level.
 
 #### context
 
-[`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+[`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`USER`\>
 
 #### path
 
@@ -45,4 +45,4 @@ It will take into account the `navigation` provided at the `FireCMS` level.
 
 ## Returns
 
-`Promise`\<[`ResolvedNavigationEntry`](../type-aliases/ResolvedNavigationEntry)\<`M`\>[]\>
+`Promise`\<[`ResolvedNavigationEntry`](/docs/api/type-aliases/ResolvedNavigationEntry)\<`M`\>[]\>

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/OnRowClickParams"
 title: "OnRowClickParams"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / OnRowClickParams
+[@firecms/core](/docs/api/README) / OnRowClickParams
 
 # Type Alias: OnRowClickParams\<T\>
 

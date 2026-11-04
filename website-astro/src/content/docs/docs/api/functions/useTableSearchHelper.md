@@ -3,11 +3,11 @@ slug: "docs/api/functions/useTableSearchHelper"
 title: "useTableSearchHelper"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useTableSearchHelper
+[@firecms/core](/docs/api/README) / useTableSearchHelper
 
 # Function: useTableSearchHelper()
 
@@ -25,7 +25,7 @@ Defined in: [components/common/useTableSearchHelper.ts:12](https://github.com/fi
 
 ### \_\_namedParameters
 
-[`UseTableSearchHelperParams`](../interfaces/UseTableSearchHelperParams)\<`M`\>
+[`UseTableSearchHelperParams`](/docs/api/interfaces/UseTableSearchHelperParams)\<`M`\>
 
 ## Returns
 

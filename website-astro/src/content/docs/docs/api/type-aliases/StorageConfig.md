@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/StorageConfig"
 title: "StorageConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / StorageConfig
+[@firecms/core](/docs/api/README) / StorageConfig
 
 # Type Alias: StorageConfig
 
@@ -21,7 +21,7 @@ Additional configuration related to Storage related fields
 
 ### acceptedFiles?
 
-> `optional` **acceptedFiles**: [`FileType`](FileType)[]
+> `optional` **acceptedFiles**: [`FileType`](/docs/api/type-aliases/FileType)[]
 
 Defined in: [types/properties.ts:773](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 
@@ -55,7 +55,7 @@ specify some placeholders that get replaced with the corresponding values.
 
 ### imageCompression?
 
-> `optional` **imageCompression**: [`ImageCompression`](../interfaces/ImageCompression)
+> `optional` **imageCompression**: [`ImageCompression`](/docs/api/interfaces/ImageCompression)
 
 Defined in: [types/properties.ts:779](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 

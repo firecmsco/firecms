@@ -3,18 +3,18 @@ slug: "docs/api/interfaces/AdditionalFieldDelegate"
 title: "AdditionalFieldDelegate"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / AdditionalFieldDelegate
+[@firecms/core](/docs/api/README) / AdditionalFieldDelegate
 
 # Interface: AdditionalFieldDelegate\<M, USER\>
 
 Defined in: [types/collections.ts:485](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
 Use this interface for adding additional fields to entity collection views.
-If you need to do some async loading you can use [AsyncPreviewComponent](../variables/AsyncPreviewComponent)
+If you need to do some async loading you can use [AsyncPreviewComponent](/docs/api/variables/AsyncPreviewComponent)
 
 ## Type Parameters
 
@@ -24,13 +24,13 @@ If you need to do some async loading you can use [AsyncPreviewComponent](../vari
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
 ### Builder?
 
-> `optional` **Builder**: `ComponentType`\<[`AdditionalFieldDelegateProps`](../type-aliases/AdditionalFieldDelegateProps)\<`M`, `USER`\>\>
+> `optional` **Builder**: `ComponentType`\<[`AdditionalFieldDelegateProps`](/docs/api/type-aliases/AdditionalFieldDelegateProps)\<`M`, `USER`\>\>
 
 Defined in: [types/collections.ts:507](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -91,11 +91,11 @@ view.
 
 ###### context
 
-[`FireCMSContext`](../type-aliases/FireCMSContext)\<`any`\>
+[`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`any`\>
 
 ###### entity
 
-[`Entity`](Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 #### Returns
 

@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/FormContext"
 title: "FormContext"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FormContext
+[@firecms/core](/docs/api/README) / FormContext
 
 # Interface: FormContext\<M\>
 
@@ -25,7 +25,7 @@ Context passed to custom fields
 
 ### collection?
 
-> `optional` **collection**: [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+> `optional` **collection**: [`ResolvedEntityCollection`](/docs/api/type-aliases/ResolvedEntityCollection)\<`M`\>
 
 Defined in: [types/fields.tsx:153](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
 
@@ -43,7 +43,7 @@ Defined in: [types/fields.tsx:180](https://github.com/firecmsco/firecms/blob/mai
 
 ### entity?
 
-> `optional` **entity**: [`Entity`](Entity)\<`M`\>
+> `optional` **entity**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 Defined in: [types/fields.tsx:167](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
 

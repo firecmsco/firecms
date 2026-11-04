@@ -58,7 +58,7 @@ customize the path and name of the file. The available placeholders are:
 
 ### Single file upload
 
-![Field](/img/fields/File_upload.png)
+![Field](https://firecms.co/img/fields/File_upload.png)
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -80,14 +80,14 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string).
+The data type is [`string`](https://firecms.co/docs/properties/config/string).
 
 Internally the component used
-is [`StorageUploadFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/StorageUploadFieldBinding).
+is [`StorageUploadFieldBinding`](https://firecms.co/docs/api/functions/StorageUploadFieldBinding).
 
 ### Multiple file upload
 
-![Field](/img/fields/Multi_file_upload.png)
+![Field](https://firecms.co/img/fields/Multi_file_upload.png)
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -109,10 +109,10 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](https://firecms.co/docs/config/array).
+The data type is [`array`](https://firecms.co/docs/properties/config/array).
 
 Internally the component used
-is [`StorageUploadFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/StorageUploadFieldBinding).
+is [`StorageUploadFieldBinding`](https://firecms.co/docs/api/functions/StorageUploadFieldBinding).
 
 ### Custom support for images, videos and audio
 

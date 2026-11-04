@@ -3,11 +3,11 @@ slug: "docs/api/variables/iconSynonyms"
 title: "iconSynonyms"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / iconSynonyms
+[@firecms/core](/docs/api/README) / iconSynonyms
 
 # Variable: iconSynonyms
 

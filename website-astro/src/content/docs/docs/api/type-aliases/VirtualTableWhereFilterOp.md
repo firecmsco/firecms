@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/VirtualTableWhereFilterOp"
 title: "VirtualTableWhereFilterOp"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / VirtualTableWhereFilterOp
+[@firecms/core](/docs/api/README) / VirtualTableWhereFilterOp
 
 # Type Alias: VirtualTableWhereFilterOp
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/EntityCollectionTable"
 title: "EntityCollectionTable"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionTable
+[@firecms/core](/docs/api/README) / EntityCollectionTable
 
 # Function: EntityCollectionTable()
 
@@ -18,20 +18,20 @@ Defined in: [components/EntityCollectionTable/EntityCollectionTable.tsx:44](http
 This component is in charge of rendering a collection table with a high
 degree of customization.
 
-This component is used internally by [EntityCollectionView](../variables/EntityCollectionView) and
-[useReferenceDialog](useReferenceDialog)
+This component is used internally by [EntityCollectionView](/docs/api/variables/EntityCollectionView) and
+[useReferenceDialog](/docs/api/functions/useReferenceDialog)
 
 Please note that you only need to use this component if you are building
 a custom view. If you just need to create a default view you can do it
 exclusively with config options.
 
-If you want to bind a [EntityCollection](../interfaces/EntityCollection) to a table with the default
+If you want to bind a [EntityCollection](/docs/api/interfaces/EntityCollection) to a table with the default
 options you see in collections in the top level navigation, you can
-check [EntityCollectionView](../variables/EntityCollectionView).
+check [EntityCollectionView](/docs/api/variables/EntityCollectionView).
 
-The data displayed in the table is managed by a [EntityTableController](../type-aliases/EntityTableController).
+The data displayed in the table is managed by a [EntityTableController](/docs/api/type-aliases/EntityTableController).
 You can build the default, bound to a path in the datasource, by using the hook
-[useDataSourceTableController](useDataSourceTableController)
+[useDataSourceTableController](/docs/api/functions/useDataSourceTableController)
 
 ## Type Parameters
 
@@ -41,13 +41,13 @@ You can build the default, bound to a path in the datasource, by using the hook
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = `any`
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = `any`
 
 ## Parameters
 
 ### \_\_namedParameters
 
-[`EntityCollectionTableProps`](../type-aliases/EntityCollectionTableProps)\<`M`\>
+[`EntityCollectionTableProps`](/docs/api/type-aliases/EntityCollectionTableProps)\<`M`\>
 
 ## Returns
 

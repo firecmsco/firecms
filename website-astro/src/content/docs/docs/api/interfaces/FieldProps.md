@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/FieldProps"
 title: "FieldProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FieldProps
+[@firecms/core](/docs/api/README) / FieldProps
 
 # Interface: FieldProps\<T, CustomProps, M\>
 
@@ -20,7 +20,7 @@ this interface as props.
 
 ### T
 
-`T` *extends* [`CMSType`](../type-aliases/CMSType) = `any`
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType) = `any`
 
 ### CustomProps
 
@@ -44,7 +44,7 @@ Should this field autofocus on mount
 
 ### context
 
-> **context**: [`FormContext`](FormContext)\<`M`\>
+> **context**: [`FormContext`](/docs/api/interfaces/FormContext)\<`M`\>
 
 Defined in: [types/fields.tsx:103](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
 
@@ -129,7 +129,7 @@ This is used to preserve state in array containers.
 
 ##### property
 
-`Partial`\<[`ArrayProperty`](ArrayProperty)\<`any`, `any`\> \| [`MapProperty`](MapProperty)\<`any`\> \| `AnyProperty`\>
+`Partial`\<[`ArrayProperty`](/docs/api/interfaces/ArrayProperty)\<`any`, `any`\> \| [`MapProperty`](/docs/api/interfaces/MapProperty)\<`any`\> \| `AnyProperty`\>
 
 #### Returns
 
@@ -149,7 +149,7 @@ Is this field part of an array
 
 ### property
 
-> **property**: [`Property`](../type-aliases/Property)\<`T`\> \| [`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\>
+> **property**: [`Property`](/docs/api/type-aliases/Property)\<`T`\> \| [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\<`T`\>
 
 Defined in: [types/fields.tsx:66](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
 
@@ -184,7 +184,7 @@ Set value of a different field directly
 
 ##### value
 
-[`CMSType`](../type-aliases/CMSType) | `null`
+[`CMSType`](/docs/api/type-aliases/CMSType) | `null`
 
 ##### shouldValidate?
 

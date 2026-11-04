@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/ArrayValuesCount"
 title: "ArrayValuesCount"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayValuesCount
+[@firecms/core](/docs/api/README) / ArrayValuesCount
 
 # Type Alias: ArrayValuesCount
 

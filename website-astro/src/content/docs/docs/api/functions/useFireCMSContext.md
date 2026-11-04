@@ -3,19 +3,19 @@ slug: "docs/api/functions/useFireCMSContext"
 title: "useFireCMSContext"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useFireCMSContext
+[@firecms/core](/docs/api/README) / useFireCMSContext
 
 # Function: useFireCMSContext()
 
-> **useFireCMSContext**\<`USER`, `AuthControllerType`\>(): [`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`, `AuthControllerType`\>
+> **useFireCMSContext**\<`USER`, `AuthControllerType`\>(): [`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`USER`, `AuthControllerType`\>
 
 Defined in: [hooks/useFireCMSContext.tsx:25](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useFireCMSContext.tsx)
 
-Hook to retrieve the [FireCMSContext](../type-aliases/FireCMSContext).
+Hook to retrieve the [FireCMSContext](/docs/api/type-aliases/FireCMSContext).
 
 Consider that in order to use this hook you need to have a parent
 `FireCMS` component.
@@ -24,15 +24,15 @@ Consider that in order to use this hook you need to have a parent
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ### AuthControllerType
 
-`AuthControllerType` *extends* [`AuthController`](../type-aliases/AuthController)\<`USER`\> = [`AuthController`](../type-aliases/AuthController)\<`USER`\>
+`AuthControllerType` *extends* [`AuthController`](/docs/api/type-aliases/AuthController)\<`USER`\> = [`AuthController`](/docs/api/type-aliases/AuthController)\<`USER`\>
 
 ## Returns
 
-[`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`, `AuthControllerType`\>
+[`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`USER`, `AuthControllerType`\>
 
 ## See
 

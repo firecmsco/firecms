@@ -3,11 +3,11 @@ slug: "docs/api/functions/FormLayout"
 title: "FormLayout"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FormLayout
+[@firecms/core](/docs/api/README) / FormLayout
 
 # Function: FormLayout()
 

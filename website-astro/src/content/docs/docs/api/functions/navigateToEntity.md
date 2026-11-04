@@ -3,11 +3,11 @@ slug: "docs/api/functions/navigateToEntity"
 title: "navigateToEntity"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / navigateToEntity
+[@firecms/core](/docs/api/README) / navigateToEntity
 
 # Function: navigateToEntity()
 
@@ -21,7 +21,7 @@ Defined in: [util/navigation\_utils.ts:174](https://github.com/firecmsco/firecms
 
 #### collection?
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>
 
 #### copy?
 
@@ -37,7 +37,7 @@ Defined in: [util/navigation\_utils.ts:174](https://github.com/firecmsco/firecms
 
 #### navigation
 
-[`NavigationController`](../type-aliases/NavigationController)
+[`NavigationController`](/docs/api/type-aliases/NavigationController)
 
 #### onClose?
 
@@ -57,7 +57,7 @@ Defined in: [util/navigation\_utils.ts:174](https://github.com/firecmsco/firecms
 
 #### sideEntityController
 
-[`SideEntityController`](../interfaces/SideEntityController)
+[`SideEntityController`](/docs/api/interfaces/SideEntityController)
 
 ## Returns
 

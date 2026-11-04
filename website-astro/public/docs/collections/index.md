@@ -24,7 +24,7 @@ You can create your collections **in the UI or using code**. You can also mix bo
 collections defined in the UI will take precedence. For example, you might have an enum property with 2 values defined
 in code, and one extra value defined in the UI. When merged, the resulting enum will have 3 values.
 
-:::important
+:::note
 You can have the same collection defined in both ways. In that case, the collection defined in the UI will
 take precedence.
 
@@ -37,7 +37,7 @@ can define an enum string property and the values will be merged from both defin
 :::note
 FireCMS provides around 20 different fields (such as text fields, selects, and complex ones like reference or
 sortable array fields). If your use case is not covered by one of the provided fields, you can create your
-own [custom field](https://firecms.co/docs/properties/custom_fields.mdx).
+own [custom field](https://firecms.co/docs/properties/custom_fields).
 :::
 
 :::tip
@@ -250,7 +250,7 @@ to `false` in the collection configuration.
 - **`path`**: Relative Firestore path of this view to its parent. If this view is in the root, the path is equal to the
   absolute one. This path also determines the URL in FireCMS.
 - **`properties`**: Object defining the properties for the entity schema. More information
-  in [Properties](https://firecms.co/docs/properties/properties_intro).
+  in [Properties](https://firecms.co/docs/properties).
 - **`propertiesOrder`**: Order in which the properties are displayed.
     - For properties, use the property key.
     - For additional field, use the field key.
@@ -288,7 +288,7 @@ to `false` in the collection configuration.
 - **`entityActions`**: You can define additional actions that can be performed on the entities in this collection. These
   actions can be displayed in the collection view or in the entity view. You can use the `onClick` method to implement
   your own logic. In the `context` prop, you can access all the controllers of FireCMS.
-  You can also define entity actions globally. See [Entity Actions](https://firecms.co/docs/entity_actions) for more details.
+  You can also define entity actions globally. See [Entity Actions](https://firecms.co/docs/collections/entity_actions) for more details.
 
 ```tsx
 const archiveEntityAction: EntityAction = {
@@ -364,7 +364,7 @@ initialSort: ["price", "asc"]
   or in the entity side panel if it's a subcollection? It will still be accessible if you reach the specified path. You
   can also use this collection as a reference target.
 - **`callbacks`**: This interface defines all the callbacks that can be used when an entity is being created, updated,
-  or deleted. Useful for adding your own logic or blocking the operation's execution. [More information](https://firecms.co/docs/callbacks).
+  or deleted. Useful for adding your own logic or blocking the operation's execution. [More information](https://firecms.co/docs/collections/callbacks).
 - **`entityViews`**: Array of builders for rendering additional panels in an entity view. Useful if you need to render custom
   views for your entities. [More information](https://firecms.co/docs/collections/entity_views).
 - **`alwaysApplyDefaultValues`**: If set to true, the default values of the properties will be applied
@@ -403,7 +403,7 @@ kanban: {
   Used by Kanban view for ordering within columns.
 - **`viewGroups`**: Group subcollections and custom views into dropdown menus in the entity view tabs.
   Views listed in a group are removed from the top-level tabs and shown under a single dropdown instead.
-  [More information](https://firecms.co/docs/entity_views#grouping-views-and-subcollections).
+  [More information](https://firecms.co/docs/collections/entity_views#grouping-views-and-subcollections).
 
 ```tsx
 viewGroups: [

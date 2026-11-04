@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/OnVirtualTableColumnResizeParams"
 title: "OnVirtualTableColumnResizeParams"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / OnVirtualTableColumnResizeParams
+[@firecms/core](/docs/api/README) / OnVirtualTableColumnResizeParams
 
 # Type Alias: OnVirtualTableColumnResizeParams
 
@@ -23,7 +23,7 @@ Table
 
 ### column
 
-> **column**: [`VirtualTableColumn`](../interfaces/VirtualTableColumn)
+> **column**: [`VirtualTableColumn`](/docs/api/interfaces/VirtualTableColumn)
 
 Defined in: [components/VirtualTable/VirtualTableProps.tsx:252](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
 

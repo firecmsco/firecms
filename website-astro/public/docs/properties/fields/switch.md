@@ -1,6 +1,6 @@
 # Switch
 
-![Field](/img/fields/Switch.png)
+![Field](https://firecms.co/img/fields/Switch.png)
 
 Simple toggle for selecting `true` or `false` values.
 
@@ -13,9 +13,9 @@ buildProperty({
 });
 ```
 
-The data type is [`boolean`](https://firecms.co/docs/config/boolean).
+The data type is [`boolean`](https://firecms.co/docs/properties/config/boolean).
 
 Internally the component used
-is [`SwitchFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/SwitchFieldBinding).
+is [`SwitchFieldBinding`](https://firecms.co/docs/api/functions/SwitchFieldBinding).
 
 

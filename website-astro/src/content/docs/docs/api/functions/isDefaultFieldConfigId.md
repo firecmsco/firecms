@@ -3,11 +3,11 @@ slug: "docs/api/functions/isDefaultFieldConfigId"
 title: "isDefaultFieldConfigId"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / isDefaultFieldConfigId
+[@firecms/core](/docs/api/README) / isDefaultFieldConfigId
 
 # Function: isDefaultFieldConfigId()
 

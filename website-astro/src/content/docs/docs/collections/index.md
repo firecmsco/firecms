@@ -42,7 +42,7 @@ can define an enum string property and the values will be merged from both defin
 :::note
 FireCMS provides around 20 different fields (such as text fields, selects, and complex ones like reference or
 sortable array fields). If your use case is not covered by one of the provided fields, you can create your
-own [custom field](../properties/custom_fields.mdx).
+own [custom field](/docs/properties/custom_fields).
 :::
 
 :::tip
@@ -255,7 +255,7 @@ to `false` in the collection configuration.
 - **`path`**: Relative Firestore path of this view to its parent. If this view is in the root, the path is equal to the
   absolute one. This path also determines the URL in FireCMS.
 - **`properties`**: Object defining the properties for the entity schema. More information
-  in [Properties](../properties/properties_intro).
+  in [Properties](/docs/properties).
 - **`propertiesOrder`**: Order in which the properties are displayed.
     - For properties, use the property key.
     - For additional field, use the field key.
@@ -293,7 +293,7 @@ to `false` in the collection configuration.
 - **`entityActions`**: You can define additional actions that can be performed on the entities in this collection. These
   actions can be displayed in the collection view or in the entity view. You can use the `onClick` method to implement
   your own logic. In the `context` prop, you can access all the controllers of FireCMS.
-  You can also define entity actions globally. See [Entity Actions](./entity_actions) for more details.
+  You can also define entity actions globally. See [Entity Actions](/docs/collections/entity_actions) for more details.
 
 ```tsx
 const archiveEntityAction: EntityAction = {
@@ -356,22 +356,22 @@ initialSort: ["price", "asc"]
 - **`textSearchEnabled`**: Flag to indicate if a search bar should be displayed on top of the collection table.
 - **`permissions`**: You can specify an object with boolean permissions with the
   shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions the user can perform. You can also pass
-  a [`PermissionsBuilder`](../api/type-aliases/PermissionsBuilder) to customize the permissions based on the user or entity.
+  a [`PermissionsBuilder`](/docs/api/type-aliases/PermissionsBuilder) to customize the permissions based on the user or entity.
 - **`inlineEditing`**: Can the elements in this collection be edited inline in the collection view? If this flag is set
   to false but `permissions.edit` is `true`, entities can still be edited in the side panel.
 - **`selectionEnabled`**: Are the entities in this collection selectable? Defaults to `true`.
 - **`selectionController`**: Pass your own selection controller if you want to control selected entities
-  externally. [See `useSelectionController`](../api/functions/useSelectionController).
+  externally. [See `useSelectionController`](/docs/api/functions/useSelectionController).
 - **`exportable`**: Should the data in this collection view include an export button? You can also set
-  an [`ExportConfig`](../api/interfaces/ExportConfig) configuration object to customize the export and add additional
+  an [`ExportConfig`](/docs/api/interfaces/ExportConfig) configuration object to customize the export and add additional
   values. Defaults to `true`.
 - **`hideFromNavigation`**: Should this collection be hidden from the main navigation panel if it is at the root level,
   or in the entity side panel if it's a subcollection? It will still be accessible if you reach the specified path. You
   can also use this collection as a reference target.
 - **`callbacks`**: This interface defines all the callbacks that can be used when an entity is being created, updated,
-  or deleted. Useful for adding your own logic or blocking the operation's execution. [More information](./callbacks).
+  or deleted. Useful for adding your own logic or blocking the operation's execution. [More information](/docs/collections/callbacks).
 - **`entityViews`**: Array of builders for rendering additional panels in an entity view. Useful if you need to render custom
-  views for your entities. [More information](./collections/entity_views).
+  views for your entities. [More information](/docs/collections/entity_views).
 - **`alwaysApplyDefaultValues`**: If set to true, the default values of the properties will be applied
   to the entity every time the entity is updated (not only when created).
   Defaults to false.
@@ -408,7 +408,7 @@ kanban: {
   Used by Kanban view for ordering within columns.
 - **`viewGroups`**: Group subcollections and custom views into dropdown menus in the entity view tabs.
   Views listed in a group are removed from the top-level tabs and shown under a single dropdown instead.
-  [More information](./entity_views#grouping-views-and-subcollections).
+  [More information](/docs/collections/entity_views#grouping-views-and-subcollections).
 
 ```tsx
 viewGroups: [

@@ -3,15 +3,15 @@ slug: "docs/api/functions/useClipboard"
 title: "useClipboard"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useClipboard
+[@firecms/core](/docs/api/README) / useClipboard
 
 # Function: useClipboard()
 
-> **useClipboard**(`options?`): [`useClipboardReturnType`](../interfaces/useClipboardReturnType)
+> **useClipboard**(`options?`): [`useClipboardReturnType`](/docs/api/interfaces/useClipboardReturnType)
 
 Defined in: [hooks/useClipboard.tsx:71](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useClipboard.tsx)
 
@@ -19,8 +19,8 @@ Defined in: [hooks/useClipboard.tsx:71](https://github.com/firecmsco/firecms/blo
 
 ### options?
 
-[`UseClipboardProps`](../interfaces/UseClipboardProps)
+[`UseClipboardProps`](/docs/api/interfaces/UseClipboardProps)
 
 ## Returns
 
-[`useClipboardReturnType`](../interfaces/useClipboardReturnType)
+[`useClipboardReturnType`](/docs/api/interfaces/useClipboardReturnType)

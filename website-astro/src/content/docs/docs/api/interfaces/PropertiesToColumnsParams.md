@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/PropertiesToColumnsParams"
 title: "PropertiesToColumnsParams"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertiesToColumnsParams
+[@firecms/core](/docs/api/README) / PropertiesToColumnsParams
 
 # Interface: PropertiesToColumnsParams\<M\>
 
@@ -23,7 +23,7 @@ Defined in: [components/EntityCollectionTable/column\_utils.tsx:20](https://gith
 
 ### AdditionalHeaderWidget?
 
-> `optional` **AdditionalHeaderWidget**: `ComponentType`\<\{ `onHover`: `boolean`; `property`: [`ResolvedProperty`](../type-aliases/ResolvedProperty); `propertyKey`: `string`; \}\>
+> `optional` **AdditionalHeaderWidget**: `ComponentType`\<\{ `onHover`: `boolean`; `property`: [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty); `propertyKey`: `string`; \}\>
 
 Defined in: [components/EntityCollectionTable/column\_utils.tsx:24](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/column_utils.tsx)
 
@@ -31,7 +31,7 @@ Defined in: [components/EntityCollectionTable/column\_utils.tsx:24](https://gith
 
 ### forceFilter?
 
-> `optional` **forceFilter**: `Partial`\<`Record`\<keyof `M` *extends* `string` ? keyof `any` : `never`, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
+> `optional` **forceFilter**: `Partial`\<`Record`\<keyof `M` *extends* `string` ? keyof `any` : `never`, \[[`WhereFilterOp`](/docs/api/type-aliases/WhereFilterOp), `any`\]\>\>
 
 Defined in: [components/EntityCollectionTable/column\_utils.tsx:23](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/column_utils.tsx)
 
@@ -39,7 +39,7 @@ Defined in: [components/EntityCollectionTable/column\_utils.tsx:23](https://gith
 
 ### properties
 
-> **properties**: [`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
+> **properties**: [`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)\<`M`\>
 
 Defined in: [components/EntityCollectionTable/column\_utils.tsx:21](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/column_utils.tsx)
 

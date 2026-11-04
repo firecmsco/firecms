@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/SaveEntityWithCallbacksProps"
 title: "SaveEntityWithCallbacksProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SaveEntityWithCallbacksProps
+[@firecms/core](/docs/api/README) / SaveEntityWithCallbacksProps
 
 # Type Alias: SaveEntityWithCallbacksProps\<M\>
 
-> **SaveEntityWithCallbacksProps**\<`M`\> = [`SaveEntityProps`](../interfaces/SaveEntityProps)\<`M`\> & `object`
+> **SaveEntityWithCallbacksProps**\<`M`\> = [`SaveEntityProps`](/docs/api/interfaces/SaveEntityProps)\<`M`\> & `object`
 
 Defined in: [hooks/data/save.ts:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/save.ts)
 
@@ -53,7 +53,7 @@ Defined in: [hooks/data/save.ts:8](https://github.com/firecmsco/firecms/blob/mai
 
 ##### updatedEntity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 #### Returns
 

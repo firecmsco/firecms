@@ -3,15 +3,15 @@ slug: "docs/api/functions/useInternalUserManagementController"
 title: "useInternalUserManagementController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useInternalUserManagementController
+[@firecms/core](/docs/api/README) / useInternalUserManagementController
 
 # Function: useInternalUserManagementController()
 
-> **useInternalUserManagementController**\<`USER`\>(): [`InternalUserManagement`](../type-aliases/InternalUserManagement)\<`USER`\>
+> **useInternalUserManagementController**\<`USER`\>(): [`InternalUserManagement`](/docs/api/type-aliases/InternalUserManagement)\<`USER`\>
 
 Defined in: [hooks/useInternalUserManagementController.tsx:16](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useInternalUserManagementController.tsx)
 
@@ -26,8 +26,8 @@ Use at your own risk!
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Returns
 
-[`InternalUserManagement`](../type-aliases/InternalUserManagement)\<`USER`\>
+[`InternalUserManagement`](/docs/api/type-aliases/InternalUserManagement)\<`USER`\>

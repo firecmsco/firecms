@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/UseTableSearchHelperParams"
 title: "UseTableSearchHelperParams"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / UseTableSearchHelperParams
+[@firecms/core](/docs/api/README) / UseTableSearchHelperParams
 
 # Interface: UseTableSearchHelperParams\<M\>
 
@@ -23,7 +23,7 @@ Defined in: [components/common/useTableSearchHelper.ts:6](https://github.com/fir
 
 ### collection
 
-> **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
+> **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 Defined in: [components/common/useTableSearchHelper.ts:7](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/useTableSearchHelper.ts)
 

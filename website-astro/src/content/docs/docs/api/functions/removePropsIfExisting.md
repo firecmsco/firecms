@@ -3,11 +3,11 @@ slug: "docs/api/functions/removePropsIfExisting"
 title: "removePropsIfExisting"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / removePropsIfExisting
+[@firecms/core](/docs/api/README) / removePropsIfExisting
 
 # Function: removePropsIfExisting()
 

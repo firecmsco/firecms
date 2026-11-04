@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityCallbacks"
 title: "EntityCallbacks"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityCallbacks
+[@firecms/core](/docs/api/README) / EntityCallbacks
 
 # Type Alias: EntityCallbacks\<M, USER\>
 
@@ -27,7 +27,7 @@ Useful for adding your own logic or blocking the execution of the operation.
 
 ### USER
 
-`USER` *extends* [`User`](User) = [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Methods
 
@@ -43,7 +43,7 @@ Callback used after the entity is deleted.
 
 ##### entityDeleteProps
 
-[`EntityOnDeleteProps`](../interfaces/EntityOnDeleteProps)\<`M`, `USER`\>
+[`EntityOnDeleteProps`](/docs/api/interfaces/EntityOnDeleteProps)\<`M`, `USER`\>
 
 #### Returns
 
@@ -53,7 +53,7 @@ Callback used after the entity is deleted.
 
 ### onFetch()?
 
-> `optional` **onFetch**(`entityFetchProps`): [`Entity`](../interfaces/Entity)\<`M`\> \| `Promise`\<[`Entity`](../interfaces/Entity)\<`M`\>\>
+> `optional` **onFetch**(`entityFetchProps`): [`Entity`](/docs/api/interfaces/Entity)\<`M`\> \| `Promise`\<[`Entity`](/docs/api/interfaces/Entity)\<`M`\>\>
 
 Defined in: [types/entity\_callbacks.ts:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -63,11 +63,11 @@ Callback used after fetching data
 
 ##### entityFetchProps
 
-[`EntityOnFetchProps`](../interfaces/EntityOnFetchProps)\<`M`, `USER`\>
+[`EntityOnFetchProps`](/docs/api/interfaces/EntityOnFetchProps)\<`M`, `USER`\>
 
 #### Returns
 
-[`Entity`](../interfaces/Entity)\<`M`\> \| `Promise`\<[`Entity`](../interfaces/Entity)\<`M`\>\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\> \| `Promise`\<[`Entity`](/docs/api/interfaces/Entity)\<`M`\>\>
 
 ***
 
@@ -85,7 +85,7 @@ The returned string will be used as the ID of the entity.
 
 ##### idUpdateProps
 
-[`EntityIdUpdateProps`](../interfaces/EntityIdUpdateProps)\<`M`\>
+[`EntityIdUpdateProps`](/docs/api/interfaces/EntityIdUpdateProps)\<`M`\>
 
 #### Returns
 
@@ -107,7 +107,7 @@ error snackbar gets displayed.
 
 ##### entityDeleteProps
 
-[`EntityOnDeleteProps`](../interfaces/EntityOnDeleteProps)\<`M`, `USER`\>
+[`EntityOnDeleteProps`](/docs/api/interfaces/EntityOnDeleteProps)\<`M`, `USER`\>
 
 #### Returns
 
@@ -129,7 +129,7 @@ error snackbar gets displayed.
 
 ##### entitySaveProps
 
-[`EntityOnPreSaveProps`](EntityOnPreSaveProps)\<`M`, `USER`\>
+[`EntityOnPreSaveProps`](/docs/api/type-aliases/EntityOnPreSaveProps)\<`M`, `USER`\>
 
 #### Returns
 
@@ -149,7 +149,7 @@ Callback used when saving fails
 
 ##### entitySaveProps
 
-[`EntityOnSaveFailureProps`](EntityOnSaveFailureProps)\<`M`, `USER`\>
+[`EntityOnSaveFailureProps`](/docs/api/type-aliases/EntityOnSaveFailureProps)\<`M`, `USER`\>
 
 #### Returns
 
@@ -169,7 +169,7 @@ Callback used when save is successful
 
 ##### entitySaveProps
 
-[`EntityOnSaveProps`](../interfaces/EntityOnSaveProps)\<`M`, `USER`\>
+[`EntityOnSaveProps`](/docs/api/interfaces/EntityOnSaveProps)\<`M`, `USER`\>
 
 #### Returns
 

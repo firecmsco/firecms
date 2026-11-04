@@ -3,11 +3,11 @@ slug: "docs/api/functions/TextFieldBinding"
 title: "TextFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / TextFieldBinding
+[@firecms/core](/docs/api/README) / TextFieldBinding
 
 # Function: TextFieldBinding()
 

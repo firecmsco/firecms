@@ -3,11 +3,11 @@ slug: "docs/api/functions/getLocalChangesBackup"
 title: "getLocalChangesBackup"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getLocalChangesBackup
+[@firecms/core](/docs/api/README) / getLocalChangesBackup
 
 # Function: getLocalChangesBackup()
 
@@ -19,7 +19,7 @@ Defined in: [util/collections.ts:74](https://github.com/firecmsco/firecms/blob/m
 
 ### collection
 
-[`EntityCollection`](../interfaces/EntityCollection)
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 ## Returns
 

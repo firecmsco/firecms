@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/AuthController"
 title: "AuthController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / AuthController
+[@firecms/core](/docs/api/README) / AuthController
 
 # Type Alias: AuthController\<USER, ExtraData\>
 
@@ -23,7 +23,7 @@ to do it as the result of a hook.
 
 ### USER
 
-`USER` *extends* [`User`](User) = `any`
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = `any`
 
 ### ExtraData
 
@@ -152,7 +152,7 @@ Defined in: [types/auth.tsx:64](https://github.com/firecmsco/firecms/blob/main/p
 
 ##### roles
 
-[`Role`](Role)[]
+[`Role`](/docs/api/type-aliases/Role)[]
 
 #### Returns
 

@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/Permissions"
 title: "Permissions"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / Permissions
+[@firecms/core](/docs/api/README) / Permissions
 
 # Interface: Permissions
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/getDefaultValueFor"
 title: "getDefaultValueFor"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getDefaultValueFor
+[@firecms/core](/docs/api/README) / getDefaultValueFor
 
 # Function: getDefaultValueFor()
 
@@ -19,7 +19,7 @@ Defined in: [util/entities.ts:50](https://github.com/firecmsco/firecms/blob/main
 
 ### property?
 
-[`PropertyOrBuilder`](../type-aliases/PropertyOrBuilder)
+[`PropertyOrBuilder`](/docs/api/type-aliases/PropertyOrBuilder)
 
 ## Returns
 

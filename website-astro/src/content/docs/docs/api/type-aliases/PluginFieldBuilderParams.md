@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/PluginFieldBuilderParams"
 title: "PluginFieldBuilderParams"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PluginFieldBuilderParams
+[@firecms/core](/docs/api/README) / PluginFieldBuilderParams
 
 # Type Alias: PluginFieldBuilderParams\<T, M, EC\>
 
@@ -19,7 +19,7 @@ Defined in: [types/plugins.tsx:244](https://github.com/firecmsco/firecms/blob/ma
 
 ### T
 
-`T` *extends* [`CMSType`](CMSType) = [`CMSType`](CMSType)
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType) = [`CMSType`](/docs/api/type-aliases/CMSType)
 
 ### M
 
@@ -27,7 +27,7 @@ Defined in: [types/plugins.tsx:244](https://github.com/firecmsco/firecms/blob/ma
 
 ### EC
 
-`EC` *extends* [`EntityCollection`](../interfaces/EntityCollection)\<`M`\> = [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
+`EC` *extends* [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\> = [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 ## Properties
 
@@ -41,7 +41,7 @@ Defined in: [types/plugins.tsx:251](https://github.com/firecmsco/firecms/blob/ma
 
 ### Field
 
-> **Field**: `React.ComponentType`\<[`FieldProps`](../interfaces/FieldProps)\<`T`, `any`, `M`\>\>
+> **Field**: `React.ComponentType`\<[`FieldProps`](/docs/api/interfaces/FieldProps)\<`T`, `any`, `M`\>\>
 
 Defined in: [types/plugins.tsx:248](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
 
@@ -65,7 +65,7 @@ Defined in: [types/plugins.tsx:250](https://github.com/firecmsco/firecms/blob/ma
 
 ### plugin
 
-> **plugin**: [`FireCMSPlugin`](FireCMSPlugin)
+> **plugin**: [`FireCMSPlugin`](/docs/api/type-aliases/FireCMSPlugin)
 
 Defined in: [types/plugins.tsx:249](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
 
@@ -73,7 +73,7 @@ Defined in: [types/plugins.tsx:249](https://github.com/firecmsco/firecms/blob/ma
 
 ### property
 
-> **property**: [`Property`](Property)\<`T`\> \| [`ResolvedProperty`](ResolvedProperty)\<`T`\>
+> **property**: [`Property`](/docs/api/type-aliases/Property)\<`T`\> \| [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\<`T`\>
 
 Defined in: [types/plugins.tsx:247](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
 

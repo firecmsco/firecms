@@ -3,15 +3,15 @@ slug: "docs/api/functions/buildFieldConfig"
 title: "buildFieldConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / buildFieldConfig
+[@firecms/core](/docs/api/README) / buildFieldConfig
 
 # Function: buildFieldConfig()
 
-> **buildFieldConfig**\<`T`\>(`propertyConfig`): [`PropertyConfig`](../type-aliases/PropertyConfig)\<`T`\>
+> **buildFieldConfig**\<`T`\>(`propertyConfig`): [`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\<`T`\>
 
 Defined in: [util/builders.ts:137](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/builders.ts)
 
@@ -22,14 +22,14 @@ additional field delegates views with all its properties
 
 ### T
 
-`T` *extends* [`CMSType`](../type-aliases/CMSType) = [`CMSType`](../type-aliases/CMSType)
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType) = [`CMSType`](/docs/api/type-aliases/CMSType)
 
 ## Parameters
 
 ### propertyConfig
 
-[`PropertyConfig`](../type-aliases/PropertyConfig)\<`T`\>
+[`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\<`T`\>
 
 ## Returns
 
-[`PropertyConfig`](../type-aliases/PropertyConfig)\<`T`\>
+[`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\<`T`\>

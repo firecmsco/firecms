@@ -3,15 +3,15 @@ slug: "docs/api/functions/buildEntityCallbacks"
 title: "buildEntityCallbacks"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / buildEntityCallbacks
+[@firecms/core](/docs/api/README) / buildEntityCallbacks
 
 # Function: buildEntityCallbacks()
 
-> **buildEntityCallbacks**\<`M`\>(`callbacks`): [`EntityCallbacks`](../type-aliases/EntityCallbacks)\<`M`\>
+> **buildEntityCallbacks**\<`M`\>(`callbacks`): [`EntityCallbacks`](/docs/api/type-aliases/EntityCallbacks)\<`M`\>
 
 Defined in: [util/builders.ts:113](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/builders.ts)
 
@@ -28,8 +28,8 @@ the properties keys.
 
 ### callbacks
 
-[`EntityCallbacks`](../type-aliases/EntityCallbacks)\<`M`\>
+[`EntityCallbacks`](/docs/api/type-aliases/EntityCallbacks)\<`M`\>
 
 ## Returns
 
-[`EntityCallbacks`](../type-aliases/EntityCallbacks)\<`M`\>
+[`EntityCallbacks`](/docs/api/type-aliases/EntityCallbacks)\<`M`\>

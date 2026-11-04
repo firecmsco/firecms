@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/DefaultSelectedViewBuilder"
 title: "DefaultSelectedViewBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DefaultSelectedViewBuilder
+[@firecms/core](/docs/api/README) / DefaultSelectedViewBuilder
 
 # Type Alias: DefaultSelectedViewBuilder()
 
@@ -15,13 +15,13 @@ title: "DefaultSelectedViewBuilder"
 
 Defined in: [types/collections.ts:614](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
-Used in the [EntityCollection#defaultSelectedView](../interfaces/EntityCollection.md#defaultselectedview) to define the default
+Used in the [EntityCollection#defaultSelectedView](/docs/api/interfaces/EntityCollection#defaultselectedview) to define the default
 
 ## Parameters
 
 ### params
 
-[`DefaultSelectedViewParams`](DefaultSelectedViewParams)
+[`DefaultSelectedViewParams`](/docs/api/type-aliases/DefaultSelectedViewParams)
 
 ## Returns
 

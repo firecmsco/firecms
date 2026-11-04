@@ -3,11 +3,11 @@ slug: "docs/api/functions/useDebouncedCallback"
 title: "useDebouncedCallback"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useDebouncedCallback
+[@firecms/core](/docs/api/README) / useDebouncedCallback
 
 # Function: useDebouncedCallback()
 

@@ -25,4 +25,4 @@ buildProperty({
 });
 ```
 
-Der Datentyp ist [`array`](../config/array).
+Der Datentyp ist [`array`](/de/docs/properties/config/array).

@@ -3,11 +3,11 @@ slug: "docs/api/functions/removeTrailingSlash"
 title: "removeTrailingSlash"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / removeTrailingSlash
+[@firecms/core](/docs/api/README) / removeTrailingSlash
 
 # Function: removeTrailingSlash()
 

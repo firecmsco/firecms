@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayItemOptions"
 title: "ArrayItemOptions"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayItemOptions
+[@firecms/core](/docs/api/README) / ArrayItemOptions
 
 # Function: ArrayItemOptions()
 

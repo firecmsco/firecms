@@ -3,11 +3,11 @@ slug: "docs/api/functions/resolveCollectionPathIds"
 title: "resolveCollectionPathIds"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolveCollectionPathIds
+[@firecms/core](/docs/api/README) / resolveCollectionPathIds
 
 # Function: resolveCollectionPathIds()
 
@@ -23,7 +23,7 @@ Defined in: [util/navigation\_utils.ts:34](https://github.com/firecmsco/firecms/
 
 ### allCollections
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>[]
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>[]
 
 ## Returns
 

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/OnColumnResizeParams"
 title: "OnColumnResizeParams"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / OnColumnResizeParams
+[@firecms/core](/docs/api/README) / OnColumnResizeParams
 
 # Type Alias: OnColumnResizeParams
 

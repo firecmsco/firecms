@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/ArrayEntryParams"
 title: "ArrayEntryParams"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayEntryParams
+[@firecms/core](/docs/api/README) / ArrayEntryParams
 
 # Type Alias: ArrayEntryParams
 

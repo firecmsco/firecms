@@ -3,11 +3,11 @@ slug: "docs/api/functions/NumberPropertyPreview"
 title: "NumberPropertyPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NumberPropertyPreview
+[@firecms/core](/docs/api/README) / NumberPropertyPreview
 
 # Function: NumberPropertyPreview()
 
@@ -19,7 +19,7 @@ Defined in: [preview/property\_previews/NumberPropertyPreview.tsx:9](https://git
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`number`\>
+[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<`number`\>
 
 ## Returns
 

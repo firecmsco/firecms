@@ -3,11 +3,11 @@ slug: "docs/api/functions/resolvedSelectedEntityView"
 title: "resolvedSelectedEntityView"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolvedSelectedEntityView
+[@firecms/core](/docs/api/README) / resolvedSelectedEntityView
 
 # Function: resolvedSelectedEntityView()
 
@@ -25,11 +25,11 @@ Defined in: [util/resolutions.ts:453](https://github.com/firecmsco/firecms/blob/
 
 ### customViews
 
-(`string` \| [`EntityCustomView`](../type-aliases/EntityCustomView)\<`M`\>)[] | `undefined`
+(`string` \| [`EntityCustomView`](/docs/api/type-aliases/EntityCustomView)\<`M`\>)[] | `undefined`
 
 ### customizationController
 
-[`CustomizationController`](../type-aliases/CustomizationController)
+[`CustomizationController`](/docs/api/type-aliases/CustomizationController)
 
 ### selectedTab?
 
@@ -45,12 +45,12 @@ Defined in: [util/resolutions.ts:453](https://github.com/firecmsco/firecms/blob/
 
 ### resolvedEntityViews
 
-> **resolvedEntityViews**: [`EntityCustomView`](../type-aliases/EntityCustomView)\<`M`\>[]
+> **resolvedEntityViews**: [`EntityCustomView`](/docs/api/type-aliases/EntityCustomView)\<`M`\>[]
 
 ### selectedEntityView
 
-> **selectedEntityView**: [`EntityCustomView`](../type-aliases/EntityCustomView)\<`M`\> \| `undefined`
+> **selectedEntityView**: [`EntityCustomView`](/docs/api/type-aliases/EntityCustomView)\<`M`\> \| `undefined`
 
 ### selectedSecondaryForm
 
-> **selectedSecondaryForm**: [`EntityCustomView`](../type-aliases/EntityCustomView)\<`M`\> \| `undefined`
+> **selectedSecondaryForm**: [`EntityCustomView`](/docs/api/type-aliases/EntityCustomView)\<`M`\> \| `undefined`

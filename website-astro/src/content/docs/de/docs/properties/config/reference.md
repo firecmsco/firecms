@@ -62,4 +62,4 @@ const productsReferenceProperty = buildProperty({
 ---
 
 Links:
-- [API](../../api/interfaces/ReferenceProperty)
+- [API](/de/docs/api/interfaces/ReferenceProperty)

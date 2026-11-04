@@ -13,7 +13,7 @@ TypeScript-Typsystem zur Validierung der Eingabe verwendet).
 
 Sie können auch Eigenschaften **dynamisch** aktualisieren, basierend auf der entityId, dem
 Pfad oder den aktuellen Werten. Lesen Sie den
-[Abschnitt über bedingte Felder](conditional_fields).
+[Abschnitt über bedingte Felder](/de/docs/properties/conditional_fields).
 
 Lesen Sie über die verschiedenen verfügbaren Felder im Felder-Abschnitt oder die
 verschiedenen Eigenschaftskonfigurationen.

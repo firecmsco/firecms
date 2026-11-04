@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/NavigationFromProps"
 title: "NavigationFromProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NavigationFromProps
+[@firecms/core](/docs/api/README) / NavigationFromProps
 
 # Interface: NavigationFromProps
 

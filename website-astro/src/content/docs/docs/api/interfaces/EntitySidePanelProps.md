@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/EntitySidePanelProps"
 title: "EntitySidePanelProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntitySidePanelProps
+[@firecms/core](/docs/api/README) / EntitySidePanelProps
 
 # Interface: EntitySidePanelProps\<M\>
 
@@ -45,7 +45,7 @@ Should this panel close when saving
 
 ### collection?
 
-> `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+> `optional` **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](/docs/api/type-aliases/ResolvedEntityCollection)\<`M`\>
 
 Defined in: [types/side\_entity\_controller.tsx:49](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_entity_controller.tsx)
 
@@ -76,7 +76,7 @@ ID of the entity, if not set, it means we are creating a new entity
 
 ### formProps?
 
-> `optional` **formProps**: `Partial`\<[`EntityFormProps`](../type-aliases/EntityFormProps)\<`M`\>\>
+> `optional` **formProps**: `Partial`\<[`EntityFormProps`](/docs/api/type-aliases/EntityFormProps)\<`M`\>\>
 
 Defined in: [types/side\_entity\_controller.tsx:78](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_entity_controller.tsx)
 
@@ -122,7 +122,7 @@ Callback when the entity is updated
 
 ###### entity
 
-[`Entity`](Entity)\<`any`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`any`\>
 
 #### Returns
 

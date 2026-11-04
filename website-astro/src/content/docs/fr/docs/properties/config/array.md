@@ -153,11 +153,11 @@ Lorsque défini sur `true`, affiche les propriétés enfants directement sans ê
 ---
 
 En fonction de votre configuration, les widgets de champ de formulaire créés sont :
-- [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding) champ de tableau générique qui permet le réordonnement et rend
+- [`RepeatFieldBinding`](/fr/docs/api/functions/RepeatFieldBinding) champ de tableau générique qui permet le réordonnement et rend
   la propriété enfant comme nœuds.
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) si la propriété `of` est un `string` avec configuration de stockage.
-- [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding) si la propriété `of` est une `reference`
-- [`BlockFieldBinding`](../../api/functions/BlockFieldBinding) si la propriété `oneOf` est spécifiée
+- [`StorageUploadFieldBinding`](/fr/docs/api/functions/StorageUploadFieldBinding) si la propriété `of` est un `string` avec configuration de stockage.
+- [`ArrayOfReferencesFieldBinding`](/fr/docs/api/functions/ArrayOfReferencesFieldBinding) si la propriété `of` est une `reference`
+- [`BlockFieldBinding`](/fr/docs/api/functions/BlockFieldBinding) si la propriété `oneOf` est spécifiée
 
 Liens :
-- [API](../../api/interfaces/ArrayProperty)
+- [API](/fr/docs/api/interfaces/ArrayProperty)

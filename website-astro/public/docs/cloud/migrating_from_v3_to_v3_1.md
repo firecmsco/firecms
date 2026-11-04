@@ -72,9 +72,9 @@ Replace your existing CSS with the new v4 format:
 @import "tailwindcss";
 @import "@firecms/ui/index.css";
 
-@source "https://firecms.co/docs/index.html";
+@source "../index.html";
 @source "./**/*.{js,ts,jsx,tsx}";
-@source "https://firecms.co/docs/node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
 
 @custom-variant dark (:is(.dark &));
 
@@ -137,7 +137,7 @@ For custom code projects, updating also unlocks:
 - **Tailwind CSS v4** — faster builds, simpler config
 - **React 19** — latest React features and performance
 
-Check the [changelog](/docs/changelog) for the complete list of changes.
+Check the [changelog](https://firecms.co/docs/changelog) for the complete list of changes.
 
 ---
 

@@ -6,7 +6,7 @@ description: Comment créer un adaptateur personnalisé pour un type de données
 ---
 
 :::info
-Pour utiliser cette fonctionnalité, vous devez initialiser un dépôt FireCMS. Vous pouvez le faire en suivant le guide [Démarrage rapide de personnalisation](../../cloud/quickstart).
+Pour utiliser cette fonctionnalité, vous devez initialiser un dépôt FireCMS. Vous pouvez le faire en suivant le guide [Démarrage rapide de personnalisation](/fr/docs/cloud/quickstart).
 :::
 
 FireCMS vous permet de personnaliser la façon dont les données sont affichées et modifiées dans le CMS. Par défaut, les vues créées par FireCMS sont basées sur le type de données défini dans les propriétés de votre collection :
@@ -21,7 +21,7 @@ FireCMS vous permet de personnaliser la façon dont les données sont affichées
 
 Cependant, vous voudrez peut-être utiliser un type de données différent dans le CMS de celui que vous utilisez dans votre modèle de données. Par exemple, vous voudrez peut-être sauvegarder la valeur de date en tant qu'horodatage Unix dans votre base de données, mais l'afficher comme une date dans le CMS.
 
-Pour y parvenir, vous pouvez utiliser des [callbacks](../../collections/entity_callbacks) pour convertir les données de votre modèle au format que vous souhaitez afficher dans le CMS.
+Pour y parvenir, vous pouvez utiliser des [callbacks](/fr/docs/collections/callbacks) pour convertir les données de votre modèle au format que vous souhaitez afficher dans le CMS.
 
 Utilisons un exemple simple pour illustrer cela. Imaginez que vous avez une collection d'exercices et que vous souhaitez afficher la date de création de chaque exercice dans le CMS. Dans votre base de données, vous stockez la date de création en tant qu'horodatage Unix. Vous souhaitez afficher cette date sous forme de date lisible par l'homme dans le CMS.
 

@@ -62,10 +62,10 @@ const property = buildProperty({
 ---
 
 The widgets that get created are
-- [`TextFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/TextFieldBinding) generic text field
-- [`SelectFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/SelectFieldBinding) if `enumValues` are set in the string config, this field renders a select
+- [`TextFieldBinding`](https://firecms.co/docs/api/functions/TextFieldBinding) generic text field
+- [`SelectFieldBinding`](https://firecms.co/docs/api/functions/SelectFieldBinding) if `enumValues` are set in the string config, this field renders a select
   where each option is a colored chip.
 
 Links:
-- [API](https://firecms.co/docs/https://firecms.co/docs/api/interfaces/NumberProperty)
+- [API](https://firecms.co/docs/api/interfaces/NumberProperty)
 

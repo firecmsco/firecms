@@ -36,7 +36,7 @@ Add an icon to clear the value and set it to `null`. Defaults to `false`
 ---
 
 The widget that gets created is
-- [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding) Field that allows selecting a date
+- [`DateTimeFieldBinding`](/docs/api/functions/DateTimeFieldBinding) Field that allows selecting a date
 
 Links:
-- [API](../../api/interfaces/DateProperty)
+- [API](/docs/api/interfaces/DateProperty)

@@ -3,11 +3,11 @@ slug: "docs/api/functions/StorageThumbnailInternal"
 title: "StorageThumbnailInternal"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / StorageThumbnailInternal
+[@firecms/core](/docs/api/README) / StorageThumbnailInternal
 
 # Function: StorageThumbnailInternal()
 

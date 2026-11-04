@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/EntityCollectionViewProps"
 title: "EntityCollectionViewProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionViewProps
+[@firecms/core](/docs/api/README) / EntityCollectionViewProps
 
 # Type Alias: EntityCollectionViewProps\<M\>
 
-> **EntityCollectionViewProps**\<`M`\> = `object` & [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
+> **EntityCollectionViewProps**\<`M`\> = `object` & [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 Defined in: [components/EntityCollectionView/EntityCollectionView.tsx:91](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionView.tsx)
 

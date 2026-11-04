@@ -3,15 +3,15 @@ slug: "docs/api/functions/buildAdditionalFieldDelegate"
 title: "buildAdditionalFieldDelegate"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / buildAdditionalFieldDelegate
+[@firecms/core](/docs/api/README) / buildAdditionalFieldDelegate
 
 # Function: buildAdditionalFieldDelegate()
 
-> **buildAdditionalFieldDelegate**\<`M`, `USER`\>(`additionalFieldDelegate`): [`AdditionalFieldDelegate`](../interfaces/AdditionalFieldDelegate)\<`M`, `USER`\>
+> **buildAdditionalFieldDelegate**\<`M`, `USER`\>(`additionalFieldDelegate`): [`AdditionalFieldDelegate`](/docs/api/interfaces/AdditionalFieldDelegate)\<`M`, `USER`\>
 
 Defined in: [util/builders.ts:125](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/builders.ts)
 
@@ -26,14 +26,14 @@ additional field delegates views with all its properties
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Parameters
 
 ### additionalFieldDelegate
 
-[`AdditionalFieldDelegate`](../interfaces/AdditionalFieldDelegate)\<`M`, `USER`\>
+[`AdditionalFieldDelegate`](/docs/api/interfaces/AdditionalFieldDelegate)\<`M`, `USER`\>
 
 ## Returns
 
-[`AdditionalFieldDelegate`](../interfaces/AdditionalFieldDelegate)\<`M`, `USER`\>
+[`AdditionalFieldDelegate`](/docs/api/interfaces/AdditionalFieldDelegate)\<`M`, `USER`\>

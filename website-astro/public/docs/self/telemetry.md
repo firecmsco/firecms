@@ -35,7 +35,7 @@ Entries are stored in our Google Cloud project, in Firestore with a copy in BigQ
 ## Why
 
 - **License validation.** For a project that uses PRO plugins, the response tells the app whether they run or pause.
-- **The trial clock.** A project's [30-day production trial](/docs/pro/licensing#30-day-free-trial) starts with its first entry from a deployed app that uses PRO plugins.
+- **The trial clock.** A project's [30-day production trial](https://firecms.co/docs/pro/licensing#30-day-free-trial) starts with its first entry from a deployed app that uses PRO plugins.
 - **Usage counts.** How many projects and users run FireCMS Community and PRO, and which plugins they use.
 
 ## Emails

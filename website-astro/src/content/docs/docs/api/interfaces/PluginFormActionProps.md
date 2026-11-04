@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/PluginFormActionProps"
 title: "PluginFormActionProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PluginFormActionProps
+[@firecms/core](/docs/api/README) / PluginFormActionProps
 
 # Interface: PluginFormActionProps\<USER, EC\>
 
@@ -17,11 +17,11 @@ Defined in: [types/plugins.tsx:232](https://github.com/firecmsco/firecms/blob/ma
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ### EC
 
-`EC` *extends* [`EntityCollection`](EntityCollection) = [`EntityCollection`](EntityCollection)
+`EC` *extends* [`EntityCollection`](/docs/api/interfaces/EntityCollection) = [`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 ## Properties
 
@@ -35,7 +35,7 @@ Defined in: [types/plugins.tsx:237](https://github.com/firecmsco/firecms/blob/ma
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+> **context**: [`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`USER`\>
 
 Defined in: [types/plugins.tsx:240](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
 
@@ -59,7 +59,7 @@ Defined in: [types/plugins.tsx:233](https://github.com/firecmsco/firecms/blob/ma
 
 ### formContext?
 
-> `optional` **formContext**: [`FormContext`](FormContext)\<`any`\>
+> `optional` **formContext**: [`FormContext`](/docs/api/interfaces/FormContext)\<`any`\>
 
 Defined in: [types/plugins.tsx:239](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
 
@@ -91,6 +91,6 @@ Defined in: [types/plugins.tsx:234](https://github.com/firecmsco/firecms/blob/ma
 
 ### status
 
-> **status**: [`EntityStatus`](../type-aliases/EntityStatus)
+> **status**: [`EntityStatus`](/docs/api/type-aliases/EntityStatus)
 
 Defined in: [types/plugins.tsx:236](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)

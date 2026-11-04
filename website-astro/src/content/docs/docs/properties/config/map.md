@@ -73,8 +73,8 @@ When set to `true`, displays the child properties directly without being wrapped
 ---
 
 The widget that gets created is
-- [`MapFieldBinding`](../../api/functions/MapFieldBinding) Field that renders the children
+- [`MapFieldBinding`](/docs/api/functions/MapFieldBinding) Field that renders the children
   property fields
 
 Links:
-- [API](../../api/interfaces/MapProperty)
+- [API](/docs/api/interfaces/MapProperty)

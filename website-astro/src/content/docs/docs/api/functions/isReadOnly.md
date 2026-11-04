@@ -3,11 +3,11 @@ slug: "docs/api/functions/isReadOnly"
 title: "isReadOnly"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / isReadOnly
+[@firecms/core](/docs/api/README) / isReadOnly
 
 # Function: isReadOnly()
 

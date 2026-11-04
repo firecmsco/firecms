@@ -63,11 +63,11 @@ const productsReferenceProperty = buildProperty({
 
 The widget that gets created is
 
-- [`ReferenceFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/ReferenceFieldBinding) Field
+- [`ReferenceFieldBinding`](https://firecms.co/docs/api/functions/ReferenceFieldBinding) Field
   that opens a
   reference selection dialog
 
 Links:
 
-- [API](https://firecms.co/docs/https://firecms.co/docs/api/interfaces/ReferenceProperty)
+- [API](https://firecms.co/docs/api/interfaces/ReferenceProperty)
 

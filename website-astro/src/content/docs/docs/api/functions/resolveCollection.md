@@ -3,15 +3,15 @@ slug: "docs/api/functions/resolveCollection"
 title: "resolveCollection"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolveCollection
+[@firecms/core](/docs/api/README) / resolveCollection
 
 # Function: resolveCollection()
 
-> **resolveCollection**\<`M`\>(`__namedParameters`): [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+> **resolveCollection**\<`M`\>(`__namedParameters`): [`ResolvedEntityCollection`](/docs/api/type-aliases/ResolvedEntityCollection)\<`M`\>
 
 Defined in: [util/resolutions.ts:34](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/resolutions.ts)
 
@@ -27,11 +27,11 @@ Defined in: [util/resolutions.ts:34](https://github.com/firecmsco/firecms/blob/m
 
 #### authController
 
-[`AuthController`](../type-aliases/AuthController)
+[`AuthController`](/docs/api/type-aliases/AuthController)
 
 #### collection
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](/docs/api/type-aliases/ResolvedEntityCollection)\<`M`\>
 
 #### entityId?
 
@@ -51,11 +51,11 @@ Defined in: [util/resolutions.ts:34](https://github.com/firecmsco/firecms/blob/m
 
 #### propertyConfigs?
 
-`Record`\<`string`, [`PropertyConfig`](../type-aliases/PropertyConfig)\>
+`Record`\<`string`, [`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\>
 
 #### userConfigPersistence?
 
-[`UserConfigurationPersistence`](../interfaces/UserConfigurationPersistence)
+[`UserConfigurationPersistence`](/docs/api/interfaces/UserConfigurationPersistence)
 
 #### values?
 
@@ -63,4 +63,4 @@ Defined in: [util/resolutions.ts:34](https://github.com/firecmsco/firecms/blob/m
 
 ## Returns
 
-[`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+[`ResolvedEntityCollection`](/docs/api/type-aliases/ResolvedEntityCollection)\<`M`\>

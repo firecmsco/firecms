@@ -9,7 +9,7 @@ Ogni proprietà che definisci nel CMS ha un componente di anteprima associato pe
 
 Proprio come puoi personalizzare come il tuo campo proprietà viene renderizzato, puoi cambiare come l'anteprima di una proprietà viene **visualizzata nella collezione** e nelle altre **viste read-only**.
 
-Puoi costruire la tua anteprima come componente React che prende [PropertyPreviewProps](../api/interfaces/PropertyPreviewProps) come props.
+Puoi costruire la tua anteprima come componente React che prende [PropertyPreviewProps](/it/docs/api/interfaces/PropertyPreviewProps) come props.
 
 `PropertyPreviewProps` ha due tipi generici: il primo è il tipo della proprietà, come `string` o `boolean`, e il secondo (opzionale) è il tipo per qualsiasi prop personalizzata che vuoi passare all'anteprima, proprio come si fa quando si definiscono campi personalizzati.
 

@@ -25,7 +25,7 @@ Enable **Firestore** in your project. FireCMS reads your existing documents to i
 collection schemas, so if you already have data, you already have a CMS — there is no
 import step.
 
-:::important
+:::caution
 A default Firestore project ships with rules that deny all reads and writes. Until you
 change them, FireCMS will connect but every collection will look empty.
 :::
@@ -94,7 +94,7 @@ Enable **Authentication** so users can get past the login screen. FireCMS builds
 roles and per-collection permissions on top of Firebase Auth, so this is also where
 access control starts.
 
-:::important
+:::caution
 Vite serves the dev server at `http://127.0.0.1:5173` by default, and Firebase Auth
 rejects sign-ins from domains it does not know. Add that URL to the authorised domains
 in the Firebase console, or run the dev server on `http://localhost:5173` and authorise
@@ -133,7 +133,7 @@ Narrow `origin` to your own domains before going to production.
 
 With Firestore, Auth and Storage in place, your Firebase project is ready:
 
-- [Self-hosted quickstart](/docs/self) — scaffold and run the CMS locally
-- [FireCMS Cloud quickstart](/docs/cloud/quickstart) — connect the project and skip the hosting
-- [Firebase App Check](/docs/cloud/app_check) — lock the panel down once it is live
+- [Self-hosted quickstart](https://firecms.co/docs/self) — scaffold and run the CMS locally
+- [FireCMS Cloud quickstart](https://firecms.co/docs/cloud/quickstart) — connect the project and skip the hosting
+- [Firebase App Check](https://firecms.co/docs/cloud/app_check) — lock the panel down once it is live
 

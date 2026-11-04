@@ -3,11 +3,11 @@ slug: "docs/api/functions/getDefaultPropertiesOrder"
 title: "getDefaultPropertiesOrder"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getDefaultPropertiesOrder
+[@firecms/core](/docs/api/README) / getDefaultPropertiesOrder
 
 # Function: getDefaultPropertiesOrder()
 
@@ -19,7 +19,7 @@ Defined in: [util/property\_utils.tsx:138](https://github.com/firecmsco/firecms/
 
 ### collection
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`any`\>
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`\>
 
 ## Returns
 

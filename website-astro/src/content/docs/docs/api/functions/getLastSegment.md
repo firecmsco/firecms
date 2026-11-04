@@ -3,11 +3,11 @@ slug: "docs/api/functions/getLastSegment"
 title: "getLastSegment"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getLastSegment
+[@firecms/core](/docs/api/README) / getLastSegment
 
 # Function: getLastSegment()
 

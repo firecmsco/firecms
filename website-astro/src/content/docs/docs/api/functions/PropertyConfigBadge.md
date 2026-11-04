@@ -3,11 +3,11 @@ slug: "docs/api/functions/PropertyConfigBadge"
 title: "PropertyConfigBadge"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyConfigBadge
+[@firecms/core](/docs/api/README) / PropertyConfigBadge
 
 # Function: PropertyConfigBadge()
 
@@ -25,7 +25,7 @@ Defined in: [components/PropertyConfigBadge.tsx:5](https://github.com/firecmsco/
 
 #### propertyConfig
 
-[`PropertyConfig`](../type-aliases/PropertyConfig) \| `undefined`
+[`PropertyConfig`](/docs/api/type-aliases/PropertyConfig) \| `undefined`
 
 ## Returns
 

@@ -3,15 +3,15 @@ slug: "docs/api/functions/resolvePermissions"
 title: "resolvePermissions"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolvePermissions
+[@firecms/core](/docs/api/README) / resolvePermissions
 
 # Function: resolvePermissions()
 
-> **resolvePermissions**\<`M`, `USER`\>(`collection`, `authController`, `path`, `entity`): [`Permissions`](../interfaces/Permissions) \| `undefined`
+> **resolvePermissions**\<`M`, `USER`\>(`collection`, `authController`, `path`, `entity`): [`Permissions`](/docs/api/interfaces/Permissions) \| `undefined`
 
 Defined in: [util/permissions.ts:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/permissions.ts)
 
@@ -23,17 +23,17 @@ Defined in: [util/permissions.ts:11](https://github.com/firecmsco/firecms/blob/m
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User)
 
 ## Parameters
 
 ### collection
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 ### authController
 
-[`AuthController`](../type-aliases/AuthController)\<`USER`\>
+[`AuthController`](/docs/api/type-aliases/AuthController)\<`USER`\>
 
 ### path
 
@@ -41,8 +41,8 @@ Defined in: [util/permissions.ts:11](https://github.com/firecmsco/firecms/blob/m
 
 ### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\> | `null`
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\> | `null`
 
 ## Returns
 
-[`Permissions`](../interfaces/Permissions) \| `undefined`
+[`Permissions`](/docs/api/interfaces/Permissions) \| `undefined`

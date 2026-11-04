@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityTableController"
 title: "EntityTableController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityTableController
+[@firecms/core](/docs/api/README) / EntityTableController
 
 # Type Alias: EntityTableController\<M\>
 
@@ -35,7 +35,7 @@ Defined in: [types/collections.ts:649](https://github.com/firecmsco/firecms/blob
 
 ##### filterValues
 
-[`FilterValues`](FilterValues)\<`any`\>
+[`FilterValues`](/docs/api/type-aliases/FilterValues)\<`any`\>
 
 ##### sortBy?
 
@@ -61,7 +61,7 @@ Defined in: [types/collections.ts:638](https://github.com/firecmsco/firecms/blob
 
 ### data
 
-> **data**: [`Entity`](../interfaces/Entity)\<`M`\>[]
+> **data**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>[]
 
 Defined in: [types/collections.ts:628](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -85,7 +85,7 @@ Defined in: [types/collections.ts:631](https://github.com/firecmsco/firecms/blob
 
 ### filterValues?
 
-> `optional` **filterValues**: [`FilterValues`](FilterValues)\<`Extract`\<keyof `M`, `string`\>\>
+> `optional` **filterValues**: [`FilterValues`](/docs/api/type-aliases/FilterValues)\<`Extract`\<keyof `M`, `string`\>\>
 
 Defined in: [types/collections.ts:632](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -179,7 +179,7 @@ Defined in: [types/collections.ts:647](https://github.com/firecmsco/firecms/blob
 
 ### popupCell?
 
-> `optional` **popupCell**: [`SelectedCellProps`](SelectedCellProps)\<`M`\>
+> `optional` **popupCell**: [`SelectedCellProps`](/docs/api/type-aliases/SelectedCellProps)\<`M`\>
 
 Defined in: [types/collections.ts:651](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -203,7 +203,7 @@ Defined in: [types/collections.ts:633](https://github.com/firecmsco/firecms/blob
 
 ##### filterValues
 
-[`FilterValues`](FilterValues)\<`Extract`\<keyof `M`, `string`\>\>
+[`FilterValues`](/docs/api/type-aliases/FilterValues)\<`Extract`\<keyof `M`, `string`\>\>
 
 #### Returns
 
@@ -239,7 +239,7 @@ Defined in: [types/collections.ts:652](https://github.com/firecmsco/firecms/blob
 
 ##### popupCell?
 
-[`SelectedCellProps`](SelectedCellProps)\<`M`\>
+[`SelectedCellProps`](/docs/api/type-aliases/SelectedCellProps)\<`M`\>
 
 #### Returns
 

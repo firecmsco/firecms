@@ -31,8 +31,8 @@ buildProperty({
 });
 ```
 
-O tipo de dado é [`map`](../config/map).
+O tipo de dado é [`map`](/pt/docs/properties/config/map).
 
 Internamente o componente usado
-é [`MapFieldBinding`](../../api/functions/MapFieldBinding).
+é [`MapFieldBinding`](/pt/docs/api/functions/MapFieldBinding).
 

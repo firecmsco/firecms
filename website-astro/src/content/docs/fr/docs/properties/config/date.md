@@ -36,7 +36,7 @@ Ajoute une icône pour effacer la valeur et la définir à `null`. Par défaut `
 ---
 
 Le widget créé est
-- [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding) Champ permettant de sélectionner une date
+- [`DateTimeFieldBinding`](/fr/docs/api/functions/DateTimeFieldBinding) Champ permettant de sélectionner une date
 
 Liens :
-- [API](../../api/interfaces/DateProperty)
+- [API](/fr/docs/api/interfaces/DateProperty)

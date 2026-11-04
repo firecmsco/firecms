@@ -3,11 +3,11 @@ slug: "docs/api/functions/useBrowserTitleAndIcon"
 title: "useBrowserTitleAndIcon"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useBrowserTitleAndIcon
+[@firecms/core](/docs/api/README) / useBrowserTitleAndIcon
 
 # Function: useBrowserTitleAndIcon()
 

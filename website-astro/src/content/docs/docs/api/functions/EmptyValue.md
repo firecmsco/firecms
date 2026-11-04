@@ -3,11 +3,11 @@ slug: "docs/api/functions/EmptyValue"
 title: "EmptyValue"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EmptyValue
+[@firecms/core](/docs/api/README) / EmptyValue
 
 # Function: EmptyValue()
 

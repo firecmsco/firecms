@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/AsyncPreviewComponentProps"
 title: "AsyncPreviewComponentProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / AsyncPreviewComponentProps
+[@firecms/core](/docs/api/README) / AsyncPreviewComponentProps
 
 # Interface: AsyncPreviewComponentProps
 

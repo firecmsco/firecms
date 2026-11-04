@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/NavigationResult"
 title: "NavigationResult"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NavigationResult
+[@firecms/core](/docs/api/README) / NavigationResult
 
 # Type Alias: NavigationResult
 
@@ -35,7 +35,7 @@ Defined in: [types/navigation.ts:264](https://github.com/firecmsco/firecms/blob/
 
 ### navigationEntries
 
-> **navigationEntries**: [`NavigationEntry`](../interfaces/NavigationEntry)[]
+> **navigationEntries**: [`NavigationEntry`](/docs/api/interfaces/NavigationEntry)[]
 
 Defined in: [types/navigation.ts:262](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
 
@@ -51,7 +51,7 @@ Defined in: [types/navigation.ts:266](https://github.com/firecmsco/firecms/blob/
 
 ##### entries
 
-[`NavigationGroupMapping`](../interfaces/NavigationGroupMapping)[]
+[`NavigationGroupMapping`](/docs/api/interfaces/NavigationGroupMapping)[]
 
 #### Returns
 

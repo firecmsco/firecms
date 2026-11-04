@@ -33,7 +33,7 @@ Forçar um filtro na seleção de referência.
 ---
 
 O widget criado é
-- [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding) Campo que abre um diálogo de seleção de referência
+- [`ReferenceFieldBinding`](/pt/docs/api/functions/ReferenceFieldBinding) Campo que abre um diálogo de seleção de referência
 
 Links:
-- [API](../../api/interfaces/ReferenceProperty)
+- [API](/pt/docs/api/interfaces/ReferenceProperty)

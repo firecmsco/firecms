@@ -3,11 +3,11 @@ slug: "docs/api/variables/iconsSearch"
 title: "iconsSearch"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / iconsSearch
+[@firecms/core](/docs/api/README) / iconsSearch
 
 # Variable: iconsSearch
 

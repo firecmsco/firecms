@@ -6,14 +6,14 @@ You can choose between using dates or date/time fields.
 Also you can create read-only fields that get updated automatically when 
 entities are created or updated
 
-The data type is [`date`](https://firecms.co/docs/config/date).
+The data type is [`date`](https://firecms.co/docs/properties/config/date).
 
 Internally the component used
-is [`DateTimeFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/DateTimeFieldBinding).
+is [`DateTimeFieldBinding`](https://firecms.co/docs/api/functions/DateTimeFieldBinding).
 
 #### Date field
 
-![Field](/img/fields/Date.png)
+![Field](https://firecms.co/img/fields/Date.png)
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -27,7 +27,7 @@ buildProperty({
 
 #### Date/time field
 
-![Field](/img/fields/Date_time.png)
+![Field](https://firecms.co/img/fields/Date_time.png)
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";

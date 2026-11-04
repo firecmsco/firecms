@@ -3,11 +3,11 @@ slug: "docs/api/functions/removeInitialSlash"
 title: "removeInitialSlash"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / removeInitialSlash
+[@firecms/core](/docs/api/README) / removeInitialSlash
 
 # Function: removeInitialSlash()
 

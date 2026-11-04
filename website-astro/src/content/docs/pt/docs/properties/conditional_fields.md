@@ -5,7 +5,7 @@ sidebar_label: Campos condicionais
 description: No FireCMS, os campos condicionais permitem configurações dinâmicas de propriedades dentro dos esquemas de coleção.
 ---
 
-Ao definir as propriedades de uma coleção, você pode optar por usar um builder [`PropertyBuilder`](../api/type-aliases/PermissionsBuilder), em vez de atribuir diretamente a configuração da propriedade.
+Ao definir as propriedades de uma coleção, você pode optar por usar um builder [`PropertyBuilder`](/pt/docs/api/type-aliases/PermissionsBuilder), em vez de atribuir diretamente a configuração da propriedade.
 
 Isso é útil para alterar configurações de propriedades, como os valores disponíveis dinamicamente, com base em outros valores.
 

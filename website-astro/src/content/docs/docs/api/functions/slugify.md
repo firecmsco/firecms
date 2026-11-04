@@ -3,11 +3,11 @@ slug: "docs/api/functions/slugify"
 title: "slugify"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / slugify
+[@firecms/core](/docs/api/README) / slugify
 
 # Function: slugify()
 

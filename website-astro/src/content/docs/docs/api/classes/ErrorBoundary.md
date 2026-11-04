@@ -3,11 +3,11 @@ slug: "docs/api/classes/ErrorBoundary"
 title: "ErrorBoundary"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ErrorBoundary
+[@firecms/core](/docs/api/README) / ErrorBoundary
 
 # Class: ErrorBoundary
 

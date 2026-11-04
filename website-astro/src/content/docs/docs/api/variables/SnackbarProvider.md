@@ -3,11 +3,11 @@ slug: "docs/api/variables/SnackbarProvider"
 title: "SnackbarProvider"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SnackbarProvider
+[@firecms/core](/docs/api/README) / SnackbarProvider
 
 # Variable: SnackbarProvider
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/EntityView"
 title: "EntityView"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityView
+[@firecms/core](/docs/api/README) / EntityView
 
 # Function: EntityView()
 
@@ -25,7 +25,7 @@ Defined in: [components/EntityView.tsx:20](https://github.com/firecmsco/firecms/
 
 ### \_\_namedParameters
 
-[`EntityViewProps`](../interfaces/EntityViewProps)\<`M`\>
+[`EntityViewProps`](/docs/api/interfaces/EntityViewProps)\<`M`\>
 
 ## Returns
 

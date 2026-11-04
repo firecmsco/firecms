@@ -3,11 +3,11 @@ slug: "docs/api/functions/ImagePreview"
 title: "ImagePreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ImagePreview
+[@firecms/core](/docs/api/README) / ImagePreview
 
 # Function: ImagePreview()
 
@@ -19,7 +19,7 @@ Defined in: [preview/components/ImagePreview.tsx:18](https://github.com/firecmsc
 
 ### \_\_namedParameters
 
-[`ImagePreviewProps`](../interfaces/ImagePreviewProps)
+[`ImagePreviewProps`](/docs/api/interfaces/ImagePreviewProps)
 
 ## Returns
 

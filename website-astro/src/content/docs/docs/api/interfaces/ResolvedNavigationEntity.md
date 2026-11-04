@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/ResolvedNavigationEntity"
 title: "ResolvedNavigationEntity"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ResolvedNavigationEntity
+[@firecms/core](/docs/api/README) / ResolvedNavigationEntity
 
 # Interface: ResolvedNavigationEntity\<M\>
 
@@ -27,7 +27,7 @@ resolveNavigationFrom
 
 ### entity
 
-> **entity**: [`Entity`](Entity)\<`M`\>
+> **entity**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 Defined in: [hooks/useResolvedNavigationFrom.tsx:21](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
 
@@ -43,7 +43,7 @@ Defined in: [hooks/useResolvedNavigationFrom.tsx:22](https://github.com/firecmsc
 
 ### parentCollection
 
-> **parentCollection**: [`EntityCollection`](EntityCollection)\<`M`\>
+> **parentCollection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 Defined in: [hooks/useResolvedNavigationFrom.tsx:24](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
 

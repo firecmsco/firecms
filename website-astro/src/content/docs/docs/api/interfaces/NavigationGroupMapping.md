@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/NavigationGroupMapping"
 title: "NavigationGroupMapping"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NavigationGroupMapping
+[@firecms/core](/docs/api/README) / NavigationGroupMapping
 
 # Interface: NavigationGroupMapping
 

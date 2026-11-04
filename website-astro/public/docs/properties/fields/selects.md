@@ -2,7 +2,7 @@
 
 ### Simple select field
 
-![Field](/img/fields/Select.png)
+![Field](https://firecms.co/img/fields/Select.png)
 
 You can use a simple select field when you would like allow the selection of a
 single value among a limited set of options. Each entry will have a key and a
@@ -10,7 +10,7 @@ label. You can also customise the color of each entry or disable certain options
 
 Set the `enumValues` prop to a valid configuration in a string property. You can
 define those values as an array
-of [`EnumValueConfig`](https://firecms.co/docs/https://firecms.co/docs/api/type-aliases/EnumValueConfig)
+of [`EnumValueConfig`](https://firecms.co/docs/api/type-aliases/EnumValueConfig)
 or simply as an object with key/value pairs:
 
 ```typescript jsx
@@ -44,14 +44,14 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string) or [`number`](https://firecms.co/docs/config/number).
+The data type is [`string`](https://firecms.co/docs/properties/config/string) or [`number`](https://firecms.co/docs/properties/config/number).
 
 Internally the component used
-is [`SelectFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/SelectFieldBinding).
+is [`SelectFieldBinding`](https://firecms.co/docs/api/functions/SelectFieldBinding).
 
 ### Multiple select field
 
-![Field](/img/fields/Multi_select.png)
+![Field](https://firecms.co/img/fields/Multi_select.png)
 
 You can use a multiple select field when you would like allow the selection of a
 zero or more values among a limited set of options. Each entry will have a key
@@ -59,7 +59,7 @@ and a label. You can also customise the color of each entry or disable certain o
 
 Set the `enumValues` prop to a valid configuration in a string property. You can
 define those values as an array
-of [`EnumValueConfig`](https://firecms.co/docs/https://firecms.co/docs/api/type-aliases/EnumValueConfig)
+of [`EnumValueConfig`](https://firecms.co/docs/api/type-aliases/EnumValueConfig)
 or simply as an object with key/value pairs:
 
 ```typescript jsx
@@ -84,18 +84,18 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](https://firecms.co/docs/config/array) with either string or number
+The data type is [`array`](https://firecms.co/docs/properties/config/array) with either string or number
 properties as the `of` prop, using enum values.
 
 Internally the component used
-is [`SelectFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/SelectFieldBinding).
+is [`SelectFieldBinding`](https://firecms.co/docs/api/functions/SelectFieldBinding).
 
 ### Customising the colors
 
 You can pick the colors among a list of predefined values:
 
 ```tsx
-import { ChipColorKey, ChipColorScheme } from "https://firecms.co/docs/components";
+import { ChipColorKey, ChipColorScheme } from "../components";
 import { hashString } from "./hash";
 
 export const CHIP_COLORS: Record<string, ChipColorScheme> = {

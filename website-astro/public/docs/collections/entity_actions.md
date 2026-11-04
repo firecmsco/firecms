@@ -19,7 +19,7 @@ You can access all the controllers of FireCMS in the `context`. That is useful f
 modifying data, accessing storage, opening dialogs, etc.
 
 In the `icon` prop, you can pass a React element to show an icon next to the action name.
-We recommend using any of the [FireCMS icons](/docs/icons), which are available in the `@firecms/ui` package.
+We recommend using any of the [FireCMS icons](https://firecms.co/docs/icons), which are available in the `@firecms/ui` package.
 
 ### Defining actions at the collection level
 
@@ -237,6 +237,6 @@ FireCMS Cloud provides the Firebase SDK to your code, but only to imports that n
 package exactly. A `firebase/functions` import makes the build point at a file it never
 produces, and the app shows "Error loading remote config". `getFunctions()` then uses your
 project's Firebase app, the same one FireCMS uses. See
-[Importing Firebase in your code](/docs/cloud/deployment#importing-firebase-in-your-code).
+[Importing Firebase in your code](https://firecms.co/docs/cloud/deployment#importing-firebase-in-your-code).
 :::
 

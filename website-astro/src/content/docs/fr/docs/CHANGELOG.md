@@ -637,8 +637,8 @@ const userManagement = useBuildUserManagement({
 ## [3.0.0-beta.1] - 2024-02-01
 
 The first beta release of FireCMS v3.0.0.
-Check all the new features and improvements in the [documentation](./what_is_new_v3)
-and the [migration guide](./cloud/migrating_from_v2).
+Check all the new features and improvements in the [documentation](/fr/docs/what_is_new_v3)
+and the [migration guide](/fr/docs/cloud/migrating_from_v2).
 
 ## [2.2.0] - 2023-11-09
 
@@ -796,8 +796,8 @@ While still in beta, we consider this version stable enough to be used in
 production.
 
 > All changes related to V2 alpha are currently bundled in these documents:
-> - [What's new in version 2.0.0](https://firecms.co/docs/new_in_v2)
-> - [Migration guide from version 1.x to 2.0.0](https://firecms.co/docs/migrating_from_v1)
+> - [What's new in version 2.0.0](https://github.com/firecmsco/firecms/blob/v2.0.0/website/docs/new_in_v2.md)
+> - [Migration guide from version 1.x to 2.0.0](https://github.com/firecmsco/firecms/blob/v2.0.0/website/docs/migrating_from_v1.md)
 
 > The changelog for 1.0.0 versions and previous versions can be
-> found [here](https://firecms.co/docs/1.0.0/changelog)
+> found [here](https://github.com/firecmsco/firecms/blob/v2.0.0/website/versioned_docs/version-1.0.0/CHANGELOG.md)

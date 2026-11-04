@@ -3,15 +3,15 @@ slug: "docs/api/functions/propertiesToColumns"
 title: "propertiesToColumns"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / propertiesToColumns
+[@firecms/core](/docs/api/README) / propertiesToColumns
 
 # Function: propertiesToColumns()
 
-> **propertiesToColumns**\<`M`\>(`__namedParameters`): [`VirtualTableColumn`](../interfaces/VirtualTableColumn)\<`any`\>[]
+> **propertiesToColumns**\<`M`\>(`__namedParameters`): [`VirtualTableColumn`](/docs/api/interfaces/VirtualTableColumn)\<`any`\>[]
 
 Defined in: [components/EntityCollectionTable/column\_utils.tsx:31](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/column_utils.tsx)
 
@@ -25,8 +25,8 @@ Defined in: [components/EntityCollectionTable/column\_utils.tsx:31](https://gith
 
 ### \_\_namedParameters
 
-[`PropertiesToColumnsParams`](../interfaces/PropertiesToColumnsParams)\<`M`\>
+[`PropertiesToColumnsParams`](/docs/api/interfaces/PropertiesToColumnsParams)\<`M`\>
 
 ## Returns
 
-[`VirtualTableColumn`](../interfaces/VirtualTableColumn)\<`any`\>[]
+[`VirtualTableColumn`](/docs/api/interfaces/VirtualTableColumn)\<`any`\>[]

@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/CMSView"
 title: "CMSView"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / CMSView
+[@firecms/core](/docs/api/README) / CMSView
 
 # Interface: CMSView
 

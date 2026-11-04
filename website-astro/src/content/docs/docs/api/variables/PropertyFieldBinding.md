@@ -3,15 +3,15 @@ slug: "docs/api/variables/PropertyFieldBinding"
 title: "PropertyFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyFieldBinding
+[@firecms/core](/docs/api/README) / PropertyFieldBinding
 
 # Variable: PropertyFieldBinding()
 
-> `const` **PropertyFieldBinding**: \<`T`, `M`\>(`propertyKey`) => `ReactElement`\<[`PropertyFieldBindingProps`](../interfaces/PropertyFieldBindingProps)\<`T`, `M`\>\>
+> `const` **PropertyFieldBinding**: \<`T`, `M`\>(`propertyKey`) => `ReactElement`\<[`PropertyFieldBindingProps`](/docs/api/interfaces/PropertyFieldBindingProps)\<`T`, `M`\>\>
 
 Defined in: [form/PropertyFieldBinding.tsx:50](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/PropertyFieldBinding.tsx)
 
@@ -32,7 +32,7 @@ the validation in the `EntityCollection` definition.
 
 ### T
 
-`T` *extends* [`CMSType`](../type-aliases/CMSType) = [`CMSType`](../type-aliases/CMSType)
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType) = [`CMSType`](/docs/api/type-aliases/CMSType)
 
 ### M
 
@@ -42,10 +42,10 @@ the validation in the `EntityCollection` definition.
 
 ### propertyKey
 
-[`PropertyFieldBindingProps`](../interfaces/PropertyFieldBindingProps)\<`T`, `M`\>
+[`PropertyFieldBindingProps`](/docs/api/interfaces/PropertyFieldBindingProps)\<`T`, `M`\>
 
 You can use nested names such as `address.street` or `friends[2]`
 
 ## Returns
 
-`ReactElement`\<[`PropertyFieldBindingProps`](../interfaces/PropertyFieldBindingProps)\<`T`, `M`\>\>
+`ReactElement`\<[`PropertyFieldBindingProps`](/docs/api/interfaces/PropertyFieldBindingProps)\<`T`, `M`\>\>

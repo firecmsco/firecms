@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayOfMapsPreview"
 title: "ArrayOfMapsPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayOfMapsPreview
+[@firecms/core](/docs/api/README) / ArrayOfMapsPreview
 
 # Function: ArrayOfMapsPreview()
 
@@ -19,7 +19,7 @@ Defined in: [preview/property\_previews/ArrayOfMapsPreview.tsx:11](https://githu
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`Record`\<`string`, `any`\>[]\>
+[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<`Record`\<`string`, `any`\>[]\>
 
 ## Returns
 

@@ -3,11 +3,11 @@ slug: "docs/api/classes/GeoPoint"
 title: "GeoPoint"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / GeoPoint
+[@firecms/core](/docs/api/README) / GeoPoint
 
 # Class: GeoPoint
 

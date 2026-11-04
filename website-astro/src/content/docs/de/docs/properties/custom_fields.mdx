@@ -31,7 +31,7 @@ Verwenden Sie ein benutzerdefiniertes Feld, wenn Sie eines (oder mehrere) der Fo
 - Integrationen (Upload zu einer externen API, Abrufen von Vorschlägen, Geocoding, etc.)
 
 Wenn Sie nur Validierung oder einfache Transformation benötigen, bevorzugen Sie zunächst Validierungsoptionen auf Eigenschaftsebene, um die Dinge einfach zu halten.
-Wenn Sie dynamisches Verhalten abhängig von anderen Werten benötigen, ziehen Sie stattdessen [bedingte Felder](./conditional_fields.md) in Betracht.
+Wenn Sie dynamisches Verhalten abhängig von anderen Werten benötigen, ziehen Sie stattdessen [bedingte Felder](/de/docs/properties/conditional_fields) in Betracht.
 
 
 ## Beispiel für ein benutzerdefiniertes Feld
@@ -114,7 +114,7 @@ Empfohlene gute Praktiken:
 - Das Label und den Fehler anzeigen (verwenden Sie Ihre eigene UI oder `<FieldHelperText>` / integrierte Komponenten)
 - Schwere Seiteneffekte bei jedem Tastendruck vermeiden (Netzwerkaufrufe entprellen)
 
-Vollständige Schnittstelle: [`FieldProps`](../api/interfaces/FieldProps) (enthält detaillierte Kommentare).
+Vollständige Schnittstelle: [`FieldProps`](/de/docs/api/interfaces/FieldProps) (enthält detaillierte Kommentare).
 
 ## Benutzerdefinierte Props übergeben
 Geben Sie ein `customProps`-Objekt in der Eigenschaftsdefinition an. Das Objekt ist stark typisiert über den zweiten Generic von `FieldProps<T, CustomProps>`.
@@ -225,7 +225,7 @@ function GeoPointField({ context }: FieldProps<any>) {
 - Nur-Lese-Modus benötigt: Respektieren Sie `disabled` aus Props oder `context.disabled`.
 
 ## Nächste Schritte
-- Weitere Anpassungsmöglichkeiten erkunden: [Benutzerdefinierte Vorschauen](./custom_previews.md)
+- Weitere Anpassungsmöglichkeiten erkunden: [Benutzerdefinierte Vorschauen](/de/docs/properties/custom_previews)
 - Logik über viele Eigenschaften hinweg wiederverwenden: eine gemeinsame Feldkomponente erstellen und verschiedene `customProps` übergeben.
 - Open-Source-freundlich? Erwägen Sie, ein wiederverwendbares Feld zur Community beizutragen.
 

@@ -25,7 +25,7 @@ Build your own **Firebase admin panel** and **headless CMS** with full control o
 | Priority support | ❌ | ✅ |
 | Price | Free, MIT license | €99 ($119) / month for the first project, €49 ($59) for each additional, plus VAT |
 
-PRO is free for 30 days in production, no card needed. See [Licensing](/docs/pro/licensing) for how projects are counted and what pauses without a license.
+PRO is free for 30 days in production, no card needed. See [Licensing](https://firecms.co/docs/pro/licensing) for how projects are counted and what pauses without a license.
 
 Both versions are built on **React**, connect to **Firebase/Firestore**, and give you a production-ready **admin panel** in minutes.
 

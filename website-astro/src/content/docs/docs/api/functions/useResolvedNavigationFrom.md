@@ -3,15 +3,15 @@ slug: "docs/api/functions/useResolvedNavigationFrom"
 title: "useResolvedNavigationFrom"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useResolvedNavigationFrom
+[@firecms/core](/docs/api/README) / useResolvedNavigationFrom
 
 # Function: useResolvedNavigationFrom()
 
-> **useResolvedNavigationFrom**\<`M`, `USER`\>(`__namedParameters`): [`NavigationFrom`](../interfaces/NavigationFrom)\<`M`\>
+> **useResolvedNavigationFrom**\<`M`, `USER`\>(`__namedParameters`): [`NavigationFrom`](/docs/api/interfaces/NavigationFrom)\<`M`\>
 
 Defined in: [hooks/useResolvedNavigationFrom.tsx:129](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
 
@@ -27,14 +27,14 @@ in any React component that lives under `FireCMS`
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-[`NavigationFromProps`](../interfaces/NavigationFromProps)
+[`NavigationFromProps`](/docs/api/interfaces/NavigationFromProps)
 
 ## Returns
 
-[`NavigationFrom`](../interfaces/NavigationFrom)\<`M`\>
+[`NavigationFrom`](/docs/api/interfaces/NavigationFrom)\<`M`\>

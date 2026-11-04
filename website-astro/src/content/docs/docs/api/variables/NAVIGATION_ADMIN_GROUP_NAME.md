@@ -3,11 +3,11 @@ slug: "docs/api/variables/NAVIGATION_ADMIN_GROUP_NAME"
 title: "NAVIGATION_ADMIN_GROUP_NAME"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NAVIGATION\_ADMIN\_GROUP\_NAME
+[@firecms/core](/docs/api/README) / NAVIGATION\_ADMIN\_GROUP\_NAME
 
 # Variable: NAVIGATION\_ADMIN\_GROUP\_NAME
 

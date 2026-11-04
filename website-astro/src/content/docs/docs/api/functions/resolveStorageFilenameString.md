@@ -3,11 +3,11 @@ slug: "docs/api/functions/resolveStorageFilenameString"
 title: "resolveStorageFilenameString"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolveStorageFilenameString
+[@firecms/core](/docs/api/README) / resolveStorageFilenameString
 
 # Function: resolveStorageFilenameString()
 

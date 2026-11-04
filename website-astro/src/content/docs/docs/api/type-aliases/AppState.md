@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/AppState"
 title: "AppState"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / AppState
+[@firecms/core](/docs/api/README) / AppState
 
 # Type Alias: AppState
 

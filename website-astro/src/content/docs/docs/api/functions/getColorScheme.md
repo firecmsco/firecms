@@ -3,11 +3,11 @@ slug: "docs/api/functions/getColorScheme"
 title: "getColorScheme"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getColorScheme
+[@firecms/core](/docs/api/README) / getColorScheme
 
 # Function: getColorScheme()
 
@@ -19,7 +19,7 @@ Defined in: [util/enums.ts:29](https://github.com/firecmsco/firecms/blob/main/pa
 
 ### enumValues
 
-[`EnumValueConfig`](../type-aliases/EnumValueConfig)[]
+[`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig)[]
 
 ### key
 

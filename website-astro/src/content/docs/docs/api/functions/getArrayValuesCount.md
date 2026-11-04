@@ -3,15 +3,15 @@ slug: "docs/api/functions/getArrayValuesCount"
 title: "getArrayValuesCount"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getArrayValuesCount
+[@firecms/core](/docs/api/README) / getArrayValuesCount
 
 # Function: getArrayValuesCount()
 
-> **getArrayValuesCount**(`array`): [`ArrayValuesCount`](../type-aliases/ArrayValuesCount)
+> **getArrayValuesCount**(`array`): [`ArrayValuesCount`](/docs/api/type-aliases/ArrayValuesCount)
 
 Defined in: [util/flatten\_object.ts:26](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/flatten_object.ts)
 
@@ -23,4 +23,4 @@ Defined in: [util/flatten\_object.ts:26](https://github.com/firecmsco/firecms/bl
 
 ## Returns
 
-[`ArrayValuesCount`](../type-aliases/ArrayValuesCount)
+[`ArrayValuesCount`](/docs/api/type-aliases/ArrayValuesCount)

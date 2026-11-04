@@ -4,7 +4,7 @@
     <source src="/img/full_screen_dark.mp4" type="video/mp4"/>
 </video>
 
-:::important
+:::note
 FireCMS is an **open-source headless CMS and admin panel framework** built with React and TypeScript. It connects directly to your **Firebase** project to provide a powerful, intuitive, and type-safe interface for managing your data.
 :::
 
@@ -34,7 +34,7 @@ For maximum control and customization. Free, open-source, and deployed in your o
   * ✅ Deep customization with React and TypeScript.
   * ✅ `npx create-firecms-app` to start.
 
-[**Self-Hosted Quickstart**](/docs/self)
+[**Self-Hosted Quickstart**](https://firecms.co/docs/self)
 
 ## What Can You Build?
 
@@ -67,6 +67,6 @@ If you can build it in React, you can build it in FireCMS. Create custom form fi
 Ready to dive in?
 
   * **🚀 Try FireCMS Cloud:** [**Start your 1-month free trial**](https://app.firecms.co) and build your project in minutes.
-  * **💻 Start the Self-Hosted Quickstart:** Follow our [**Self-Hosting guide**](/docs/self) to get your project running locally with `npx`.
-  * **📚 Learn about Collections:** Understand the core concept of how FireCMS maps [**Collections**](/docs/collections) to your database.
+  * **💻 Start the Self-Hosted Quickstart:** Follow our [**Self-Hosting guide**](https://firecms.co/docs/self) to get your project running locally with `npx`.
+  * **📚 Learn about Collections:** Understand the core concept of how FireCMS maps [**Collections**](https://firecms.co/docs/collections) to your database.
 

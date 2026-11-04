@@ -3,11 +3,11 @@ slug: "docs/api/functions/getIdIcon"
 title: "getIdIcon"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getIdIcon
+[@firecms/core](/docs/api/README) / getIdIcon
 
 # Function: getIdIcon()
 

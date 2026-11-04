@@ -3,11 +3,11 @@ slug: "docs/api/functions/removeUndefined"
 title: "removeUndefined"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / removeUndefined
+[@firecms/core](/docs/api/README) / removeUndefined
 
 # Function: removeUndefined()
 

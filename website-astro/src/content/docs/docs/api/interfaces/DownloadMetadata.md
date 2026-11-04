@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/DownloadMetadata"
 title: "DownloadMetadata"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DownloadMetadata
+[@firecms/core](/docs/api/README) / DownloadMetadata
 
 # Interface: DownloadMetadata
 

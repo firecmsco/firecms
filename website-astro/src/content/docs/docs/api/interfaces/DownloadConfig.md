@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/DownloadConfig"
 title: "DownloadConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DownloadConfig
+[@firecms/core](/docs/api/README) / DownloadConfig
 
 # Interface: DownloadConfig
 
@@ -25,7 +25,7 @@ Defined in: [types/storage.ts:37](https://github.com/firecmsco/firecms/blob/main
 
 ### metadata?
 
-> `optional` **metadata**: [`DownloadMetadata`](DownloadMetadata)
+> `optional` **metadata**: [`DownloadMetadata`](/docs/api/interfaces/DownloadMetadata)
 
 Defined in: [types/storage.ts:35](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
 

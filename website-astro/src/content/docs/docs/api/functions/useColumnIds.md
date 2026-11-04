@@ -3,11 +3,11 @@ slug: "docs/api/functions/useColumnIds"
 title: "useColumnIds"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useColumnIds
+[@firecms/core](/docs/api/README) / useColumnIds
 
 # Function: useColumnIds()
 
@@ -25,7 +25,7 @@ Defined in: [components/common/useColumnsIds.tsx:8](https://github.com/firecmsco
 
 ### collection
 
-[`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+[`ResolvedEntityCollection`](/docs/api/type-aliases/ResolvedEntityCollection)\<`M`\>
 
 ### includeSubcollections
 

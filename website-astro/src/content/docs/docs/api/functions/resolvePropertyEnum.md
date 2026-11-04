@@ -3,15 +3,15 @@ slug: "docs/api/functions/resolvePropertyEnum"
 title: "resolvePropertyEnum"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolvePropertyEnum
+[@firecms/core](/docs/api/README) / resolvePropertyEnum
 
 # Function: resolvePropertyEnum()
 
-> **resolvePropertyEnum**(`property`, `fromBuilder?`): [`ResolvedStringProperty`](../type-aliases/ResolvedStringProperty) \| [`ResolvedNumberProperty`](../type-aliases/ResolvedNumberProperty)
+> **resolvePropertyEnum**(`property`, `fromBuilder?`): [`ResolvedStringProperty`](/docs/api/type-aliases/ResolvedStringProperty) \| [`ResolvedNumberProperty`](/docs/api/type-aliases/ResolvedNumberProperty)
 
 Defined in: [util/resolutions.ts:406](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/resolutions.ts)
 
@@ -21,7 +21,7 @@ Resolve enum aliases for a string or number property
 
 ### property
 
-[`StringProperty`](../interfaces/StringProperty) | [`NumberProperty`](../interfaces/NumberProperty)
+[`StringProperty`](/docs/api/interfaces/StringProperty) | [`NumberProperty`](/docs/api/interfaces/NumberProperty)
 
 ### fromBuilder?
 
@@ -29,4 +29,4 @@ Resolve enum aliases for a string or number property
 
 ## Returns
 
-[`ResolvedStringProperty`](../type-aliases/ResolvedStringProperty) \| [`ResolvedNumberProperty`](../type-aliases/ResolvedNumberProperty)
+[`ResolvedStringProperty`](/docs/api/type-aliases/ResolvedStringProperty) \| [`ResolvedNumberProperty`](/docs/api/type-aliases/ResolvedNumberProperty)

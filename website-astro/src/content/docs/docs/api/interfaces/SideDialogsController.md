@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/SideDialogsController"
 title: "SideDialogsController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SideDialogsController
+[@firecms/core](/docs/api/README) / SideDialogsController
 
 # Interface: SideDialogsController
 
@@ -43,7 +43,7 @@ Open one or multiple side panels
 
 ##### panelProps
 
-[`SideDialogPanelProps`](SideDialogPanelProps) | [`SideDialogPanelProps`](SideDialogPanelProps)[]
+[`SideDialogPanelProps`](/docs/api/interfaces/SideDialogPanelProps) | [`SideDialogPanelProps`](/docs/api/interfaces/SideDialogPanelProps)[]
 
 #### Returns
 
@@ -63,7 +63,7 @@ Replace the last open panel with the given one
 
 ##### panelProps
 
-[`SideDialogPanelProps`](SideDialogPanelProps) | [`SideDialogPanelProps`](SideDialogPanelProps)[]
+[`SideDialogPanelProps`](/docs/api/interfaces/SideDialogPanelProps) | [`SideDialogPanelProps`](/docs/api/interfaces/SideDialogPanelProps)[]
 
 #### Returns
 
@@ -83,7 +83,7 @@ Override the current side panels
 
 ##### panels
 
-[`SideDialogPanelProps`](SideDialogPanelProps)[]
+[`SideDialogPanelProps`](/docs/api/interfaces/SideDialogPanelProps)[]
 
 #### Returns
 
@@ -93,7 +93,7 @@ Override the current side panels
 
 ### sidePanels
 
-> **sidePanels**: [`SideDialogPanelProps`](SideDialogPanelProps)[]
+> **sidePanels**: [`SideDialogPanelProps`](/docs/api/interfaces/SideDialogPanelProps)[]
 
 Defined in: [types/side\_dialogs\_controller.tsx:18](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
 

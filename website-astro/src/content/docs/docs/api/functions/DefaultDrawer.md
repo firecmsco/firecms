@@ -3,11 +3,11 @@ slug: "docs/api/functions/DefaultDrawer"
 title: "DefaultDrawer"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DefaultDrawer
+[@firecms/core](/docs/api/README) / DefaultDrawer
 
 # Function: DefaultDrawer()
 

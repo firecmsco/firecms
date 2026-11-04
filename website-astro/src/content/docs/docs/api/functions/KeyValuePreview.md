@@ -3,11 +3,11 @@ slug: "docs/api/functions/KeyValuePreview"
 title: "KeyValuePreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / KeyValuePreview
+[@firecms/core](/docs/api/README) / KeyValuePreview
 
 # Function: KeyValuePreview()
 

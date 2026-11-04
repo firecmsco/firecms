@@ -3,11 +3,11 @@ slug: "docs/api/functions/useSnackbarController"
 title: "useSnackbarController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useSnackbarController
+[@firecms/core](/docs/api/README) / useSnackbarController
 
 # Function: useSnackbarController()
 
@@ -50,7 +50,7 @@ Consider that in order to use this hook you need to have a parent
 
 ###### type
 
-[`SnackbarMessageType`](../type-aliases/SnackbarMessageType)
+[`SnackbarMessageType`](/docs/api/type-aliases/SnackbarMessageType)
 
 #### Returns
 

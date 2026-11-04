@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/FilterCombination"
 title: "FilterCombination"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FilterCombination
+[@firecms/core](/docs/api/README) / FilterCombination
 
 # Type Alias: FilterCombination\<Key\>
 

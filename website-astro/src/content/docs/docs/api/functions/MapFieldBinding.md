@@ -3,11 +3,11 @@ slug: "docs/api/functions/MapFieldBinding"
 title: "MapFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / MapFieldBinding
+[@firecms/core](/docs/api/README) / MapFieldBinding
 
 # Function: MapFieldBinding()
 
@@ -24,7 +24,7 @@ and tables to the specified properties.
 
 ### \_\_namedParameters
 
-[`FieldProps`](../interfaces/FieldProps)\<`Record`\<`string`, `any`\>\>
+[`FieldProps`](/docs/api/interfaces/FieldProps)\<`Record`\<`string`, `any`\>\>
 
 ## Returns
 

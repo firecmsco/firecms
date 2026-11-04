@@ -1,6 +1,6 @@
 # Copying an entity from one collection to another
 
-![Product selection](/img/product_selection.webp)
+![Product selection](https://firecms.co/img/product_selection.webp)
 
 In this tutorial we will show how you can add a button to your collection,
 that will allow you to **copy entities from another collection**.

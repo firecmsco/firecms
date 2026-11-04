@@ -639,7 +639,7 @@ app.put("/api/data/:path/:id", authenticate, requirePermission("edit"), handler)
 app.delete("/api/data/:path/:id", authenticate, requirePermission("delete"), handler);
 ```
 
-:::important
+:::caution
 If a user can modify their own role in the database (e.g. setting `role: "admin"` on their own user document), your permission system is broken. **Always restrict writes to user/role collections to admin-only operations.**
 :::
 

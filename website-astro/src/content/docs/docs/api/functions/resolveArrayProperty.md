@@ -3,15 +3,15 @@ slug: "docs/api/functions/resolveArrayProperty"
 title: "resolveArrayProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolveArrayProperty
+[@firecms/core](/docs/api/README) / resolveArrayProperty
 
 # Function: resolveArrayProperty()
 
-> **resolveArrayProperty**\<`T`, `M`\>(`__namedParameters`): [`ResolvedArrayProperty`](../type-aliases/ResolvedArrayProperty)
+> **resolveArrayProperty**\<`T`, `M`\>(`__namedParameters`): [`ResolvedArrayProperty`](/docs/api/type-aliases/ResolvedArrayProperty)
 
 Defined in: [util/resolutions.ts:258](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/resolutions.ts)
 
@@ -31,7 +31,7 @@ Defined in: [util/resolutions.ts:258](https://github.com/firecmsco/firecms/blob/
 
 #### authController
 
-[`AuthController`](../type-aliases/AuthController)
+[`AuthController`](/docs/api/type-aliases/AuthController)
 
 #### entityId?
 
@@ -59,11 +59,11 @@ Defined in: [util/resolutions.ts:258](https://github.com/firecmsco/firecms/blob/
 
 #### property
 
-[`ResolvedArrayProperty`](../type-aliases/ResolvedArrayProperty)\<`T`, `ArrayT`\> \| [`ArrayProperty`](../interfaces/ArrayProperty)\<`T`, `any`\>
+[`ResolvedArrayProperty`](/docs/api/type-aliases/ResolvedArrayProperty)\<`T`, `ArrayT`\> \| [`ArrayProperty`](/docs/api/interfaces/ArrayProperty)\<`T`, `any`\>
 
 #### propertyConfigs?
 
-`Record`\<`string`, [`PropertyConfig`](../type-aliases/PropertyConfig)\>
+`Record`\<`string`, [`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\>
 
 #### propertyKey?
 
@@ -75,4 +75,4 @@ Defined in: [util/resolutions.ts:258](https://github.com/firecmsco/firecms/blob/
 
 ## Returns
 
-[`ResolvedArrayProperty`](../type-aliases/ResolvedArrayProperty)
+[`ResolvedArrayProperty`](/docs/api/type-aliases/ResolvedArrayProperty)

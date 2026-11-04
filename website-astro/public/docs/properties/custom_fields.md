@@ -26,7 +26,7 @@ Use a custom field when you need one (or more) of the following:
 - Integrations (upload to an external API, fetch suggestions, geocode, etc.)
 
 If you only need validation or simple transformation, prefer property level `validation` options first to keep things simple.
-If you need dynamic behavior depending on other values, consider using [conditional fields](https://firecms.co/docs/conditional_fields.md) instead.
+If you need dynamic behavior depending on other values, consider using [conditional fields](https://firecms.co/docs/properties/conditional_fields) instead.
 
 ## Custom field example
 A custom text field with a background color supplied via `customProps` (scroll below for full prop contract and advanced techniques):
@@ -218,7 +218,7 @@ function GeoPointField({ context }: FieldProps<any>) {
 - Need read‑only mode: Respect `disabled` from props or `context.disabled`.
 
 ## Next steps
-- Explore other customization: [Custom previews](https://firecms.co/docs/custom_previews.md)
+- Explore other customization: [Custom previews](https://firecms.co/docs/properties/custom_previews)
 - Reuse logic across many properties: create a shared field component and pass different `customProps`.
 - Open source friendly? Consider contributing a reusable field to the community.
 

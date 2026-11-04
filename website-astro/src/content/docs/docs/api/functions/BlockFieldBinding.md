@@ -3,11 +3,11 @@ slug: "docs/api/functions/BlockFieldBinding"
 title: "BlockFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / BlockFieldBinding
+[@firecms/core](/docs/api/README) / BlockFieldBinding
 
 # Function: BlockFieldBinding()
 
@@ -31,7 +31,7 @@ and tables to the specified properties.
 
 ### \_\_namedParameters
 
-[`FieldProps`](../interfaces/FieldProps)\<`T`\>
+[`FieldProps`](/docs/api/interfaces/FieldProps)\<`T`\>
 
 ## Returns
 

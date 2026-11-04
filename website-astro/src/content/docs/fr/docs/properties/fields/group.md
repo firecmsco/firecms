@@ -29,6 +29,6 @@ buildProperty({
 });
 ```
 
-Le type de données est [`map`](../config/map).
+Le type de données est [`map`](/fr/docs/properties/config/map).
 
-En interne, le composant utilisé est [`MapFieldBinding`](../../api/functions/MapFieldBinding).
+En interne, le composant utilisé est [`MapFieldBinding`](/fr/docs/api/functions/MapFieldBinding).

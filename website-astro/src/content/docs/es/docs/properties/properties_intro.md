@@ -13,7 +13,7 @@ el sistema de tipos de Typescript para validar la entrada).
 
 Es posible que también desees actualizar las propiedades **dinámicamente**, según el entityId, la
 ruta (path) o los valores actuales. Consulta
-la [sección de campos condicionales](conditional_fields).
+la [sección de campos condicionales](/es/docs/properties/conditional_fields).
 
 Consulta los diferentes campos disponibles en la sección de campos, o las
 diferentes configuraciones de propiedades.

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/SnackbarMessageType"
 title: "SnackbarMessageType"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SnackbarMessageType
+[@firecms/core](/docs/api/README) / SnackbarMessageType
 
 # Type Alias: SnackbarMessageType
 

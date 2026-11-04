@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/CustomizationController"
 title: "CustomizationController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / CustomizationController
+[@firecms/core](/docs/api/README) / CustomizationController
 
 # Type Alias: CustomizationController
 
@@ -44,7 +44,7 @@ Defaults to 'MMMM dd, yyyy, HH:mm:ss'
 
 ### entityActions?
 
-> `optional` **entityActions**: [`EntityAction`](EntityAction)\<`any`, `any`\>[]
+> `optional` **entityActions**: [`EntityAction`](/docs/api/type-aliases/EntityAction)\<`any`, `any`\>[]
 
 Defined in: [types/customization\_controller.tsx:36](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/customization_controller.tsx)
 
@@ -57,7 +57,7 @@ by specifying the `key` of the action.
 
 ### entityLinkBuilder?
 
-> `optional` **entityLinkBuilder**: [`EntityLinkBuilder`](EntityLinkBuilder)
+> `optional` **entityLinkBuilder**: [`EntityLinkBuilder`](/docs/api/type-aliases/EntityLinkBuilder)
 
 Defined in: [types/customization\_controller.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/customization_controller.tsx)
 
@@ -67,7 +67,7 @@ Builder for generating utility links for entities
 
 ### entityViews?
 
-> `optional` **entityViews**: [`EntityCustomView`](EntityCustomView)[]
+> `optional` **entityViews**: [`EntityCustomView`](/docs/api/type-aliases/EntityCustomView)[]
 
 Defined in: [types/customization\_controller.tsx:28](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/customization_controller.tsx)
 
@@ -81,7 +81,7 @@ You can also define an entity view from the UI.
 
 ### locale?
 
-> `optional` **locale**: [`Locale`](Locale)
+> `optional` **locale**: [`Locale`](/docs/api/type-aliases/Locale)
 
 Defined in: [types/customization\_controller.tsx:47](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/customization_controller.tsx)
 
@@ -91,7 +91,7 @@ Locale of the CMS, currently only affecting dates
 
 ### plugins?
 
-> `optional` **plugins**: [`FireCMSPlugin`](FireCMSPlugin)\<`any`, `any`, `any`\>[]
+> `optional` **plugins**: [`FireCMSPlugin`](/docs/api/type-aliases/FireCMSPlugin)\<`any`, `any`, `any`\>[]
 
 Defined in: [types/customization\_controller.tsx:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/customization_controller.tsx)
 
@@ -101,7 +101,7 @@ Use plugins to modify the behaviour of the CMS.
 
 ### propertyConfigs
 
-> **propertyConfigs**: `Record`\<`string`, [`PropertyConfig`](PropertyConfig)\>
+> **propertyConfigs**: `Record`\<`string`, [`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\>
 
 Defined in: [types/customization\_controller.tsx:54](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/customization_controller.tsx)
 

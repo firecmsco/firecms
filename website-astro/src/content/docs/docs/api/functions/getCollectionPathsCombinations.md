@@ -3,11 +3,11 @@ slug: "docs/api/functions/getCollectionPathsCombinations"
 title: "getCollectionPathsCombinations"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getCollectionPathsCombinations
+[@firecms/core](/docs/api/README) / getCollectionPathsCombinations
 
 # Function: getCollectionPathsCombinations()
 

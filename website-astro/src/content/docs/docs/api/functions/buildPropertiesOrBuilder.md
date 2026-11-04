@@ -3,15 +3,15 @@ slug: "docs/api/functions/buildPropertiesOrBuilder"
 title: "buildPropertiesOrBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / buildPropertiesOrBuilder
+[@firecms/core](/docs/api/README) / buildPropertiesOrBuilder
 
 # Function: buildPropertiesOrBuilder()
 
-> **buildPropertiesOrBuilder**\<`M`\>(`propertiesOrBuilder`): [`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+> **buildPropertiesOrBuilder**\<`M`\>(`propertiesOrBuilder`): [`PropertiesOrBuilders`](/docs/api/type-aliases/PropertiesOrBuilders)\<`M`\>
 
 Defined in: [util/builders.ts:77](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/builders.ts)
 
@@ -28,8 +28,8 @@ the properties keys.
 
 ### propertiesOrBuilder
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`PropertiesOrBuilders`](/docs/api/type-aliases/PropertiesOrBuilders)\<`M`\>
 
 ## Returns
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`PropertiesOrBuilders`](/docs/api/type-aliases/PropertiesOrBuilders)\<`M`\>

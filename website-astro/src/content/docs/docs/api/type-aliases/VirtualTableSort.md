@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/VirtualTableSort"
 title: "VirtualTableSort"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / VirtualTableSort
+[@firecms/core](/docs/api/README) / VirtualTableSort
 
 # Type Alias: VirtualTableSort
 

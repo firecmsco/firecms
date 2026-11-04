@@ -9,10 +9,10 @@ You can choose between using dates or date/time fields.
 Also you can create read-only fields that get updated automatically when 
 entities are created or updated
 
-The data type is [`date`](../config/date).
+The data type is [`date`](/docs/properties/config/date).
 
 Internally the component used
-is [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding).
+is [`DateTimeFieldBinding`](/docs/api/functions/DateTimeFieldBinding).
 
 #### Date field
 

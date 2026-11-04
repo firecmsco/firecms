@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/BuildNavigationContextProps"
 title: "BuildNavigationContextProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / BuildNavigationContextProps
+[@firecms/core](/docs/api/README) / BuildNavigationContextProps
 
 # Type Alias: BuildNavigationContextProps\<EC, USER\>
 
@@ -19,17 +19,17 @@ Defined in: [hooks/useBuildNavigationController.tsx:40](https://github.com/firec
 
 ### EC
 
-`EC` *extends* [`EntityCollection`](../interfaces/EntityCollection)
+`EC` *extends* [`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 ### USER
 
-`USER` *extends* [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
 ### adminViews?
 
-> `optional` **adminViews**: [`CMSView`](../interfaces/CMSView)[] \| [`CMSViewsBuilder`](CMSViewsBuilder)
+> `optional` **adminViews**: [`CMSView`](/docs/api/interfaces/CMSView)[] \| [`CMSViewsBuilder`](/docs/api/type-aliases/CMSViewsBuilder)
 
 Defined in: [hooks/useBuildNavigationController.tsx:77](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildNavigationController.tsx)
 
@@ -41,7 +41,7 @@ resolving to an array of views.
 
 ### authController
 
-> **authController**: [`AuthController`](AuthController)\<`USER`\>
+> **authController**: [`AuthController`](/docs/api/type-aliases/AuthController)\<`USER`\>
 
 Defined in: [hooks/useBuildNavigationController.tsx:54](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildNavigationController.tsx)
 
@@ -73,7 +73,7 @@ Defaults to "/".
 
 ### collectionPermissions?
 
-> `optional` **collectionPermissions**: [`PermissionsBuilder`](PermissionsBuilder)
+> `optional` **collectionPermissions**: [`PermissionsBuilder`](/docs/api/type-aliases/PermissionsBuilder)
 
 Defined in: [hooks/useBuildNavigationController.tsx:65](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildNavigationController.tsx)
 
@@ -84,7 +84,7 @@ If not provided, the permissions will be resolved from the collection configurat
 
 ### collections?
 
-> `optional` **collections**: `EC`[] \| [`EntityCollectionsBuilder`](EntityCollectionsBuilder)\<`EC`\>
+> `optional` **collections**: `EC`[] \| [`EntityCollectionsBuilder`](/docs/api/type-aliases/EntityCollectionsBuilder)\<`EC`\>
 
 Defined in: [hooks/useBuildNavigationController.tsx:60](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildNavigationController.tsx)
 
@@ -96,7 +96,7 @@ resolving to an array of collections.
 
 ### dataSourceDelegate
 
-> **dataSourceDelegate**: [`DataSourceDelegate`](../interfaces/DataSourceDelegate)
+> **dataSourceDelegate**: [`DataSourceDelegate`](/docs/api/interfaces/DataSourceDelegate)
 
 Defined in: [hooks/useBuildNavigationController.tsx:85](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildNavigationController.tsx)
 
@@ -116,7 +116,7 @@ If true, the navigation logic will not be updated until this flag is false
 
 ### navigationGroupMappings?
 
-> `optional` **navigationGroupMappings**: [`NavigationGroupMapping`](../interfaces/NavigationGroupMapping)[]
+> `optional` **navigationGroupMappings**: [`NavigationGroupMapping`](/docs/api/interfaces/NavigationGroupMapping)[]
 
 Defined in: [hooks/useBuildNavigationController.tsx:93](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildNavigationController.tsx)
 
@@ -126,7 +126,7 @@ Used to define the name of groups and order of the navigation entries.
 
 ### plugins?
 
-> `optional` **plugins**: [`FireCMSPlugin`](FireCMSPlugin)[]
+> `optional` **plugins**: [`FireCMSPlugin`](/docs/api/type-aliases/FireCMSPlugin)[]
 
 Defined in: [hooks/useBuildNavigationController.tsx:89](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildNavigationController.tsx)
 
@@ -136,7 +136,7 @@ Plugins to be used in the CMS.
 
 ### userConfigPersistence?
 
-> `optional` **userConfigPersistence**: [`UserConfigurationPersistence`](../interfaces/UserConfigurationPersistence)
+> `optional` **userConfigPersistence**: [`UserConfigurationPersistence`](/docs/api/interfaces/UserConfigurationPersistence)
 
 Defined in: [hooks/useBuildNavigationController.tsx:81](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildNavigationController.tsx)
 
@@ -146,7 +146,7 @@ Controller for storing user preferences.
 
 ### views?
 
-> `optional` **views**: [`CMSView`](../interfaces/CMSView)[] \| [`CMSViewsBuilder`](CMSViewsBuilder)
+> `optional` **views**: [`CMSView`](/docs/api/interfaces/CMSView)[] \| [`CMSViewsBuilder`](/docs/api/type-aliases/CMSViewsBuilder)
 
 Defined in: [hooks/useBuildNavigationController.tsx:71](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildNavigationController.tsx)
 

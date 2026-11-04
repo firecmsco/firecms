@@ -1,6 +1,6 @@
 # Migrating from FireCMS 2.0 to FireCMS Cloud
 
-:::important
+:::note
 This migration guide applies for migrating from FireCMS 2.0 to FireCMS Cloud
 :::
 

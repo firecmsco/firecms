@@ -3,15 +3,15 @@ slug: "docs/api/functions/useBuildNavigationController"
 title: "useBuildNavigationController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useBuildNavigationController
+[@firecms/core](/docs/api/README) / useBuildNavigationController
 
 # Function: useBuildNavigationController()
 
-> **useBuildNavigationController**\<`EC`, `USER`\>(`props`): [`NavigationController`](../type-aliases/NavigationController)
+> **useBuildNavigationController**\<`EC`, `USER`\>(`props`): [`NavigationController`](/docs/api/type-aliases/NavigationController)
 
 Defined in: [hooks/useBuildNavigationController.tsx:106](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildNavigationController.tsx)
 
@@ -19,18 +19,18 @@ Defined in: [hooks/useBuildNavigationController.tsx:106](https://github.com/fire
 
 ### EC
 
-`EC` *extends* [`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>
+`EC` *extends* [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User)
 
 ## Parameters
 
 ### props
 
-[`BuildNavigationContextProps`](../type-aliases/BuildNavigationContextProps)\<`EC`, `USER`\>
+[`BuildNavigationContextProps`](/docs/api/type-aliases/BuildNavigationContextProps)\<`EC`, `USER`\>
 
 ## Returns
 
-[`NavigationController`](../type-aliases/NavigationController)
+[`NavigationController`](/docs/api/type-aliases/NavigationController)

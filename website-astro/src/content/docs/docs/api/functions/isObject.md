@@ -3,11 +3,11 @@ slug: "docs/api/functions/isObject"
 title: "isObject"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / isObject
+[@firecms/core](/docs/api/README) / isObject
 
 # Function: isObject()
 

@@ -153,10 +153,10 @@ Wenn auf `true` gesetzt, werden die Kind-Eigenschaften direkt ohne umschließend
 ---
 
 Basierend auf Ihrer Konfiguration werden folgende Formular-Widgets erstellt:
-- [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding) generisches Array-Feld, das Neuordnung ermöglicht und die Kind-Eigenschaft als Knoten rendert.
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) wenn die `of`-Eigenschaft ein `string` mit Speicherkonfiguration ist.
-- [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding) wenn die `of`-Eigenschaft eine `reference` ist.
-- [`BlockFieldBinding`](../../api/functions/BlockFieldBinding) wenn die `oneOf`-Eigenschaft angegeben ist.
+- [`RepeatFieldBinding`](/de/docs/api/functions/RepeatFieldBinding) generisches Array-Feld, das Neuordnung ermöglicht und die Kind-Eigenschaft als Knoten rendert.
+- [`StorageUploadFieldBinding`](/de/docs/api/functions/StorageUploadFieldBinding) wenn die `of`-Eigenschaft ein `string` mit Speicherkonfiguration ist.
+- [`ArrayOfReferencesFieldBinding`](/de/docs/api/functions/ArrayOfReferencesFieldBinding) wenn die `of`-Eigenschaft eine `reference` ist.
+- [`BlockFieldBinding`](/de/docs/api/functions/BlockFieldBinding) wenn die `oneOf`-Eigenschaft angegeben ist.
 
 Links:
-- [API](../../api/interfaces/ArrayProperty)
+- [API](/de/docs/api/interfaces/ArrayProperty)

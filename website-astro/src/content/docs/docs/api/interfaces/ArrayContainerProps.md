@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/ArrayContainerProps"
 title: "ArrayContainerProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayContainerProps
+[@firecms/core](/docs/api/README) / ArrayContainerProps
 
 # Interface: ArrayContainerProps\<T\>
 
@@ -31,7 +31,7 @@ Defined in: [components/ArrayContainer.tsx:45](https://github.com/firecmsco/fire
 
 ### buildEntry
 
-> **buildEntry**: [`ArrayEntryBuilder`](../type-aliases/ArrayEntryBuilder)
+> **buildEntry**: [`ArrayEntryBuilder`](/docs/api/type-aliases/ArrayEntryBuilder)
 
 Defined in: [components/ArrayContainer.tsx:46](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
 

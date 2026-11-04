@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/CollectionActionsProps"
 title: "CollectionActionsProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / CollectionActionsProps
+[@firecms/core](/docs/api/README) / CollectionActionsProps
 
 # Interface: CollectionActionsProps\<M, USER, EC\>
 
@@ -25,11 +25,11 @@ toolbar.
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ### EC
 
-`EC` *extends* [`EntityCollection`](EntityCollection)\<`M`\> = [`EntityCollection`](EntityCollection)\<`M`\>
+`EC` *extends* [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\> = [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 ## Properties
 
@@ -55,7 +55,7 @@ Count of the entities in this collection
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+> **context**: [`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`USER`\>
 
 Defined in: [types/collections.ts:413](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -96,7 +96,7 @@ Path of the last collection, like `addresses`
 
 ### selectionController
 
-> **selectionController**: [`SelectionController`](../type-aliases/SelectionController)\<`M`\>
+> **selectionController**: [`SelectionController`](/docs/api/type-aliases/SelectionController)\<`M`\>
 
 Defined in: [types/collections.ts:402](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -107,7 +107,7 @@ selected entities state.
 
 ### tableController
 
-> **tableController**: [`EntityTableController`](../type-aliases/EntityTableController)\<`M`\>
+> **tableController**: [`EntityTableController`](/docs/api/type-aliases/EntityTableController)\<`M`\>
 
 Defined in: [types/collections.ts:408](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 

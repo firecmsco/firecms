@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/ArrayPropertyValidationSchema"
 title: "ArrayPropertyValidationSchema"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayPropertyValidationSchema
+[@firecms/core](/docs/api/README) / ArrayPropertyValidationSchema
 
 # Interface: ArrayPropertyValidationSchema
 
@@ -17,7 +17,7 @@ Validation rules for arrays
 
 ## Extends
 
-- [`PropertyValidationSchema`](PropertyValidationSchema)
+- [`PropertyValidationSchema`](/docs/api/interfaces/PropertyValidationSchema)
 
 ## Properties
 
@@ -47,7 +47,7 @@ Is this field required
 
 #### Inherited from
 
-[`PropertyValidationSchema`](PropertyValidationSchema).[`required`](PropertyValidationSchema.md#required)
+[`PropertyValidationSchema`](/docs/api/interfaces/PropertyValidationSchema).[`required`](/docs/api/interfaces/PropertyValidationSchema#required)
 
 ***
 
@@ -61,7 +61,7 @@ Customize the required message when the property is not set
 
 #### Inherited from
 
-[`PropertyValidationSchema`](PropertyValidationSchema).[`requiredMessage`](PropertyValidationSchema.md#requiredmessage)
+[`PropertyValidationSchema`](/docs/api/interfaces/PropertyValidationSchema).[`requiredMessage`](/docs/api/interfaces/PropertyValidationSchema#requiredmessage)
 
 ***
 
@@ -76,7 +76,7 @@ collection with this value.
 
 #### Inherited from
 
-[`PropertyValidationSchema`](PropertyValidationSchema).[`unique`](PropertyValidationSchema.md#unique)
+[`PropertyValidationSchema`](/docs/api/interfaces/PropertyValidationSchema).[`unique`](/docs/api/interfaces/PropertyValidationSchema#unique)
 
 ***
 
@@ -93,4 +93,4 @@ children of an `ArrayProperty` or first level children of `MapProperty`
 
 #### Inherited from
 
-[`PropertyValidationSchema`](PropertyValidationSchema).[`uniqueInArray`](PropertyValidationSchema.md#uniqueinarray)
+[`PropertyValidationSchema`](/docs/api/interfaces/PropertyValidationSchema).[`uniqueInArray`](/docs/api/interfaces/PropertyValidationSchema#uniqueinarray)

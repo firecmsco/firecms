@@ -3,15 +3,15 @@ slug: "docs/api/functions/getLabelOrConfigFrom"
 title: "getLabelOrConfigFrom"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getLabelOrConfigFrom
+[@firecms/core](/docs/api/README) / getLabelOrConfigFrom
 
 # Function: getLabelOrConfigFrom()
 
-> **getLabelOrConfigFrom**(`enumValues`, `key?`): [`EnumValueConfig`](../type-aliases/EnumValueConfig) \| `undefined`
+> **getLabelOrConfigFrom**(`enumValues`, `key?`): [`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig) \| `undefined`
 
 Defined in: [util/enums.ts:24](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/enums.ts)
 
@@ -19,7 +19,7 @@ Defined in: [util/enums.ts:24](https://github.com/firecmsco/firecms/blob/main/pa
 
 ### enumValues
 
-[`EnumValueConfig`](../type-aliases/EnumValueConfig)[]
+[`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig)[]
 
 ### key?
 
@@ -27,4 +27,4 @@ Defined in: [util/enums.ts:24](https://github.com/firecmsco/firecms/blob/main/pa
 
 ## Returns
 
-[`EnumValueConfig`](../type-aliases/EnumValueConfig) \| `undefined`
+[`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig) \| `undefined`

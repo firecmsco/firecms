@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayOfStringsPreview"
 title: "ArrayOfStringsPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayOfStringsPreview
+[@firecms/core](/docs/api/README) / ArrayOfStringsPreview
 
 # Function: ArrayOfStringsPreview()
 
@@ -19,7 +19,7 @@ Defined in: [preview/property\_previews/ArrayOfStringsPreview.tsx:12](https://gi
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`string`[]\>
+[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<`string`[]\>
 
 ## Returns
 

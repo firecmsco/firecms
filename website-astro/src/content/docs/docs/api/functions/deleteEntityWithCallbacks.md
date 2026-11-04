@@ -3,11 +3,11 @@ slug: "docs/api/functions/deleteEntityWithCallbacks"
 title: "deleteEntityWithCallbacks"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / deleteEntityWithCallbacks
+[@firecms/core](/docs/api/README) / deleteEntityWithCallbacks
 
 # Function: deleteEntityWithCallbacks()
 
@@ -22,7 +22,7 @@ errors.
 
 If you just want to delete any data without running the `onPreDelete`,
 and `onDelete` callbacks, you can use the `deleteEntity` method
-in the datasource ([useDataSource](useDataSource)).
+in the datasource ([useDataSource](/docs/api/functions/useDataSource)).
 
 ## Type Parameters
 
@@ -32,13 +32,13 @@ in the datasource ([useDataSource](useDataSource)).
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User)
 
 ## Parameters
 
 ### dataSource
 
-[`DeleteEntityProps`](../interfaces/DeleteEntityProps)\<`M`\> & `object` & `object`
+[`DeleteEntityProps`](/docs/api/interfaces/DeleteEntityProps)\<`M`\> & `object` & `object`
 
 ## Returns
 

@@ -71,7 +71,7 @@ Quando impostato su `true`, mostra le proprietà figlio direttamente senza esser
 ---
 
 Il widget creato è
-- [`MapFieldBinding`](../../api/functions/MapFieldBinding) Campo che renderizza i campi delle proprietà figlio
+- [`MapFieldBinding`](/it/docs/api/functions/MapFieldBinding) Campo che renderizza i campi delle proprietà figlio
 
 Link:
-- [API](../../api/interfaces/MapProperty)
+- [API](/it/docs/api/interfaces/MapProperty)

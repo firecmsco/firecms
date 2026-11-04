@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/CollectionFetchResult"
 title: "CollectionFetchResult"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / CollectionFetchResult
+[@firecms/core](/docs/api/README) / CollectionFetchResult
 
 # Interface: CollectionFetchResult\<M\>
 
@@ -23,7 +23,7 @@ Defined in: [hooks/data/useCollectionFetch.tsx:46](https://github.com/firecmsco/
 
 ### data
 
-> **data**: [`Entity`](Entity)\<`M`\>[]
+> **data**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>[]
 
 Defined in: [hooks/data/useCollectionFetch.tsx:47](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useCollectionFetch.tsx)
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/useValidateAuthenticator"
 title: "useValidateAuthenticator"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useValidateAuthenticator
+[@firecms/core](/docs/api/README) / useValidateAuthenticator
 
 # Function: useValidateAuthenticator()
 
@@ -21,7 +21,7 @@ This hook is used internally for validating an authenticator.
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = `any`
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = `any`
 
 ## Parameters
 
@@ -29,15 +29,15 @@ This hook is used internally for validating an authenticator.
 
 #### authController
 
-[`AuthController`](../type-aliases/AuthController)\<`USER`\>
+[`AuthController`](/docs/api/type-aliases/AuthController)\<`USER`\>
 
 #### authenticator?
 
-`boolean` \| [`Authenticator`](../type-aliases/Authenticator)\<`USER`\>
+`boolean` \| [`Authenticator`](/docs/api/type-aliases/Authenticator)\<`USER`\>
 
 #### dataSourceDelegate
 
-[`DataSourceDelegate`](../interfaces/DataSourceDelegate)
+[`DataSourceDelegate`](/docs/api/interfaces/DataSourceDelegate)
 
 #### disabled?
 
@@ -45,7 +45,7 @@ This hook is used internally for validating an authenticator.
 
 #### storageSource
 
-[`StorageSource`](../interfaces/StorageSource)
+[`StorageSource`](/docs/api/interfaces/StorageSource)
 
 ## Returns
 

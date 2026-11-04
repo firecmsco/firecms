@@ -3,15 +3,15 @@ slug: "docs/api/functions/sortProperties"
 title: "sortProperties"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / sortProperties
+[@firecms/core](/docs/api/README) / sortProperties
 
 # Function: sortProperties()
 
-> **sortProperties**\<`M`\>(`properties`, `propertiesOrder?`): [`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+> **sortProperties**\<`M`\>(`properties`, `propertiesOrder?`): [`PropertiesOrBuilders`](/docs/api/type-aliases/PropertiesOrBuilders)\<`M`\>
 
 Defined in: [util/collections.ts:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/collections.ts)
 
@@ -25,7 +25,7 @@ Defined in: [util/collections.ts:11](https://github.com/firecmsco/firecms/blob/m
 
 ### properties
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`PropertiesOrBuilders`](/docs/api/type-aliases/PropertiesOrBuilders)\<`M`\>
 
 ### propertiesOrder?
 
@@ -33,4 +33,4 @@ keyof `M`[]
 
 ## Returns
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`PropertiesOrBuilders`](/docs/api/type-aliases/PropertiesOrBuilders)\<`M`\>

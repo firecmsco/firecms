@@ -3,15 +3,15 @@ slug: "docs/api/functions/useModeController"
 title: "useModeController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useModeController
+[@firecms/core](/docs/api/README) / useModeController
 
 # Function: useModeController()
 
-> **useModeController**(): [`ModeController`](../interfaces/ModeController)
+> **useModeController**(): [`ModeController`](/docs/api/interfaces/ModeController)
 
 Defined in: [hooks/useModeController.tsx:23](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useModeController.tsx)
 
@@ -23,7 +23,7 @@ Consider that in order to use this hook you need to have a parent
 
 ## Returns
 
-[`ModeController`](../interfaces/ModeController)
+[`ModeController`](/docs/api/interfaces/ModeController)
 
 ## See
 

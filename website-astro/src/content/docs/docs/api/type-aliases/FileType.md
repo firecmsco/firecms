@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/FileType"
 title: "FileType"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FileType
+[@firecms/core](/docs/api/README) / FileType
 
 # Type Alias: FileType
 

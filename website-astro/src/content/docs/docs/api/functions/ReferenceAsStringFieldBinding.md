@@ -3,11 +3,11 @@ slug: "docs/api/functions/ReferenceAsStringFieldBinding"
 title: "ReferenceAsStringFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ReferenceAsStringFieldBinding
+[@firecms/core](/docs/api/README) / ReferenceAsStringFieldBinding
 
 # Function: ReferenceAsStringFieldBinding()
 
@@ -24,7 +24,7 @@ and tables to the specified properties.
 
 ### props
 
-[`FieldProps`](../interfaces/FieldProps)\<`string`\>
+[`FieldProps`](/docs/api/interfaces/FieldProps)\<`string`\>
 
 ## Returns
 

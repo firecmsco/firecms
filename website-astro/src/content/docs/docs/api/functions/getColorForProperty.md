@@ -3,11 +3,11 @@ slug: "docs/api/functions/getColorForProperty"
 title: "getColorForProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getColorForProperty
+[@firecms/core](/docs/api/README) / getColorForProperty
 
 # Function: getColorForProperty()
 
@@ -19,11 +19,11 @@ Defined in: [util/property\_utils.tsx:62](https://github.com/firecmsco/firecms/b
 
 ### property
 
-[`PropertyOrBuilder`](../type-aliases/PropertyOrBuilder)
+[`PropertyOrBuilder`](/docs/api/type-aliases/PropertyOrBuilder)
 
 ### fields
 
-`Record`\<`string`, [`PropertyConfig`](../type-aliases/PropertyConfig)\>
+`Record`\<`string`, [`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\>
 
 ## Returns
 

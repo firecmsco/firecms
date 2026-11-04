@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/EntityOnSaveProps"
 title: "EntityOnSaveProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityOnSaveProps
+[@firecms/core](/docs/api/README) / EntityOnSaveProps
 
 # Interface: EntityOnSaveProps\<M, USER\>
 
@@ -23,13 +23,13 @@ Parameters passed to hooks when an entity is saved
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
 ### collection
 
-> **collection**: [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+> **collection**: [`ResolvedEntityCollection`](/docs/api/type-aliases/ResolvedEntityCollection)\<`M`\>
 
 Defined in: [types/entity\_callbacks.ts:128](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -39,7 +39,7 @@ Resolved collection of the entity
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+> **context**: [`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`USER`\>
 
 Defined in: [types/entity\_callbacks.ts:164](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -90,7 +90,7 @@ Full path where this entity is being saved, with alias resolved
 
 ### status
 
-> **status**: [`EntityStatus`](../type-aliases/EntityStatus)
+> **status**: [`EntityStatus`](/docs/api/type-aliases/EntityStatus)
 
 Defined in: [types/entity\_callbacks.ts:159](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -100,7 +100,7 @@ New or existing entity
 
 ### values
 
-> **values**: `Partial`\<[`EntityValues`](../type-aliases/EntityValues)\<`M`\>\>
+> **values**: `Partial`\<[`EntityValues`](/docs/api/type-aliases/EntityValues)\<`M`\>\>
 
 Defined in: [types/entity\_callbacks.ts:149](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 

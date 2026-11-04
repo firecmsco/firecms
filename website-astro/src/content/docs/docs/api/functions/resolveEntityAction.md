@@ -3,15 +3,15 @@ slug: "docs/api/functions/resolveEntityAction"
 title: "resolveEntityAction"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolveEntityAction
+[@firecms/core](/docs/api/README) / resolveEntityAction
 
 # Function: resolveEntityAction()
 
-> **resolveEntityAction**\<`M`\>(`entityAction`, `contextEntityActions?`): [`EntityAction`](../type-aliases/EntityAction)\<`M`\> \| `undefined`
+> **resolveEntityAction**\<`M`\>(`entityAction`, `contextEntityActions?`): [`EntityAction`](/docs/api/type-aliases/EntityAction)\<`M`\> \| `undefined`
 
 Defined in: [util/resolutions.ts:442](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/resolutions.ts)
 
@@ -25,12 +25,12 @@ Defined in: [util/resolutions.ts:442](https://github.com/firecmsco/firecms/blob/
 
 ### entityAction
 
-`string` | [`EntityAction`](../type-aliases/EntityAction)\<`M`\>
+`string` | [`EntityAction`](/docs/api/type-aliases/EntityAction)\<`M`\>
 
 ### contextEntityActions?
 
-[`EntityAction`](../type-aliases/EntityAction)\<`M`\>[]
+[`EntityAction`](/docs/api/type-aliases/EntityAction)\<`M`\>[]
 
 ## Returns
 
-[`EntityAction`](../type-aliases/EntityAction)\<`M`\> \| `undefined`
+[`EntityAction`](/docs/api/type-aliases/EntityAction)\<`M`\> \| `undefined`

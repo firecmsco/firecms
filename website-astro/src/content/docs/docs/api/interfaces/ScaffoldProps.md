@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/ScaffoldProps"
 title: "ScaffoldProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ScaffoldProps
+[@firecms/core](/docs/api/README) / ScaffoldProps
 
 # Interface: ScaffoldProps
 

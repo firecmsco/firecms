@@ -3,11 +3,11 @@ slug: "docs/api/functions/StorageUploadFieldBinding"
 title: "StorageUploadFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / StorageUploadFieldBinding
+[@firecms/core](/docs/api/README) / StorageUploadFieldBinding
 
 # Function: StorageUploadFieldBinding()
 

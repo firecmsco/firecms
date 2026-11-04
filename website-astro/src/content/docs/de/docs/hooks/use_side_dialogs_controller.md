@@ -14,7 +14,7 @@ Dies ist der grundlegende Mechanismus, den FireCMS verwendet, um folgendes zu ö
 Sie können ihn verwenden, um Ihre eigenen benutzerdefinierten Seitenpanels zu öffnen.
 
 :::tip
-Wenn Sie nur ein Entitätsformular öffnen möchten, verwenden Sie stattdessen **[`useSideEntityController`](./use_side_entity_controller)**.
+Wenn Sie nur ein Entitätsformular öffnen möchten, verwenden Sie stattdessen **[`useSideEntityController`](/de/docs/hooks/use_side_entity_controller)**.
 :::
 
 ### Verwendung

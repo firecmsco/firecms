@@ -3,11 +3,11 @@ slug: "docs/api/functions/hydrateRegExp"
 title: "hydrateRegExp"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / hydrateRegExp
+[@firecms/core](/docs/api/README) / hydrateRegExp
 
 # Function: hydrateRegExp()
 

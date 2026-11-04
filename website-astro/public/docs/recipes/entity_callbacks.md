@@ -1,6 +1,6 @@
 # How to use entity callbacks
 
-![Entity Callbacks](/img/recipes/entity_callbacks.png)
+![Entity Callbacks](https://firecms.co/img/recipes/entity_callbacks.png)
 
 In this tutorial we will create a simple collection, containing cars. Then, we are going to use the Entity Callbacks to can track changes in the entity, adding the timestamp of the last update and the user who made the change.
 
@@ -140,7 +140,7 @@ Simple enough, right? Now let's add the callbacks.
 
 ### Create the entity callbacks
 
-Now, you can check the interface of the [EntityCallbacks in the documentation](/docs/collections/callbacks). We have all this callbacks available:
+Now, you can check the interface of the [EntityCallbacks in the documentation](https://firecms.co/docs/collections/callbacks). We have all this callbacks available:
 - `onFetch`: Called when an entity is fetched from the database.
 - `onPreSave`: Called before an entity is saved to the database.
 - `onSaveSuccess`: Called after an entity is saved successfully to the database.
@@ -184,7 +184,7 @@ export const carsCollection = buildCollection<Car>({
 
 Now, when we save the entity, the `modified_at` and `modified_by` fields will be updated with the current date and the user who made the change.
 
-![entity_callbacks_example](/img/recipes/entity_callbacks.png)
+![entity_callbacks_example](https://firecms.co/img/recipes/entity_callbacks.png)
 
 Now let's implement another feature, let's block deleting the cars, or entities that you haven't created yourself; for that, we are gonna use the `onPreDelete` callback.
 
@@ -201,7 +201,7 @@ const carsCallbacks = buildEntityCallbacks<Car>({
 
 Now, when a user tries to delete a car that wasn't created by themselves, an error will be thrown.
 
-![entity_callbacks_delete_example](/img/recipes/entity_callbacks_delete.png)
+![entity_callbacks_delete_example](https://firecms.co/img/recipes/entity_callbacks_delete.png)
 
 So, we cannot delete the cars that we didn't create. In this example, the one created by the F1 driver Fernando Alonso.
 

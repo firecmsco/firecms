@@ -3,15 +3,15 @@ slug: "docs/api/functions/resolveProperties"
 title: "resolveProperties"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / resolveProperties
+[@firecms/core](/docs/api/README) / resolveProperties
 
 # Function: resolveProperties()
 
-> **resolveProperties**\<`M`\>(`properties`): [`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
+> **resolveProperties**\<`M`\>(`properties`): [`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)\<`M`\>
 
 Defined in: [util/resolutions.ts:366](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/resolutions.ts)
 
@@ -29,7 +29,7 @@ Resolve enums and arrays for properties
 
 #### authController
 
-[`AuthController`](../type-aliases/AuthController)
+[`AuthController`](/docs/api/type-aliases/AuthController)
 
 #### entityId?
 
@@ -57,11 +57,11 @@ Resolve enums and arrays for properties
 
 #### properties
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`PropertiesOrBuilders`](/docs/api/type-aliases/PropertiesOrBuilders)\<`M`\>
 
 #### propertyConfigs?
 
-`Record`\<`string`, [`PropertyConfig`](../type-aliases/PropertyConfig)\>
+`Record`\<`string`, [`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\>
 
 #### propertyKey?
 
@@ -73,4 +73,4 @@ Resolve enums and arrays for properties
 
 ## Returns
 
-[`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
+[`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)\<`M`\>

@@ -3,11 +3,11 @@ slug: "docs/api/functions/randomString"
 title: "randomString"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / randomString
+[@firecms/core](/docs/api/README) / randomString
 
 # Function: randomString()
 

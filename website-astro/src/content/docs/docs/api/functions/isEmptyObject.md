@@ -3,11 +3,11 @@ slug: "docs/api/functions/isEmptyObject"
 title: "isEmptyObject"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / isEmptyObject
+[@firecms/core](/docs/api/README) / isEmptyObject
 
 # Function: isEmptyObject()
 

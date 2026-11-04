@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayPropertyEnumPreview"
 title: "ArrayPropertyEnumPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayPropertyEnumPreview
+[@firecms/core](/docs/api/README) / ArrayPropertyEnumPreview
 
 # Function: ArrayPropertyEnumPreview()
 
@@ -19,7 +19,7 @@ Defined in: [preview/property\_previews/ArrayPropertyEnumPreview.tsx:8](https://
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`string`[] \| `number`[]\>
+[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<`string`[] \| `number`[]\>
 
 ## Returns
 

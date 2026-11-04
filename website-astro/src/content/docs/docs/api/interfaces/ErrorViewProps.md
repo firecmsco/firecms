@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/ErrorViewProps"
 title: "ErrorViewProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ErrorViewProps
+[@firecms/core](/docs/api/README) / ErrorViewProps
 
 # Interface: ErrorViewProps
 

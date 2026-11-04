@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityValues"
 title: "EntityValues"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityValues
+[@firecms/core](/docs/api/README) / EntityValues
 
 # Type Alias: EntityValues\<M\>
 

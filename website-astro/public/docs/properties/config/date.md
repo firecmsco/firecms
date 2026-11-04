@@ -31,8 +31,8 @@ Add an icon to clear the value and set it to `null`. Defaults to `false`
 ---
 
 The widget that gets created is
-- [`DateTimeFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/DateTimeFieldBinding) Field that allows selecting a date
+- [`DateTimeFieldBinding`](https://firecms.co/docs/api/functions/DateTimeFieldBinding) Field that allows selecting a date
 
 Links:
-- [API](https://firecms.co/docs/https://firecms.co/docs/api/interfaces/DateProperty)
+- [API](https://firecms.co/docs/api/interfaces/DateProperty)
 

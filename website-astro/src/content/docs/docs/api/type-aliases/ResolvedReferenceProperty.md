@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/ResolvedReferenceProperty"
 title: "ResolvedReferenceProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ResolvedReferenceProperty
+[@firecms/core](/docs/api/README) / ResolvedReferenceProperty
 
 # Type Alias: ResolvedReferenceProperty
 
-> **ResolvedReferenceProperty** = `Omit`\<[`ReferenceProperty`](../interfaces/ReferenceProperty), `"dataType"`\> & `object`
+> **ResolvedReferenceProperty** = `Omit`\<[`ReferenceProperty`](/docs/api/interfaces/ReferenceProperty), `"dataType"`\> & `object`
 
 Defined in: [types/resolved\_entities.ts:110](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
 

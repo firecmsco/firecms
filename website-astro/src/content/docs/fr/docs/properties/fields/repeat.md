@@ -29,6 +29,6 @@ buildProperty({
 });
 ```
 
-Le type de données est [`array`](../config/array).
+Le type de données est [`array`](/fr/docs/properties/config/array).
 
-En interne, le composant utilisé est [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding).
+En interne, le composant utilisé est [`RepeatFieldBinding`](/fr/docs/api/functions/RepeatFieldBinding).

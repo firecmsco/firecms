@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityPreviewProps"
 title: "EntityPreviewProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityPreviewProps
+[@firecms/core](/docs/api/README) / EntityPreviewProps
 
 # Type Alias: EntityPreviewProps
 
@@ -27,7 +27,7 @@ Defined in: [components/EntityPreview.tsx:27](https://github.com/firecmsco/firec
 
 ### collection?
 
-> `optional` **collection**: [`EntityCollection`](../interfaces/EntityCollection)
+> `optional` **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 Defined in: [components/EntityPreview.tsx:28](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityPreview.tsx)
 
@@ -43,7 +43,7 @@ Defined in: [components/EntityPreview.tsx:31](https://github.com/firecmsco/firec
 
 ### entity
 
-> **entity**: [`Entity`](../interfaces/Entity)\<`any`\>
+> **entity**: [`Entity`](/docs/api/interfaces/Entity)\<`any`\>
 
 Defined in: [components/EntityPreview.tsx:32](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityPreview.tsx)
 
@@ -117,6 +117,6 @@ Defined in: [components/EntityPreview.tsx:30](https://github.com/firecmsco/firec
 
 ### size?
 
-> `optional` **size**: [`PreviewSize`](PreviewSize)
+> `optional` **size**: [`PreviewSize`](/docs/api/type-aliases/PreviewSize)
 
 Defined in: [components/EntityPreview.tsx:26](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityPreview.tsx)

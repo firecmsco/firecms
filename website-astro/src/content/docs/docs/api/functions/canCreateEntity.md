@@ -3,11 +3,11 @@ slug: "docs/api/functions/canCreateEntity"
 title: "canCreateEntity"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / canCreateEntity
+[@firecms/core](/docs/api/README) / canCreateEntity
 
 # Function: canCreateEntity()
 
@@ -23,17 +23,17 @@ Defined in: [util/permissions.ts:46](https://github.com/firecmsco/firecms/blob/m
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User)
 
 ## Parameters
 
 ### collection
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 ### authController
 
-[`AuthController`](../type-aliases/AuthController)\<`USER`\>
+[`AuthController`](/docs/api/type-aliases/AuthController)\<`USER`\>
 
 ### path
 
@@ -41,7 +41,7 @@ Defined in: [util/permissions.ts:46](https://github.com/firecmsco/firecms/blob/m
 
 ### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\> | `null`
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\> | `null`
 
 ## Returns
 

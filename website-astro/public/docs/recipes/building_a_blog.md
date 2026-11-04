@@ -1,6 +1,6 @@
 # Building a blog in FireCMS Cloud
 
-![blog_example](/img/blog_example.webp)
+![blog_example](https://firecms.co/img/blog_example.webp)
 
 :::note
 In this tutorial we assume you have set up a Firebase project and a FireCMS instance with custom code.

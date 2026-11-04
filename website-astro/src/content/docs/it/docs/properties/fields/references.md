@@ -24,10 +24,10 @@ buildProperty({
 });
 ```
 
-Il tipo di dato è [`reference`](../config/reference)
+Il tipo di dato è [`reference`](/it/docs/properties/config/reference)
 
 Il componente utilizzato internamente
-è [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding).
+è [`ReferenceFieldBinding`](/it/docs/api/functions/ReferenceFieldBinding).
 
 
 ### Campo riferimento multiplo
@@ -47,8 +47,8 @@ buildProperty({
 });
 ```
 
-Il tipo di dato è [`array`](../config/array) con una proprietà reference
+Il tipo di dato è [`array`](/it/docs/properties/config/array) con una proprietà reference
 come prop `of`.
 
 Il componente utilizzato internamente
-è [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding).
+è [`ArrayOfReferencesFieldBinding`](/it/docs/api/functions/ArrayOfReferencesFieldBinding).

@@ -66,10 +66,10 @@ const productsReferenceProperty = buildProperty({
 
 Le widget créé est
 
-- [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding) Champ
+- [`ReferenceFieldBinding`](/fr/docs/api/functions/ReferenceFieldBinding) Champ
   qui ouvre un
   dialogue de sélection de référence
 
 Liens :
 
-- [API](../../api/interfaces/ReferenceProperty)
+- [API](/fr/docs/api/interfaces/ReferenceProperty)

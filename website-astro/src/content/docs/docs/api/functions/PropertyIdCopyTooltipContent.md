@@ -3,11 +3,11 @@ slug: "docs/api/functions/PropertyIdCopyTooltipContent"
 title: "PropertyIdCopyTooltipContent"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyIdCopyTooltipContent
+[@firecms/core](/docs/api/README) / PropertyIdCopyTooltipContent
 
 # Function: PropertyIdCopyTooltipContent()
 

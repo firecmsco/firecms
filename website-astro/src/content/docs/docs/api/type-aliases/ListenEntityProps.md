@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/ListenEntityProps"
 title: "ListenEntityProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ListenEntityProps
+[@firecms/core](/docs/api/README) / ListenEntityProps
 
 # Type Alias: ListenEntityProps\<M\>
 
-> **ListenEntityProps**\<`M`\> = [`FetchEntityProps`](../interfaces/FetchEntityProps)\<`M`\> & `object`
+> **ListenEntityProps**\<`M`\> = [`FetchEntityProps`](/docs/api/interfaces/FetchEntityProps)\<`M`\> & `object`
 
 Defined in: [types/datasource.ts:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 
@@ -39,7 +39,7 @@ Defined in: [types/datasource.ts:19](https://github.com/firecmsco/firecms/blob/m
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 #### Returns
 

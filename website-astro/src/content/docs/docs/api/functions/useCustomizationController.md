@@ -3,15 +3,15 @@ slug: "docs/api/functions/useCustomizationController"
 title: "useCustomizationController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useCustomizationController
+[@firecms/core](/docs/api/README) / useCustomizationController
 
 # Function: useCustomizationController()
 
-> **useCustomizationController**(): [`CustomizationController`](../type-aliases/CustomizationController)
+> **useCustomizationController**(): [`CustomizationController`](/docs/api/type-aliases/CustomizationController)
 
 Defined in: [hooks/useCustomizationController.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useCustomizationController.tsx)
 
@@ -23,4 +23,4 @@ You will likely not need to use this hook directly.
 
 ## Returns
 
-[`CustomizationController`](../type-aliases/CustomizationController)
+[`CustomizationController`](/docs/api/type-aliases/CustomizationController)

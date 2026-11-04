@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/UploadFileResult"
 title: "UploadFileResult"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / UploadFileResult
+[@firecms/core](/docs/api/README) / UploadFileResult
 
 # Interface: UploadFileResult
 

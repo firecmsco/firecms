@@ -26,10 +26,10 @@ buildProperty({
 });
 ```
 
-El tipo de datos es [`string`](../config/string) o [`number`](../config/number).
+El tipo de datos es [`string`](/es/docs/properties/config/string) o [`number`](/es/docs/properties/config/number).
 
 Internamente, el componente utilizado
-es [`TextFieldBinding`](../../api/functions/TextFieldBinding).
+es [`TextFieldBinding`](/es/docs/api/functions/TextFieldBinding).
 
 ### Campo de texto multilínea (Multi line text field)
 
@@ -53,10 +53,10 @@ buildProperty({
 });
 ```
 
-El tipo de datos es [`string`](../config/string).
+El tipo de datos es [`string`](/es/docs/properties/config/string).
 
 Internamente, el componente utilizado
-es [`TextFieldBinding`](../../api/functions/TextFieldBinding).
+es [`TextFieldBinding`](/es/docs/api/functions/TextFieldBinding).
 
 
 ### Campo de texto Markdown (Markdown text field)
@@ -81,10 +81,10 @@ buildProperty({
 });
 ```
 
-El tipo de datos es [`string`](../config/string).
+El tipo de datos es [`string`](/es/docs/properties/config/string).
 
 Internamente, el componente utilizado
-es [`MarkdownEditorFieldBinding`](../../api/functions/MarkdownEditorFieldBinding).
+es [`MarkdownEditorFieldBinding`](/es/docs/api/functions/MarkdownEditorFieldBinding).
 
 
 ### Campo de texto de URL (Url text field)
@@ -109,10 +109,10 @@ buildProperty({
 });
 ```
 
-El tipo de datos es [`string`](../config/string).
+El tipo de datos es [`string`](/es/docs/properties/config/string).
 
 Internamente, el componente utilizado
-es [`TextFieldBinding`](../../api/functions/TextFieldBinding).
+es [`TextFieldBinding`](/es/docs/api/functions/TextFieldBinding).
 
 
 ### Campo de correo electrónico (Email field)
@@ -137,7 +137,7 @@ buildProperty({
 });
 ```
 
-El tipo de datos es [`string`](../config/string).
+El tipo de datos es [`string`](/es/docs/properties/config/string).
 
 Internamente, el componente utilizado
-es [`TextFieldBinding`](../../api/functions/TextFieldBinding).
+es [`TextFieldBinding`](/es/docs/api/functions/TextFieldBinding).

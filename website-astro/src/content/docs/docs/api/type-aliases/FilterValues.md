@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/FilterValues"
 title: "FilterValues"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FilterValues
+[@firecms/core](/docs/api/README) / FilterValues
 
 # Type Alias: FilterValues\<Key\>
 
-> **FilterValues**\<`Key`\> = `Partial`\<`Record`\<`Key`, \[[`WhereFilterOp`](WhereFilterOp), `any`\]\>\>
+> **FilterValues**\<`Key`\> = `Partial`\<`Record`\<`Key`, \[[`WhereFilterOp`](/docs/api/type-aliases/WhereFilterOp), `any`\]\>\>
 
 Defined in: [types/collections.ts:458](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 

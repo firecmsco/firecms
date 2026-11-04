@@ -3,11 +3,11 @@ slug: "docs/api/functions/removeFunctions"
 title: "removeFunctions"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / removeFunctions
+[@firecms/core](/docs/api/README) / removeFunctions
 
 # Function: removeFunctions()
 

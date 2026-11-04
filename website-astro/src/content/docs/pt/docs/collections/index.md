@@ -36,7 +36,7 @@ Uma mesclagem profunda é realizada, portanto você pode definir algumas proprie
 ### Exemplo de coleção definida em código
 
 :::note
-O FireCMS fornece cerca de 20 campos diferentes (como campos de texto, selects e campos complexos como referência ou campos de array ordenáveis). Se seu caso de uso não for coberto por um dos campos fornecidos, você pode criar seu próprio [campo personalizado](../properties/custom_fields.mdx).
+O FireCMS fornece cerca de 20 campos diferentes (como campos de texto, selects e campos complexos como referência ou campos de array ordenáveis). Se seu caso de uso não for coberto por um dos campos fornecidos, você pode criar seu próprio [campo personalizado](/pt/docs/properties/custom_fields).
 :::
 
 :::tip
@@ -235,7 +235,7 @@ Você pode forçar o CMS a sempre abrir o formulário ao editar um documento def
 - **`name`**: O nome plural da coleção. Ex.: 'Products'.
 - **`singularName`**: O nome singular de uma entrada na coleção. Ex.: 'Product'.
 - **`path`**: Caminho relativo do Firestore desta view ao seu pai. Se esta view estiver na raiz, o caminho é igual ao absoluto. Esse caminho também determina a URL no FireCMS.
-- **`properties`**: Objeto definindo as propriedades para o schema da entidade. Mais informações em [Propriedades](../properties/properties_intro).
+- **`properties`**: Objeto definindo as propriedades para o schema da entidade. Mais informações em [Propriedades](/pt/docs/properties).
 - **`propertiesOrder`**: Ordem em que as propriedades são exibidas.
     - Para propriedades, use a chave da propriedade.
     - Para campos adicionais, use a chave do campo.
@@ -257,7 +257,7 @@ Você pode forçar o CMS a sempre abrir o formulário ao editar um documento def
 - **`defaultSize`**: Tamanho padrão da coleção renderizada.
 - **`group`**: Campo opcional usado para agrupar entradas de navegação de nível superior em uma view de navegação. Se você definir esse valor em uma subcoleção, não terá efeito.
 - **`description`**: Descrição opcional desta view. Você pode usar Markdown.
-- **`entityActions`**: Você pode definir ações adicionais que podem ser executadas nas entidades desta coleção. Essas ações podem ser exibidas na view de coleção ou na view de entidade. Você pode usar o método `onClick` para implementar sua própria lógica. Na prop `context`, você pode acessar todos os controllers do FireCMS. Você também pode definir ações de entidade globalmente. Veja [Ações de Entidade](./entity_actions) para mais detalhes.
+- **`entityActions`**: Você pode definir ações adicionais que podem ser executadas nas entidades desta coleção. Essas ações podem ser exibidas na view de coleção ou na view de entidade. Você pode usar o método `onClick` para implementar sua própria lógica. Na prop `context`, você pode acessar todos os controllers do FireCMS. Você também pode definir ações de entidade globalmente. Veja [Ações de Entidade](/pt/docs/collections/entity_actions) para mais detalhes.
 
 ```tsx
 const archiveEntityAction: EntityAction = {
@@ -284,7 +284,7 @@ const archiveEntityAction: EntityAction = {
 - **`pagination`**: Se habilitado, o conteúdo é carregado em lotes. Se `false`, todas as entidades na coleção são carregadas. Você pode especificar um número para definir o tamanho da paginação (50 por padrão). Padrão `true`.
 - **`additionalFields`**: Você pode adicionar campos adicionais tanto na view de coleção quanto na view de formulário implementando um delegado de campo adicional.
 - **`textSearchEnabled`**: Flag para indicar se uma barra de pesquisa deve ser exibida no topo da tabela de coleção.
-- **`permissions`**: Você pode especificar um objeto com permissões booleanas no formato `{edit:boolean; create:boolean; delete:boolean}` para indicar as ações que o usuário pode realizar. Você também pode passar um [`PermissionsBuilder`](../api/type-aliases/PermissionsBuilder) para personalizar as permissões com base no usuário ou entidade.
+- **`permissions`**: Você pode especificar um objeto com permissões booleanas no formato `{edit:boolean; create:boolean; delete:boolean}` para indicar as ações que o usuário pode realizar. Você também pode passar um [`PermissionsBuilder`](/pt/docs/api/type-aliases/PermissionsBuilder) para personalizar as permissões com base no usuário ou entidade.
 - **`inlineEditing`**: Os elementos desta coleção podem ser editados inline na view de coleção? Se esta flag for definida como false mas `permissions.edit` for `true`, as entidades ainda podem ser editadas no painel lateral.
 - **`selectionEnabled`**: As entidades desta coleção são selecionáveis? Padrão `true`.
 - **`exportable`**: Os dados desta view de coleção devem incluir um botão de exportação? Padrão `true`.

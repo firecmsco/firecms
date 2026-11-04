@@ -3,11 +3,11 @@ slug: "docs/api/functions/ReferenceWidget"
 title: "ReferenceWidget"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ReferenceWidget
+[@firecms/core](/docs/api/README) / ReferenceWidget
 
 # Function: ReferenceWidget()
 
@@ -27,7 +27,7 @@ This field allows selecting reference/s.
 
 ### \_\_namedParameters
 
-[`ReferenceWidgetProps`](../type-aliases/ReferenceWidgetProps)\<`M`\>
+[`ReferenceWidgetProps`](/docs/api/type-aliases/ReferenceWidgetProps)\<`M`\>
 
 ## Returns
 

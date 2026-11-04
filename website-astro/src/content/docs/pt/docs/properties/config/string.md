@@ -118,10 +118,10 @@ Se esta string deve ser renderizada como um tag em vez de texto simples.
 
 Com base na sua configuração, os widgets criados são:
 
-- [`TextFieldBinding`](../../api/functions/TextFieldBinding) campo de texto genérico
-- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) se os `enumValues` estiverem definidos
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) configuração de armazenamento
-- [`MarkdownEditorFieldBinding`](../../api/functions/MarkdownEditorFieldBinding) configuração markdown
+- [`TextFieldBinding`](/pt/docs/api/functions/TextFieldBinding) campo de texto genérico
+- [`SelectFieldBinding`](/pt/docs/api/functions/SelectFieldBinding) se os `enumValues` estiverem definidos
+- [`StorageUploadFieldBinding`](/pt/docs/api/functions/StorageUploadFieldBinding) configuração de armazenamento
+- [`MarkdownEditorFieldBinding`](/pt/docs/api/functions/MarkdownEditorFieldBinding) configuração markdown
 
 Links:
-- [API](../../api/interfaces/StringProperty)
+- [API](/pt/docs/api/interfaces/StringProperty)

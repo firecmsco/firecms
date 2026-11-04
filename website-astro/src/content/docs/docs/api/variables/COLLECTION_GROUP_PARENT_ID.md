@@ -3,11 +3,11 @@ slug: "docs/api/variables/COLLECTION_GROUP_PARENT_ID"
 title: "COLLECTION_GROUP_PARENT_ID"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / COLLECTION\_GROUP\_PARENT\_ID
+[@firecms/core](/docs/api/README) / COLLECTION\_GROUP\_PARENT\_ID
 
 # Variable: COLLECTION\_GROUP\_PARENT\_ID
 

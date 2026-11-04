@@ -3,11 +3,11 @@ slug: "docs/api/functions/EntityCollectionRowActions"
 title: "EntityCollectionRowActions"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionRowActions
+[@firecms/core](/docs/api/README) / EntityCollectionRowActions
 
 # Function: EntityCollectionRowActions()
 
@@ -21,15 +21,15 @@ Defined in: [components/EntityCollectionTable/EntityCollectionRowActions.tsx:33]
 
 #### actions?
 
-[`EntityAction`](../type-aliases/EntityAction)[] = `[]`
+[`EntityAction`](/docs/api/type-aliases/EntityAction)[] = `[]`
 
 #### collection?
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>
 
 #### entity
 
-[`Entity`](../interfaces/Entity)\<`any`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`any`\>
 
 #### frozen?
 
@@ -65,7 +65,7 @@ Defined in: [components/EntityCollectionTable/EntityCollectionRowActions.tsx:33]
 
 #### selectionController?
 
-[`SelectionController`](../type-aliases/SelectionController)
+[`SelectionController`](/docs/api/type-aliases/SelectionController)
 
 #### selectionEnabled?
 
@@ -73,7 +73,7 @@ Defined in: [components/EntityCollectionTable/EntityCollectionRowActions.tsx:33]
 
 #### size
 
-[`CollectionSize`](../type-aliases/CollectionSize)
+[`CollectionSize`](/docs/api/type-aliases/CollectionSize)
 
 #### unhighlightEntity?
 

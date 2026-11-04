@@ -20,17 +20,17 @@ Jede Eigenschaft im CMS hat ihre eigene API, aber sie teilen alle einige **gemei
 
 * `disabled` Ist dieses Feld deaktiviert? Wenn auf true gesetzt, wird es als deaktiviertes Feld gerendert.
   Sie können auch eine Konfiguration angeben, die das Verhalten von deaktivierten Eigenschaften definiert.
-  [PropertyDisabledConfig](../../api/interfaces/PropertyDisabledConfig)
+  [PropertyDisabledConfig](/de/docs/api/interfaces/PropertyDisabledConfig)
 
 * `Field`
   Wenn Sie ein benutzerdefiniertes Feld rendern müssen, können Sie eine Komponente erstellen, die
   `FieldProps` als Props nimmt. Sie erhalten den Wert, eine Funktion zum Aktualisieren des Werts und
   zusätzliche Utility-Props wie ob ein Fehler vorliegt.
-  Weitere Details zu [benutzerdefinierten Feldern](../custom_fields.mdx)
+  Weitere Details zu [benutzerdefinierten Feldern](/de/docs/properties/custom_fields)
 
 * `Preview`
   Konfigurieren Sie, wie eine Eigenschaft als Vorschau angezeigt wird, z.B. in der Kollektionsansicht.
-  Weitere Details zu [benutzerdefinierten Vorschauen](../custom_previews)
+  Weitere Details zu [benutzerdefinierten Vorschauen](/de/docs/properties/custom_previews)
 
 * `customProps`
   Zusätzliche Props, die an die in `Field` oder `Preview` definierten Komponenten übergeben werden.

@@ -1,7 +1,7 @@
 # Collection Bar Actions
 
 
-![collection_actions](/img/collection_actions.png)
+![collection_actions](https://firecms.co/img/collection_actions.png)
 
 You can add your custom components to the collection bar.
 

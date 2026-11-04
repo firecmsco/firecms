@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/DataSourceTableControllerProps"
 title: "DataSourceTableControllerProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DataSourceTableControllerProps
+[@firecms/core](/docs/api/README) / DataSourceTableControllerProps
 
 # Type Alias: DataSourceTableControllerProps\<M\>
 
@@ -25,7 +25,7 @@ Defined in: [components/common/useDataSourceTableController.tsx:21](https://gith
 
 ### collection
 
-> **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
+> **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 Defined in: [components/common/useDataSourceTableController.tsx:29](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/useDataSourceTableController.tsx)
 
@@ -35,7 +35,7 @@ The collection that is represented by this config.
 
 ### entitiesDisplayedFirst?
 
-> `optional` **entitiesDisplayedFirst**: [`Entity`](../interfaces/Entity)\<`M`\>[]
+> `optional` **entitiesDisplayedFirst**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>[]
 
 Defined in: [components/common/useDataSourceTableController.tsx:34](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/useDataSourceTableController.tsx)
 
@@ -46,7 +46,7 @@ This is used for reference fields selection
 
 ### forceFilter?
 
-> `optional` **forceFilter**: [`FilterValues`](FilterValues)\<`string`\>
+> `optional` **forceFilter**: [`FilterValues`](/docs/api/type-aliases/FilterValues)\<`string`\>
 
 Defined in: [components/common/useDataSourceTableController.tsx:41](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/useDataSourceTableController.tsx)
 

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EnumType"
 title: "EnumType"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EnumType
+[@firecms/core](/docs/api/README) / EnumType
 
 # Type Alias: EnumType
 

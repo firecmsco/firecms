@@ -3,11 +3,11 @@ slug: "docs/api/functions/flattenObject"
 title: "flattenObject"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / flattenObject
+[@firecms/core](/docs/api/README) / flattenObject
 
 # Function: flattenObject()
 

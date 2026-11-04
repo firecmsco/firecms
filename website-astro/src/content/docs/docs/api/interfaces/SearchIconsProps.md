@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/SearchIconsProps"
 title: "SearchIconsProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SearchIconsProps
+[@firecms/core](/docs/api/README) / SearchIconsProps
 
 # Interface: SearchIconsProps
 

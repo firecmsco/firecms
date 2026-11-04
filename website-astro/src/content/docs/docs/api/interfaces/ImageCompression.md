@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/ImageCompression"
 title: "ImageCompression"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ImageCompression
+[@firecms/core](/docs/api/README) / ImageCompression
 
 # Interface: ImageCompression
 

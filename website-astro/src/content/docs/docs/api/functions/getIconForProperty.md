@@ -3,11 +3,11 @@ slug: "docs/api/functions/getIconForProperty"
 title: "getIconForProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getIconForProperty
+[@firecms/core](/docs/api/README) / getIconForProperty
 
 # Function: getIconForProperty()
 
@@ -27,7 +27,7 @@ Defined in: [util/property\_utils.tsx:48](https://github.com/firecmsco/firecms/b
 
 ### fields
 
-`Record`\<`string`, [`PropertyConfig`](../type-aliases/PropertyConfig)\> = `{}`
+`Record`\<`string`, [`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\> = `{}`
 
 ## Returns
 

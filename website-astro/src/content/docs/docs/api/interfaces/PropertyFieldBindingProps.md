@@ -3,24 +3,24 @@ slug: "docs/api/interfaces/PropertyFieldBindingProps"
 title: "PropertyFieldBindingProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyFieldBindingProps
+[@firecms/core](/docs/api/README) / PropertyFieldBindingProps
 
 # Interface: PropertyFieldBindingProps\<T, M\>
 
 Defined in: [types/fields.tsx:188](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
 
 In case you need to render a field bound to a Property inside your
-custom field you can use [PropertyFieldBinding](../variables/PropertyFieldBinding) with these props.
+custom field you can use [PropertyFieldBinding](/docs/api/variables/PropertyFieldBinding) with these props.
 
 ## Type Parameters
 
 ### T
 
-`T` *extends* [`CMSType`](../type-aliases/CMSType)
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType)
 
 ### M
 
@@ -41,7 +41,7 @@ in table mode, it makes sense to put the focus on the only field rendered.
 
 ### context
 
-> **context**: [`FormContext`](FormContext)\<`M`\>
+> **context**: [`FormContext`](/docs/api/interfaces/FormContext)\<`M`\>
 
 Defined in: [types/fields.tsx:205](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
 
@@ -106,7 +106,7 @@ This is used to preserve state in array containers.
 
 ##### property
 
-`Partial`\<[`ArrayProperty`](ArrayProperty)\<`any`, `any`\> \| [`MapProperty`](MapProperty)\<`any`\> \| `AnyProperty`\>
+`Partial`\<[`ArrayProperty`](/docs/api/interfaces/ArrayProperty)\<`any`, `any`\> \| [`MapProperty`](/docs/api/interfaces/MapProperty)\<`any`\> \| `AnyProperty`\>
 
 #### Returns
 
@@ -126,7 +126,7 @@ Is this field part of an array
 
 ### property
 
-> **property**: [`PropertyOrBuilder`](../type-aliases/PropertyOrBuilder)\<`T`\> \| [`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\>
+> **property**: [`PropertyOrBuilder`](/docs/api/type-aliases/PropertyOrBuilder)\<`T`\> \| [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\<`T`\>
 
 Defined in: [types/fields.tsx:199](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
 

@@ -3,15 +3,15 @@ slug: "docs/api/functions/getPropertiesWithPropertiesOrder"
 title: "getPropertiesWithPropertiesOrder"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getPropertiesWithPropertiesOrder
+[@firecms/core](/docs/api/README) / getPropertiesWithPropertiesOrder
 
 # Function: getPropertiesWithPropertiesOrder()
 
-> **getPropertiesWithPropertiesOrder**\<`M`\>(`properties`, `propertiesOrder?`): [`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+> **getPropertiesWithPropertiesOrder**\<`M`\>(`properties`, `propertiesOrder?`): [`PropertiesOrBuilders`](/docs/api/type-aliases/PropertiesOrBuilders)\<`M`\>
 
 Defined in: [util/property\_utils.tsx:120](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/property_utils.tsx)
 
@@ -27,7 +27,7 @@ Get properties exclusively indexed by their order
 
 ### properties
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`PropertiesOrBuilders`](/docs/api/type-aliases/PropertiesOrBuilders)\<`M`\>
 
 ### propertiesOrder?
 
@@ -35,4 +35,4 @@ Get properties exclusively indexed by their order
 
 ## Returns
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`PropertiesOrBuilders`](/docs/api/type-aliases/PropertiesOrBuilders)\<`M`\>

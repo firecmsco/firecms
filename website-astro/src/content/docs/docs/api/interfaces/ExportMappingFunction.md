@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/ExportMappingFunction"
 title: "ExportMappingFunction"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ExportMappingFunction
+[@firecms/core](/docs/api/README) / ExportMappingFunction
 
 # Interface: ExportMappingFunction\<USER\>
 
@@ -17,7 +17,7 @@ Defined in: [types/export\_import.ts:17](https://github.com/firecmsco/firecms/bl
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
@@ -33,11 +33,11 @@ Defined in: [types/export\_import.ts:19](https://github.com/firecmsco/firecms/bl
 
 ###### context
 
-[`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+[`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`USER`\>
 
 ###### entity
 
-[`Entity`](Entity)\<`any`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`any`\>
 
 #### Returns
 

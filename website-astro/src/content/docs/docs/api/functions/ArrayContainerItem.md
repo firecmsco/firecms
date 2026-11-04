@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayContainerItem"
 title: "ArrayContainerItem"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayContainerItem
+[@firecms/core](/docs/api/README) / ArrayContainerItem
 
 # Function: ArrayContainerItem()
 

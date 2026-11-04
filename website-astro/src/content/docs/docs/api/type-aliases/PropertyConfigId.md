@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/PropertyConfigId"
 title: "PropertyConfigId"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyConfigId
+[@firecms/core](/docs/api/README) / PropertyConfigId
 
 # Type Alias: PropertyConfigId
 

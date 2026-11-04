@@ -3,11 +3,11 @@ slug: "docs/api/functions/SearchIconsView"
 title: "SearchIconsView"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SearchIconsView
+[@firecms/core](/docs/api/README) / SearchIconsView
 
 # Function: SearchIconsView()
 
@@ -19,7 +19,7 @@ Defined in: [components/SearchIconsView.tsx:21](https://github.com/firecmsco/fir
 
 ### \_\_namedParameters
 
-[`SearchIconsProps`](../interfaces/SearchIconsProps)
+[`SearchIconsProps`](/docs/api/interfaces/SearchIconsProps)
 
 ## Returns
 

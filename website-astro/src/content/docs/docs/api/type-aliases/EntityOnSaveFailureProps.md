@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/EntityOnSaveFailureProps"
 title: "EntityOnSaveFailureProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityOnSaveFailureProps
+[@firecms/core](/docs/api/README) / EntityOnSaveFailureProps
 
 # Type Alias: EntityOnSaveFailureProps\<M, USER\>
 
-> **EntityOnSaveFailureProps**\<`M`, `USER`\> = `Omit`\<[`EntityOnSaveProps`](../interfaces/EntityOnSaveProps)\<`M`, `USER`\>, `"entityId"`\> & `object`
+> **EntityOnSaveFailureProps**\<`M`, `USER`\> = `Omit`\<[`EntityOnSaveProps`](/docs/api/interfaces/EntityOnSaveProps)\<`M`, `USER`\>, `"entityId"`\> & `object`
 
 Defined in: [types/entity\_callbacks.ts:113](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -31,4 +31,4 @@ Parameters passed to hooks before an entity is saved
 
 ### USER
 
-`USER` *extends* [`User`](User) = [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)

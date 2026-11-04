@@ -24,9 +24,9 @@ buildProperty({
 });
 ```
 
-Le type de données est [`string`](../config/string) ou [`number`](../config/number).
+Le type de données est [`string`](/fr/docs/properties/config/string) ou [`number`](/fr/docs/properties/config/number).
 
-En interne, le composant utilisé est [`TextFieldBinding`](../../api/functions/TextFieldBinding).
+En interne, le composant utilisé est [`TextFieldBinding`](/fr/docs/api/functions/TextFieldBinding).
 
 ### Champ de texte multiligne
 
@@ -49,9 +49,9 @@ buildProperty({
 });
 ```
 
-Le type de données est [`string`](../config/string).
+Le type de données est [`string`](/fr/docs/properties/config/string).
 
-En interne, le composant utilisé est [`TextFieldBinding`](../../api/functions/TextFieldBinding).
+En interne, le composant utilisé est [`TextFieldBinding`](/fr/docs/api/functions/TextFieldBinding).
 
 
 ### Champ de texte Markdown
@@ -75,9 +75,9 @@ buildProperty({
 });
 ```
 
-Le type de données est [`string`](../config/string).
+Le type de données est [`string`](/fr/docs/properties/config/string).
 
-En interne, le composant utilisé est [`MarkdownEditorFieldBinding`](../../api/functions/MarkdownEditorFieldBinding).
+En interne, le composant utilisé est [`MarkdownEditorFieldBinding`](/fr/docs/api/functions/MarkdownEditorFieldBinding).
 
 
 ### Champ de texte URL
@@ -101,9 +101,9 @@ buildProperty({
 });
 ```
 
-Le type de données est [`string`](../config/string).
+Le type de données est [`string`](/fr/docs/properties/config/string).
 
-En interne, le composant utilisé est [`TextFieldBinding`](../../api/functions/TextFieldBinding).
+En interne, le composant utilisé est [`TextFieldBinding`](/fr/docs/api/functions/TextFieldBinding).
 
 
 ### Champ email
@@ -127,6 +127,6 @@ buildProperty({
 });
 ```
 
-Le type de données est [`string`](../config/string).
+Le type de données est [`string`](/fr/docs/properties/config/string).
 
-En interne, le composant utilisé est [`TextFieldBinding`](../../api/functions/TextFieldBinding).
+En interne, le composant utilisé est [`TextFieldBinding`](/fr/docs/api/functions/TextFieldBinding).

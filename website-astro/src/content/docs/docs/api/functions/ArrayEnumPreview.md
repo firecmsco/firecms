@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayEnumPreview"
 title: "ArrayEnumPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayEnumPreview
+[@firecms/core](/docs/api/README) / ArrayEnumPreview
 
 # Function: ArrayEnumPreview()
 
@@ -21,7 +21,7 @@ Defined in: [preview/components/ArrayEnumPreview.tsx:11](https://github.com/fire
 
 #### enumValues
 
-[`EnumValueConfig`](../type-aliases/EnumValueConfig)[]
+[`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig)[]
 
 #### name
 
@@ -29,7 +29,7 @@ Defined in: [preview/components/ArrayEnumPreview.tsx:11](https://github.com/fire
 
 #### size
 
-[`PreviewSize`](../type-aliases/PreviewSize)
+[`PreviewSize`](/docs/api/type-aliases/PreviewSize)
 
 #### value
 

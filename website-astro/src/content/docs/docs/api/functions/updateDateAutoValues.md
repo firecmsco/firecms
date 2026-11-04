@@ -3,11 +3,11 @@ slug: "docs/api/functions/updateDateAutoValues"
 title: "updateDateAutoValues"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / updateDateAutoValues
+[@firecms/core](/docs/api/README) / updateDateAutoValues
 
 # Function: updateDateAutoValues()
 
@@ -29,11 +29,11 @@ Update the automatic values in an entity before save
 
 #### inputValues
 
-`Partial`\<[`EntityValues`](../type-aliases/EntityValues)\<`M`\>\>
+`Partial`\<[`EntityValues`](/docs/api/type-aliases/EntityValues)\<`M`\>\>
 
 #### properties
 
-[`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
+[`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)\<`M`\>
 
 #### setDateToMidnight
 
@@ -41,7 +41,7 @@ Update the automatic values in an entity before save
 
 #### status
 
-[`EntityStatus`](../type-aliases/EntityStatus)
+[`EntityStatus`](/docs/api/type-aliases/EntityStatus)
 
 #### timestampNowValue
 

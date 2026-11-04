@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/ReferenceWidgetProps"
 title: "ReferenceWidgetProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ReferenceWidgetProps
+[@firecms/core](/docs/api/README) / ReferenceWidgetProps
 
 # Type Alias: ReferenceWidgetProps\<M\>
 
@@ -41,7 +41,7 @@ Defined in: [components/ReferenceWidget.tsx:22](https://github.com/firecmsco/fir
 
 ### forceFilter?
 
-> `optional` **forceFilter**: [`FilterValues`](FilterValues)\<`string`\>
+> `optional` **forceFilter**: [`FilterValues`](/docs/api/type-aliases/FilterValues)\<`string`\>
 
 Defined in: [components/ReferenceWidget.tsx:27](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ReferenceWidget.tsx)
 
@@ -93,11 +93,11 @@ Defined in: [components/ReferenceWidget.tsx:17](https://github.com/firecmsco/fir
 
 ###### entities
 
-[`Entity`](../interfaces/Entity)\<`M`\>[] \| `null`
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>[] \| `null`
 
 ###### references
 
-[`EntityReference`](../classes/EntityReference)[] \| `null`
+[`EntityReference`](/docs/api/classes/EntityReference)[] \| `null`
 
 #### Returns
 
@@ -117,11 +117,11 @@ Defined in: [components/ReferenceWidget.tsx:13](https://github.com/firecmsco/fir
 
 ###### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\> \| `null`
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\> \| `null`
 
 ###### reference
 
-[`EntityReference`](../classes/EntityReference) \| `null`
+[`EntityReference`](/docs/api/classes/EntityReference) \| `null`
 
 #### Returns
 
@@ -147,7 +147,7 @@ Defined in: [components/ReferenceWidget.tsx:23](https://github.com/firecmsco/fir
 
 ### size
 
-> **size**: [`PreviewSize`](PreviewSize)
+> **size**: [`PreviewSize`](/docs/api/type-aliases/PreviewSize)
 
 Defined in: [components/ReferenceWidget.tsx:28](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ReferenceWidget.tsx)
 
@@ -155,6 +155,6 @@ Defined in: [components/ReferenceWidget.tsx:28](https://github.com/firecmsco/fir
 
 ### value
 
-> **value**: [`EntityReference`](../classes/EntityReference) \| [`EntityReference`](../classes/EntityReference)[] \| `null`
+> **value**: [`EntityReference`](/docs/api/classes/EntityReference) \| [`EntityReference`](/docs/api/classes/EntityReference)[] \| `null`
 
 Defined in: [components/ReferenceWidget.tsx:12](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ReferenceWidget.tsx)

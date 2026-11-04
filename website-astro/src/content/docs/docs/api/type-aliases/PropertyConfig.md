@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/PropertyConfig"
 title: "PropertyConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyConfig
+[@firecms/core](/docs/api/README) / PropertyConfig
 
 # Type Alias: PropertyConfig\<T\>
 
@@ -23,7 +23,7 @@ collections' configuration, but you can define your own to be used.
 
 ### T
 
-`T` *extends* [`CMSType`](CMSType) = `any`
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType) = `any`
 
 ## Properties
 
@@ -62,7 +62,7 @@ Any FireCMS icon can be used.
 
 ### key
 
-> **key**: [`PropertyConfigId`](PropertyConfigId) \| `string`
+> **key**: [`PropertyConfigId`](/docs/api/type-aliases/PropertyConfigId) \| `string`
 
 Defined in: [types/property\_config.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/property_config.tsx)
 
@@ -83,7 +83,7 @@ This is not the name of the property.
 
 ### property
 
-> **property**: [`PropertyOrBuilder`](PropertyOrBuilder)\<`T`\>
+> **property**: [`PropertyOrBuilder`](/docs/api/type-aliases/PropertyOrBuilder)\<`T`\>
 
 Defined in: [types/property\_config.tsx:27](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/property_config.tsx)
 

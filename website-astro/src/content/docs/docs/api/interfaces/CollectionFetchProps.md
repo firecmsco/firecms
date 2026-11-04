@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/CollectionFetchProps"
 title: "CollectionFetchProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / CollectionFetchProps
+[@firecms/core](/docs/api/README) / CollectionFetchProps
 
 # Interface: CollectionFetchProps\<M\>
 
@@ -23,7 +23,7 @@ Defined in: [hooks/data/useCollectionFetch.tsx:10](https://github.com/firecmsco/
 
 ### collection
 
-> **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
+> **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 Defined in: [hooks/data/useCollectionFetch.tsx:20](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useCollectionFetch.tsx)
 
@@ -33,7 +33,7 @@ collection of the entity displayed by this collection
 
 ### filterValues?
 
-> `optional` **filterValues**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
+> `optional` **filterValues**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](/docs/api/type-aliases/WhereFilterOp), `any`\]\>\>
 
 Defined in: [hooks/data/useCollectionFetch.tsx:30](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useCollectionFetch.tsx)
 

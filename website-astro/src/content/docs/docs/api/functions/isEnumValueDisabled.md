@@ -3,11 +3,11 @@ slug: "docs/api/functions/isEnumValueDisabled"
 title: "isEnumValueDisabled"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / isEnumValueDisabled
+[@firecms/core](/docs/api/README) / isEnumValueDisabled
 
 # Function: isEnumValueDisabled()
 
@@ -19,7 +19,7 @@ Defined in: [util/enums.ts:42](https://github.com/firecmsco/firecms/blob/main/pa
 
 ### labelOrConfig?
 
-`string` | [`EnumValueConfig`](../type-aliases/EnumValueConfig)
+`string` | [`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig)
 
 ## Returns
 

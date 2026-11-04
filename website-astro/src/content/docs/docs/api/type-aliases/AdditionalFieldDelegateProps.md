@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/AdditionalFieldDelegateProps"
 title: "AdditionalFieldDelegateProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / AdditionalFieldDelegateProps
+[@firecms/core](/docs/api/README) / AdditionalFieldDelegateProps
 
 # Type Alias: AdditionalFieldDelegateProps\<M, USER\>
 
@@ -23,13 +23,13 @@ Defined in: [types/collections.ts:475](https://github.com/firecmsco/firecms/blob
 
 ### USER
 
-`USER` *extends* [`User`](User) = [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
 ### context
 
-> **context**: [`FireCMSContext`](FireCMSContext)\<`USER`\>
+> **context**: [`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`USER`\>
 
 Defined in: [types/collections.ts:477](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -37,6 +37,6 @@ Defined in: [types/collections.ts:477](https://github.com/firecmsco/firecms/blob
 
 ### entity
 
-> **entity**: [`Entity`](../interfaces/Entity)\<`M`\>
+> **entity**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 Defined in: [types/collections.ts:476](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)

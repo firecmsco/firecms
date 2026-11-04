@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayCustomShapedFieldBinding"
 title: "ArrayCustomShapedFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayCustomShapedFieldBinding
+[@firecms/core](/docs/api/README) / ArrayCustomShapedFieldBinding
 
 # Function: ArrayCustomShapedFieldBinding()
 
@@ -30,7 +30,7 @@ and tables to the specified properties.
 
 ### \_\_namedParameters
 
-[`FieldProps`](../interfaces/FieldProps)\<`T`, `any`, `any`\>
+[`FieldProps`](/docs/api/interfaces/FieldProps)\<`T`, `any`, `any`\>
 
 ## Returns
 

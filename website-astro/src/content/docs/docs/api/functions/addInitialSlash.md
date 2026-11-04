@@ -3,11 +3,11 @@ slug: "docs/api/functions/addInitialSlash"
 title: "addInitialSlash"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / addInitialSlash
+[@firecms/core](/docs/api/README) / addInitialSlash
 
 # Function: addInitialSlash()
 

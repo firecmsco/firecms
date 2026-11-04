@@ -28,4 +28,4 @@ buildProperty({
 });
 ```
 
-Der Datentyp ist [`map`](../config/map).
+Der Datentyp ist [`map`](/de/docs/properties/config/map).

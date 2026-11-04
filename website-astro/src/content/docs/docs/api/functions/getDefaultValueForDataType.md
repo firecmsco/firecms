@@ -3,11 +3,11 @@ slug: "docs/api/functions/getDefaultValueForDataType"
 title: "getDefaultValueForDataType"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getDefaultValueForDataType
+[@firecms/core](/docs/api/README) / getDefaultValueForDataType
 
 # Function: getDefaultValueForDataType()
 
@@ -19,7 +19,7 @@ Defined in: [util/entities.ts:64](https://github.com/firecmsco/firecms/blob/main
 
 ### dataType
 
-[`DataType`](../type-aliases/DataType)
+[`DataType`](/docs/api/type-aliases/DataType)
 
 ## Returns
 

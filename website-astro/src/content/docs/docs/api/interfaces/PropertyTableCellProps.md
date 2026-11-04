@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/PropertyTableCellProps"
 title: "PropertyTableCellProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyTableCellProps
+[@firecms/core](/docs/api/README) / PropertyTableCellProps
 
 # Interface: PropertyTableCellProps\<T\>
 
@@ -17,7 +17,7 @@ Defined in: [components/EntityCollectionTable/PropertyTableCell.tsx:38](https://
 
 ### T
 
-`T` *extends* [`CMSType`](../type-aliases/CMSType)
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType)
 
 ## Properties
 
@@ -63,7 +63,7 @@ Defined in: [components/EntityCollectionTable/PropertyTableCell.tsx:51](https://
 
 ### entity
 
-> **entity**: [`Entity`](Entity)\<`any`\>
+> **entity**: [`Entity`](/docs/api/interfaces/Entity)\<`any`\>
 
 Defined in: [components/EntityCollectionTable/PropertyTableCell.tsx:48](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
@@ -87,7 +87,7 @@ Defined in: [components/EntityCollectionTable/PropertyTableCell.tsx:49](https://
 
 ### property
 
-> **property**: [`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\>
+> **property**: [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\<`T`\>
 
 Defined in: [components/EntityCollectionTable/PropertyTableCell.tsx:45](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 

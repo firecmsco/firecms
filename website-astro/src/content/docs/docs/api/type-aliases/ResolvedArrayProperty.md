@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/ResolvedArrayProperty"
 title: "ResolvedArrayProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ResolvedArrayProperty
+[@firecms/core](/docs/api/README) / ResolvedArrayProperty
 
 # Type Alias: ResolvedArrayProperty\<T, ArrayT\>
 
-> **ResolvedArrayProperty**\<`T`, `ArrayT`\> = `Omit`\<[`ArrayProperty`](../interfaces/ArrayProperty), `"of"` \| `"oneOf"` \| `"dataType"`\> & `object`
+> **ResolvedArrayProperty**\<`T`, `ArrayT`\> = `Omit`\<[`ArrayProperty`](/docs/api/interfaces/ArrayProperty), `"of"` \| `"oneOf"` \| `"dataType"`\> & `object`
 
 Defined in: [types/resolved\_entities.ts:121](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
 
@@ -27,7 +27,7 @@ Defined in: [types/resolved\_entities.ts:121](https://github.com/firecmsco/firec
 
 ### of?
 
-> `optional` **of**: [`ResolvedProperty`](ResolvedProperty)\<`any`\> \| [`ResolvedProperty`](ResolvedProperty)\<`any`\>[]
+> `optional` **of**: [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\<`any`\> \| [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\<`any`\>[]
 
 ### oneOf?
 
@@ -35,7 +35,7 @@ Defined in: [types/resolved\_entities.ts:121](https://github.com/firecmsco/firec
 
 #### oneOf.properties
 
-> **properties**: [`ResolvedProperties`](ResolvedProperties)
+> **properties**: [`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)
 
 #### oneOf.typeField?
 
@@ -51,7 +51,7 @@ Defined in: [types/resolved\_entities.ts:121](https://github.com/firecmsco/firec
 
 ### resolvedProperties
 
-> **resolvedProperties**: [`ResolvedProperty`](ResolvedProperty)\<`any`\>[]
+> **resolvedProperties**: [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty)\<`any`\>[]
 
 ## Type Parameters
 
@@ -61,4 +61,4 @@ Defined in: [types/resolved\_entities.ts:121](https://github.com/firecmsco/firec
 
 ### ArrayT
 
-`ArrayT` *extends* [`CMSType`](CMSType) = [`CMSType`](CMSType)
+`ArrayT` *extends* [`CMSType`](/docs/api/type-aliases/CMSType) = [`CMSType`](/docs/api/type-aliases/CMSType)

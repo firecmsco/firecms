@@ -3,11 +3,11 @@ slug: "docs/api/functions/SmallNavigationCard"
 title: "SmallNavigationCard"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SmallNavigationCard
+[@firecms/core](/docs/api/README) / SmallNavigationCard
 
 # Function: SmallNavigationCard()
 
@@ -19,7 +19,7 @@ Defined in: [components/HomePage/SmallNavigationCard.tsx:11](https://github.com/
 
 ### \_\_namedParameters
 
-[`SmallNavigationCardProps`](../type-aliases/SmallNavigationCardProps)
+[`SmallNavigationCardProps`](/docs/api/type-aliases/SmallNavigationCardProps)
 
 ## Returns
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayPropertyPreview"
 title: "ArrayPropertyPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayPropertyPreview
+[@firecms/core](/docs/api/README) / ArrayPropertyPreview
 
 # Function: ArrayPropertyPreview()
 
@@ -19,7 +19,7 @@ Defined in: [preview/property\_previews/ArrayPropertyPreview.tsx:14](https://git
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`any`[]\>
+[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<`any`[]\>
 
 ## Returns
 

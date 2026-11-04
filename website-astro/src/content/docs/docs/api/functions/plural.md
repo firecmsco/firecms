@@ -3,11 +3,11 @@ slug: "docs/api/functions/plural"
 title: "plural"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / plural
+[@firecms/core](/docs/api/README) / plural
 
 # Function: plural()
 

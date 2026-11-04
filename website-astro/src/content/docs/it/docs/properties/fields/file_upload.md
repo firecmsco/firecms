@@ -69,10 +69,10 @@ buildProperty({
 });
 ```
 
-Il tipo di dato è [`string`](../config/string).
+Il tipo di dato è [`string`](/it/docs/properties/config/string).
 
 Il componente utilizzato internamente
-è [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
+è [`StorageUploadFieldBinding`](/it/docs/api/functions/StorageUploadFieldBinding).
 
 ### Caricamento file multiplo
 
@@ -98,10 +98,10 @@ buildProperty({
 });
 ```
 
-Il tipo di dato è [`array`](../config/array).
+Il tipo di dato è [`array`](/it/docs/properties/config/array).
 
 Il componente utilizzato internamente
-è [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
+è [`StorageUploadFieldBinding`](/it/docs/api/functions/StorageUploadFieldBinding).
 
 ### Supporto personalizzato per immagini, video e audio
 

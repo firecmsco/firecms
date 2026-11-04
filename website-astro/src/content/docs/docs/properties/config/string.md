@@ -180,7 +180,7 @@ You can use the enum values providing a map of possible exclusive values the
 property can take, mapped to the label that it is displayed in the dropdown. You
 can use a simple object with the format
 `value` => `label`, or with the format `value`
-=> [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig) if you need extra
+=> [`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig) if you need extra
 customization, (like disabling specific options or assigning colors). If you
 need to ensure the order of the elements, you can pass a `Map` instead of a
 plain object.
@@ -284,17 +284,17 @@ const property = buildProperty({
 
 Based on your configuration the form field widgets that are created are:
 
-- [`TextFieldBinding`](../../api/functions/TextFieldBinding) generic text field
-- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) if `enumValues`
+- [`TextFieldBinding`](/docs/api/functions/TextFieldBinding) generic text field
+- [`SelectFieldBinding`](/docs/api/functions/SelectFieldBinding) if `enumValues`
   are set in the string config, this field renders a select
   where each option is a colored chip.
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding)
+- [`StorageUploadFieldBinding`](/docs/api/functions/StorageUploadFieldBinding)
   the property has a
   storage configuration.
-- [`MarkdownEditorFieldBinding.`](../../api/functions/MarkdownEditorFieldBinding) the
+- [`MarkdownEditorFieldBinding.`](/docs/api/functions/MarkdownEditorFieldBinding) the
   property has a
   markdown configuration.
 
 Links:
 
-- [API](../../api/interfaces/StringProperty)
+- [API](/docs/api/interfaces/StringProperty)

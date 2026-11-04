@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/FireCMSPlugin"
 title: "FireCMSPlugin"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FireCMSPlugin
+[@firecms/core](/docs/api/README) / FireCMSPlugin
 
 # Type Alias: FireCMSPlugin\<PROPS, FORM_PROPS, EC, COL_ACTIONS_PROPS, COL_ACTIONS_START__PROPS\>
 
@@ -30,7 +30,7 @@ NOTE: This is a work in progress and the API is not stable yet.
 
 ### EC
 
-`EC` *extends* [`EntityCollection`](../interfaces/EntityCollection) = [`EntityCollection`](../interfaces/EntityCollection)
+`EC` *extends* [`EntityCollection`](/docs/api/interfaces/EntityCollection) = [`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 ### COL_ACTIONS_PROPS
 
@@ -50,7 +50,7 @@ Defined in: [types/plugins.tsx:187](https://github.com/firecmsco/firecms/blob/ma
 
 #### injectCollections()?
 
-> `optional` **injectCollections**: (`collections`) => [`EntityCollection`](../interfaces/EntityCollection)[]
+> `optional` **injectCollections**: (`collections`) => [`EntityCollection`](/docs/api/interfaces/EntityCollection)[]
 
 Use this method to modify, add or remove collections.
 
@@ -58,15 +58,15 @@ Use this method to modify, add or remove collections.
 
 ###### collections
 
-[`EntityCollection`](../interfaces/EntityCollection)[]
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)[]
 
 ##### Returns
 
-[`EntityCollection`](../interfaces/EntityCollection)[]
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)[]
 
 #### modifyCollection()?
 
-> `optional` **modifyCollection**: (`collection`) => [`EntityCollection`](../interfaces/EntityCollection)
+> `optional` **modifyCollection**: (`collection`) => [`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 Use this method to modify a single collection before it is rendered.
 
@@ -74,11 +74,11 @@ Use this method to modify a single collection before it is rendered.
 
 ###### collection
 
-[`EntityCollection`](../interfaces/EntityCollection)
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 ##### Returns
 
-[`EntityCollection`](../interfaces/EntityCollection)
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 ***
 
@@ -90,7 +90,7 @@ Defined in: [types/plugins.tsx:107](https://github.com/firecmsco/firecms/blob/ma
 
 #### AddColumnComponent?
 
-> `optional` **AddColumnComponent**: `React.ComponentType`\<\{ `collection`: `EC`; `fullPath`: `string`; `parentCollectionIds`: `string`[]; `tableController`: [`EntityTableController`](EntityTableController); \}\>
+> `optional` **AddColumnComponent**: `React.ComponentType`\<\{ `collection`: `EC`; `fullPath`: `string`; `parentCollectionIds`: `string`[]; `tableController`: [`EntityTableController`](/docs/api/type-aliases/EntityTableController); \}\>
 
 If you add this callback to your plugin, an add button will be added to the collection table.
 TODO: Only the first plugin that defines this callback will be used, at the moment.
@@ -109,7 +109,7 @@ TODO: Only the first plugin that defines this callback will be used, at the mome
 
 ###### context
 
-[`FireCMSContext`](FireCMSContext)
+[`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)
 
 ###### parentCollectionIds?
 
@@ -125,7 +125,7 @@ TODO: Only the first plugin that defines this callback will be used, at the mome
 
 #### CollectionActions?
 
-> `optional` **CollectionActions**: `React.ComponentType`\<[`CollectionActionsProps`](../interfaces/CollectionActionsProps)\<`any`, `any`, `EC`\> & `COL_ACTIONS_PROPS`\> \| `React.ComponentType`\<[`CollectionActionsProps`](../interfaces/CollectionActionsProps)\<`any`, `any`, `EC`\> & `COL_ACTIONS_PROPS`\>[]
+> `optional` **CollectionActions**: `React.ComponentType`\<[`CollectionActionsProps`](/docs/api/interfaces/CollectionActionsProps)\<`any`, `any`, `EC`\> & `COL_ACTIONS_PROPS`\> \| `React.ComponentType`\<[`CollectionActionsProps`](/docs/api/interfaces/CollectionActionsProps)\<`any`, `any`, `EC`\> & `COL_ACTIONS_PROPS`\>[]
 
 Use this component to add custom actions to the entity collections
 toolbar.
@@ -136,7 +136,7 @@ toolbar.
 
 #### CollectionActionsStart?
 
-> `optional` **CollectionActionsStart**: `React.ComponentType`\<[`CollectionActionsProps`](../interfaces/CollectionActionsProps)\<`any`, `any`, `EC`\> & `COL_ACTIONS_START__PROPS`\> \| `React.ComponentType`\<[`CollectionActionsProps`](../interfaces/CollectionActionsProps)\<`any`, `any`, `EC`\> & `COL_ACTIONS_START__PROPS`\>[]
+> `optional` **CollectionActionsStart**: `React.ComponentType`\<[`CollectionActionsProps`](/docs/api/interfaces/CollectionActionsProps)\<`any`, `any`, `EC`\> & `COL_ACTIONS_START__PROPS`\> \| `React.ComponentType`\<[`CollectionActionsProps`](/docs/api/interfaces/CollectionActionsProps)\<`any`, `any`, `EC`\> & `COL_ACTIONS_START__PROPS`\>[]
 
 #### collectionActionsStartProps?
 
@@ -144,7 +144,7 @@ toolbar.
 
 #### HeaderAction?
 
-> `optional` **HeaderAction**: `React.ComponentType`\<\{ `collection`: `EC`; `fullPath`: `string`; `onHover`: `boolean`; `parentCollectionIds`: `string`[]; `property`: [`ResolvedProperty`](ResolvedProperty); `propertyKey`: `string`; `tableController`: [`EntityTableController`](EntityTableController); \}\>
+> `optional` **HeaderAction**: `React.ComponentType`\<\{ `collection`: `EC`; `fullPath`: `string`; `onHover`: `boolean`; `parentCollectionIds`: `string`[]; `property`: [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty); `propertyKey`: `string`; `tableController`: [`EntityTableController`](/docs/api/type-aliases/EntityTableController); \}\>
 
 Use this method to inject widgets to the entity collections header
 
@@ -164,7 +164,7 @@ Use this method to inject widgets to the entity collections header
 
 ###### context
 
-[`FireCMSContext`](FireCMSContext)
+[`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)
 
 ###### parentCollectionIds?
 
@@ -192,7 +192,7 @@ Use this method to inject widgets to the entity collections header
 
 ###### context
 
-[`FireCMSContext`](FireCMSContext)
+[`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)
 
 ###### parentCollectionIds?
 
@@ -216,35 +216,35 @@ Defined in: [types/plugins.tsx:166](https://github.com/firecmsco/firecms/blob/ma
 
 #### Actions?
 
-> `optional` **Actions**: `React.ComponentType`\<[`PluginFormActionProps`](../interfaces/PluginFormActionProps)\<`any`, `EC`\>\>
+> `optional` **Actions**: `React.ComponentType`\<[`PluginFormActionProps`](/docs/api/interfaces/PluginFormActionProps)\<`any`, `EC`\>\>
 
 Add custom actions to the default ones ("Save", "Discard"...)
 
 #### ActionsTop?
 
-> `optional` **ActionsTop**: `React.ComponentType`\<[`PluginFormActionProps`](../interfaces/PluginFormActionProps)\<`any`, `EC`\>\>
+> `optional` **ActionsTop**: `React.ComponentType`\<[`PluginFormActionProps`](/docs/api/interfaces/PluginFormActionProps)\<`any`, `EC`\>\>
 
 Add custom actions to the top of the form
 
 #### fieldBuilder()?
 
-> `optional` **fieldBuilder**: \<`T`\>(`props`) => `React.ComponentType`\<[`FieldProps`](../interfaces/FieldProps)\<`T`\>\> \| `null`
+> `optional` **fieldBuilder**: \<`T`\>(`props`) => `React.ComponentType`\<[`FieldProps`](/docs/api/interfaces/FieldProps)\<`T`\>\> \| `null`
 
 ##### Type Parameters
 
 ###### T
 
-`T` *extends* [`CMSType`](CMSType) = [`CMSType`](CMSType)
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType) = [`CMSType`](/docs/api/type-aliases/CMSType)
 
 ##### Parameters
 
 ###### props
 
-[`PluginFieldBuilderParams`](PluginFieldBuilderParams)\<`T`, `any`, `EC`\>
+[`PluginFieldBuilderParams`](/docs/api/type-aliases/PluginFieldBuilderParams)\<`T`, `any`, `EC`\>
 
 ##### Returns
 
-`React.ComponentType`\<[`FieldProps`](../interfaces/FieldProps)\<`T`\>\> \| `null`
+`React.ComponentType`\<[`FieldProps`](/docs/api/interfaces/FieldProps)\<`T`\>\> \| `null`
 
 #### fieldBuilderEnabled()?
 
@@ -254,13 +254,13 @@ Add custom actions to the top of the form
 
 ###### T
 
-`T` *extends* [`CMSType`](CMSType) = [`CMSType`](CMSType)
+`T` *extends* [`CMSType`](/docs/api/type-aliases/CMSType) = [`CMSType`](/docs/api/type-aliases/CMSType)
 
 ##### Parameters
 
 ###### props
 
-[`PluginFieldBuilderParams`](PluginFieldBuilderParams)\<`T`\>
+[`PluginFieldBuilderParams`](/docs/api/type-aliases/PluginFieldBuilderParams)\<`T`\>
 
 ##### Returns
 
@@ -272,7 +272,7 @@ Add custom actions to the top of the form
 
 ##### provider.Component
 
-> **Component**: `React.ComponentType`\<`PropsWithChildren`\<`FORM_PROPS` & [`PluginFormActionProps`](../interfaces/PluginFormActionProps)\<`any`, `EC`\>\>\>
+> **Component**: `React.ComponentType`\<`PropsWithChildren`\<`FORM_PROPS` & [`PluginFormActionProps`](/docs/api/interfaces/PluginFormActionProps)\<`any`, `EC`\>\>\>
 
 ##### provider.props?
 
@@ -294,7 +294,7 @@ Additional actions to be rendered in the home page, close to the search bar.
 
 #### AdditionalCards?
 
-> `optional` **AdditionalCards**: `React.ComponentType`\<[`PluginHomePageAdditionalCardsProps`](../interfaces/PluginHomePageAdditionalCardsProps)\> \| `React.ComponentType`\<[`PluginHomePageAdditionalCardsProps`](../interfaces/PluginHomePageAdditionalCardsProps)\>[]
+> `optional` **AdditionalCards**: `React.ComponentType`\<[`PluginHomePageAdditionalCardsProps`](/docs/api/interfaces/PluginHomePageAdditionalCardsProps)\> \| `React.ComponentType`\<[`PluginHomePageAdditionalCardsProps`](/docs/api/interfaces/PluginHomePageAdditionalCardsProps)\>[]
 
 Add additional cards to each collection group in the home page.
 
@@ -318,7 +318,7 @@ Allow reordering with drag and drop of the collections in the home page.
 
 #### CollectionActions?
 
-> `optional` **CollectionActions**: `React.ComponentType`\<[`PluginHomePageActionsProps`](../interfaces/PluginHomePageActionsProps)\>
+> `optional` **CollectionActions**: `React.ComponentType`\<[`PluginHomePageActionsProps`](/docs/api/interfaces/PluginHomePageActionsProps)\>
 
 Use this component to add custom actions to the navigation card
 in the home page.
@@ -339,7 +339,7 @@ Include a section in the home page with a custom component and title.
 
 ###### props
 
-[`PluginGenericProps`](../interfaces/PluginGenericProps)
+[`PluginGenericProps`](/docs/api/interfaces/PluginGenericProps)
 
 ##### Returns
 
@@ -355,7 +355,7 @@ Include a section in the home page with a custom component and title.
 
 #### navigationEntries?
 
-> `optional` **navigationEntries**: [`NavigationGroupMapping`](../interfaces/NavigationGroupMapping)[]
+> `optional` **navigationEntries**: [`NavigationGroupMapping`](/docs/api/interfaces/NavigationGroupMapping)[]
 
 #### onNavigationEntriesUpdate()?
 
@@ -368,7 +368,7 @@ group => navigationEntriesOrder (path)
 
 ###### entries
 
-[`NavigationGroupMapping`](../interfaces/NavigationGroupMapping)[]
+[`NavigationGroupMapping`](/docs/api/interfaces/NavigationGroupMapping)[]
 
 ##### Returns
 
@@ -407,7 +407,7 @@ You can use this prop to add higher order components to the CMS.
 The components will be added to the root of the CMS, so any component
 rendered underneath by this plugin will have access to the context
 provided by this HOC.
-Anyhow, this is rendered below the [FireCMSContext](FireCMSContext) provider, so
+Anyhow, this is rendered below the [FireCMSContext](/docs/api/type-aliases/FireCMSContext) provider, so
 you can use the hooks provided by the CMS.
 
 #### Component
@@ -424,6 +424,6 @@ you can use the hooks provided by the CMS.
 
 ### userManagement?
 
-> `optional` **userManagement**: [`InternalUserManagement`](InternalUserManagement)
+> `optional` **userManagement**: [`InternalUserManagement`](/docs/api/type-aliases/InternalUserManagement)
 
 Defined in: [types/plugins.tsx:47](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)

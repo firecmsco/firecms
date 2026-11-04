@@ -3,11 +3,11 @@ slug: "docs/api/functions/useLargeLayout"
 title: "useLargeLayout"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useLargeLayout
+[@firecms/core](/docs/api/README) / useLargeLayout
 
 # Function: useLargeLayout()
 

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityCustomView"
 title: "EntityCustomView"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityCustomView
+[@firecms/core](/docs/api/README) / EntityCustomView
 
 # Type Alias: EntityCustomView\<M\>
 
@@ -28,7 +28,7 @@ It gets rendered as a tab.
 
 ### Builder?
 
-> `optional` **Builder**: `React.ComponentType`\<[`EntityCustomViewParams`](../interfaces/EntityCustomViewParams)\<`M`\>\>
+> `optional` **Builder**: `React.ComponentType`\<[`EntityCustomViewParams`](/docs/api/interfaces/EntityCustomViewParams)\<`M`\>\>
 
 Defined in: [types/collections.ts:565](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 

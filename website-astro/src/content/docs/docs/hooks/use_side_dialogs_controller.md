@@ -14,7 +14,7 @@ This is the low-level mechanism used by FireCMS to open:
 You can use it to open your own custom side panels.
 
 :::tip
-If you just want to open an entity form form, use **[`useSideEntityController`](./use_side_entity_controller)** instead.
+If you just want to open an entity form form, use **[`useSideEntityController`](/docs/hooks/use_side_entity_controller)** instead.
 :::
 
 ### Usage

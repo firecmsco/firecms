@@ -3,11 +3,11 @@ slug: "docs/api/functions/removeInPath"
 title: "removeInPath"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / removeInPath
+[@firecms/core](/docs/api/README) / removeInPath
 
 # Function: removeInPath()
 

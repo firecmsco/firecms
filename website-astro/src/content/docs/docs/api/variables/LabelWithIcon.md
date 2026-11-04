@@ -3,11 +3,11 @@ slug: "docs/api/variables/LabelWithIcon"
 title: "LabelWithIcon"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / LabelWithIcon
+[@firecms/core](/docs/api/README) / LabelWithIcon
 
 # Variable: LabelWithIcon
 

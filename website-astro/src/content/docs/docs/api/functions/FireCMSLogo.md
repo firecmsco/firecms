@@ -3,11 +3,11 @@ slug: "docs/api/functions/FireCMSLogo"
 title: "FireCMSLogo"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FireCMSLogo
+[@firecms/core](/docs/api/README) / FireCMSLogo
 
 # Function: FireCMSLogo()
 

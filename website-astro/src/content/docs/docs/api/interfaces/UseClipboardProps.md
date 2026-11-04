@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/UseClipboardProps"
 title: "UseClipboardProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / UseClipboardProps
+[@firecms/core](/docs/api/README) / UseClipboardProps
 
 # Interface: UseClipboardProps
 

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/User"
 title: "User"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / User
+[@firecms/core](/docs/api/README) / User
 
 # Type Alias: User
 
@@ -92,7 +92,7 @@ The provider used to authenticate the user.
 
 ### roles?
 
-> `optional` **roles**: [`Role`](Role)[]
+> `optional` **roles**: [`Role`](/docs/api/type-aliases/Role)[]
 
 Defined in: [types/user.ts:42](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/user.ts)
 

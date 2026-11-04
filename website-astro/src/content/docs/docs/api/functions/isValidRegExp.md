@@ -3,11 +3,11 @@ slug: "docs/api/functions/isValidRegExp"
 title: "isValidRegExp"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / isValidRegExp
+[@firecms/core](/docs/api/README) / isValidRegExp
 
 # Function: isValidRegExp()
 

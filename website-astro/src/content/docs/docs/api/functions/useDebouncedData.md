@@ -3,11 +3,11 @@ slug: "docs/api/functions/useDebouncedData"
 title: "useDebouncedData"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useDebouncedData
+[@firecms/core](/docs/api/README) / useDebouncedData
 
 # Function: useDebouncedData()
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/NotFoundPage"
 title: "NotFoundPage"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NotFoundPage
+[@firecms/core](/docs/api/README) / NotFoundPage
 
 # Function: NotFoundPage()
 

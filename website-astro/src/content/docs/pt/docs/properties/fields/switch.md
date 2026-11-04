@@ -16,8 +16,8 @@ buildProperty({
 });
 ```
 
-O tipo de dado é [`boolean`](../config/boolean).
+O tipo de dado é [`boolean`](/pt/docs/properties/config/boolean).
 
 Internamente o componente usado
-é [`SwitchFieldBinding`](../../api/functions/SwitchFieldBinding).
+é [`SwitchFieldBinding`](/pt/docs/api/functions/SwitchFieldBinding).
 

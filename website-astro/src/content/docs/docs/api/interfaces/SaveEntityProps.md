@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/SaveEntityProps"
 title: "SaveEntityProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SaveEntityProps
+[@firecms/core](/docs/api/README) / SaveEntityProps
 
 # Interface: SaveEntityProps\<M\>
 
@@ -23,7 +23,7 @@ Defined in: [types/datasource.ts:53](https://github.com/firecmsco/firecms/blob/m
 
 ### collection?
 
-> `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+> `optional` **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](/docs/api/type-aliases/ResolvedEntityCollection)\<`M`\>
 
 Defined in: [types/datasource.ts:58](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 
@@ -55,7 +55,7 @@ Defined in: [types/datasource.ts:57](https://github.com/firecmsco/firecms/blob/m
 
 ### status
 
-> **status**: [`EntityStatus`](../type-aliases/EntityStatus)
+> **status**: [`EntityStatus`](/docs/api/type-aliases/EntityStatus)
 
 Defined in: [types/datasource.ts:59](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 
@@ -63,6 +63,6 @@ Defined in: [types/datasource.ts:59](https://github.com/firecmsco/firecms/blob/m
 
 ### values
 
-> **values**: `Partial`\<[`EntityValues`](../type-aliases/EntityValues)\<`M`\>\>
+> **values**: `Partial`\<[`EntityValues`](/docs/api/type-aliases/EntityValues)\<`M`\>\>
 
 Defined in: [types/datasource.ts:55](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)

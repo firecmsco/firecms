@@ -68,9 +68,9 @@ When set to `true`, displays the child properties directly without being wrapped
 ---
 
 The widget that gets created is
-- [`MapFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/MapFieldBinding) Field that renders the children
+- [`MapFieldBinding`](https://firecms.co/docs/api/functions/MapFieldBinding) Field that renders the children
   property fields
 
 Links:
-- [API](https://firecms.co/docs/https://firecms.co/docs/api/interfaces/MapProperty)
+- [API](https://firecms.co/docs/api/interfaces/MapProperty)
 

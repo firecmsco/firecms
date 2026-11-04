@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/CollectionSize"
 title: "CollectionSize"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / CollectionSize
+[@firecms/core](/docs/api/README) / CollectionSize
 
 # Type Alias: CollectionSize
 

@@ -9,10 +9,10 @@ Puedes elegir entre usar campos de fechas o de fecha/hora.
 También puedes crear campos de solo lectura que se actualizan automáticamente cuando 
 se crean o actualizan entidades.
 
-El tipo de datos es [`date`](../config/date).
+El tipo de datos es [`date`](/es/docs/properties/config/date).
 
 Internamente, el componente utilizado
-es [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding).
+es [`DateTimeFieldBinding`](/es/docs/api/functions/DateTimeFieldBinding).
 
 #### Campo de fecha
 

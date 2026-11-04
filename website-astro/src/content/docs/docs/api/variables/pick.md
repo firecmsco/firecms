@@ -3,11 +3,11 @@ slug: "docs/api/variables/pick"
 title: "pick"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / pick
+[@firecms/core](/docs/api/README) / pick
 
 # Variable: pick()
 

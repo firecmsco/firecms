@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/EntityViewProps"
 title: "EntityViewProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityViewProps
+[@firecms/core](/docs/api/README) / EntityViewProps
 
 # Interface: EntityViewProps\<M\>
 
@@ -31,7 +31,7 @@ Defined in: [components/EntityView.tsx:17](https://github.com/firecmsco/firecms/
 
 ### collection
 
-> **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
+> **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 Defined in: [components/EntityView.tsx:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityView.tsx)
 
@@ -39,7 +39,7 @@ Defined in: [components/EntityView.tsx:15](https://github.com/firecmsco/firecms/
 
 ### entity
 
-> **entity**: [`Entity`](Entity)\<`M`\>
+> **entity**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 Defined in: [components/EntityView.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityView.tsx)
 

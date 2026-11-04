@@ -3,15 +3,15 @@ slug: "docs/api/functions/enumToObjectEntries"
 title: "enumToObjectEntries"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / enumToObjectEntries
+[@firecms/core](/docs/api/README) / enumToObjectEntries
 
 # Function: enumToObjectEntries()
 
-> **enumToObjectEntries**(`enumValues`): [`EnumValueConfig`](../type-aliases/EnumValueConfig)[]
+> **enumToObjectEntries**(`enumValues`): [`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig)[]
 
 Defined in: [util/enums.ts:4](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/enums.ts)
 
@@ -19,8 +19,8 @@ Defined in: [util/enums.ts:4](https://github.com/firecmsco/firecms/blob/main/pac
 
 ### enumValues
 
-[`EnumValues`](../type-aliases/EnumValues)
+[`EnumValues`](/docs/api/type-aliases/EnumValues)
 
 ## Returns
 
-[`EnumValueConfig`](../type-aliases/EnumValueConfig)[]
+[`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig)[]

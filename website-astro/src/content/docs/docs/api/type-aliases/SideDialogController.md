@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/SideDialogController"
 title: "SideDialogController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SideDialogController
+[@firecms/core](/docs/api/README) / SideDialogController
 
 # Type Alias: SideDialogController
 

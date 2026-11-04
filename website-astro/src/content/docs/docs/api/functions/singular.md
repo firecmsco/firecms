@@ -3,11 +3,11 @@ slug: "docs/api/functions/singular"
 title: "singular"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / singular
+[@firecms/core](/docs/api/README) / singular
 
 # Function: singular()
 

@@ -42,7 +42,7 @@ pouvez définir une propriété de chaîne enum et les valeurs seront fusionnée
 :::note
 FireCMS fournit environ 20 champs différents (comme les champs de texte, les sélecteurs, et des complexes comme les champs de référence ou
 les champs de tableau triables). Si votre cas d'utilisation n'est pas couvert par l'un des champs fournis, vous pouvez créer votre
-propre [champ personnalisé](../properties/custom_fields.mdx).
+propre [champ personnalisé](/fr/docs/properties/custom_fields).
 :::
 
 :::tip
@@ -252,7 +252,7 @@ Vous pouvez forcer le CMS à toujours ouvrir le formulaire lors de l'édition d'
 - **`name`** : Le nom pluriel de la collection. Ex. : 'Products'.
 - **`singularName`** : Le nom singulier d'une entrée dans la collection. Ex. : 'Product'.
 - **`path`** : Chemin Firestore relatif de cette vue à son parent. Si cette vue est à la racine, le chemin est égal à l'absolu. Ce chemin détermine également l'URL dans FireCMS.
-- **`properties`** : Objet définissant les propriétés du schéma d'entité. Plus d'informations dans [Propriétés](../properties/properties_intro).
+- **`properties`** : Objet définissant les propriétés du schéma d'entité. Plus d'informations dans [Propriétés](/fr/docs/properties).
 - **`propertiesOrder`** : Ordre dans lequel les propriétés sont affichées.
     - Pour les propriétés, utilisez la clé de propriété.
     - Pour un champ supplémentaire, utilisez la clé du champ.
@@ -274,7 +274,7 @@ Vous pouvez forcer le CMS à toujours ouvrir le formulaire lors de l'édition d'
 - **`defaultSize`** : Taille par défaut de la collection rendue.
 - **`group`** : Champ optionnel utilisé pour regrouper les entrées de navigation de niveau supérieur sous une vue de navigation. Si vous définissez cette valeur dans une sous-collection, elle n'a aucun effet.
 - **`description`** : Description optionnelle de cette vue. Vous pouvez utiliser Markdown.
-- **`entityActions`** : Vous pouvez définir des actions supplémentaires pouvant être effectuées sur les entités dans cette collection. Ces actions peuvent être affichées dans la vue de collection ou dans la vue d'entité. Vous pouvez utiliser la méthode `onClick` pour implémenter votre propre logique. Dans la prop `context`, vous pouvez accéder à tous les contrôleurs de FireCMS. Vous pouvez également définir des actions d'entité globalement. Voir [Actions d'entité](./entity_actions) pour plus de détails.
+- **`entityActions`** : Vous pouvez définir des actions supplémentaires pouvant être effectuées sur les entités dans cette collection. Ces actions peuvent être affichées dans la vue de collection ou dans la vue d'entité. Vous pouvez utiliser la méthode `onClick` pour implémenter votre propre logique. Dans la prop `context`, vous pouvez accéder à tous les contrôleurs de FireCMS. Vous pouvez également définir des actions d'entité globalement. Voir [Actions d'entité](/fr/docs/collections/entity_actions) pour plus de détails.
 
 ```tsx
 const archiveEntityAction: EntityAction = {
@@ -327,14 +327,14 @@ initialSort: ["price", "asc"]
 - **`pagination`** : Si activé, le contenu est chargé par lots. Si `false`, toutes les entités de la collection sont chargées. Cela signifie qu'en atteignant la fin de la collection, le CMS chargera plus d'entités. Vous pouvez spécifier un nombre pour définir la taille de pagination (50 par défaut). Par défaut `true`.
 - **`additionalFields`** : Vous pouvez ajouter des champs supplémentaires à la fois à la vue de collection et à la vue de formulaire en implémentant un délégué de champ supplémentaire.
 - **`textSearchEnabled`** : Indicateur pour indiquer si une barre de recherche doit être affichée en haut du tableau de collection.
-- **`permissions`** : Vous pouvez spécifier un objet avec des permissions booléennes sous la forme `{edit:boolean; create:boolean; delete:boolean}` pour indiquer les actions que l'utilisateur peut effectuer. Vous pouvez également passer un [`PermissionsBuilder`](../api/type-aliases/PermissionsBuilder) pour personnaliser les permissions basées sur l'utilisateur ou l'entité.
+- **`permissions`** : Vous pouvez spécifier un objet avec des permissions booléennes sous la forme `{edit:boolean; create:boolean; delete:boolean}` pour indiquer les actions que l'utilisateur peut effectuer. Vous pouvez également passer un [`PermissionsBuilder`](/fr/docs/api/type-aliases/PermissionsBuilder) pour personnaliser les permissions basées sur l'utilisateur ou l'entité.
 - **`inlineEditing`** : Les éléments de cette collection peuvent-ils être édités en ligne dans la vue de collection ? Si cet indicateur est défini à false mais que `permissions.edit` est `true`, les entités peuvent toujours être éditées dans le panneau latéral.
 - **`selectionEnabled`** : Les entités de cette collection sont-elles sélectionnables ? Par défaut `true`.
-- **`selectionController`** : Passez votre propre contrôleur de sélection si vous voulez contrôler les entités sélectionnées en externe. [Voir `useSelectionController`](../api/functions/useSelectionController).
-- **`exportable`** : Les données de cette vue de collection doivent-elles inclure un bouton d'exportation ? Vous pouvez également définir un objet de configuration [`ExportConfig`](../api/interfaces/ExportConfig) pour personnaliser l'exportation et ajouter des valeurs supplémentaires. Par défaut `true`.
+- **`selectionController`** : Passez votre propre contrôleur de sélection si vous voulez contrôler les entités sélectionnées en externe. [Voir `useSelectionController`](/fr/docs/api/functions/useSelectionController).
+- **`exportable`** : Les données de cette vue de collection doivent-elles inclure un bouton d'exportation ? Vous pouvez également définir un objet de configuration [`ExportConfig`](/fr/docs/api/interfaces/ExportConfig) pour personnaliser l'exportation et ajouter des valeurs supplémentaires. Par défaut `true`.
 - **`hideFromNavigation`** : Cette collection doit-elle être cachée du panneau de navigation principal si elle est au niveau racine, ou dans le panneau latéral d'entité si c'est une sous-collection ? Elle sera toujours accessible si vous atteignez le chemin spécifié. Vous pouvez également utiliser cette collection comme cible de référence.
-- **`callbacks`** : Cette interface définit tous les callbacks qui peuvent être utilisés quand une entité est créée, mise à jour ou supprimée. Utile pour ajouter votre propre logique ou bloquer l'exécution de l'opération. [Plus d'informations](./callbacks).
-- **`entityViews`** : Tableau de constructeurs pour rendre des panneaux supplémentaires dans une vue d'entité. Utile si vous avez besoin de rendre des vues personnalisées pour vos entités. [Plus d'informations](./entity_views).
+- **`callbacks`** : Cette interface définit tous les callbacks qui peuvent être utilisés quand une entité est créée, mise à jour ou supprimée. Utile pour ajouter votre propre logique ou bloquer l'exécution de l'opération. [Plus d'informations](/fr/docs/collections/callbacks).
+- **`entityViews`** : Tableau de constructeurs pour rendre des panneaux supplémentaires dans une vue d'entité. Utile si vous avez besoin de rendre des vues personnalisées pour vos entités. [Plus d'informations](/fr/docs/collections/entity_views).
 - **`alwaysApplyDefaultValues`** : Si défini à true, les valeurs par défaut des propriétés seront appliquées à l'entité chaque fois qu'elle est mise à jour (pas seulement lors de la création). Par défaut false.
 - **`databaseId`** : ID de base de données optionnel de cette collection. Si non spécifié, l'ID de base de données par défaut sera utilisé. Utile quand on travaille avec plusieurs bases de données.
 - **`previewProperties`** : Propriétés d'aperçu par défaut affichées quand cette collection est référencée.

@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayContainer"
 title: "ArrayContainer"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayContainer
+[@firecms/core](/docs/api/README) / ArrayContainer
 
 # Function: ArrayContainer()
 
@@ -25,7 +25,7 @@ Defined in: [components/ArrayContainer.tsx:341](https://github.com/firecmsco/fir
 
 ### \_\_namedParameters
 
-[`ArrayContainerProps`](../interfaces/ArrayContainerProps)\<`T`\>
+[`ArrayContainerProps`](/docs/api/interfaces/ArrayContainerProps)\<`T`\>
 
 ## Returns
 

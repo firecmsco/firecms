@@ -3,11 +3,11 @@ slug: "docs/api/functions/UserPreview"
 title: "UserPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / UserPreview
+[@firecms/core](/docs/api/README) / UserPreview
 
 # Function: UserPreview()
 
@@ -22,7 +22,7 @@ This is a simple wrapper around UserDisplay.
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`string`\>
+[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<`string`\>
 
 ## Returns
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/getValueInPath"
 title: "getValueInPath"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getValueInPath
+[@firecms/core](/docs/api/README) / getValueInPath
 
 # Function: getValueInPath()
 

@@ -10,7 +10,7 @@ properties.
 
 ### Single reference field
 
-![Field](/img/fields/Reference.png)
+![Field](https://firecms.co/img/fields/Reference.png)
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -22,14 +22,14 @@ buildProperty({
 });
 ```
 
-The data type is [`reference`](https://firecms.co/docs/config/reference)
+The data type is [`reference`](https://firecms.co/docs/properties/config/reference)
 
 Internally the component used
-is [`ReferenceFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/ReferenceFieldBinding).
+is [`ReferenceFieldBinding`](https://firecms.co/docs/api/functions/ReferenceFieldBinding).
 
 ### Multiple reference field
 
-![Field](/img/fields/Multi_reference.png)
+![Field](https://firecms.co/img/fields/Multi_reference.png)
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -44,10 +44,10 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](https://firecms.co/docs/config/array) with a reference
+The data type is [`array`](https://firecms.co/docs/properties/config/array) with a reference
 property as the `of` prop. 
 
 Internally the component used
-is [`ArrayOfReferencesFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/ArrayOfReferencesFieldBinding).
+is [`ArrayOfReferencesFieldBinding`](https://firecms.co/docs/api/functions/ArrayOfReferencesFieldBinding).
 
 

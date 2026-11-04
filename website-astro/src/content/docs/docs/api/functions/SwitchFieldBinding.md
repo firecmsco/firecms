@@ -3,11 +3,11 @@ slug: "docs/api/functions/SwitchFieldBinding"
 title: "SwitchFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SwitchFieldBinding
+[@firecms/core](/docs/api/README) / SwitchFieldBinding
 
 # Function: SwitchFieldBinding()
 

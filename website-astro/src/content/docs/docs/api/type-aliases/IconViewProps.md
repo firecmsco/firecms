@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/IconViewProps"
 title: "IconViewProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / IconViewProps
+[@firecms/core](/docs/api/README) / IconViewProps
 
 # Type Alias: IconViewProps
 

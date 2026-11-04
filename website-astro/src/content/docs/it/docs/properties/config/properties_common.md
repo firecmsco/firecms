@@ -25,7 +25,7 @@ Ogni proprietà nel CMS ha la propria API, ma condividono alcune **props comuni*
   campo disabilitato. Puoi anche specificare una configurazione per definire il
   comportamento delle proprietà disabilitate (inclusi messaggi personalizzati, cancella il valore quando
   disabilitato o nascondi completamente il campo)
-  [PropertyDisabledConfig](../../api/interfaces/PropertyDisabledConfig)
+  [PropertyDisabledConfig](/it/docs/api/interfaces/PropertyDisabledConfig)
 
 * `Field`
   Se hai bisogno di renderizzare un campo personalizzato, puoi creare un componente che
@@ -33,13 +33,13 @@ Ogni proprietà nel CMS ha la propria API, ma condividono alcune **props comuni*
   il valore e props di utilità aggiuntive come la presenza di errori. Puoi
   personalizzarlo passando props personalizzate che vengono ricevute nel
   componente. Maggiori dettagli su come
-  implementare [campi personalizzati](../custom_fields.mdx)
+  implementare [campi personalizzati](/it/docs/properties/custom_fields)
 
 * `Preview`
   Configura come una proprietà viene visualizzata come anteprima, es. nella vista
   collezione. Puoi personalizzarla passando props personalizzate che vengono ricevute nel
   componente. Maggiori dettagli su come
-  implementare [anteprime personalizzate](../custom_previews)
+  implementare [anteprime personalizzate](/it/docs/properties/custom_previews)
 
 * `customProps`
   Props aggiuntive che vengono passate ai componenti definiti in `Field` o

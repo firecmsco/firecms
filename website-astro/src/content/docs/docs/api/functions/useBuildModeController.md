@@ -3,15 +3,15 @@ slug: "docs/api/functions/useBuildModeController"
 title: "useBuildModeController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useBuildModeController
+[@firecms/core](/docs/api/README) / useBuildModeController
 
 # Function: useBuildModeController()
 
-> **useBuildModeController**(): [`ModeController`](../interfaces/ModeController)
+> **useBuildModeController**(): [`ModeController`](/docs/api/interfaces/ModeController)
 
 Defined in: [hooks/useBuildModeController.tsx:9](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildModeController.tsx)
 
@@ -20,4 +20,4 @@ the theme of the CMS
 
 ## Returns
 
-[`ModeController`](../interfaces/ModeController)
+[`ModeController`](/docs/api/interfaces/ModeController)

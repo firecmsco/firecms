@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/SideDialogPanelProps"
 title: "SideDialogPanelProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SideDialogPanelProps
+[@firecms/core](/docs/api/README) / SideDialogPanelProps
 
 # Interface: SideDialogPanelProps
 

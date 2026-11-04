@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/ModifyCollectionProps"
 title: "ModifyCollectionProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ModifyCollectionProps
+[@firecms/core](/docs/api/README) / ModifyCollectionProps
 
 # Type Alias: ModifyCollectionProps
 
@@ -19,7 +19,7 @@ Defined in: [types/modify\_collections.tsx:3](https://github.com/firecmsco/firec
 
 ### collection
 
-> **collection**: [`EntityCollection`](../interfaces/EntityCollection)
+> **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 Defined in: [types/modify\_collections.tsx:4](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/modify_collections.tsx)
 

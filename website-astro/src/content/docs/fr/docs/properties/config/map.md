@@ -73,8 +73,8 @@ Lorsque défini sur `true`, affiche les propriétés enfants directement sans ê
 ---
 
 Le widget créé est
-- [`MapFieldBinding`](../../api/functions/MapFieldBinding) Champ qui rend les champs
+- [`MapFieldBinding`](/fr/docs/api/functions/MapFieldBinding) Champ qui rend les champs
   de propriétés enfants
 
 Liens :
-- [API](../../api/interfaces/MapProperty)
+- [API](/fr/docs/api/interfaces/MapProperty)

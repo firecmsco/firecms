@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityStatus"
 title: "EntityStatus"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityStatus
+[@firecms/core](/docs/api/README) / EntityStatus
 
 # Type Alias: EntityStatus
 

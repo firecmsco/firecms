@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/EnumValuesChipProps"
 title: "EnumValuesChipProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EnumValuesChipProps
+[@firecms/core](/docs/api/README) / EnumValuesChipProps
 
 # Interface: EnumValuesChipProps
 
@@ -41,7 +41,7 @@ Defined in: [preview/components/EnumValuesChip.tsx:8](https://github.com/firecms
 
 ### enumValues?
 
-> `optional` **enumValues**: [`EnumValues`](../type-aliases/EnumValues)
+> `optional` **enumValues**: [`EnumValues`](/docs/api/type-aliases/EnumValues)
 
 Defined in: [preview/components/EnumValuesChip.tsx:7](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/EnumValuesChip.tsx)
 

@@ -31,8 +31,8 @@ buildProperty({
 });
 ```
 
-The data type is [`map`](../config/map).
+The data type is [`map`](/docs/properties/config/map).
 
 Internally the component used
-is [`MapFieldBinding`](../../api/functions/MapFieldBinding).
+is [`MapFieldBinding`](/docs/api/functions/MapFieldBinding).
 

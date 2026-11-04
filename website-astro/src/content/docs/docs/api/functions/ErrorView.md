@@ -3,11 +3,11 @@ slug: "docs/api/functions/ErrorView"
 title: "ErrorView"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ErrorView
+[@firecms/core](/docs/api/README) / ErrorView
 
 # Function: ErrorView()
 
@@ -22,7 +22,7 @@ from the datasource in a collection view.
 
 ### title
 
-[`ErrorViewProps`](../interfaces/ErrorViewProps)
+[`ErrorViewProps`](/docs/api/interfaces/ErrorViewProps)
 
 ## Returns
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/UrlComponentPreview"
 title: "UrlComponentPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / UrlComponentPreview
+[@firecms/core](/docs/api/README) / UrlComponentPreview
 
 # Function: UrlComponentPreview()
 
@@ -29,11 +29,11 @@ Defined in: [preview/components/UrlComponentPreview.tsx:13](https://github.com/f
 
 #### previewType?
 
-[`PreviewType`](../type-aliases/PreviewType)
+[`PreviewType`](/docs/api/type-aliases/PreviewType)
 
 #### size
 
-[`PreviewSize`](../type-aliases/PreviewSize)
+[`PreviewSize`](/docs/api/type-aliases/PreviewSize)
 
 #### url
 

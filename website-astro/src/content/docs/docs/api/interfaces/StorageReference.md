@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/StorageReference"
 title: "StorageReference"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / StorageReference
+[@firecms/core](/docs/api/README) / StorageReference
 
 # Interface: StorageReference
 

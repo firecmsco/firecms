@@ -2,7 +2,7 @@
 
 FireCMS offers three different ways to visualize your collections. Each view mode is optimized for different types of data and workflows.
 
-![Collection View Modes](/img/blog/kanban_settings.png)
+![Collection View Modes](https://firecms.co/img/blog/kanban_settings.png)
 
 ## Available View Modes
 
@@ -71,7 +71,7 @@ Transforms your collection into a responsive grid of cards. Each card displays:
 - Title and key metadata
 - Quick actions
 
-![Cards View Example](/img/blog/cards_view_plants.png)
+![Cards View Example](https://firecms.co/img/blog/cards_view_plants.png)
 
 ### Enable Cards View
 
@@ -129,7 +129,7 @@ If `imageProperty` is not set, or references a property that doesn't exist, Fire
 
 Displays entities as cards organized into columns based on an enum property. Drag and drop cards between columns to update their status.
 
-![Kanban View in Action](/img/blog/kanban_view.png)
+![Kanban View in Action](https://firecms.co/img/blog/kanban_view.png)
 
 ### Auto-Detection
 
@@ -206,5 +206,5 @@ If you're using FireCMS Cloud, you can configure view modes through the UI witho
 4. Optionally choose an **Image Property** to control the thumbnail used in Cards and Kanban views
 5. For Kanban, choose the **Kanban Column Property** and optionally an **Order Property**
 
-![Kanban Settings in FireCMS Cloud](/img/blog/kanban_settings.png)
+![Kanban Settings in FireCMS Cloud](https://firecms.co/img/blog/kanban_settings.png)
 

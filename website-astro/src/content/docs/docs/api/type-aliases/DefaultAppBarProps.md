@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/DefaultAppBarProps"
 title: "DefaultAppBarProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DefaultAppBarProps
+[@firecms/core](/docs/api/README) / DefaultAppBarProps
 
 # Type Alias: DefaultAppBarProps\<ADDITIONAL_PROPS\>
 
@@ -57,7 +57,7 @@ The content of the app bar, usually a title or logo. This includes a link to the
 
 ### user?
 
-> `optional` **user**: [`User`](User)
+> `optional` **user**: [`User`](/docs/api/type-aliases/User)
 
 ## Type Parameters
 

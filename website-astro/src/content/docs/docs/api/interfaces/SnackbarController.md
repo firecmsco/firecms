@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/SnackbarController"
 title: "SnackbarController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SnackbarController
+[@firecms/core](/docs/api/README) / SnackbarController
 
 # Interface: SnackbarController
 
@@ -54,7 +54,7 @@ You can optionally specify a title
 
 ###### type
 
-[`SnackbarMessageType`](../type-aliases/SnackbarMessageType)
+[`SnackbarMessageType`](/docs/api/type-aliases/SnackbarMessageType)
 
 #### Returns
 

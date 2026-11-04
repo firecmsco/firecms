@@ -3,11 +3,11 @@ slug: "docs/api/functions/EntityPreview"
 title: "EntityPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityPreview
+[@firecms/core](/docs/api/README) / EntityPreview
 
 # Function: EntityPreview()
 
@@ -22,7 +22,7 @@ It is used by default in reference fields and whenever a reference is displayed.
 
 ### \_\_namedParameters
 
-[`EntityPreviewProps`](../type-aliases/EntityPreviewProps)
+[`EntityPreviewProps`](/docs/api/type-aliases/EntityPreviewProps)
 
 ## Returns
 

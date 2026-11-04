@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/EntityFetchResult"
 title: "EntityFetchResult"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityFetchResult
+[@firecms/core](/docs/api/README) / EntityFetchResult
 
 # Interface: EntityFetchResult\<M\>
 
@@ -39,6 +39,6 @@ Defined in: [hooks/data/useEntityFetch.tsx:24](https://github.com/firecmsco/fire
 
 ### entity?
 
-> `optional` **entity**: [`Entity`](Entity)\<`M`\>
+> `optional` **entity**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 Defined in: [hooks/data/useEntityFetch.tsx:22](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useEntityFetch.tsx)

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityCollectionTableProps"
 title: "EntityCollectionTableProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionTableProps
+[@firecms/core](/docs/api/README) / EntityCollectionTableProps
 
 # Type Alias: EntityCollectionTableProps\<M, USER\>
 
@@ -23,7 +23,7 @@ Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:18]
 
 ### USER
 
-`USER` *extends* [`User`](User) = [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
@@ -59,7 +59,7 @@ Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:141
 
 ### additionalFields?
 
-> `optional` **additionalFields**: [`AdditionalFieldDelegate`](../interfaces/AdditionalFieldDelegate)\<`M`, `USER`\>[]
+> `optional` **additionalFields**: [`AdditionalFieldDelegate`](/docs/api/interfaces/AdditionalFieldDelegate)\<`M`, `USER`\>[]
 
 Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:121](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
@@ -67,7 +67,7 @@ Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:121
 
 ### AdditionalHeaderWidget?
 
-> `optional` **AdditionalHeaderWidget**: `React.ComponentType`\<\{ `onHover`: `boolean`; `property`: [`ResolvedProperty`](ResolvedProperty); `propertyKey`: `string`; \}\>
+> `optional` **AdditionalHeaderWidget**: `React.ComponentType`\<\{ `onHover`: `boolean`; `property`: [`ResolvedProperty`](/docs/api/type-aliases/ResolvedProperty); `propertyKey`: `string`; \}\>
 
 Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:135](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
@@ -91,7 +91,7 @@ Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:21]
 
 ### defaultSize?
 
-> `optional` **defaultSize**: [`CollectionSize`](CollectionSize)
+> `optional` **defaultSize**: [`CollectionSize`](/docs/api/type-aliases/CollectionSize)
 
 Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:123](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
@@ -139,7 +139,7 @@ Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:129
 
 ### forceFilter?
 
-> `optional` **forceFilter**: [`FilterValues`](FilterValues)\<`Extract`\<keyof `M`, `string`\>\>
+> `optional` **forceFilter**: [`FilterValues`](/docs/api/type-aliases/FilterValues)\<`Extract`\<keyof `M`, `string`\>\>
 
 Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:115](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
@@ -159,7 +159,7 @@ Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:147
 
 ### getPropertyFor()?
 
-> `optional` **getPropertyFor**: (`props`) => [`ResolvedProperties`](ResolvedProperties)\<`M`\>\[`string`\]
+> `optional` **getPropertyFor**: (`props`) => [`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)\<`M`\>\[`string`\]
 
 Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:127](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
@@ -171,13 +171,13 @@ Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:127
 
 #### Returns
 
-[`ResolvedProperties`](ResolvedProperties)\<`M`\>\[`string`\]
+[`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)\<`M`\>\[`string`\]
 
 ***
 
 ### highlightedEntities?
 
-> `optional` **highlightedEntities**: [`Entity`](../interfaces/Entity)\<`M`\>[]
+> `optional` **highlightedEntities**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>[]
 
 Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:33](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
@@ -257,7 +257,7 @@ Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:149
 
 ### onValueChange?
 
-> `optional` **onValueChange**: [`OnCellValueChange`](OnCellValueChange)\<`any`, `M`\>
+> `optional` **onValueChange**: [`OnCellValueChange`](/docs/api/type-aliases/OnCellValueChange)\<`any`, `M`\>
 
 Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:49](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
@@ -275,7 +275,7 @@ Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:155
 
 ### properties
 
-> **properties**: [`ResolvedProperties`](ResolvedProperties)\<`M`\>
+> **properties**: [`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)\<`M`\>
 
 Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:125](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
@@ -283,7 +283,7 @@ Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:125
 
 ### selectionController
 
-> **selectionController**: [`SelectionController`](SelectionController)\<`M`\>
+> **selectionController**: [`SelectionController`](/docs/api/type-aliases/SelectionController)\<`M`\>
 
 Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:28](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
@@ -309,13 +309,13 @@ Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:23]
 
 ### tableController
 
-> **tableController**: [`EntityTableController`](EntityTableController)\<`M`\>
+> **tableController**: [`EntityTableController`](/docs/api/type-aliases/EntityTableController)\<`M`\>
 
 Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:111](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Controller holding the logic for the table
-[useDataSourceTableController](../functions/useDataSourceTableController)
-[EntityTableController](EntityTableController)
+[useDataSourceTableController](/docs/api/functions/useDataSourceTableController)
+[EntityTableController](/docs/api/type-aliases/EntityTableController)
 
 ***
 
@@ -333,7 +333,7 @@ Builder for creating the buttons in each row
 
 ###### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 ###### frozen?
 
@@ -341,7 +341,7 @@ Builder for creating the buttons in each row
 
 ###### size
 
-[`CollectionSize`](CollectionSize)
+[`CollectionSize`](/docs/api/type-aliases/CollectionSize)
 
 ###### width
 
@@ -381,7 +381,7 @@ Override the title in the toolbar
 
 ### uniqueFieldValidator?
 
-> `optional` **uniqueFieldValidator**: [`UniqueFieldValidator`](UniqueFieldValidator)
+> `optional` **uniqueFieldValidator**: [`UniqueFieldValidator`](/docs/api/type-aliases/UniqueFieldValidator)
 
 Defined in: [components/EntityCollectionTable/EntityCollectionTableProps.tsx:51](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
@@ -399,7 +399,7 @@ Callback when a column is resized
 
 ##### params
 
-[`OnColumnResizeParams`](OnColumnResizeParams)
+[`OnColumnResizeParams`](/docs/api/type-aliases/OnColumnResizeParams)
 
 #### Returns
 
@@ -419,7 +419,7 @@ Callback when anywhere on the table is clicked
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 #### Returns
 
@@ -439,7 +439,7 @@ Callback when the selected size of the table is changed
 
 ##### size
 
-[`CollectionSize`](CollectionSize)
+[`CollectionSize`](/docs/api/type-aliases/CollectionSize)
 
 #### Returns
 

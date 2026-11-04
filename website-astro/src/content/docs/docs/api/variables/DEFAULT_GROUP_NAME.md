@@ -3,11 +3,11 @@ slug: "docs/api/variables/DEFAULT_GROUP_NAME"
 title: "DEFAULT_GROUP_NAME"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DEFAULT\_GROUP\_NAME
+[@firecms/core](/docs/api/README) / DEFAULT\_GROUP\_NAME
 
 # Variable: DEFAULT\_GROUP\_NAME
 

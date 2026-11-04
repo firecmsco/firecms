@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/WhereFilterOp"
 title: "WhereFilterOp"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / WhereFilterOp
+[@firecms/core](/docs/api/README) / WhereFilterOp
 
 # Type Alias: WhereFilterOp
 

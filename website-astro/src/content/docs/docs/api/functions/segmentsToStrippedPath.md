@@ -3,11 +3,11 @@ slug: "docs/api/functions/segmentsToStrippedPath"
 title: "segmentsToStrippedPath"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / segmentsToStrippedPath
+[@firecms/core](/docs/api/README) / segmentsToStrippedPath
 
 # Function: segmentsToStrippedPath()
 

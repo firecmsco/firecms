@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/CMSAnalyticsEvent"
 title: "CMSAnalyticsEvent"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / CMSAnalyticsEvent
+[@firecms/core](/docs/api/README) / CMSAnalyticsEvent
 
 # Type Alias: CMSAnalyticsEvent
 

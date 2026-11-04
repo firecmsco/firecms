@@ -3,11 +3,11 @@ slug: "docs/api/functions/NavigationGroup"
 title: "NavigationGroup"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NavigationGroup
+[@firecms/core](/docs/api/README) / NavigationGroup
 
 # Function: NavigationGroup()
 

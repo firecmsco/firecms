@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/PropertyValidationSchema"
 title: "PropertyValidationSchema"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyValidationSchema
+[@firecms/core](/docs/api/README) / PropertyValidationSchema
 
 # Interface: PropertyValidationSchema
 
@@ -18,10 +18,10 @@ additionally to these.
 
 ## Extended by
 
-- [`NumberPropertyValidationSchema`](NumberPropertyValidationSchema)
-- [`StringPropertyValidationSchema`](StringPropertyValidationSchema)
-- [`DatePropertyValidationSchema`](DatePropertyValidationSchema)
-- [`ArrayPropertyValidationSchema`](ArrayPropertyValidationSchema)
+- [`NumberPropertyValidationSchema`](/docs/api/interfaces/NumberPropertyValidationSchema)
+- [`StringPropertyValidationSchema`](/docs/api/interfaces/StringPropertyValidationSchema)
+- [`DatePropertyValidationSchema`](/docs/api/interfaces/DatePropertyValidationSchema)
+- [`ArrayPropertyValidationSchema`](/docs/api/interfaces/ArrayPropertyValidationSchema)
 
 ## Properties
 

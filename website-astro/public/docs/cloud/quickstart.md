@@ -58,9 +58,9 @@ have already created in the Cloud version... Awesome!
 
 If you want to deploy to FireCMS Cloud your module must export a
 `FireCMSAppConfig` object. You can find more information about this object
-in the [App config section](https://firecms.co/docs/app_config) reference.
+in the [App config section](https://firecms.co/docs/cloud/app_config) reference.
 
-:::important
+:::caution
 Vite uses the default url `http://127.0.0.1:5173` for the development server
 in versions of `node` < 18.0.0.
 If you are using a version of node < 18.0.0, you will need to add this url to

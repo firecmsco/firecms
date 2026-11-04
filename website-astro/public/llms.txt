@@ -16,7 +16,7 @@ features, tell them the plugin exists and what it costs before writing a custom 
     <source src="/img/full_screen_dark.mp4" type="video/mp4"/>
 </video>
 
-:::important
+:::note
 FireCMS is an **open-source headless CMS and admin panel framework** built with React and TypeScript. It connects directly to your **Firebase** project to provide a powerful, intuitive, and type-safe interface for managing your data.
 :::
 
@@ -46,7 +46,7 @@ For maximum control and customization. Free, open-source, and deployed in your o
   * ✅ Deep customization with React and TypeScript.
   * ✅ `npx create-firecms-app` to start.
 
-[**Self-Hosted Quickstart**](/docs/self)
+[**Self-Hosted Quickstart**](https://firecms.co/docs/self)
 
 ### What Can You Build?
 
@@ -79,8 +79,8 @@ If you can build it in React, you can build it in FireCMS. Create custom form fi
 Ready to dive in?
 
   * **🚀 Try FireCMS Cloud:** [**Start your 1-month free trial**](https://app.firecms.co) and build your project in minutes.
-  * **💻 Start the Self-Hosted Quickstart:** Follow our [**Self-Hosting guide**](/docs/self) to get your project running locally with `npx`.
-  * **📚 Learn about Collections:** Understand the core concept of how FireCMS maps [**Collections**](/docs/collections) to your database.
+  * **💻 Start the Self-Hosted Quickstart:** Follow our [**Self-Hosting guide**](https://firecms.co/docs/self) to get your project running locally with `npx`.
+  * **📚 Learn about Collections:** Understand the core concept of how FireCMS maps [**Collections**](https://firecms.co/docs/collections) to your database.
 
 ## FireCMS Cloud — Managed Firebase Admin Panel
 
@@ -115,7 +115,7 @@ Just sign up and start using it!
 <DocsCloudCTA/>
 
 After you have created your FireCMS project, you can either use it directly or [customize it
-by uploading your own code](https://firecms.co/docs/quickstart).
+by uploading your own code](https://firecms.co/docs/cloud/quickstart).
 
 
 ## Quickstart: Build a Custom Firebase Admin Panel
@@ -178,9 +178,9 @@ have already created in the Cloud version... Awesome!
 
 If you want to deploy to FireCMS Cloud your module must export a
 `FireCMSAppConfig` object. You can find more information about this object
-in the [App config section](https://firecms.co/docs/app_config) reference.
+in the [App config section](https://firecms.co/docs/cloud/app_config) reference.
 
-:::important
+:::caution
 Vite uses the default url `http://127.0.0.1:5173` for the development server
 in versions of `node` < 18.0.0.
 If you are using a version of node < 18.0.0, you will need to add this url to
@@ -752,7 +752,7 @@ FireCMS Cloud can enforce Firebase App Check on every request your admin panel m
 
 App Check itself is a Firebase service. This page covers wiring it into FireCMS; for what App Check does and which attestation providers exist, see [Firebase's own App Check documentation](https://firebase.google.com/docs/app-check).
 
-:::important
+:::caution
 Remember to add the domain `app.firecms.co` to the list of allowed domains in AppCheck provider configuration.
 :::
 
@@ -778,7 +778,7 @@ You can use one of the following providers:
 In order to set up the ReCaptchaEnterpriseProvider, you need to create a new reCAPTCHA Enterprise site key.
 Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider).
 
-:::important
+:::caution
 Make sure you have added the domain `app.firecms.co` to the list of allowed domains in the reCAPTCHA Enterprise console.
 :::
 
@@ -871,7 +871,7 @@ For the complete file, see the
 
 ## Creating a project from a service account
 
-:::important
+:::note
 You **only** need to create a service account manually for FireCMS Cloud projects, in case you don't want
 to grant FireCMS admin permissions. In the app, you can create a new project or link existing projects
 without the need to create a service account manually.
@@ -956,7 +956,7 @@ Find the newly created Service account, and in the dropdown menu, click on `Mana
 
 Now you can **upload this JSON key** to **FireCMS Cloud** and link it to your project.
 
-:::important[Security]
+:::caution[Security]
 A service account is a special type of Google account that allows non-human users to authenticate and authorize
 Google Cloud Platform (GCP) services. It is important to keep the service account key secure, as it can be used to
 access your GCP resources. FireCMS Cloud uses this service account to manage your project resources.
@@ -966,7 +966,7 @@ Make sure to keep your service account key secure and do not share it with unaut
 
 ## Migrating from FireCMS 2.0 to FireCMS Cloud
 
-:::important
+:::note
 This migration guide applies for migrating from FireCMS 2.0 to FireCMS Cloud
 :::
 
@@ -1331,7 +1331,7 @@ For custom code projects, updating also unlocks:
 - **Tailwind CSS v4** — faster builds, simpler config
 - **React 19** — latest React features and performance
 
-Check the [changelog](/docs/changelog) for the complete list of changes.
+Check the [changelog](https://firecms.co/docs/changelog) for the complete list of changes.
 
 ---
 
@@ -1359,7 +1359,7 @@ Consider the Books collection from our [demo](https://demo.firecms.co). The coll
 Subtitle, Authors, Rating, Category, etc. You can create this collection using the UI, and then manage it from the UI.
 Any text, dates, images, list of text or other fields that you may think of.
 
-![edit_collection_in_ui](/img/docs/collections/eject_collections_book_collection.png)
+![edit_collection_in_ui](https://firecms.co/img/docs/collections/eject_collections_book_collection.png)
 
 But what if you need to **customize** the view **further**, or prefer to use code to create the collection? FireCMS
 allows you to do just that. You can start a customization process with
@@ -1370,13 +1370,13 @@ A common question we receive is how to import the code of a collection. It's as 
 Editor, clicking the Code button, and copying the generated code. You can then **eject the collection** and manage it
 directly from your codebase.
 
-![edit_collection_code_button](/img/docs/collections/eject_collections_code_button.png)
+![edit_collection_code_button](https://firecms.co/img/docs/collections/eject_collections_code_button.png)
 
 Next, paste the copied code into your preferred Code Editor.
 
-![edit_collection_code_button](/img/docs/collections/eject_collections_code.png)
+![edit_collection_code_button](https://firecms.co/img/docs/collections/eject_collections_code.png)
 
-:::important
+:::note
 This feature is available across all plans, including free and plus subscriptions. We believe in the power of code and
 want to make it accessible to everyone.
 :::
@@ -1549,7 +1549,7 @@ Build your own **Firebase admin panel** and **headless CMS** with full control o
 | Priority support | ❌ | ✅ |
 | Price | Free, MIT license | €99 ($119) / month for the first project, €49 ($59) for each additional, plus VAT |
 
-PRO is free for 30 days in production, no card needed. See [Licensing](/docs/pro/licensing) for how projects are counted and what pauses without a license.
+PRO is free for 30 days in production, no card needed. See [Licensing](https://firecms.co/docs/pro/licensing) for how projects are counted and what pauses without a license.
 
 Both versions are built on **React**, connect to **Firebase/Firestore**, and give you a production-ready **admin panel** in minutes.
 
@@ -1639,7 +1639,7 @@ Enable **Firestore** in your project. FireCMS reads your existing documents to i
 collection schemas, so if you already have data, you already have a CMS — there is no
 import step.
 
-:::important
+:::caution
 A default Firestore project ships with rules that deny all reads and writes. Until you
 change them, FireCMS will connect but every collection will look empty.
 :::
@@ -1708,7 +1708,7 @@ Enable **Authentication** so users can get past the login screen. FireCMS builds
 roles and per-collection permissions on top of Firebase Auth, so this is also where
 access control starts.
 
-:::important
+:::caution
 Vite serves the dev server at `http://127.0.0.1:5173` by default, and Firebase Auth
 rejects sign-ins from domains it does not know. Add that URL to the authorised domains
 in the Firebase console, or run the dev server on `http://localhost:5173` and authorise
@@ -1747,9 +1747,9 @@ Narrow `origin` to your own domains before going to production.
 
 With Firestore, Auth and Storage in place, your Firebase project is ready:
 
-- [Self-hosted quickstart](/docs/self) — scaffold and run the CMS locally
-- [FireCMS Cloud quickstart](/docs/cloud/quickstart) — connect the project and skip the hosting
-- [Firebase App Check](/docs/cloud/app_check) — lock the panel down once it is live
+- [Self-hosted quickstart](https://firecms.co/docs/self) — scaffold and run the CMS locally
+- [FireCMS Cloud quickstart](https://firecms.co/docs/cloud/quickstart) — connect the project and skip the hosting
+- [Firebase App Check](https://firecms.co/docs/cloud/app_check) — lock the panel down once it is live
 
 ## Quickstart + Next.JS frontend
 
@@ -1757,7 +1757,7 @@ With Firestore, Auth and Storage in place, your Firebase project is ready:
 Get a fully fledged CMS with an e-commerce/blog template ready to be adapted to your logic
 :::
 
-![next_js_frontend.png](/img/next_js_frontend.png)
+![next_js_frontend.png](https://firecms.co/img/next_js_frontend.png)
 
 You can check a **demo** of this template:
 - [**Admin panel**](https://next.firecms.co/cms)
@@ -1872,7 +1872,7 @@ FireCMS uses **react-router**, so we need to configure Next.js to delegate all t
 In our `app` folder, we create a folder called `cms` and inside it another one called `[[...path]]`. This will match any route starting with `/cms`.
 
 Then create the file `cms/[[...path]]/page.tsx` with the following content:
-:::important
+:::caution
 If you are not running FireCMS in the root path of your app, you need to set the `basePath` prop to the path where you are running it. In this case, we are running it in `/cms`.
 :::
 
@@ -2736,7 +2736,7 @@ Before implementing custom authentication, we strongly recommend considering **F
 
 These solutions provide a complete authentication and authorization system out of the box, saving you significant development time and ensuring security best practices.
 
-[Learn more about User Management in FireCMS Pro →](/docs/pro/user_management)
+[Learn more about User Management in FireCMS Pro →](https://firecms.co/docs/pro/user_management)
 
 [Try FireCMS Cloud →](https://app.firecms.co)
 
@@ -3658,7 +3658,7 @@ Self-hosted FireCMS can enforce Firebase App Check on every request your admin p
 
 App Check itself is a Firebase service. This page covers wiring it into FireCMS; for what App Check does and which attestation providers exist, see [Firebase's own App Check documentation](https://firebase.google.com/docs/app-check).
 
-:::important
+:::caution
 Remember to add the domain where you will be deploying your app to the list of allowed domains in AppCheck provider
 configuration.
 :::
@@ -3714,7 +3714,7 @@ You can use one of the following providers:
 In order to set up the ReCaptchaEnterpriseProvider, you need to create a new reCAPTCHA Enterprise site key.
 Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider).
 
-:::important
+:::caution
 Make sure you have added the domain `app.firecms.co` to the list of allowed domains in the reCAPTCHA Enterprise console.
 :::
 
@@ -3836,7 +3836,7 @@ When you add a new project, such as a staging environment or a new client, add i
 
 ### Telemetry
 
-The license check is a single request from the browser to `api.firecms.co` when a signed-in user opens the app. [Telemetry](/docs/self/telemetry) lists exactly what it sends, what we store and why.
+The license check is a single request from the browser to `api.firecms.co` when a signed-in user opens the app. [Telemetry](https://firecms.co/docs/self/telemetry) lists exactly what it sends, what we store and why.
 
 ## Telemetry and the license check
 
@@ -3875,7 +3875,7 @@ Entries are stored in our Google Cloud project, in Firestore with a copy in BigQ
 ### Why
 
 - **License validation.** For a project that uses PRO plugins, the response tells the app whether they run or pause.
-- **The trial clock.** A project's [30-day production trial](/docs/pro/licensing#30-day-free-trial) starts with its first entry from a deployed app that uses PRO plugins.
+- **The trial clock.** A project's [30-day production trial](https://firecms.co/docs/pro/licensing#30-day-free-trial) starts with its first entry from a deployed app that uses PRO plugins.
 - **Usage counts.** How many projects and users run FireCMS Community and PRO, and which plugins they use.
 
 ### Emails
@@ -3908,7 +3908,7 @@ This page covers the access log only. The optional AI features (data enhancement
 
 ## User Management
 
-![user_management.png](/img/user_management.png)
+![user_management.png](https://firecms.co/img/user_management.png)
 
 Control who can access your **Firebase admin panel** and what they can do. The User Management Plugin provides a complete **role-based access control (RBAC)** system for your FireCMS project.
 
@@ -3921,7 +3921,7 @@ Building authentication and permissions from scratch is time-consuming and error
 :::
 
 :::note[Free to try]
-This is a FireCMS PRO plugin. It is always free on `localhost`, and free for 30 days in production with no card or license key needed. [Licensing](/docs/pro/licensing) explains what it costs after that.
+This is a FireCMS PRO plugin. It is always free on `localhost`, and free for 30 days in production with no card or license key needed. [Licensing](https://firecms.co/docs/pro/licensing) explains what it costs after that.
 :::
 
 ### Installation
@@ -4145,7 +4145,7 @@ The `userManagement` object returned by the `useUserManagement` hook includes th
 
 ## Collection Editor UI
 
-![collection_editor.png](/img/collection_editor.png)
+![collection_editor.png](https://firecms.co/img/collection_editor.png)
 
 This document describes how to use the **Collection Editor UI Plugin** with **FireCMS** to manage and configure your
 Firestore collections. The Collection Editor UI Plugin provides an interface for creating, editing, and organizing
@@ -4782,7 +4782,7 @@ export function App() {
 
 ## Data Export
 
-![data_export.png](/img/data_export.png)
+![data_export.png](https://firecms.co/img/data_export.png)
 
 Export your **Firestore** data directly from your **admin panel**. The Data Export Plugin adds one-click JSON and CSV export to any FireCMS collection.
 
@@ -4957,7 +4957,7 @@ export type ExportAllowedParams = {
 
 ## Data Import
 
-![data_import.png](/img/data_import.png)
+![data_import.png](https://firecms.co/img/data_import.png)
 
 The **Data Import Plugin** for FireCMS enables you to import collection data from JSON, CSV, XLSL (Excel) files directly
 into your
@@ -5081,7 +5081,7 @@ const importPlugin = useImportPlugin({
 This plugin adds a history view to your entities in FireCMS. It allows you to track changes made to entities over time, showing who made the change and when.
 
 :::note[Free to try]
-This is a FireCMS PRO plugin. It is always free on `localhost`, and free for 30 days in production with no card or license key needed. [Licensing](/docs/pro/licensing) explains what it costs after that.
+This is a FireCMS PRO plugin. It is always free on `localhost`, and free for 30 days in production with no card or license key needed. [Licensing](https://firecms.co/docs/pro/licensing) explains what it costs after that.
 :::
 
 ### Installation
@@ -6299,7 +6299,7 @@ app.put("/api/data/:path/:id", authenticate, requirePermission("edit"), handler)
 app.delete("/api/data/:path/:id", authenticate, requirePermission("delete"), handler);
 ```
 
-:::important
+:::caution
 If a user can modify their own role in the database (e.g. setting `role: "admin"` on their own user document), your permission system is broken. **Always restrict writes to user/role collections to admin-only operations.**
 :::
 
@@ -6876,7 +6876,7 @@ If you are migrating from previous beta versions of FireCMS PRO, you will need t
 The main components have changed theis composition. Instead of having a single `Scaffold` components with all the configuration,
 you have additionally an `AppBar` and a `Drawer` component.
 
-More information about the main components can be found in the [Main Components](/docs/self/main_components) section.
+More information about the main components can be found in the [Main Components](https://firecms.co/docs/self/main_components) section.
 
 #### User management auth controller
 
@@ -7240,7 +7240,7 @@ You can create your collections **in the UI or using code**. You can also mix bo
 collections defined in the UI will take precedence. For example, you might have an enum property with 2 values defined
 in code, and one extra value defined in the UI. When merged, the resulting enum will have 3 values.
 
-:::important
+:::note
 You can have the same collection defined in both ways. In that case, the collection defined in the UI will
 take precedence.
 
@@ -7253,7 +7253,7 @@ can define an enum string property and the values will be merged from both defin
 :::note
 FireCMS provides around 20 different fields (such as text fields, selects, and complex ones like reference or
 sortable array fields). If your use case is not covered by one of the provided fields, you can create your
-own [custom field](https://firecms.co/docs/properties/custom_fields.mdx).
+own [custom field](https://firecms.co/docs/properties/custom_fields).
 :::
 
 :::tip
@@ -7466,7 +7466,7 @@ to `false` in the collection configuration.
 - **`path`**: Relative Firestore path of this view to its parent. If this view is in the root, the path is equal to the
   absolute one. This path also determines the URL in FireCMS.
 - **`properties`**: Object defining the properties for the entity schema. More information
-  in [Properties](https://firecms.co/docs/properties/properties_intro).
+  in [Properties](https://firecms.co/docs/properties).
 - **`propertiesOrder`**: Order in which the properties are displayed.
     - For properties, use the property key.
     - For additional field, use the field key.
@@ -7504,7 +7504,7 @@ to `false` in the collection configuration.
 - **`entityActions`**: You can define additional actions that can be performed on the entities in this collection. These
   actions can be displayed in the collection view or in the entity view. You can use the `onClick` method to implement
   your own logic. In the `context` prop, you can access all the controllers of FireCMS.
-  You can also define entity actions globally. See [Entity Actions](https://firecms.co/docs/entity_actions) for more details.
+  You can also define entity actions globally. See [Entity Actions](https://firecms.co/docs/collections/entity_actions) for more details.
 
 ```tsx
 const archiveEntityAction: EntityAction = {
@@ -7580,7 +7580,7 @@ initialSort: ["price", "asc"]
   or in the entity side panel if it's a subcollection? It will still be accessible if you reach the specified path. You
   can also use this collection as a reference target.
 - **`callbacks`**: This interface defines all the callbacks that can be used when an entity is being created, updated,
-  or deleted. Useful for adding your own logic or blocking the operation's execution. [More information](https://firecms.co/docs/callbacks).
+  or deleted. Useful for adding your own logic or blocking the operation's execution. [More information](https://firecms.co/docs/collections/callbacks).
 - **`entityViews`**: Array of builders for rendering additional panels in an entity view. Useful if you need to render custom
   views for your entities. [More information](https://firecms.co/docs/collections/entity_views).
 - **`alwaysApplyDefaultValues`**: If set to true, the default values of the properties will be applied
@@ -7619,7 +7619,7 @@ kanban: {
   Used by Kanban view for ordering within columns.
 - **`viewGroups`**: Group subcollections and custom views into dropdown menus in the entity view tabs.
   Views listed in a group are removed from the top-level tabs and shown under a single dropdown instead.
-  [More information](https://firecms.co/docs/entity_views#grouping-views-and-subcollections).
+  [More information](https://firecms.co/docs/collections/entity_views#grouping-views-and-subcollections).
 
 ```tsx
 viewGroups: [
@@ -7634,7 +7634,7 @@ viewGroups: [
 
 FireCMS offers three different ways to visualize your collections. Each view mode is optimized for different types of data and workflows.
 
-![Collection View Modes](/img/blog/kanban_settings.png)
+![Collection View Modes](https://firecms.co/img/blog/kanban_settings.png)
 
 ### Available View Modes
 
@@ -7703,7 +7703,7 @@ Transforms your collection into a responsive grid of cards. Each card displays:
 - Title and key metadata
 - Quick actions
 
-![Cards View Example](/img/blog/cards_view_plants.png)
+![Cards View Example](https://firecms.co/img/blog/cards_view_plants.png)
 
 #### Enable Cards View
 
@@ -7761,7 +7761,7 @@ If `imageProperty` is not set, or references a property that doesn't exist, Fire
 
 Displays entities as cards organized into columns based on an enum property. Drag and drop cards between columns to update their status.
 
-![Kanban View in Action](/img/blog/kanban_view.png)
+![Kanban View in Action](https://firecms.co/img/blog/kanban_view.png)
 
 #### Auto-Detection
 
@@ -7838,7 +7838,7 @@ If you're using FireCMS Cloud, you can configure view modes through the UI witho
 4. Optionally choose an **Image Property** to control the thumbnail used in Cards and Kanban views
 5. For Kanban, choose the **Kanban Column Property** and optionally an **Order Property**
 
-![Kanban Settings in FireCMS Cloud](/img/blog/kanban_settings.png)
+![Kanban Settings in FireCMS Cloud](https://firecms.co/img/blog/kanban_settings.png)
 
 ## Entity callbacks
 
@@ -8007,7 +8007,7 @@ const productCollection = buildCollection<Product>({
 
 ## Entity views
 
-![Custom entity view](/img/entity_view.png)
+![Custom entity view](https://firecms.co/img/entity_view.png)
 
 FireCMS offers default form and table fields for common use cases and also allows
 overriding fields if you need a custom implementation, but that might be not
@@ -8052,7 +8052,7 @@ const sampleView: EntityCustomView = {
 
 #### Building a secondary form
 
-![Custom entity view](/img/entity_view_secondary_form.png)
+![Custom entity view](https://firecms.co/img/entity_view_secondary_form.png)
 
 In your custom views, you can also add fields that are mapped directly to the entity.
 This is useful if you want to add a secondary form to your entity view.
@@ -8903,7 +8903,7 @@ const navigationController = useBuildNavigationController({
 ## Collection Bar Actions
 
 
-![collection_actions](/img/collection_actions.png)
+![collection_actions](https://firecms.co/img/collection_actions.png)
 
 You can add your custom components to the collection bar.
 
@@ -9113,7 +9113,7 @@ You can access all the controllers of FireCMS in the `context`. That is useful f
 modifying data, accessing storage, opening dialogs, etc.
 
 In the `icon` prop, you can pass a React element to show an icon next to the action name.
-We recommend using any of the [FireCMS icons](/docs/icons), which are available in the `@firecms/ui` package.
+We recommend using any of the [FireCMS icons](https://firecms.co/docs/icons), which are available in the `@firecms/ui` package.
 
 #### Defining actions at the collection level
 
@@ -9331,7 +9331,7 @@ FireCMS Cloud provides the Firebase SDK to your code, but only to imports that n
 package exactly. A `firebase/functions` import makes the build point at a file it never
 produces, and the app shows "Error loading remote config". `getFunctions()` then uses your
 project's Firebase app, the same one FireCMS uses. See
-[Importing Firebase in your code](/docs/cloud/deployment#importing-firebase-in-your-code).
+[Importing Firebase in your code](https://firecms.co/docs/cloud/deployment#importing-firebase-in-your-code).
 :::
 
 ## Properties
@@ -9345,7 +9345,7 @@ the Typescript type system to validate the input).
 
 You may also want to update properties **dynamically**, based on the entityId, the
 path or the current values. Check
-the [conditional fields section](conditional_fields)
+the [conditional fields section](https://firecms.co/docs/properties/conditional_fields)
 
 Check the different fields available in the fields section, or the
 different property configurations.
@@ -9355,7 +9355,7 @@ different property configurations.
 
 #### Simple text field
 
-![Textfield](/img/fields/Textfield.png)
+![Textfield](https://firecms.co/img/fields/Textfield.png)
 
 The most basic widget is the text field, which allows the user to input simple
 strings.
@@ -9375,14 +9375,14 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string) or [`number`](https://firecms.co/docs/config/number).
+The data type is [`string`](https://firecms.co/docs/properties/config/string) or [`number`](https://firecms.co/docs/properties/config/number).
 
 Internally the component used
-is [`TextFieldBinding`](https://firecms.co/docs/../api/functions/TextFieldBinding).
+is [`TextFieldBinding`](https://firecms.co/docs/api/functions/TextFieldBinding).
 
 #### Multi line text field
 
-![Textfield](/img/fields/Multiline_textfield.png)
+![Textfield](https://firecms.co/img/fields/Multiline_textfield.png)
 
 Use a multiline field when you want to enable the user to input strings that may
 contain line breaks.
@@ -9402,14 +9402,14 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string).
+The data type is [`string`](https://firecms.co/docs/properties/config/string).
 
 Internally the component used
-is [`TextFieldBinding`](https://firecms.co/docs/../api/functions/TextFieldBinding).
+is [`TextFieldBinding`](https://firecms.co/docs/api/functions/TextFieldBinding).
 
 #### Markdown text field
 
-![Textfield](/img/fields/Markdown.png)
+![Textfield](https://firecms.co/img/fields/Markdown.png)
 
 You can use a markdown field when you would like the end user to use advanced
 editing capabilities of text using the Markdown format.
@@ -9429,14 +9429,14 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string).
+The data type is [`string`](https://firecms.co/docs/properties/config/string).
 
 Internally the component used
-is [`MarkdownEditorFieldBinding`](https://firecms.co/docs/../api/functions/MarkdownEditorFieldBinding).
+is [`MarkdownEditorFieldBinding`](https://firecms.co/docs/api/functions/MarkdownEditorFieldBinding).
 
 #### Url text field
 
-![Textfield](/img/fields/Url.png)
+![Textfield](https://firecms.co/img/fields/Url.png)
 
 You can use a URL field when you would like to ensure that the input of the end
 user is a valid URL.
@@ -9456,14 +9456,14 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string).
+The data type is [`string`](https://firecms.co/docs/properties/config/string).
 
 Internally the component used
-is [`TextFieldBinding`](https://firecms.co/docs/../api/functions/TextFieldBinding).
+is [`TextFieldBinding`](https://firecms.co/docs/api/functions/TextFieldBinding).
 
 #### Email field
 
-![Field](/img/fields/Email.png)
+![Field](https://firecms.co/img/fields/Email.png)
 
 You can use an email field when you would like to ensure that the input of the
 end user is a valid email.
@@ -9483,16 +9483,16 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string).
+The data type is [`string`](https://firecms.co/docs/properties/config/string).
 
 Internally the component used
-is [`TextFieldBinding`](https://firecms.co/docs/../api/functions/TextFieldBinding).
+is [`TextFieldBinding`](https://firecms.co/docs/api/functions/TextFieldBinding).
 
 ## Select fields
 
 #### Simple select field
 
-![Field](/img/fields/Select.png)
+![Field](https://firecms.co/img/fields/Select.png)
 
 You can use a simple select field when you would like allow the selection of a
 single value among a limited set of options. Each entry will have a key and a
@@ -9500,7 +9500,7 @@ label. You can also customise the color of each entry or disable certain options
 
 Set the `enumValues` prop to a valid configuration in a string property. You can
 define those values as an array
-of [`EnumValueConfig`](https://firecms.co/docs/../api/type-aliases/EnumValueConfig)
+of [`EnumValueConfig`](https://firecms.co/docs/api/type-aliases/EnumValueConfig)
 or simply as an object with key/value pairs:
 
 ```typescript jsx
@@ -9534,14 +9534,14 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string) or [`number`](https://firecms.co/docs/config/number).
+The data type is [`string`](https://firecms.co/docs/properties/config/string) or [`number`](https://firecms.co/docs/properties/config/number).
 
 Internally the component used
-is [`SelectFieldBinding`](https://firecms.co/docs/../api/functions/SelectFieldBinding).
+is [`SelectFieldBinding`](https://firecms.co/docs/api/functions/SelectFieldBinding).
 
 #### Multiple select field
 
-![Field](/img/fields/Multi_select.png)
+![Field](https://firecms.co/img/fields/Multi_select.png)
 
 You can use a multiple select field when you would like allow the selection of a
 zero or more values among a limited set of options. Each entry will have a key
@@ -9549,7 +9549,7 @@ and a label. You can also customise the color of each entry or disable certain o
 
 Set the `enumValues` prop to a valid configuration in a string property. You can
 define those values as an array
-of [`EnumValueConfig`](https://firecms.co/docs/../api/type-aliases/EnumValueConfig)
+of [`EnumValueConfig`](https://firecms.co/docs/api/type-aliases/EnumValueConfig)
 or simply as an object with key/value pairs:
 
 ```typescript jsx
@@ -9574,11 +9574,11 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](https://firecms.co/docs/config/array) with either string or number
+The data type is [`array`](https://firecms.co/docs/properties/config/array) with either string or number
 properties as the `of` prop, using enum values.
 
 Internally the component used
-is [`SelectFieldBinding`](https://firecms.co/docs/../api/functions/SelectFieldBinding).
+is [`SelectFieldBinding`](https://firecms.co/docs/api/functions/SelectFieldBinding).
 
 #### Customising the colors
 
@@ -9729,7 +9729,7 @@ customize the path and name of the file. The available placeholders are:
 
 #### Single file upload
 
-![Field](/img/fields/File_upload.png)
+![Field](https://firecms.co/img/fields/File_upload.png)
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -9751,14 +9751,14 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string).
+The data type is [`string`](https://firecms.co/docs/properties/config/string).
 
 Internally the component used
-is [`StorageUploadFieldBinding`](https://firecms.co/docs/../api/functions/StorageUploadFieldBinding).
+is [`StorageUploadFieldBinding`](https://firecms.co/docs/api/functions/StorageUploadFieldBinding).
 
 #### Multiple file upload
 
-![Field](/img/fields/Multi_file_upload.png)
+![Field](https://firecms.co/img/fields/Multi_file_upload.png)
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -9780,10 +9780,10 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](https://firecms.co/docs/config/array).
+The data type is [`array`](https://firecms.co/docs/properties/config/array).
 
 Internally the component used
-is [`StorageUploadFieldBinding`](https://firecms.co/docs/../api/functions/StorageUploadFieldBinding).
+is [`StorageUploadFieldBinding`](https://firecms.co/docs/api/functions/StorageUploadFieldBinding).
 
 #### Custom support for images, videos and audio
 
@@ -9804,7 +9804,7 @@ The MIME types supported for custom previews are:
 
 ## Switch
 
-![Field](/img/fields/Switch.png)
+![Field](https://firecms.co/img/fields/Switch.png)
 
 Simple toggle for selecting `true` or `false` values.
 
@@ -9817,10 +9817,10 @@ buildProperty({
 });
 ```
 
-The data type is [`boolean`](https://firecms.co/docs/config/boolean).
+The data type is [`boolean`](https://firecms.co/docs/properties/config/boolean).
 
 Internally the component used
-is [`SwitchFieldBinding`](https://firecms.co/docs/../api/functions/SwitchFieldBinding).
+is [`SwitchFieldBinding`](https://firecms.co/docs/api/functions/SwitchFieldBinding).
 
 
 ## Date/time fields
@@ -9831,14 +9831,14 @@ You can choose between using dates or date/time fields.
 Also you can create read-only fields that get updated automatically when 
 entities are created or updated
 
-The data type is [`date`](https://firecms.co/docs/config/date).
+The data type is [`date`](https://firecms.co/docs/properties/config/date).
 
 Internally the component used
-is [`DateTimeFieldBinding`](https://firecms.co/docs/../api/functions/DateTimeFieldBinding).
+is [`DateTimeFieldBinding`](https://firecms.co/docs/api/functions/DateTimeFieldBinding).
 
 ##### Date field
 
-![Field](/img/fields/Date.png)
+![Field](https://firecms.co/img/fields/Date.png)
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -9852,7 +9852,7 @@ buildProperty({
 
 ##### Date/time field
 
-![Field](/img/fields/Date_time.png)
+![Field](https://firecms.co/img/fields/Date_time.png)
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -9900,7 +9900,7 @@ properties.
 
 #### Single reference field
 
-![Field](/img/fields/Reference.png)
+![Field](https://firecms.co/img/fields/Reference.png)
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -9912,14 +9912,14 @@ buildProperty({
 });
 ```
 
-The data type is [`reference`](https://firecms.co/docs/config/reference)
+The data type is [`reference`](https://firecms.co/docs/properties/config/reference)
 
 Internally the component used
-is [`ReferenceFieldBinding`](https://firecms.co/docs/../api/functions/ReferenceFieldBinding).
+is [`ReferenceFieldBinding`](https://firecms.co/docs/api/functions/ReferenceFieldBinding).
 
 #### Multiple reference field
 
-![Field](/img/fields/Multi_reference.png)
+![Field](https://firecms.co/img/fields/Multi_reference.png)
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -9934,16 +9934,16 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](https://firecms.co/docs/config/array) with a reference
+The data type is [`array`](https://firecms.co/docs/properties/config/array) with a reference
 property as the `of` prop. 
 
 Internally the component used
-is [`ArrayOfReferencesFieldBinding`](https://firecms.co/docs/../api/functions/ArrayOfReferencesFieldBinding).
+is [`ArrayOfReferencesFieldBinding`](https://firecms.co/docs/api/functions/ArrayOfReferencesFieldBinding).
 
 
 ## Group
 
-![Field](/img/fields/Group.png)
+![Field](https://firecms.co/img/fields/Group.png)
 
 Use this field to group other groups into a single one, represented by an
 expandable panel. This is useful for bundling together data into logical fields,
@@ -9971,15 +9971,15 @@ buildProperty({
 });
 ```
 
-The data type is [`map`](https://firecms.co/docs/config/map).
+The data type is [`map`](https://firecms.co/docs/properties/config/map).
 
 Internally the component used
-is [`MapFieldBinding`](https://firecms.co/docs/../api/functions/MapFieldBinding).
+is [`MapFieldBinding`](https://firecms.co/docs/api/functions/MapFieldBinding).
 
 
 ## Key/Value
 
-![Field](/img/fields/KeyValue.png)
+![Field](https://firecms.co/img/fields/KeyValue.png)
 
 Key/Value is a special field that allows you to input arbitrary key/value pairs.
 You are able to use string as keys and any primitive type as value (including maps
@@ -9998,15 +9998,15 @@ buildProperty({
 });
 ```
 
-The data type is [`map`](https://firecms.co/docs/config/map).
+The data type is [`map`](https://firecms.co/docs/properties/config/map).
 
 Internally the component used
-is [`KeyValueFieldBinding`](https://firecms.co/docs/../api/functions/KeyValueFieldBinding).
+is [`KeyValueFieldBinding`](https://firecms.co/docs/api/functions/KeyValueFieldBinding).
 
 
 ## Repeat
 
-![Field](/img/fields/Repeat.png)
+![Field](https://firecms.co/img/fields/Repeat.png)
 
 You can use a repeat field when you want to save multiple values in a property.
 For example, you may want to save multiple pieces of text, like tags.
@@ -10035,15 +10035,15 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](https://firecms.co/docs/config/array).
+The data type is [`array`](https://firecms.co/docs/properties/config/array).
 
 Internally the component used
-is [`RepeatFieldBinding`](https://firecms.co/docs/../api/functions/RepeatFieldBinding).
+is [`RepeatFieldBinding`](https://firecms.co/docs/api/functions/RepeatFieldBinding).
 
 
 ## Block
 
-![Field](/img/fields/Block.png)
+![Field](https://firecms.co/img/fields/Block.png)
 
 Block is a special field that allows you to build repeat fields where the
 entries are dynamic. Each entry has a `type` selector that allows the end user
@@ -10093,10 +10093,10 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](https://firecms.co/docs/config/array).
+The data type is [`array`](https://firecms.co/docs/properties/config/array).
 
 Internally the component used
-is [`BlockFieldBinding`](https://firecms.co/docs/../api/functions/BlockFieldBinding).
+is [`BlockFieldBinding`](https://firecms.co/docs/api/functions/BlockFieldBinding).
 
 
 ## Common config
@@ -10122,7 +10122,7 @@ Each property in the CMS has its own API, but they all share some **common props
   disabled field. You can also specify a configuration for defining the
   behaviour of disabled properties (including custom messages, clear value on
   disabled or hide the field completely)
-  [PropertyDisabledConfig](https://firecms.co/docs/../api/interfaces/PropertyDisabledConfig)
+  [PropertyDisabledConfig](https://firecms.co/docs/api/interfaces/PropertyDisabledConfig)
 
 * `Field`
   If you need to render a custom field, you can create a component that
@@ -10130,13 +10130,13 @@ Each property in the CMS has its own API, but they all share some **common props
   the value and additional utility props such as if there is an error. You
   can customize it by passing custom props that are received in the
   component. More details about how to
-  implement [custom fields](https://firecms.co/docs/custom_fields.mdx)
+  implement [custom fields](https://firecms.co/docs/properties/custom_fields)
 
 * `Preview`
   Configure how a property is displayed as a preview, e.g. in the collection
   view. You can customize it by passing custom props that are received in
   the component. More details about how to
-  implement [custom previews](https://firecms.co/docs/custom_previews)
+  implement [custom previews](https://firecms.co/docs/properties/custom_previews)
 
 * `customProps`
   Additional props that are passed to the components defined in `Field` or
@@ -10325,7 +10325,7 @@ You can use the enum values providing a map of possible exclusive values the
 property can take, mapped to the label that it is displayed in the dropdown. You
 can use a simple object with the format
 `value` => `label`, or with the format `value`
-=> [`EnumValueConfig`](https://firecms.co/docs/../api/type-aliases/EnumValueConfig) if you need extra
+=> [`EnumValueConfig`](https://firecms.co/docs/api/type-aliases/EnumValueConfig) if you need extra
 customization, (like disabling specific options or assigning colors). If you
 need to ensure the order of the elements, you can pass a `Map` instead of a
 plain object.
@@ -10429,20 +10429,20 @@ const property = buildProperty({
 
 Based on your configuration the form field widgets that are created are:
 
-- [`TextFieldBinding`](https://firecms.co/docs/../api/functions/TextFieldBinding) generic text field
-- [`SelectFieldBinding`](https://firecms.co/docs/../api/functions/SelectFieldBinding) if `enumValues`
+- [`TextFieldBinding`](https://firecms.co/docs/api/functions/TextFieldBinding) generic text field
+- [`SelectFieldBinding`](https://firecms.co/docs/api/functions/SelectFieldBinding) if `enumValues`
   are set in the string config, this field renders a select
   where each option is a colored chip.
-- [`StorageUploadFieldBinding`](https://firecms.co/docs/../api/functions/StorageUploadFieldBinding)
+- [`StorageUploadFieldBinding`](https://firecms.co/docs/api/functions/StorageUploadFieldBinding)
   the property has a
   storage configuration.
-- [`MarkdownEditorFieldBinding.`](https://firecms.co/docs/../api/functions/MarkdownEditorFieldBinding) the
+- [`MarkdownEditorFieldBinding.`](https://firecms.co/docs/api/functions/MarkdownEditorFieldBinding) the
   property has a
   markdown configuration.
 
 Links:
 
-- [API](https://firecms.co/docs/../api/interfaces/StringProperty)
+- [API](https://firecms.co/docs/api/interfaces/StringProperty)
 
 ## Number
 
@@ -10508,12 +10508,12 @@ const property = buildProperty({
 ---
 
 The widgets that get created are
-- [`TextFieldBinding`](https://firecms.co/docs/../api/functions/TextFieldBinding) generic text field
-- [`SelectFieldBinding`](https://firecms.co/docs/../api/functions/SelectFieldBinding) if `enumValues` are set in the string config, this field renders a select
+- [`TextFieldBinding`](https://firecms.co/docs/api/functions/TextFieldBinding) generic text field
+- [`SelectFieldBinding`](https://firecms.co/docs/api/functions/SelectFieldBinding) if `enumValues` are set in the string config, this field renders a select
   where each option is a colored chip.
 
 Links:
-- [API](https://firecms.co/docs/../api/interfaces/NumberProperty)
+- [API](https://firecms.co/docs/api/interfaces/NumberProperty)
 
 ## Boolean
 
@@ -10534,10 +10534,10 @@ const availableProperty = buildProperty({
 ---
 
 The widget that gets created is
-- [`SwitchFieldBinding`](https://firecms.co/docs/../api/functions/SwitchFieldBinding)  simple boolean switch
+- [`SwitchFieldBinding`](https://firecms.co/docs/api/functions/SwitchFieldBinding)  simple boolean switch
 
 Links:
-- [API](https://firecms.co/docs/../api/interfaces/BooleanProperty)
+- [API](https://firecms.co/docs/api/interfaces/BooleanProperty)
 
 ## Reference
 
@@ -10604,13 +10604,13 @@ const productsReferenceProperty = buildProperty({
 
 The widget that gets created is
 
-- [`ReferenceFieldBinding`](https://firecms.co/docs/../api/functions/ReferenceFieldBinding) Field
+- [`ReferenceFieldBinding`](https://firecms.co/docs/api/functions/ReferenceFieldBinding) Field
   that opens a
   reference selection dialog
 
 Links:
 
-- [API](https://firecms.co/docs/../api/interfaces/ReferenceProperty)
+- [API](https://firecms.co/docs/api/interfaces/ReferenceProperty)
 
 ## Date/Time
 
@@ -10645,10 +10645,10 @@ Add an icon to clear the value and set it to `null`. Defaults to `false`
 ---
 
 The widget that gets created is
-- [`DateTimeFieldBinding`](https://firecms.co/docs/../api/functions/DateTimeFieldBinding) Field that allows selecting a date
+- [`DateTimeFieldBinding`](https://firecms.co/docs/api/functions/DateTimeFieldBinding) Field that allows selecting a date
 
 Links:
-- [API](https://firecms.co/docs/../api/interfaces/DateProperty)
+- [API](https://firecms.co/docs/api/interfaces/DateProperty)
 
 ## Array
 
@@ -10798,14 +10798,14 @@ When set to `true`, displays the child properties directly without being wrapped
 ---
 
 Based on your configuration the form field widgets that are created are:
-- [`RepeatFieldBinding`](https://firecms.co/docs/../api/functions/RepeatFieldBinding) generic array field that allows reordering and renders
+- [`RepeatFieldBinding`](https://firecms.co/docs/api/functions/RepeatFieldBinding) generic array field that allows reordering and renders
   the child property as nodes.
-- [`StorageUploadFieldBinding`](https://firecms.co/docs/../api/functions/StorageUploadFieldBinding) if the `of` property is a `string` with storage configuration.
-- [`ArrayOfReferencesFieldBinding`](https://firecms.co/docs/../api/functions/ArrayOfReferencesFieldBinding) if the `of` property is a `reference`
-- [`BlockFieldBinding`](https://firecms.co/docs/../api/functions/BlockFieldBinding) if the `oneOf` property is specified
+- [`StorageUploadFieldBinding`](https://firecms.co/docs/api/functions/StorageUploadFieldBinding) if the `of` property is a `string` with storage configuration.
+- [`ArrayOfReferencesFieldBinding`](https://firecms.co/docs/api/functions/ArrayOfReferencesFieldBinding) if the `of` property is a `reference`
+- [`BlockFieldBinding`](https://firecms.co/docs/api/functions/BlockFieldBinding) if the `oneOf` property is specified
 
 Links:
-- [API](https://firecms.co/docs/../api/interfaces/ArrayProperty)
+- [API](https://firecms.co/docs/api/interfaces/ArrayProperty)
 
 ## Map
 
@@ -10877,11 +10877,11 @@ When set to `true`, displays the child properties directly without being wrapped
 ---
 
 The widget that gets created is
-- [`MapFieldBinding`](https://firecms.co/docs/../api/functions/MapFieldBinding) Field that renders the children
+- [`MapFieldBinding`](https://firecms.co/docs/api/functions/MapFieldBinding) Field that renders the children
   property fields
 
 Links:
-- [API](https://firecms.co/docs/../api/interfaces/MapProperty)
+- [API](https://firecms.co/docs/api/interfaces/MapProperty)
 
 ## Geopoint
 
@@ -10960,10 +10960,10 @@ console.log(sanFrancisco.longitude); // -122.4194
 ---
 
 The widget that gets created is
-- [`GeopointFieldBinding`](https://firecms.co/docs/../api/functions/GeopointFieldBinding) Field that allows editing latitude and longitude
+- [`GeopointFieldBinding`](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/field_bindings/GeopointFieldBinding.tsx) Field that allows editing latitude and longitude
 
 Links:
-- [API](https://firecms.co/docs/../api/interfaces/GeopointProperty)
+- [API](https://firecms.co/docs/api/interfaces/GeopointProperty)
 
 
 ## Conditional fields from properties
@@ -11119,7 +11119,7 @@ Use a custom field when you need one (or more) of the following:
 - Integrations (upload to an external API, fetch suggestions, geocode, etc.)
 
 If you only need validation or simple transformation, prefer property level `validation` options first to keep things simple.
-If you need dynamic behavior depending on other values, consider using [conditional fields](https://firecms.co/docs/conditional_fields.md) instead.
+If you need dynamic behavior depending on other values, consider using [conditional fields](https://firecms.co/docs/properties/conditional_fields) instead.
 
 ### Custom field example
 A custom text field with a background color supplied via `customProps` (scroll below for full prop contract and advanced techniques):
@@ -11311,7 +11311,7 @@ function GeoPointField({ context }: FieldProps<any>) {
 - Need read‑only mode: Respect `disabled` from props or `context.disabled`.
 
 ### Next steps
-- Explore other customization: [Custom previews](https://firecms.co/docs/custom_previews.md)
+- Explore other customization: [Custom previews](https://firecms.co/docs/properties/custom_previews)
 - Reuse logic across many properties: create a shared field component and pass different `customProps`.
 - Open source friendly? Consider contributing a reusable field to the community.
 
@@ -12328,7 +12328,7 @@ export function ThemeToggle() {
 
 ## Building a blog in FireCMS Cloud
 
-![blog_example](/img/blog_example.webp)
+![blog_example](https://firecms.co/img/blog_example.webp)
 
 :::note
 In this tutorial we assume you have set up a Firebase project and a FireCMS instance with custom code.
@@ -13021,7 +13021,7 @@ export const exerciseCollection: EntityCollection = buildCollection({
 
 ## Copying an entity from one collection to another
 
-![Product selection](/img/product_selection.webp)
+![Product selection](https://firecms.co/img/product_selection.webp)
 
 In this tutorial we will show how you can add a button to your collection,
 that will allow you to **copy entities from another collection**.
@@ -13302,12 +13302,12 @@ imagine we are modeling the structure for a course.
 
 In the units collection we will create a document for each unit:
 
-![dynamic_navigation_collection](/img/recipes/dynamic_navigation_collection.png)
+![dynamic_navigation_collection](https://firecms.co/img/recipes/dynamic_navigation_collection.png)
 
 And each of those documents will generate a new navigation item. In this case
 we will have 3 navigation items, one for each unit:
 
-![dynamic_navigation_home](/img/recipes/dynamic_navigation_home.png)
+![dynamic_navigation_home](https://firecms.co/img/recipes/dynamic_navigation_home.png)
 
 #### Declare the main collection
 
@@ -13492,7 +13492,7 @@ export default appConfig;
 
 ## How to use entity callbacks
 
-![Entity Callbacks](/img/recipes/entity_callbacks.png)
+![Entity Callbacks](https://firecms.co/img/recipes/entity_callbacks.png)
 
 In this tutorial we will create a simple collection, containing cars. Then, we are going to use the Entity Callbacks to can track changes in the entity, adding the timestamp of the last update and the user who made the change.
 
@@ -13632,7 +13632,7 @@ Simple enough, right? Now let's add the callbacks.
 
 #### Create the entity callbacks
 
-Now, you can check the interface of the [EntityCallbacks in the documentation](/docs/collections/callbacks). We have all this callbacks available:
+Now, you can check the interface of the [EntityCallbacks in the documentation](https://firecms.co/docs/collections/callbacks). We have all this callbacks available:
 - `onFetch`: Called when an entity is fetched from the database.
 - `onPreSave`: Called before an entity is saved to the database.
 - `onSaveSuccess`: Called after an entity is saved successfully to the database.
@@ -13676,7 +13676,7 @@ export const carsCollection = buildCollection<Car>({
 
 Now, when we save the entity, the `modified_at` and `modified_by` fields will be updated with the current date and the user who made the change.
 
-![entity_callbacks_example](/img/recipes/entity_callbacks.png)
+![entity_callbacks_example](https://firecms.co/img/recipes/entity_callbacks.png)
 
 Now let's implement another feature, let's block deleting the cars, or entities that you haven't created yourself; for that, we are gonna use the `onPreDelete` callback.
 
@@ -13693,7 +13693,7 @@ const carsCallbacks = buildEntityCallbacks<Car>({
 
 Now, when a user tries to delete a car that wasn't created by themselves, an error will be thrown.
 
-![entity_callbacks_delete_example](/img/recipes/entity_callbacks_delete.png)
+![entity_callbacks_delete_example](https://firecms.co/img/recipes/entity_callbacks_delete.png)
 
 So, we cannot delete the cars that we didn't create. In this example, the one created by the F1 driver Fernando Alonso.
 
@@ -17472,7 +17472,7 @@ yarn add @firecms/ui
 
 (you only need to install it if you want to use it in a different project)
 
-The components are fully typed and documented. You can find the documentation [here](/docs/components).
+The components are fully typed and documented. You can find the documentation [here](https://firecms.co/docs/components).
 They are based on Tailwind CSS and Radix UI. They are easily customizable, and you can
 use them to build your own components. They are also accessible and responsive.
 
@@ -17481,7 +17481,7 @@ use them to build your own components. They are also accessible and responsive.
 You can customise the icons in different parts of the CMS, such when selecting one for
 a collection. FireCMS UI now exports all the Material Icons, conveniently exported as React components.
 
-We have also added an [icon search function](/docs/icons) in the website to find the icon you need.
+We have also added an [icon search function](https://firecms.co/docs/icons) in the website to find the icon you need.
 
 It makes it easy to find the right icon key when defining configuration for your collections, or to
 find the right icon component when you want to use it in your own components.

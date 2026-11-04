@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/PropertyBuilderProps"
 title: "PropertyBuilderProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PropertyBuilderProps
+[@firecms/core](/docs/api/README) / PropertyBuilderProps
 
 # Type Alias: PropertyBuilderProps\<M\>
 
@@ -25,7 +25,7 @@ Defined in: [types/properties.ts:248](https://github.com/firecmsco/firecms/blob/
 
 ### authController
 
-> **authController**: [`AuthController`](AuthController)
+> **authController**: [`AuthController`](/docs/api/type-aliases/AuthController)
 
 Defined in: [types/properties.ts:278](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
 

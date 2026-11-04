@@ -1,6 +1,6 @@
 # Data Export
 
-![data_export.png](/img/data_export.png)
+![data_export.png](https://firecms.co/img/data_export.png)
 
 Export your **Firestore** data directly from your **admin panel**. The Data Export Plugin adds one-click JSON and CSV export to any FireCMS collection.
 

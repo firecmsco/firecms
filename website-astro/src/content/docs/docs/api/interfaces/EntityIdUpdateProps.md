@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/EntityIdUpdateProps"
 title: "EntityIdUpdateProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityIdUpdateProps
+[@firecms/core](/docs/api/README) / EntityIdUpdateProps
 
 # Interface: EntityIdUpdateProps\<M\>
 
@@ -25,7 +25,7 @@ Parameters passed to hooks when an entity is deleted
 
 ### collection
 
-> **collection**: [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+> **collection**: [`ResolvedEntityCollection`](/docs/api/type-aliases/ResolvedEntityCollection)\<`M`\>
 
 Defined in: [types/entity\_callbacks.ts:208](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 
@@ -35,7 +35,7 @@ collection of the entity being deleted
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)
+> **context**: [`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)
 
 Defined in: [types/entity\_callbacks.ts:228](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
 

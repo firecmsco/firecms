@@ -36,4 +36,4 @@ Fügt ein Symbol zum Löschen des Werts hinzu. Standardmäßig `false`.
 ---
 
 Links:
-- [API](../../api/interfaces/DateProperty)
+- [API](/de/docs/api/interfaces/DateProperty)

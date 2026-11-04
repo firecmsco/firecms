@@ -3,11 +3,11 @@ slug: "docs/api/functions/stripCollectionPath"
 title: "stripCollectionPath"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / stripCollectionPath
+[@firecms/core](/docs/api/README) / stripCollectionPath
 
 # Function: stripCollectionPath()
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/ReferencePreview"
 title: "ReferencePreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ReferencePreview
+[@firecms/core](/docs/api/README) / ReferencePreview
 
 # Function: ReferencePreview()
 
@@ -19,7 +19,7 @@ Defined in: [preview/components/ReferencePreview.tsx:24](https://github.com/fire
 
 ### props
 
-[`ReferencePreviewProps`](../type-aliases/ReferencePreviewProps)
+[`ReferencePreviewProps`](/docs/api/type-aliases/ReferencePreviewProps)
 
 ## Returns
 

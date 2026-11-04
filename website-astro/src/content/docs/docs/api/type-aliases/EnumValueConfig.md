@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EnumValueConfig"
 title: "EnumValueConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EnumValueConfig
+[@firecms/core](/docs/api/README) / EnumValueConfig
 
 # Type Alias: EnumValueConfig
 

@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/VirtualTableColumn"
 title: "VirtualTableColumn"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / VirtualTableColumn
+[@firecms/core](/docs/api/README) / VirtualTableColumn
 
 # Interface: VirtualTableColumn\<CustomProps\>
 

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/ResolvedProperties"
 title: "ResolvedProperties"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ResolvedProperties
+[@firecms/core](/docs/api/README) / ResolvedProperties
 
 # Type Alias: ResolvedProperties\<M\>
 

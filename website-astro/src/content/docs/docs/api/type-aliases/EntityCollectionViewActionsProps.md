@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityCollectionViewActionsProps"
 title: "EntityCollectionViewActionsProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionViewActionsProps
+[@firecms/core](/docs/api/README) / EntityCollectionViewActionsProps
 
 # Type Alias: EntityCollectionViewActionsProps\<M\>
 
@@ -25,7 +25,7 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:10]
 
 ### collection
 
-> **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
+> **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
@@ -89,7 +89,7 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:13]
 
 ### selectionController
 
-> **selectionController**: [`SelectionController`](SelectionController)\<`M`\>
+> **selectionController**: [`SelectionController`](/docs/api/type-aliases/SelectionController)\<`M`\>
 
 Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:18](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
@@ -105,6 +105,6 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:15]
 
 ### tableController
 
-> **tableController**: [`EntityTableController`](EntityTableController)\<`M`\>
+> **tableController**: [`EntityTableController`](/docs/api/type-aliases/EntityTableController)\<`M`\>
 
 Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)

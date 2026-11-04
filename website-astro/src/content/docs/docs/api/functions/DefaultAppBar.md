@@ -3,11 +3,11 @@ slug: "docs/api/functions/DefaultAppBar"
 title: "DefaultAppBar"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DefaultAppBar
+[@firecms/core](/docs/api/README) / DefaultAppBar
 
 # Function: DefaultAppBar()
 
@@ -22,7 +22,7 @@ You will likely not need to use this component directly.
 
 ### \_\_namedParameters
 
-[`DefaultAppBarProps`](../type-aliases/DefaultAppBarProps)
+[`DefaultAppBarProps`](/docs/api/type-aliases/DefaultAppBarProps)
 
 ## Returns
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/SkeletonPropertyComponent"
 title: "SkeletonPropertyComponent"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / SkeletonPropertyComponent
+[@firecms/core](/docs/api/README) / SkeletonPropertyComponent
 
 # Function: SkeletonPropertyComponent()
 
@@ -19,7 +19,7 @@ Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:21](https:
 
 ### \_\_namedParameters
 
-[`SkeletonPropertyComponentProps`](../interfaces/SkeletonPropertyComponentProps)
+[`SkeletonPropertyComponentProps`](/docs/api/interfaces/SkeletonPropertyComponentProps)
 
 ## Returns
 

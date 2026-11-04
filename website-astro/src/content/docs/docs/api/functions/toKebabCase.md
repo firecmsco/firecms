@@ -3,11 +3,11 @@ slug: "docs/api/functions/toKebabCase"
 title: "toKebabCase"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / toKebabCase
+[@firecms/core](/docs/api/README) / toKebabCase
 
 # Function: toKebabCase()
 

@@ -3,11 +3,11 @@ slug: "docs/api/functions/useReferenceDialog"
 title: "useReferenceDialog"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useReferenceDialog
+[@firecms/core](/docs/api/README) / useReferenceDialog
 
 # Function: useReferenceDialog()
 
@@ -33,7 +33,7 @@ This is the same hook used internally when a reference property is defined.
 
 ### referenceDialogProps
 
-`Omit`\<[`ReferenceSelectionInnerProps`](../interfaces/ReferenceSelectionInnerProps)\<`M`\>, `"path"`\> & `object`
+`Omit`\<[`ReferenceSelectionInnerProps`](/docs/api/interfaces/ReferenceSelectionInnerProps)\<`M`\>, `"path"`\> & `object`
 
 ## Returns
 

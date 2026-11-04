@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityActionClickProps"
 title: "EntityActionClickProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityActionClickProps
+[@firecms/core](/docs/api/README) / EntityActionClickProps
 
 # Type Alias: EntityActionClickProps\<M, USER\>
 
@@ -23,13 +23,13 @@ Defined in: [types/entity\_actions.tsx:63](https://github.com/firecmsco/firecms/
 
 ### USER
 
-`USER` *extends* [`User`](User) = [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
 ### collection?
 
-> `optional` **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
+> `optional` **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 Defined in: [types/entity\_actions.tsx:69](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
 
@@ -37,7 +37,7 @@ Defined in: [types/entity\_actions.tsx:69](https://github.com/firecmsco/firecms/
 
 ### context
 
-> **context**: [`FireCMSContext`](FireCMSContext)\<`USER`\>
+> **context**: [`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`USER`\>
 
 Defined in: [types/entity\_actions.tsx:65](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
 
@@ -45,7 +45,7 @@ Defined in: [types/entity\_actions.tsx:65](https://github.com/firecmsco/firecms/
 
 ### entity?
 
-> `optional` **entity**: [`Entity`](../interfaces/Entity)\<`M`\>
+> `optional` **entity**: [`Entity`](/docs/api/interfaces/Entity)\<`M`\>
 
 Defined in: [types/entity\_actions.tsx:64](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
 
@@ -53,7 +53,7 @@ Defined in: [types/entity\_actions.tsx:64](https://github.com/firecmsco/firecms/
 
 ### formContext?
 
-> `optional` **formContext**: [`FormContext`](../interfaces/FormContext)
+> `optional` **formContext**: [`FormContext`](/docs/api/interfaces/FormContext)
 
 Defined in: [types/entity\_actions.tsx:75](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
 
@@ -90,7 +90,7 @@ Optional highlight function to highlight the entity in the collection view
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`any`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`any`\>
 
 #### Returns
 
@@ -138,7 +138,7 @@ If the action is rendered in the form, is it open in a side panel or full screen
 
 ### selectionController?
 
-> `optional` **selectionController**: [`SelectionController`](SelectionController)
+> `optional` **selectionController**: [`SelectionController`](/docs/api/type-aliases/SelectionController)
 
 Defined in: [types/entity\_actions.tsx:95](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
 
@@ -148,7 +148,7 @@ Optional selection controller, present if the action is being called from a coll
 
 ### sideEntityController?
 
-> `optional` **sideEntityController**: [`SideEntityController`](../interfaces/SideEntityController)
+> `optional` **sideEntityController**: [`SideEntityController`](/docs/api/interfaces/SideEntityController)
 
 Defined in: [types/entity\_actions.tsx:80](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
 
@@ -168,7 +168,7 @@ Optional unhighlight function to remove the highlight from the entity in the col
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`any`\>
+[`Entity`](/docs/api/interfaces/Entity)\<`any`\>
 
 #### Returns
 

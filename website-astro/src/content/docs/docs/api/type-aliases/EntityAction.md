@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityAction"
 title: "EntityAction"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityAction
+[@firecms/core](/docs/api/README) / EntityAction
 
 # Type Alias: EntityAction\<M, USER\>
 
@@ -26,7 +26,7 @@ They are displayed in the entity view and in the collection view.
 
 ### USER
 
-`USER` *extends* [`User`](User) = [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
@@ -74,7 +74,7 @@ Optional callback in case you want to disable the action
 
 ##### props
 
-[`EntityActionClickProps`](EntityActionClickProps)\<`M`, `USER`\>
+[`EntityActionClickProps`](/docs/api/type-aliases/EntityActionClickProps)\<`M`, `USER`\>
 
 #### Returns
 
@@ -122,7 +122,7 @@ Callback when the action is clicked
 
 ##### props
 
-[`EntityActionClickProps`](EntityActionClickProps)\<`M`, `USER`\>
+[`EntityActionClickProps`](/docs/api/type-aliases/EntityActionClickProps)\<`M`, `USER`\>
 
 #### Returns
 

@@ -3,11 +3,11 @@ slug: "docs/api/classes/Vector"
 title: "Vector"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / Vector
+[@firecms/core](/docs/api/README) / Vector
 
 # Class: Vector
 

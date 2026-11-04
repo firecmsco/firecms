@@ -3,11 +3,11 @@ slug: "docs/api/functions/DateTimeFieldBinding"
 title: "DateTimeFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DateTimeFieldBinding
+[@firecms/core](/docs/api/README) / DateTimeFieldBinding
 
 # Function: DateTimeFieldBinding()
 

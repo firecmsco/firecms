@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayOfReferencesFieldBinding"
 title: "ArrayOfReferencesFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayOfReferencesFieldBinding
+[@firecms/core](/docs/api/README) / ArrayOfReferencesFieldBinding
 
 # Function: ArrayOfReferencesFieldBinding()
 

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/EntityOverrides"
 title: "EntityOverrides"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityOverrides
+[@firecms/core](/docs/api/README) / EntityOverrides
 
 # Type Alias: EntityOverrides
 
@@ -19,7 +19,7 @@ Defined in: [types/entity\_overrides.tsx:4](https://github.com/firecmsco/firecms
 
 ### dataSourceDelegate?
 
-> `optional` **dataSourceDelegate**: [`DataSourceDelegate`](../interfaces/DataSourceDelegate)
+> `optional` **dataSourceDelegate**: [`DataSourceDelegate`](/docs/api/interfaces/DataSourceDelegate)
 
 Defined in: [types/entity\_overrides.tsx:5](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_overrides.tsx)
 
@@ -27,6 +27,6 @@ Defined in: [types/entity\_overrides.tsx:5](https://github.com/firecmsco/firecms
 
 ### storageSource?
 
-> `optional` **storageSource**: [`StorageSource`](../interfaces/StorageSource)
+> `optional` **storageSource**: [`StorageSource`](/docs/api/interfaces/StorageSource)
 
 Defined in: [types/entity\_overrides.tsx:6](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_overrides.tsx)

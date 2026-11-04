@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/Locale"
 title: "Locale"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / Locale
+[@firecms/core](/docs/api/README) / Locale
 
 # Type Alias: Locale
 

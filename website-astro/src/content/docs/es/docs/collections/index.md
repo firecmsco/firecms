@@ -42,7 +42,7 @@ definir una propiedad de `string enum` y los valores se combinarán a partir de 
 :::note
 FireCMS proporciona alrededor de 20 campos diferentes (como campos de texto, selectores y campos complejos como de referencia o
 campos de matrices ordenables). Si tu caso de uso no está cubierto por uno de los campos proporcionados, puedes crear tu
-propio [campo personalizado](../properties/custom_fields.mdx).
+propio [campo personalizado](/es/docs/properties/custom_fields).
 :::
 
 :::tip

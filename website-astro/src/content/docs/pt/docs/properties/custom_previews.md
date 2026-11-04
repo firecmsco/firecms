@@ -12,7 +12,7 @@ Assim como você pode personalizar como o campo da sua propriedade é renderizad
 como a prévia de uma propriedade é **exibida na coleção** e em outras **views somente leitura**.
 
 Você pode construir sua prévia como um componente React que recebe
-[PropertyPreviewProps](../api/interfaces/PropertyPreviewProps) como props.
+[PropertyPreviewProps](/pt/docs/api/interfaces/PropertyPreviewProps) como props.
 
 `PropertyPreviewProps` possui dois tipos genéricos: o primeiro é o tipo da
 propriedade, como `string` ou `boolean` e o segundo (opcional) é o

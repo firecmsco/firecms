@@ -3,11 +3,11 @@ slug: "docs/api/functions/MarkdownEditorFieldBinding"
 title: "MarkdownEditorFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / MarkdownEditorFieldBinding
+[@firecms/core](/docs/api/README) / MarkdownEditorFieldBinding
 
 # Function: MarkdownEditorFieldBinding()
 
@@ -19,7 +19,7 @@ Defined in: [form/field\_bindings/MarkdownEditorFieldBinding.tsx:23](https://git
 
 ### \_\_namedParameters
 
-[`FieldProps`](../interfaces/FieldProps)\<`string`, `MarkdownEditorFieldProps`\>
+[`FieldProps`](/docs/api/interfaces/FieldProps)\<`string`, `MarkdownEditorFieldProps`\>
 
 ## Returns
 

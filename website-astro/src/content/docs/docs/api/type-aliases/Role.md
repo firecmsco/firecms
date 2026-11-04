@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/Role"
 title: "Role"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / Role
+[@firecms/core](/docs/api/README) / Role
 
 # Type Alias: Role
 
@@ -19,7 +19,7 @@ Defined in: [types/roles.ts:3](https://github.com/firecmsco/firecms/blob/main/pa
 
 ### collectionPermissions?
 
-> `optional` **collectionPermissions**: `Record`\<`string`, [`Permissions`](../interfaces/Permissions)\>
+> `optional` **collectionPermissions**: `Record`\<`string`, [`Permissions`](/docs/api/interfaces/Permissions)\>
 
 Defined in: [types/roles.ts:31](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/roles.ts)
 
@@ -55,7 +55,7 @@ Permissions related to editing the collections
 
 ### defaultPermissions?
 
-> `optional` **defaultPermissions**: [`Permissions`](../interfaces/Permissions)
+> `optional` **defaultPermissions**: [`Permissions`](/docs/api/interfaces/Permissions)
 
 Defined in: [types/roles.ts:25](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/roles.ts)
 

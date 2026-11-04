@@ -3,15 +3,15 @@ slug: "docs/api/functions/getDefaultValuesFor"
 title: "getDefaultValuesFor"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getDefaultValuesFor
+[@firecms/core](/docs/api/README) / getDefaultValuesFor
 
 # Function: getDefaultValuesFor()
 
-> **getDefaultValuesFor**\<`M`\>(`properties`): `Partial`\<[`EntityValues`](../type-aliases/EntityValues)\<`M`\>\>
+> **getDefaultValuesFor**\<`M`\>(`properties`): `Partial`\<[`EntityValues`](/docs/api/type-aliases/EntityValues)\<`M`\>\>
 
 Defined in: [util/entities.ts:39](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/entities.ts)
 
@@ -25,8 +25,8 @@ Defined in: [util/entities.ts:39](https://github.com/firecmsco/firecms/blob/main
 
 ### properties
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\> | [`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
+[`PropertiesOrBuilders`](/docs/api/type-aliases/PropertiesOrBuilders)\<`M`\> | [`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)\<`M`\>
 
 ## Returns
 
-`Partial`\<[`EntityValues`](../type-aliases/EntityValues)\<`M`\>\>
+`Partial`\<[`EntityValues`](/docs/api/type-aliases/EntityValues)\<`M`\>\>

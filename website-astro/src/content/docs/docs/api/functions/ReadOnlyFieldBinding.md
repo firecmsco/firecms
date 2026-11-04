@@ -3,11 +3,11 @@ slug: "docs/api/functions/ReadOnlyFieldBinding"
 title: "ReadOnlyFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ReadOnlyFieldBinding
+[@firecms/core](/docs/api/README) / ReadOnlyFieldBinding
 
 # Function: ReadOnlyFieldBinding()
 
@@ -24,7 +24,7 @@ and tables to the specified properties.
 
 ### \_\_namedParameters
 
-[`FieldProps`](../interfaces/FieldProps)\<`any`\>
+[`FieldProps`](/docs/api/interfaces/FieldProps)\<`any`\>
 
 ## Returns
 

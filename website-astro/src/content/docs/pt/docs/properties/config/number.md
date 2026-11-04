@@ -39,9 +39,9 @@ Você pode usar os valores enum fornecendo um map de valores exclusivos possíve
 ---
 
 Os widgets criados são
-- [`TextFieldBinding`](../../api/functions/TextFieldBinding) campo de texto genérico
-- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) se os `enumValues` estiverem definidos na configuração, este campo renderiza um select
+- [`TextFieldBinding`](/pt/docs/api/functions/TextFieldBinding) campo de texto genérico
+- [`SelectFieldBinding`](/pt/docs/api/functions/SelectFieldBinding) se os `enumValues` estiverem definidos na configuração, este campo renderiza um select
   onde cada opção é um chip colorido.
 
 Links:
-- [API](../../api/interfaces/NumberProperty)
+- [API](/pt/docs/api/interfaces/NumberProperty)

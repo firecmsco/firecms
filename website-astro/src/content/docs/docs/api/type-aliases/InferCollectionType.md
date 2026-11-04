@@ -3,15 +3,15 @@ slug: "docs/api/type-aliases/InferCollectionType"
 title: "InferCollectionType"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / InferCollectionType
+[@firecms/core](/docs/api/README) / InferCollectionType
 
 # Type Alias: InferCollectionType\<S\>
 
-> **InferCollectionType**\<`S`\> = `S` *extends* [`EntityCollection`](../interfaces/EntityCollection)\<infer M\> ? `M` : `never`
+> **InferCollectionType**\<`S`\> = `S` *extends* [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<infer M\> ? `M` : `never`
 
 Defined in: [types/collections.ts:608](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -19,4 +19,4 @@ Defined in: [types/collections.ts:608](https://github.com/firecmsco/firecms/blob
 
 ### S
 
-`S` *extends* [`EntityCollection`](../interfaces/EntityCollection)
+`S` *extends* [`EntityCollection`](/docs/api/interfaces/EntityCollection)

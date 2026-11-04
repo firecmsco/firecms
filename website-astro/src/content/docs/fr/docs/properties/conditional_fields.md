@@ -6,7 +6,7 @@ description: Dans FireCMS, les champs conditionnels permettent des configuration
 ---
 
 Lors de la définition des propriétés d'une collection, vous pouvez choisir d'utiliser un constructeur
-[`PropertyBuilder`](../api/type-aliases/PermissionsBuilder), au lieu d'assigner la
+[`PropertyBuilder`](/fr/docs/api/type-aliases/PermissionsBuilder), au lieu d'assigner la
 configuration de propriété directement.
 
 Ceci est utile pour changer les configurations de propriétés comme les valeurs disponibles à la

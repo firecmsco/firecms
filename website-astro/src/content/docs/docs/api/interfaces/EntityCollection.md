@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/EntityCollection"
 title: "EntityCollection"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / EntityCollection
+[@firecms/core](/docs/api/README) / EntityCollection
 
 # Interface: EntityCollection\<M, USER\>
 
@@ -25,13 +25,13 @@ menu navigation. You can also find it as a subcollection of a different one.
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = `any`
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = `any`
 
 ## Properties
 
 ### Actions?
 
-> `optional` **Actions**: `ComponentType`\<[`CollectionActionsProps`](CollectionActionsProps)\<`any`, [`User`](../type-aliases/User), `EntityCollection`\<`any`, `any`\>\>\> \| `ComponentType`\<[`CollectionActionsProps`](CollectionActionsProps)\<`any`, [`User`](../type-aliases/User), `EntityCollection`\<`any`, `any`\>\>\>[]
+> `optional` **Actions**: `ComponentType`\<[`CollectionActionsProps`](/docs/api/interfaces/CollectionActionsProps)\<`any`, [`User`](/docs/api/type-aliases/User), `EntityCollection`\<`any`, `any`\>\>\> \| `ComponentType`\<[`CollectionActionsProps`](/docs/api/interfaces/CollectionActionsProps)\<`any`, [`User`](/docs/api/type-aliases/User), `EntityCollection`\<`any`, `any`\>\>\>[]
 
 Defined in: [types/collections.ts:177](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -42,7 +42,7 @@ collection toolbar
 
 ### additionalFields?
 
-> `optional` **additionalFields**: [`AdditionalFieldDelegate`](AdditionalFieldDelegate)\<`M`, `USER`\>[]
+> `optional` **additionalFields**: [`AdditionalFieldDelegate`](/docs/api/interfaces/AdditionalFieldDelegate)\<`M`, `USER`\>[]
 
 Defined in: [types/collections.ts:259](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -65,7 +65,7 @@ Defaults to false.
 
 ### callbacks?
 
-> `optional` **callbacks**: [`EntityCallbacks`](../type-aliases/EntityCallbacks)\<`M`, `USER`\>
+> `optional` **callbacks**: [`EntityCallbacks`](/docs/api/type-aliases/EntityCallbacks)\<`M`, `USER`\>
 
 Defined in: [types/collections.ts:171](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -88,7 +88,7 @@ property to `true` to indicate that this collection is a collection group.
 
 ### customId?
 
-> `optional` **customId**: `boolean` \| [`EnumValues`](../type-aliases/EnumValues) \| `"optional"`
+> `optional` **customId**: `boolean` \| [`EnumValues`](/docs/api/type-aliases/EnumValues) \| `"optional"`
 
 Defined in: [types/collections.ts:221](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -113,7 +113,7 @@ database id will be used.
 
 ### defaultSelectedView?
 
-> `optional` **defaultSelectedView**: `string` \| [`DefaultSelectedViewBuilder`](../type-aliases/DefaultSelectedViewBuilder)
+> `optional` **defaultSelectedView**: `string` \| [`DefaultSelectedViewBuilder`](/docs/api/type-aliases/DefaultSelectedViewBuilder)
 
 Defined in: [types/collections.ts:289](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -127,7 +127,7 @@ either specify the path to the custom view or the path to the subcollection.
 
 ### defaultSize?
 
-> `optional` **defaultSize**: [`CollectionSize`](../type-aliases/CollectionSize)
+> `optional` **defaultSize**: [`CollectionSize`](/docs/api/type-aliases/CollectionSize)
 
 Defined in: [types/collections.ts:264](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -160,7 +160,7 @@ This prop has only effect if you are using the collection editor.
 
 ### entityActions?
 
-> `optional` **entityActions**: (`string` \| [`EntityAction`](../type-aliases/EntityAction)\<`M`, `USER`\>)[]
+> `optional` **entityActions**: (`string` \| [`EntityAction`](/docs/api/type-aliases/EntityAction)\<`M`, `USER`\>)[]
 
 Defined in: [types/collections.ts:205](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -193,7 +193,7 @@ use the action defined in the main configuration under `entityActions`.
 
 ### entityViews?
 
-> `optional` **entityViews**: (`string` \| [`EntityCustomView`](../type-aliases/EntityCustomView)\<`M`\>)[]
+> `optional` **entityViews**: (`string` \| [`EntityCustomView`](/docs/api/type-aliases/EntityCustomView)\<`M`\>)[]
 
 Defined in: [types/collections.ts:253](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -206,7 +206,7 @@ a custom view defined in the main configuration under `entityViews`
 
 ### exportable?
 
-> `optional` **exportable**: `boolean` \| [`ExportConfig`](ExportConfig)\<`USER`\>
+> `optional` **exportable**: `boolean` \| [`ExportConfig`](/docs/api/interfaces/ExportConfig)\<`USER`\>
 
 Defined in: [types/collections.ts:312](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -214,7 +214,7 @@ Defined in: [types/collections.ts:312](https://github.com/firecmsco/firecms/blob
 
 ### forceFilter?
 
-> `optional` **forceFilter**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
+> `optional` **forceFilter**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](/docs/api/type-aliases/WhereFilterOp), `any`\]\>\>
 
 Defined in: [types/collections.ts:229](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -252,7 +252,7 @@ effect.
 
 This prop is deprecated and will be removed in the future.
 You can apply grouping by using the `navigationGroupMappings` prop in the
-[useBuildNavigationController](../functions/useBuildNavigationController) hook instead.
+[useBuildNavigationController](/docs/api/functions/useBuildNavigationController) hook instead.
 
 ***
 
@@ -342,7 +342,7 @@ If set to true, a tab including the JSON representation of the entity will be in
 
 ### initialFilter?
 
-> `optional` **initialFilter**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
+> `optional` **initialFilter**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](/docs/api/type-aliases/WhereFilterOp), `any`\]\>\>
 
 Defined in: [types/collections.ts:237](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -419,7 +419,7 @@ or in a full screen dialog. Defaults to `full_screen`.
 
 ### overrides?
 
-> `optional` **overrides**: [`EntityOverrides`](../type-aliases/EntityOverrides)
+> `optional` **overrides**: [`EntityOverrides`](/docs/api/type-aliases/EntityOverrides)
 
 Defined in: [types/collections.ts:323](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -466,7 +466,7 @@ This path also determines the URL in FireCMS, unless an alias is specified
 
 ### permissions?
 
-> `optional` **permissions**: [`Permissions`](Permissions) \| [`PermissionsBuilder`](../type-aliases/PermissionsBuilder)\<`EntityCollection`\<`any`, `any`\>, `USER`, `M`\>
+> `optional` **permissions**: [`Permissions`](/docs/api/interfaces/Permissions) \| [`PermissionsBuilder`](/docs/api/type-aliases/PermissionsBuilder)\<`EntityCollection`\<`any`, `any`\>, `USER`, `M`\>
 
 Defined in: [types/collections.ts:152](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -487,7 +487,7 @@ Default preview properties displayed when this collection is referenced to.
 
 ### properties
 
-> **properties**: [`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+> **properties**: [`PropertiesOrBuilders`](/docs/api/type-aliases/PropertiesOrBuilders)\<`M`\>
 
 Defined in: [types/collections.ts:90](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 
@@ -525,7 +525,7 @@ Note that if you set this prop, other ways to hide fields, like
 
 ### selectionController?
 
-> `optional` **selectionController**: [`SelectionController`](../type-aliases/SelectionController)\<`M`\>
+> `optional` **selectionController**: [`SelectionController`](/docs/api/type-aliases/SelectionController)\<`M`\>
 
 Defined in: [types/collections.ts:212](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
 

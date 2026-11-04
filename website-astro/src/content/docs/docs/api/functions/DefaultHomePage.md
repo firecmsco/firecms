@@ -3,11 +3,11 @@ slug: "docs/api/functions/DefaultHomePage"
 title: "DefaultHomePage"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / DefaultHomePage
+[@firecms/core](/docs/api/README) / DefaultHomePage
 
 # Function: DefaultHomePage()
 

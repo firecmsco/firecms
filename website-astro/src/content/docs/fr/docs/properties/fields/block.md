@@ -50,6 +50,6 @@ buildProperty({
 });
 ```
 
-Le type de données est [`array`](../config/array).
+Le type de données est [`array`](/fr/docs/properties/config/array).
 
-En interne, le composant utilisé est [`BlockFieldBinding`](../../api/functions/BlockFieldBinding).
+En interne, le composant utilisé est [`BlockFieldBinding`](/fr/docs/api/functions/BlockFieldBinding).

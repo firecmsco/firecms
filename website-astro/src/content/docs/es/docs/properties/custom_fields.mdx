@@ -31,7 +31,7 @@ Usa un campo personalizado cuando necesites una (o más) de las siguientes opcio
 - Integraciones (subir a una API externa, obtener sugerencias, geocodificación, etc.)
 
 Si solo necesitas validación o una transformación simple, prefiere primero las opciones de validación a nivel de propiedad `validation` para mantener las cosas simples.
-Si necesitas un comportamiento dinámico que dependa de otros valores, considera usar [campos condicionales](./conditional_fields.md) en su lugar.
+Si necesitas un comportamiento dinámico que dependa de otros valores, considera usar [campos condicionales](/es/docs/properties/conditional_fields) en su lugar.
 
 
 ## Ejemplo de campo personalizado
@@ -114,7 +114,7 @@ Buenas prácticas recomendadas:
 - Mostrar la etiqueta y el error (usa tu propia UI o `<FieldHelperText>` / componentes integrados)
 - Evitar efectos secundarios pesados (heavy side effects) en cada pulsación de tecla (mitigar llamadas de red con debounce)
 
-Interfaz completa: [`FieldProps`](../api/interfaces/FieldProps) (incluye comentarios detallados).
+Interfaz completa: [`FieldProps`](/es/docs/api/interfaces/FieldProps) (incluye comentarios detallados).
 
 ## Pasar props personalizados (customProps)
 Proporciona un objeto `customProps` en la definición de la propiedad. El objeto está fuertemente tipado a través del segundo genérico de `FieldProps<T, CustomProps>`.
@@ -224,7 +224,7 @@ function GeoPointField({ context }: FieldProps<any>) {
 - Necesita modo de solo lectura (read-only): respeta `disabled` que viene de las props o de `context.disabled`.
 
 ## Próximos pasos
-- Explorar otras personalizaciones: [Vistas previas personalizadas (Custom previews)](./custom_previews.md)
+- Explorar otras personalizaciones: [Vistas previas personalizadas (Custom previews)](/es/docs/properties/custom_previews)
 - Reutilizar lógica a través de múltiples propiedades: crea un componente de campo compartido y pasa distintos `customProps`.
 - ¿Amigable con el código abierto (Open source)? Considera contribuir con un campo reutilizable a la comunidad.
 

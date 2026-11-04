@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayOfStorageComponentsPreview"
 title: "ArrayOfStorageComponentsPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayOfStorageComponentsPreview
+[@firecms/core](/docs/api/README) / ArrayOfStorageComponentsPreview
 
 # Function: ArrayOfStorageComponentsPreview()
 
@@ -19,7 +19,7 @@ Defined in: [preview/property\_previews/ArrayOfStorageComponentsPreview.tsx:14](
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`any`[]\>
+[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<`any`[]\>
 
 ## Returns
 

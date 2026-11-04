@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/Authenticator"
 title: "Authenticator"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / Authenticator
+[@firecms/core](/docs/api/README) / Authenticator
 
 # Type Alias: Authenticator()\<USER\>
 
@@ -21,7 +21,7 @@ Implement this function to allow access to specific users.
 
 ### USER
 
-`USER` *extends* [`User`](User) = [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Parameters
 
@@ -29,19 +29,19 @@ Implement this function to allow access to specific users.
 
 #### authController
 
-[`AuthController`](AuthController)\<`USER`\>
+[`AuthController`](/docs/api/type-aliases/AuthController)\<`USER`\>
 
 AuthController
 
 #### dataSourceDelegate
 
-[`DataSourceDelegate`](../interfaces/DataSourceDelegate)
+[`DataSourceDelegate`](/docs/api/interfaces/DataSourceDelegate)
 
 Connector to your database, e.g. your Firestore database
 
 #### storageSource
 
-[`StorageSource`](../interfaces/StorageSource)
+[`StorageSource`](/docs/api/interfaces/StorageSource)
 
 Used storage implementation
 

@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/ModeController"
 title: "ModeController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ModeController
+[@firecms/core](/docs/api/README) / ModeController
 
 # Interface: ModeController
 

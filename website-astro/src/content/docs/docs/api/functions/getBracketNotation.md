@@ -3,11 +3,11 @@ slug: "docs/api/functions/getBracketNotation"
 title: "getBracketNotation"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getBracketNotation
+[@firecms/core](/docs/api/README) / getBracketNotation
 
 # Function: getBracketNotation()
 

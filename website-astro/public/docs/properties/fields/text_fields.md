@@ -3,7 +3,7 @@
 
 ### Simple text field
 
-![Textfield](/img/fields/Textfield.png)
+![Textfield](https://firecms.co/img/fields/Textfield.png)
 
 The most basic widget is the text field, which allows the user to input simple
 strings.
@@ -23,14 +23,14 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string) or [`number`](https://firecms.co/docs/config/number).
+The data type is [`string`](https://firecms.co/docs/properties/config/string) or [`number`](https://firecms.co/docs/properties/config/number).
 
 Internally the component used
-is [`TextFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/TextFieldBinding).
+is [`TextFieldBinding`](https://firecms.co/docs/api/functions/TextFieldBinding).
 
 ### Multi line text field
 
-![Textfield](/img/fields/Multiline_textfield.png)
+![Textfield](https://firecms.co/img/fields/Multiline_textfield.png)
 
 Use a multiline field when you want to enable the user to input strings that may
 contain line breaks.
@@ -50,14 +50,14 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string).
+The data type is [`string`](https://firecms.co/docs/properties/config/string).
 
 Internally the component used
-is [`TextFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/TextFieldBinding).
+is [`TextFieldBinding`](https://firecms.co/docs/api/functions/TextFieldBinding).
 
 ### Markdown text field
 
-![Textfield](/img/fields/Markdown.png)
+![Textfield](https://firecms.co/img/fields/Markdown.png)
 
 You can use a markdown field when you would like the end user to use advanced
 editing capabilities of text using the Markdown format.
@@ -77,14 +77,14 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string).
+The data type is [`string`](https://firecms.co/docs/properties/config/string).
 
 Internally the component used
-is [`MarkdownEditorFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/MarkdownEditorFieldBinding).
+is [`MarkdownEditorFieldBinding`](https://firecms.co/docs/api/functions/MarkdownEditorFieldBinding).
 
 ### Url text field
 
-![Textfield](/img/fields/Url.png)
+![Textfield](https://firecms.co/img/fields/Url.png)
 
 You can use a URL field when you would like to ensure that the input of the end
 user is a valid URL.
@@ -104,14 +104,14 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string).
+The data type is [`string`](https://firecms.co/docs/properties/config/string).
 
 Internally the component used
-is [`TextFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/TextFieldBinding).
+is [`TextFieldBinding`](https://firecms.co/docs/api/functions/TextFieldBinding).
 
 ### Email field
 
-![Field](/img/fields/Email.png)
+![Field](https://firecms.co/img/fields/Email.png)
 
 You can use an email field when you would like to ensure that the input of the
 end user is a valid email.
@@ -131,8 +131,8 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](https://firecms.co/docs/config/string).
+The data type is [`string`](https://firecms.co/docs/properties/config/string).
 
 Internally the component used
-is [`TextFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api/functions/TextFieldBinding).
+is [`TextFieldBinding`](https://firecms.co/docs/api/functions/TextFieldBinding).
 

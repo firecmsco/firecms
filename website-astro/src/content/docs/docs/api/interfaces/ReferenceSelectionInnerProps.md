@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/ReferenceSelectionInnerProps"
 title: "ReferenceSelectionInnerProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ReferenceSelectionInnerProps
+[@firecms/core](/docs/api/README) / ReferenceSelectionInnerProps
 
 # Interface: ReferenceSelectionInnerProps\<M\>
 
@@ -23,7 +23,7 @@ Defined in: [components/ReferenceTable/ReferenceSelectionTable.tsx:28](https://g
 
 ### collection?
 
-> `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\>
+> `optional` **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`, `any`\>
 
 Defined in: [components/ReferenceTable/ReferenceSelectionTable.tsx:38](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ReferenceTable/ReferenceSelectionTable.tsx)
 
@@ -43,7 +43,7 @@ Use this description to indicate the user what to do in this dialog.
 
 ### forceFilter?
 
-> `optional` **forceFilter**: `Partial`\<`Record`\<`string`, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
+> `optional` **forceFilter**: `Partial`\<`Record`\<`string`, \[[`WhereFilterOp`](/docs/api/type-aliases/WhereFilterOp), `any`\]\>\>
 
 Defined in: [components/ReferenceTable/ReferenceSelectionTable.tsx:72](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ReferenceTable/ReferenceSelectionTable.tsx)
 
@@ -107,7 +107,7 @@ in this callback.
 
 ##### entities
 
-[`Entity`](Entity)\<`any`\>[]
+[`Entity`](/docs/api/interfaces/Entity)\<`any`\>[]
 
 #### Returns
 
@@ -128,7 +128,7 @@ in this callback.
 
 ##### entity
 
-[`Entity`](Entity)\<`any`\> | `null`
+[`Entity`](/docs/api/interfaces/Entity)\<`any`\> | `null`
 
 #### Returns
 

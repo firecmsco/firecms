@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/AnalyticsController"
 title: "AnalyticsController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / AnalyticsController
+[@firecms/core](/docs/api/README) / AnalyticsController
 
 # Type Alias: AnalyticsController
 
@@ -29,7 +29,7 @@ Callback used to get analytics events from the CMS
 
 ##### event
 
-[`CMSAnalyticsEvent`](CMSAnalyticsEvent)
+[`CMSAnalyticsEvent`](/docs/api/type-aliases/CMSAnalyticsEvent)
 
 ##### data?
 

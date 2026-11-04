@@ -3,11 +3,11 @@ slug: "docs/api/functions/AppBar"
 title: "AppBar"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / AppBar
+[@firecms/core](/docs/api/README) / AppBar
 
 # Function: AppBar()
 

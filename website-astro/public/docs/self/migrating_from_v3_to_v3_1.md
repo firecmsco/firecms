@@ -100,9 +100,9 @@ Your `index.css` file should now look like this:
 @import "tailwindcss";
 @import "@firecms/ui/index.css";
 
-@source "https://firecms.co/docs/index.html";
+@source "../index.html";
 @source "./**/*.{js,ts,jsx,tsx}";
-@source "https://firecms.co/docs/node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
 
 @custom-variant dark (:is(.dark &));
 

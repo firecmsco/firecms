@@ -3,11 +3,11 @@ slug: "docs/api/functions/sanitizeData"
 title: "sanitizeData"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / sanitizeData
+[@firecms/core](/docs/api/README) / sanitizeData
 
 # Function: sanitizeData()
 
@@ -31,7 +31,7 @@ Add missing required fields, expected in the collection, to the values of an ent
 
 ### properties
 
-[`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
+[`ResolvedProperties`](/docs/api/type-aliases/ResolvedProperties)\<`M`\>
 
 ## Returns
 

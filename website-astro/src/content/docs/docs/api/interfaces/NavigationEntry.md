@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/NavigationEntry"
 title: "NavigationEntry"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NavigationEntry
+[@firecms/core](/docs/api/README) / NavigationEntry
 
 # Interface: NavigationEntry
 
@@ -17,7 +17,7 @@ Defined in: [types/navigation.ts:246](https://github.com/firecmsco/firecms/blob/
 
 ### collection?
 
-> `optional` **collection**: [`EntityCollection`](EntityCollection)\<`any`, `any`\>
+> `optional` **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`any`, `any`\>
 
 Defined in: [types/navigation.ts:252](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
 
@@ -81,6 +81,6 @@ Defined in: [types/navigation.ts:248](https://github.com/firecmsco/firecms/blob/
 
 ### view?
 
-> `optional` **view**: [`CMSView`](CMSView)
+> `optional` **view**: [`CMSView`](/docs/api/interfaces/CMSView)
 
 Defined in: [types/navigation.ts:253](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)

@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/PluginHomePageAdditionalCardsProps"
 title: "PluginHomePageAdditionalCardsProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PluginHomePageAdditionalCardsProps
+[@firecms/core](/docs/api/README) / PluginHomePageAdditionalCardsProps
 
 # Interface: PluginHomePageAdditionalCardsProps\<USER\>
 
@@ -17,13 +17,13 @@ Defined in: [types/plugins.tsx:258](https://github.com/firecmsco/firecms/blob/ma
 
 ### USER
 
-`USER` *extends* [`User`](../type-aliases/User) = [`User`](../type-aliases/User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+> **context**: [`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)\<`USER`\>
 
 Defined in: [types/plugins.tsx:260](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
 

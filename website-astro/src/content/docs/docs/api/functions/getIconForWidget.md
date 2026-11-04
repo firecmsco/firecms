@@ -3,11 +3,11 @@ slug: "docs/api/functions/getIconForWidget"
 title: "getIconForWidget"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getIconForWidget
+[@firecms/core](/docs/api/README) / getIconForWidget
 
 # Function: getIconForWidget()
 
@@ -19,7 +19,7 @@ Defined in: [util/property\_utils.tsx:42](https://github.com/firecmsco/firecms/b
 
 ### widget
 
-[`PropertyConfig`](../type-aliases/PropertyConfig) | `undefined`
+[`PropertyConfig`](/docs/api/type-aliases/PropertyConfig) | `undefined`
 
 ### size
 

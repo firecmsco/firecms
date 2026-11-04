@@ -55,6 +55,12 @@ title: "${title}"
     // Match patterns like [text](path.md) or [text](../path.md) or [text](./path.md)
     content = content.replace(/(\[.*?\]\((?:\.\.\/)*(?:\.\/)*[^)]+)\.md(\))/g, '$1$2');
 
+    // Make typedoc's file-relative links absolute, e.g. [Entity](../interfaces/Entity.md#id) -> [Entity](/docs/api/interfaces/Entity#id)
+    // Pages are served with a trailing slash (/docs/api/functions/Foo/), so a relative link resolves one level too deep
+    const baseUrl = `https://firecms.co/docs/api/${path.dirname(relativePath).replace(/\\/g, "/")}/`;
+    content = content.replace(/\]\(((?:\.\.?\/)*[\w-]+(?:\/[\w-]+)*)(?:\.md)?(#[^)\s]*)?\)/g,
+        (match, target, hash = "") => `](${new URL(target, baseUrl).pathname}${hash})`);
+
     // Fix GitHub links to remove commit hashes and line numbers
     // Pattern: https://github.com/FireCMSco/firecms/blob/{commit-hash}/packages/... -> https://github.com/firecmsco/firecms/blob/main/packages/...
     content = content.replace(/https:\/\/github\.com\/FireCMSco\/firecms\/blob\/[a-f0-9]+\//gi, 'https://github.com/firecmsco/firecms/blob/main/');

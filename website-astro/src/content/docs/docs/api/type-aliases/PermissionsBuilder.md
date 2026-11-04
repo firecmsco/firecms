@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/PermissionsBuilder"
 title: "PermissionsBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / PermissionsBuilder
+[@firecms/core](/docs/api/README) / PermissionsBuilder
 
 # Type Alias: PermissionsBuilder()\<EC, USER, M\>
 
@@ -16,7 +16,7 @@ title: "PermissionsBuilder"
           user,
           collection,
           authController
-      }`) => [`Permissions`](../interfaces/Permissions) \| `undefined`
+      }`) => [`Permissions`](/docs/api/interfaces/Permissions) \| `undefined`
 
 Defined in: [types/permissions.ts:75](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/permissions.ts)
 
@@ -27,15 +27,15 @@ based on the logged user or collection.
 
 ### EC
 
-`EC` *extends* [`EntityCollection`](../interfaces/EntityCollection) = [`EntityCollection`](../interfaces/EntityCollection)
+`EC` *extends* [`EntityCollection`](/docs/api/interfaces/EntityCollection) = [`EntityCollection`](/docs/api/interfaces/EntityCollection)
 
 ### USER
 
-`USER` *extends* [`User`](User) = [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ### M
 
-`M` *extends* `object` = [`InferCollectionType`](InferCollectionType)\<`EC`\>
+`M` *extends* `object` = [`InferCollectionType`](/docs/api/type-aliases/InferCollectionType)\<`EC`\>
 
 ## Parameters
 
@@ -46,8 +46,8 @@ based on the logged user or collection.
           authController
       \}
 
-[`PermissionsBuilderProps`](../interfaces/PermissionsBuilderProps)\<`EC`, `USER`, `M`\>
+[`PermissionsBuilderProps`](/docs/api/interfaces/PermissionsBuilderProps)\<`EC`, `USER`, `M`\>
 
 ## Returns
 
-[`Permissions`](../interfaces/Permissions) \| `undefined`
+[`Permissions`](/docs/api/interfaces/Permissions) \| `undefined`

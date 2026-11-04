@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/Entity"
 title: "Entity"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / Entity
+[@firecms/core](/docs/api/README) / Entity
 
 # Interface: Entity\<M\>
 

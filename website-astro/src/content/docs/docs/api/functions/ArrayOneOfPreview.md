@@ -3,11 +3,11 @@ slug: "docs/api/functions/ArrayOneOfPreview"
 title: "ArrayOneOfPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / ArrayOneOfPreview
+[@firecms/core](/docs/api/README) / ArrayOneOfPreview
 
 # Function: ArrayOneOfPreview()
 
@@ -19,7 +19,7 @@ Defined in: [preview/property\_previews/ArrayOneOfPreview.tsx:14](https://github
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`any`[]\>
+[`PropertyPreviewProps`](/docs/api/interfaces/PropertyPreviewProps)\<`any`[]\>
 
 ## Returns
 

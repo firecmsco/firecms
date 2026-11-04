@@ -3,11 +3,11 @@ slug: "docs/api/functions/FieldCaption"
 title: "FieldCaption"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FieldCaption
+[@firecms/core](/docs/api/README) / FieldCaption
 
 # Function: FieldCaption()
 

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/CellRendererParams"
 title: "CellRendererParams"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / CellRendererParams
+[@firecms/core](/docs/api/README) / CellRendererParams
 
 # Type Alias: CellRendererParams\<T\>
 
@@ -25,7 +25,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:167](https://github.c
 
 ### column
 
-> **column**: [`VirtualTableColumn`](../interfaces/VirtualTableColumn)
+> **column**: [`VirtualTableColumn`](/docs/api/interfaces/VirtualTableColumn)
 
 Defined in: [components/VirtualTable/VirtualTableProps.tsx:168](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
 
@@ -41,7 +41,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:170](https://github.c
 
 ### columns
 
-> **columns**: [`VirtualTableColumn`](../interfaces/VirtualTableColumn)[]
+> **columns**: [`VirtualTableColumn`](/docs/api/interfaces/VirtualTableColumn)[]
 
 Defined in: [components/VirtualTable/VirtualTableProps.tsx:169](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
 

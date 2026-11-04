@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/StorageListResult"
 title: "StorageListResult"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / StorageListResult
+[@firecms/core](/docs/api/README) / StorageListResult
 
 # Interface: StorageListResult
 
@@ -19,7 +19,7 @@ Result returned by list().
 
 ### items
 
-> **items**: [`StorageReference`](StorageReference)[]
+> **items**: [`StorageReference`](/docs/api/interfaces/StorageReference)[]
 
 Defined in: [types/storage.ts:144](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
 
@@ -40,7 +40,7 @@ If set, there might be more results for this list. Use this token to resume the 
 
 ### prefixes
 
-> **prefixes**: [`StorageReference`](StorageReference)[]
+> **prefixes**: [`StorageReference`](/docs/api/interfaces/StorageReference)[]
 
 Defined in: [types/storage.ts:139](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
 

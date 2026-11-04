@@ -13,7 +13,7 @@ cómo se **muestra la vista previa de una propiedad en la colección** y otras *
 lectura**.
 
 Puede construir su vista previa como un componente de React que tome
-[PropertyPreviewProps](../api/interfaces/PropertyPreviewProps) como props (propiedades).
+[PropertyPreviewProps](/es/docs/api/interfaces/PropertyPreviewProps) como props (propiedades).
 
 `PropertyPreviewProps` tiene dos tipos genéricos: el primero es el tipo de la
 propiedad, como `string` o `boolean`, y el segundo (opcional) es el

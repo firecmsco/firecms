@@ -3,15 +3,15 @@ slug: "docs/api/functions/useNavigationController"
 title: "useNavigationController"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / useNavigationController
+[@firecms/core](/docs/api/README) / useNavigationController
 
 # Function: useNavigationController()
 
-> **useNavigationController**(): [`NavigationController`](../type-aliases/NavigationController)
+> **useNavigationController**(): [`NavigationController`](/docs/api/type-aliases/NavigationController)
 
 Defined in: [hooks/useNavigationController.tsx:12](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useNavigationController.tsx)
 
@@ -21,4 +21,4 @@ as utility methods.
 
 ## Returns
 
-[`NavigationController`](../type-aliases/NavigationController)
+[`NavigationController`](/docs/api/type-aliases/NavigationController)

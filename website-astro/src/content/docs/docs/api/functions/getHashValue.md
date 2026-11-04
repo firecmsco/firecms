@@ -3,11 +3,11 @@ slug: "docs/api/functions/getHashValue"
 title: "getHashValue"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getHashValue
+[@firecms/core](/docs/api/README) / getHashValue
 
 # Function: getHashValue()
 

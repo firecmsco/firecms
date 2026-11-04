@@ -72,7 +72,7 @@ Wenn auf `true` gesetzt, werden die Kind-Eigenschaften direkt ohne umschließend
 ---
 
 Das erstellte Widget ist
-- [`MapFieldBinding`](../../api/functions/MapFieldBinding) Feld, das die Kind-Eigenschaftsfelder rendert
+- [`MapFieldBinding`](/de/docs/api/functions/MapFieldBinding) Feld, das die Kind-Eigenschaftsfelder rendert
 
 Links:
-- [API](../../api/interfaces/MapProperty)
+- [API](/de/docs/api/interfaces/MapProperty)

@@ -3,11 +3,11 @@ slug: "docs/api/variables/AsyncPreviewComponent"
 title: "AsyncPreviewComponent"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / AsyncPreviewComponent
+[@firecms/core](/docs/api/README) / AsyncPreviewComponent
 
 # Variable: AsyncPreviewComponent
 

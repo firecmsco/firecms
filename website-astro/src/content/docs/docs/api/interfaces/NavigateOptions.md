@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/NavigateOptions"
 title: "NavigateOptions"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / NavigateOptions
+[@firecms/core](/docs/api/README) / NavigateOptions
 
 # Interface: NavigateOptions
 

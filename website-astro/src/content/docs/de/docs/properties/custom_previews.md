@@ -12,7 +12,7 @@ Genau wie Sie anpassen können, wie Ihr Eigenschaftsfeld gerendert wird, können
 wie die Vorschau einer Eigenschaft in der **Kollektion** und anderen **Nur-Lese-Ansichten** angezeigt wird.
 
 Sie können Ihre Vorschau als React-Komponente erstellen, die
-[PropertyPreviewProps](../api/interfaces/PropertyPreviewProps) als Props nimmt.
+[PropertyPreviewProps](/de/docs/api/interfaces/PropertyPreviewProps) als Props nimmt.
 
 `PropertyPreviewProps` hat zwei generische Typen: der erste ist der Typ der
 Eigenschaft, wie `string` oder `boolean`, und der zweite (optional) ist der

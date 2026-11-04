@@ -3,11 +3,11 @@ slug: "docs/api/interfaces/FetchCollectionProps"
 title: "FetchCollectionProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FetchCollectionProps
+[@firecms/core](/docs/api/README) / FetchCollectionProps
 
 # Interface: FetchCollectionProps\<M\>
 
@@ -23,7 +23,7 @@ Defined in: [types/datasource.ts:29](https://github.com/firecmsco/firecms/blob/m
 
 ### collection?
 
-> `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+> `optional` **collection**: [`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](/docs/api/type-aliases/ResolvedEntityCollection)\<`M`\>
 
 Defined in: [types/datasource.ts:31](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 
@@ -31,7 +31,7 @@ Defined in: [types/datasource.ts:31](https://github.com/firecmsco/firecms/blob/m
 
 ### filter?
 
-> `optional` **filter**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
+> `optional` **filter**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](/docs/api/type-aliases/WhereFilterOp), `any`\]\>\>
 
 Defined in: [types/datasource.ts:32](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
 

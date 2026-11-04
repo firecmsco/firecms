@@ -9,7 +9,7 @@ slug: fr/docs/properties/fields/selects
 
 Vous pouvez utiliser un champ de sélection simple lorsque vous souhaitez permettre la sélection d'une seule valeur parmi un ensemble limité d'options. Chaque entrée aura une clé et une étiquette. Vous pouvez également personnaliser la couleur de chaque entrée ou désactiver certaines options.
 
-Définissez la prop `enumValues` à une configuration valide dans une propriété string. Vous pouvez définir ces valeurs comme un tableau de [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig) ou simplement comme un objet avec des paires clé/valeur :
+Définissez la prop `enumValues` à une configuration valide dans une propriété string. Vous pouvez définir ces valeurs comme un tableau de [`EnumValueConfig`](/fr/docs/api/type-aliases/EnumValueConfig) ou simplement comme un objet avec des paires clé/valeur :
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -42,9 +42,9 @@ buildProperty({
 });
 ```
 
-Le type de données est [`string`](../config/string) ou [`number`](../config/number).
+Le type de données est [`string`](/fr/docs/properties/config/string) ou [`number`](/fr/docs/properties/config/number).
 
-En interne, le composant utilisé est [`SelectFieldBinding`](../../api/functions/SelectFieldBinding).
+En interne, le composant utilisé est [`SelectFieldBinding`](/fr/docs/api/functions/SelectFieldBinding).
 
 
 ### Champ de sélection multiple
@@ -75,9 +75,9 @@ buildProperty({
 });
 ```
 
-Le type de données est [`array`](../config/array) avec des propriétés string ou number comme prop `of`, utilisant des valeurs enum.
+Le type de données est [`array`](/fr/docs/properties/config/array) avec des propriétés string ou number comme prop `of`, utilisant des valeurs enum.
 
-En interne, le composant utilisé est [`SelectFieldBinding`](../../api/functions/SelectFieldBinding).
+En interne, le composant utilisé est [`SelectFieldBinding`](/fr/docs/api/functions/SelectFieldBinding).
 
 ### Personnalisation des couleurs
 

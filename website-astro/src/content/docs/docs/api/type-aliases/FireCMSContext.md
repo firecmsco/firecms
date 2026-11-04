@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/FireCMSContext"
 title: "FireCMSContext"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FireCMSContext
+[@firecms/core](/docs/api/README) / FireCMSContext
 
 # Type Alias: FireCMSContext\<USER, AuthControllerType\>
 
@@ -27,17 +27,17 @@ useFireCMSContext
 
 ### USER
 
-`USER` *extends* [`User`](User) = [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User) = [`User`](/docs/api/type-aliases/User)
 
 ### AuthControllerType
 
-`AuthControllerType` *extends* [`AuthController`](AuthController)\<`USER`\> = [`AuthController`](AuthController)\<`USER`\>
+`AuthControllerType` *extends* [`AuthController`](/docs/api/type-aliases/AuthController)\<`USER`\> = [`AuthController`](/docs/api/type-aliases/AuthController)\<`USER`\>
 
 ## Properties
 
 ### analyticsController?
 
-> `optional` **analyticsController**: [`AnalyticsController`](AnalyticsController)
+> `optional` **analyticsController**: [`AnalyticsController`](/docs/api/type-aliases/AnalyticsController)
 
 Defined in: [types/firecms\_context.tsx:82](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms_context.tsx)
 
@@ -57,7 +57,7 @@ Used auth controller
 
 ### customizationController
 
-> **customizationController**: [`CustomizationController`](CustomizationController)
+> **customizationController**: [`CustomizationController`](/docs/api/type-aliases/CustomizationController)
 
 Defined in: [types/firecms\_context.tsx:67](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms_context.tsx)
 
@@ -67,7 +67,7 @@ This controller holds the customization options for the CMS.
 
 ### dataSource
 
-> **dataSource**: [`DataSource`](../interfaces/DataSource)
+> **dataSource**: [`DataSource`](/docs/api/interfaces/DataSource)
 
 Defined in: [types/firecms\_context.tsx:27](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms_context.tsx)
 
@@ -87,7 +87,7 @@ Controller used to open regular dialogs
 
 ### navigation
 
-> **navigation**: [`NavigationController`](NavigationController)
+> **navigation**: [`NavigationController`](/docs/api/type-aliases/NavigationController)
 
 Defined in: [types/firecms\_context.tsx:39](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms_context.tsx)
 
@@ -102,7 +102,7 @@ useNavigation
 
 ### sideDialogsController
 
-> **sideDialogsController**: [`SideDialogsController`](../interfaces/SideDialogsController)
+> **sideDialogsController**: [`SideDialogsController`](/docs/api/interfaces/SideDialogsController)
 
 Defined in: [types/firecms\_context.tsx:52](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms_context.tsx)
 
@@ -114,7 +114,7 @@ or reference dialogs.
 
 ### sideEntityController
 
-> **sideEntityController**: [`SideEntityController`](../interfaces/SideEntityController)
+> **sideEntityController**: [`SideEntityController`](/docs/api/interfaces/SideEntityController)
 
 Defined in: [types/firecms\_context.tsx:45](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms_context.tsx)
 
@@ -128,7 +128,7 @@ useSideEntityController
 
 ### snackbarController
 
-> **snackbarController**: [`SnackbarController`](../interfaces/SnackbarController)
+> **snackbarController**: [`SnackbarController`](/docs/api/interfaces/SnackbarController)
 
 Defined in: [types/firecms\_context.tsx:72](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms_context.tsx)
 
@@ -138,7 +138,7 @@ Use this controller to display snackbars
 
 ### storageSource
 
-> **storageSource**: [`StorageSource`](../interfaces/StorageSource)
+> **storageSource**: [`StorageSource`](/docs/api/interfaces/StorageSource)
 
 Defined in: [types/firecms\_context.tsx:32](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms_context.tsx)
 
@@ -148,7 +148,7 @@ Used storage implementation
 
 ### userConfigPersistence?
 
-> `optional` **userConfigPersistence**: [`UserConfigurationPersistence`](../interfaces/UserConfigurationPersistence)
+> `optional` **userConfigPersistence**: [`UserConfigurationPersistence`](/docs/api/interfaces/UserConfigurationPersistence)
 
 Defined in: [types/firecms\_context.tsx:77](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms_context.tsx)
 
@@ -158,7 +158,7 @@ Use this controller to access data stored in the browser for the user
 
 ### userManagement
 
-> **userManagement**: [`InternalUserManagement`](InternalUserManagement)\<`USER`\>
+> **userManagement**: [`InternalUserManagement`](/docs/api/type-aliases/InternalUserManagement)\<`USER`\>
 
 Defined in: [types/firecms\_context.tsx:98](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms_context.tsx)
 

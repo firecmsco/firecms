@@ -3,11 +3,11 @@ slug: "docs/api/variables/StorageThumbnail"
 title: "StorageThumbnail"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / StorageThumbnail
+[@firecms/core](/docs/api/README) / StorageThumbnail
 
 # Variable: StorageThumbnail
 

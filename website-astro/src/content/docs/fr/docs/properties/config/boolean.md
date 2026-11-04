@@ -24,7 +24,7 @@ const availableProperty = buildProperty({
 ---
 
 Le widget créé est
-- [`SwitchFieldBinding`](../../api/functions/SwitchFieldBinding)  interrupteur booléen simple
+- [`SwitchFieldBinding`](/fr/docs/api/functions/SwitchFieldBinding)  interrupteur booléen simple
 
 Liens :
-- [API](../../api/interfaces/BooleanProperty)
+- [API](/fr/docs/api/interfaces/BooleanProperty)

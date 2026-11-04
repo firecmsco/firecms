@@ -3,11 +3,11 @@ slug: "docs/api/functions/FireCMSRouter"
 title: "FireCMSRouter"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FireCMSRouter
+[@firecms/core](/docs/api/README) / FireCMSRouter
 
 # Function: FireCMSRouter()
 

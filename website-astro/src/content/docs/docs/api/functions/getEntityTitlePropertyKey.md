@@ -3,11 +3,11 @@ slug: "docs/api/functions/getEntityTitlePropertyKey"
 title: "getEntityTitlePropertyKey"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / getEntityTitlePropertyKey
+[@firecms/core](/docs/api/README) / getEntityTitlePropertyKey
 
 # Function: getEntityTitlePropertyKey()
 
@@ -25,11 +25,11 @@ Defined in: [util/references.ts:28](https://github.com/firecmsco/firecms/blob/ma
 
 ### collection
 
-[`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
+[`EntityCollection`](/docs/api/interfaces/EntityCollection)\<`M`\>
 
 ### propertyConfigs
 
-`Record`\<`string`, [`PropertyConfig`](../type-aliases/PropertyConfig)\<`any`\>\>
+`Record`\<`string`, [`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\<`any`\>\>
 
 ## Returns
 

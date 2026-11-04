@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/FireCMSProps"
 title: "FireCMSProps"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / FireCMSProps
+[@firecms/core](/docs/api/README) / FireCMSProps
 
 # Type Alias: FireCMSProps\<USER\>
 
@@ -19,7 +19,7 @@ Defined in: [types/firecms.tsx:52](https://github.com/firecmsco/firecms/blob/mai
 
 ### USER
 
-`USER` *extends* [`User`](User)
+`USER` *extends* [`User`](/docs/api/type-aliases/User)
 
 ## Properties
 
@@ -35,7 +35,7 @@ If you have a custom API key, you can use it here.
 
 ### authController
 
-> **authController**: [`AuthController`](AuthController)\<`USER`\>
+> **authController**: [`AuthController`](/docs/api/type-aliases/AuthController)\<`USER`\>
 
 Defined in: [types/firecms.tsx:131](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 
@@ -58,7 +58,7 @@ FireCMS
 
 ###### context
 
-[`FireCMSContext`](FireCMSContext)
+[`FireCMSContext`](/docs/api/type-aliases/FireCMSContext)
 
 Context of the app
 
@@ -92,7 +92,7 @@ Component to render when a reference is missing
 
 ### dataSourceDelegate
 
-> **dataSourceDelegate**: [`DataSourceDelegate`](../interfaces/DataSourceDelegate)
+> **dataSourceDelegate**: [`DataSourceDelegate`](/docs/api/interfaces/DataSourceDelegate)
 
 Defined in: [types/firecms.tsx:121](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 
@@ -113,7 +113,7 @@ Defaults to 'MMMM dd, yyyy, HH:mm:ss'
 
 ### entityActions?
 
-> `optional` **entityActions**: [`EntityAction`](EntityAction)[]
+> `optional` **entityActions**: [`EntityAction`](/docs/api/type-aliases/EntityAction)[]
 
 Defined in: [types/firecms.tsx:105](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 
@@ -126,7 +126,7 @@ by specifying the `key` of the action.
 
 ### entityLinkBuilder?
 
-> `optional` **entityLinkBuilder**: [`EntityLinkBuilder`](EntityLinkBuilder)
+> `optional` **entityLinkBuilder**: [`EntityLinkBuilder`](/docs/api/type-aliases/EntityLinkBuilder)
 
 Defined in: [types/firecms.tsx:156](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 
@@ -137,7 +137,7 @@ The function must return a URL that gets opened when the button is clicked
 
 ### entityViews?
 
-> `optional` **entityViews**: [`EntityCustomView`](EntityCustomView)[]
+> `optional` **entityViews**: [`EntityCustomView`](/docs/api/type-aliases/EntityCustomView)[]
 
 Defined in: [types/firecms.tsx:97](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 
@@ -151,7 +151,7 @@ You can also define an entity view from the UI.
 
 ### locale?
 
-> `optional` **locale**: [`Locale`](Locale)
+> `optional` **locale**: [`Locale`](/docs/api/type-aliases/Locale)
 
 Defined in: [types/firecms.tsx:116](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 
@@ -161,7 +161,7 @@ Locale of the CMS, currently only affecting dates
 
 ### navigationController
 
-> **navigationController**: [`NavigationController`](NavigationController)
+> **navigationController**: [`NavigationController`](/docs/api/type-aliases/NavigationController)
 
 Defined in: [types/firecms.tsx:88](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 
@@ -182,7 +182,7 @@ Callback used to get analytics events from the CMS
 
 ##### event
 
-[`CMSAnalyticsEvent`](CMSAnalyticsEvent)
+[`CMSAnalyticsEvent`](/docs/api/type-aliases/CMSAnalyticsEvent)
 
 ##### data?
 
@@ -196,7 +196,7 @@ Callback used to get analytics events from the CMS
 
 ### ~~plugins?~~
 
-> `optional` **plugins**: [`FireCMSPlugin`](FireCMSPlugin)\<`any`, `any`, `any`\>[]
+> `optional` **plugins**: [`FireCMSPlugin`](/docs/api/type-aliases/FireCMSPlugin)\<`any`, `any`, `any`\>[]
 
 Defined in: [types/firecms.tsx:145](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 
@@ -210,7 +210,7 @@ This prop will work as a fallback for the `plugins` prop in the `useBuildNavigat
 
 ### propertyConfigs?
 
-> `optional` **propertyConfigs**: `Record`\<`string`, [`PropertyConfig`](PropertyConfig)\>
+> `optional` **propertyConfigs**: `Record`\<`string`, [`PropertyConfig`](/docs/api/type-aliases/PropertyConfig)\>
 
 Defined in: [types/firecms.tsx:82](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 
@@ -222,7 +222,7 @@ the `propertyConfig` prop of a property in a collection.
 
 ### storageSource
 
-> **storageSource**: [`StorageSource`](../interfaces/StorageSource)
+> **storageSource**: [`StorageSource`](/docs/api/interfaces/StorageSource)
 
 Defined in: [types/firecms.tsx:126](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 
@@ -232,7 +232,7 @@ Connector to your file upload/fetch implementation
 
 ### userConfigPersistence?
 
-> `optional` **userConfigPersistence**: [`UserConfigurationPersistence`](../interfaces/UserConfigurationPersistence)
+> `optional` **userConfigPersistence**: [`UserConfigurationPersistence`](/docs/api/interfaces/UserConfigurationPersistence)
 
 Defined in: [types/firecms.tsx:137](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 
@@ -243,7 +243,7 @@ and not defined in code
 
 ### userManagement?
 
-> `optional` **userManagement**: [`InternalUserManagement`](InternalUserManagement)
+> `optional` **userManagement**: [`InternalUserManagement`](/docs/api/type-aliases/InternalUserManagement)
 
 Defined in: [types/firecms.tsx:170](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
 

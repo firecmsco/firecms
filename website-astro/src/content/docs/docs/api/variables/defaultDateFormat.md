@@ -3,11 +3,11 @@ slug: "docs/api/variables/defaultDateFormat"
 title: "defaultDateFormat"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / defaultDateFormat
+[@firecms/core](/docs/api/README) / defaultDateFormat
 
 # Variable: defaultDateFormat
 

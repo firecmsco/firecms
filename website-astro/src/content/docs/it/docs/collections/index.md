@@ -36,7 +36,7 @@ Viene eseguita una fusione profonda, quindi puoi definire alcune proprietà nel 
 ### Esempio di collezione definita nel codice
 
 :::note
-FireCMS fornisce circa 20 campi diversi (come campi di testo, selettori e quelli complessi come riferimento o campi array ordinabili). Se il tuo caso d'uso non è coperto da uno dei campi forniti, puoi creare il tuo [campo personalizzato](../properties/custom_fields.mdx).
+FireCMS fornisce circa 20 campi diversi (come campi di testo, selettori e quelli complessi come riferimento o campi array ordinabili). Se il tuo caso d'uso non è coperto da uno dei campi forniti, puoi creare il tuo [campo personalizzato](/it/docs/properties/custom_fields).
 :::
 
 :::tip
@@ -235,7 +235,7 @@ Puoi forzare il CMS ad aprire sempre il form quando si modifica un documento imp
 - **`name`**: Il nome plurale della collezione. Es., 'Products'.
 - **`singularName`**: Il nome singolare di una voce nella collezione. Es., 'Product'.
 - **`path`**: Percorso relativo Firestore di questa vista al suo genitore. Se questa vista è alla radice, il percorso è uguale a quello assoluto. Questo percorso determina anche l'URL in FireCMS.
-- **`properties`**: Oggetto che definisce le proprietà per lo schema dell'entità. Ulteriori informazioni in [Proprietà](../properties/properties_intro).
+- **`properties`**: Oggetto che definisce le proprietà per lo schema dell'entità. Ulteriori informazioni in [Proprietà](/it/docs/properties).
 - **`propertiesOrder`**: Ordine in cui le proprietà vengono visualizzate.
     - Per le proprietà, usa la chiave della proprietà.
     - Per i campi aggiuntivi, usa la chiave del campo.
@@ -257,7 +257,7 @@ Puoi forzare il CMS ad aprire sempre il form quando si modifica un documento imp
 - **`defaultSize`**: Dimensione predefinita della collezione renderizzata.
 - **`group`**: Campo opzionale usato per raggruppare le voci di navigazione di primo livello sotto una vista di navigazione. Se imposti questo valore in una sotto-collezione, non ha effetto.
 - **`description`**: Descrizione opzionale di questa vista. Puoi usare Markdown.
-- **`entityActions`**: Puoi definire azioni aggiuntive che possono essere eseguite sulle entità in questa collezione. Queste azioni possono essere visualizzate nella vista collezione o nella vista entità. Puoi usare il metodo `onClick` per implementare la tua logica. Nella prop `context`, puoi accedere a tutti i controller di FireCMS. Puoi anche definire azioni sulle entità globalmente. Vedi [Azioni Entità](./entity_actions) per ulteriori dettagli.
+- **`entityActions`**: Puoi definire azioni aggiuntive che possono essere eseguite sulle entità in questa collezione. Queste azioni possono essere visualizzate nella vista collezione o nella vista entità. Puoi usare il metodo `onClick` per implementare la tua logica. Nella prop `context`, puoi accedere a tutti i controller di FireCMS. Puoi anche definire azioni sulle entità globalmente. Vedi [Azioni Entità](/it/docs/collections/entity_actions) per ulteriori dettagli.
 
 ```tsx
 const archiveEntityAction: EntityAction = {
@@ -284,7 +284,7 @@ const archiveEntityAction: EntityAction = {
 - **`pagination`**: Se abilitato, il contenuto viene caricato in batch. Se `false` tutte le entità nella collezione vengono caricate. Puoi specificare un numero per definire la dimensione della paginazione (50 per impostazione predefinita). Predefinito `true`.
 - **`additionalFields`**: Puoi aggiungere campi aggiuntivi sia alla vista collezione che alla vista form implementando un delegato di campo aggiuntivo.
 - **`textSearchEnabled`**: Flag per indicare se mostrare una barra di ricerca in cima alla tabella della collezione.
-- **`permissions`**: Puoi specificare un oggetto con permessi booleani con la forma `{edit:boolean; create:boolean; delete:boolean}` per indicare le azioni che l'utente può eseguire. Puoi anche passare un [`PermissionsBuilder`](../api/type-aliases/PermissionsBuilder) per personalizzare i permessi in base all'utente o all'entità.
+- **`permissions`**: Puoi specificare un oggetto con permessi booleani con la forma `{edit:boolean; create:boolean; delete:boolean}` per indicare le azioni che l'utente può eseguire. Puoi anche passare un [`PermissionsBuilder`](/it/docs/api/type-aliases/PermissionsBuilder) per personalizzare i permessi in base all'utente o all'entità.
 - **`inlineEditing`**: Gli elementi in questa collezione possono essere modificati inline nella vista collezione? Se questo flag è impostato su false ma `permissions.edit` è `true`, le entità possono comunque essere modificate nel pannello laterale.
 - **`selectionEnabled`**: Le entità in questa collezione sono selezionabili? Predefinito `true`.
 - **`exportable`**: I dati in questa vista collezione devono includere un pulsante di esportazione? Predefinito `true`.

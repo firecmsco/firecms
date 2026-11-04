@@ -31,7 +31,7 @@ Use a custom field when you need one (or more) of the following:
 - Integrations (upload to an external API, fetch suggestions, geocode, etc.)
 
 If you only need validation or simple transformation, prefer property level `validation` options first to keep things simple.
-If you need dynamic behavior depending on other values, consider using [conditional fields](./conditional_fields.md) instead.
+If you need dynamic behavior depending on other values, consider using [conditional fields](/docs/properties/conditional_fields) instead.
 
 
 ## Custom field example
@@ -114,7 +114,7 @@ Recommended good practices:
 - Show the label and error (use your own UI or `<FieldHelperText>` / built‑ins)
 - Avoid heavy side effects on every keystroke (debounce network calls)
 
-Full interface: [`FieldProps`](../api/interfaces/FieldProps) (includes detailed comments).
+Full interface: [`FieldProps`](/docs/api/interfaces/FieldProps) (includes detailed comments).
 
 ## Passing custom props
 Provide a `customProps` object in the property definition. The object is strongly typed via the second generic of `FieldProps<T, CustomProps>`.
@@ -225,7 +225,7 @@ function GeoPointField({ context }: FieldProps<any>) {
 - Need read‑only mode: Respect `disabled` from props or `context.disabled`.
 
 ## Next steps
-- Explore other customization: [Custom previews](./custom_previews.md)
+- Explore other customization: [Custom previews](/docs/properties/custom_previews)
 - Reuse logic across many properties: create a shared field component and pass different `customProps`.
 - Open source friendly? Consider contributing a reusable field to the community.
 

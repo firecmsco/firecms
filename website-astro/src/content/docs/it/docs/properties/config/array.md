@@ -152,10 +152,10 @@ Quando impostato su `true`, mostra le proprietà figlio direttamente senza esser
 ---
 
 In base alla configurazione, i widget del campo form creati sono:
-- [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding) campo array generico che permette il riordino e renderizza la proprietà figlio come nodi.
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) se la proprietà `of` è una `string` con configurazione di archiviazione.
-- [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding) se la proprietà `of` è un `reference`
-- [`BlockFieldBinding`](../../api/functions/BlockFieldBinding) se la proprietà `oneOf` è specificata
+- [`RepeatFieldBinding`](/it/docs/api/functions/RepeatFieldBinding) campo array generico che permette il riordino e renderizza la proprietà figlio come nodi.
+- [`StorageUploadFieldBinding`](/it/docs/api/functions/StorageUploadFieldBinding) se la proprietà `of` è una `string` con configurazione di archiviazione.
+- [`ArrayOfReferencesFieldBinding`](/it/docs/api/functions/ArrayOfReferencesFieldBinding) se la proprietà `of` è un `reference`
+- [`BlockFieldBinding`](/it/docs/api/functions/BlockFieldBinding) se la proprietà `oneOf` è specificata
 
 Link:
-- [API](../../api/interfaces/ArrayProperty)
+- [API](/it/docs/api/interfaces/ArrayProperty)

@@ -32,8 +32,8 @@ buildProperty({
 });
 ```
 
-O tipo de dado é [`array`](../config/array).
+O tipo de dado é [`array`](/pt/docs/properties/config/array).
 
 Internamente o componente usado
-é [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding).
+é [`RepeatFieldBinding`](/pt/docs/api/functions/RepeatFieldBinding).
 

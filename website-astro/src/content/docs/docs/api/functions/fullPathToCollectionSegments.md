@@ -3,11 +3,11 @@ slug: "docs/api/functions/fullPathToCollectionSegments"
 title: "fullPathToCollectionSegments"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / fullPathToCollectionSegments
+[@firecms/core](/docs/api/README) / fullPathToCollectionSegments
 
 # Function: fullPathToCollectionSegments()
 

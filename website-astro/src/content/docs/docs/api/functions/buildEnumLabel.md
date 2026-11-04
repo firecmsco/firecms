@@ -3,11 +3,11 @@ slug: "docs/api/functions/buildEnumLabel"
 title: "buildEnumLabel"
 ---
 
-[**@firecms/core**](../README)
+[**@firecms/core**](/docs/api/README)
 
 ***
 
-[@firecms/core](../README) / buildEnumLabel
+[@firecms/core](/docs/api/README) / buildEnumLabel
 
 # Function: buildEnumLabel()
 
@@ -19,7 +19,7 @@ Defined in: [util/enums.ts:46](https://github.com/firecmsco/firecms/blob/main/pa
 
 ### labelOrConfig?
 
-`string` | [`EnumValueConfig`](../type-aliases/EnumValueConfig)
+`string` | [`EnumValueConfig`](/docs/api/type-aliases/EnumValueConfig)
 
 ## Returns
 
