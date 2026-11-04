@@ -1,10 +1,9 @@
 ---
 // Cookie Banner Component - Blocking Modal
-import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const tp = useTranslatedPath(lang);
 ---
 
 <style>
@@ -65,7 +64,7 @@ const tp = useTranslatedPath(lang);
                         <h2 class="text-lg font-bold text-surface-900 dark:text-white mb-3">{t('cookie.title')}</h2>
                         <p class="text-sm leading-relaxed text-surface-800 dark:text-surface-200 m-0">
                             {t('cookie.desc.1')}
-                            <a href={tp("/policy/cookies_policy")} target="_blank"
+                            <a href="/policy/cookies_policy" target="_blank"
                                class="text-primary-light hover:text-primary underline transition-colors">{t('cookie.desc.2')}</a>
                         </p>
                     </div>

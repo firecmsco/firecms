@@ -11,7 +11,8 @@ const t = useTranslations(lang as any);
 const comparisons = await getCollection('comparisons');
 const compareLinks = (comparisons || []).map(c => ({
     label: c.data.title,
-    url: tp(`/compare/${c.id}`)
+    // Comparison pages are English-only, so no tp() prefix.
+    url: `/compare/${c.id}`
 }));
 
 const footerNavs = [
