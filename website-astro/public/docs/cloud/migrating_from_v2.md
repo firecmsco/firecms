@@ -91,7 +91,7 @@ of your project needs to be in a specific format.
 The `index.ts` file should export a `FireCMSAppConfig` object, which is defined as follows:
 
 ```typescript
-
+import {CMSView, CMSViewsBuilder, EntityCollection, EntityCollectionsBuilder, EntityCustomView, PropertyConfig} from "./index.ts";
 export type FireCMSAppConfig = {
 
     /**
@@ -148,7 +148,7 @@ easy to adapt your collections to the new format.
 To migrate your collections, simply export them in your `index.ts` file:
 
 ```typescript
-
+import { FireCMSAppConfig } from "@firecms/cloud";
 const appConfig: FireCMSAppConfig = {
     version: "1",
     collections: async (props) => {

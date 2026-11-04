@@ -69,6 +69,9 @@ You can define your collections in code or use the UI to define them. It is also
 UI of collections defined in code. You can then merge the collections defined in code with those defined in the UI.
 
 ```jsx
+import { useCallback } from "react";
+import { mergeCollections } from "@firecms/collection_editor";
+import { productsCollection } from "./collections/products_collection";
 
 // The collection builder is passed to the navigation controller
 const collectionsBuilder = useCallback(() => {
@@ -97,6 +100,7 @@ This will add an icon in each collection card that allows you to edit the collec
 The main hook to utilize the plugin's functionality is `useCollectionEditorPlugin`. Here's an example of how to use it:
 
 ```jsx
+import { useCollectionEditorPlugin } from "@firecms/collection_editor";
 
 const collectionEditorPlugin = useCollectionEditorPlugin({
     collectionConfigController,
@@ -125,6 +129,21 @@ resulting plugin into the FireCMS configuration. This is typically done in your 
 ### Example Configuration
 
 ```jsx
+import React, { useCallback } from "react";
+import { FireCMS, useBuildNavigationController } from "@firecms/core";
+import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import {
+    useFirebaseAuthController,
+    useFirestoreDelegate,
+    useInitialiseFirebase,
+    useValidateAuthenticator
+} from "@firecms/firebase";
+import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
+import { productsCollection } from "./collections/products_collection";
+import { customPermissionsBuilder } from "./config/permissions";
+import { CustomCollectionView } from "./views/CustomCollectionView";
+import { CollectionIcon } from "./components/CollectionIcon";
 
 function App() {
     const {
@@ -243,6 +262,7 @@ integrated into the FireCMS navigation and allow users to manage collections.
 ### Example Integration
 
 ```jsx
+import { useCollectionEditorPlugin } from "@firecms/collection_editor";
 
 const collectionEditorPlugin = useCollectionEditorPlugin({
     collectionConfigController,
@@ -274,6 +294,7 @@ levels.
 ### Example Usage
 
 ```jsx
+import { useValidateAuthenticator } from "@firecms/core";
 
 const {
     authLoading,
@@ -365,6 +386,7 @@ The `collectionEditor` object returned by the `useCollectionEditorPlugin` hook i
 ### Example Access
 
 ```jsx
+import { useCollectionEditorPlugin } from "@firecms/collection_editor";
 
 const collectionEditor = useCollectionEditorPlugin({
     collectionConfigController,
@@ -397,6 +419,7 @@ You can modify the UI and functionality of the Collection Editor UI Plugin by pr
 example, customizing the database field renderer:
 
 ```jsx
+import CustomDatabaseFieldComponent from "./components/CustomDatabaseFieldComponent";
 
 const collectionEditorPlugin = useCollectionEditorPlugin({
     collectionConfigController,
@@ -425,6 +448,40 @@ Below is an example of how to integrate the Collection Editor UI Plugin into a F
 ### Plugin Setup
 
 ```jsx
+import React, { useCallback, useMemo } from "react";
+
+import "typeface-rubik";
+import "@fontsource/jetbrains-mono";
+import {
+  AppBar,
+  CircularProgressCenter,
+  CMSView,
+  Drawer,
+  FireCMS,
+  ModeControllerProvider,
+  NavigationRoutes,
+  Scaffold,
+  SideDialogs,
+  SnackbarProvider,
+  useBuildLocalConfigurationPersistence,
+  useBuildModeController,
+  useBuildNavigationController,
+  useValidateAuthenticator
+} from "@firecms/core";
+import {
+  FirebaseAuthController,
+  FirebaseLoginView,
+  FirebaseSignInProvider,
+  useFirebaseAuthController,
+  useFirebaseStorageSource,
+  useFirestoreDelegate,
+  useInitialiseFirebase
+} from "@firecms/firebase";
+import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
+
+import { firebaseConfig } from "./firebase_config";
+import { productsCollection } from "./collections/products";
 
 export function App() {
 

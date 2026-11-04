@@ -61,6 +61,8 @@ type AuthController<USER extends User = any> = {
 Your `getAuthToken` implementation is the cornerstone of the entire security model — every request your `DataSourceDelegate` and `StorageSource` make will call it to attach credentials.
 
 ```typescript
+import { useState, useCallback, useEffect } from "react";
+import type { AuthController, User } from "@firecms/core";
 
 interface CustomUser extends User {
   uid: string;
@@ -143,6 +145,7 @@ export function useCustomAuthController(): AuthController<CustomUser> {
 The `Authenticator` callback allows you to control **which authenticated users can access FireCMS**. Use it to load the user's role from your database and attach it to the auth controller.
 
 ```typescript
+import type { Authenticator } from "@firecms/core";
 
 const myAuthenticator: Authenticator<CustomUser> = async ({
   user,
@@ -186,7 +189,7 @@ This is the most critical rule. Do not use a database driver, a connection strin
 
 ```typescript
 // ❌ DANGEROUS — database credentials shipped to the browser
-
+import { createClient } from "your-database-driver";
 const client = createClient("user:password@your-database-host...");
 
 // ✅ CORRECT — proxy through your authenticated API
@@ -198,6 +201,14 @@ const response = await fetch("/api/data/products", {
 ### Example: Secure DataSourceDelegate
 
 ```typescript
+import type {
+  DataSourceDelegate,
+  Entity,
+  FetchCollectionDelegateProps,
+  FetchEntityProps,
+  SaveEntityDelegateProps,
+  DeleteEntityProps
+} from "@firecms/core";
 
 export function useSecureApiDelegate(
   getAuthToken: () => Promise<string>
@@ -299,6 +310,7 @@ Your API server (e.g. Express, Fastify, NestJS) must enforce the following on **
 
 ```typescript
 // Express middleware example
+import jwt from "jsonwebtoken";
 
 function authenticate(req, res, next) {
   const token = req.headers.authorization?.replace("Bearer ", "");
@@ -417,6 +429,7 @@ interface StorageSource {
 Instead of passing S3/GCS credentials to the browser, have your server generate short-lived pre-signed URLs:
 
 ```typescript
+import type { StorageSource, UploadFileProps, UploadFileResult, DownloadConfig } from "@firecms/core";
 
 export function useSecureStorageSource(
   getAuthToken: () => Promise<string>
@@ -558,6 +571,7 @@ FireCMS has a built-in `Permissions` system and a `PermissionsBuilder` callback 
 ### Client-Side Permissions (UI Only)
 
 ```typescript
+import { buildCollection } from "@firecms/core";
 
 export const productsCollection = buildCollection({
   name: "Products",
@@ -644,6 +658,7 @@ If a user can modify their own role in the database (e.g. setting `role: "admin"
 Configure CORS on your API server to allow only your FireCMS domain:
 
 ```typescript
+import cors from "cors";
 
 app.use(cors({
   origin: "https://your-admin-panel.example.com",
@@ -662,6 +677,7 @@ app.use(cors({
 Protect your API from brute-force attacks and abuse:
 
 ```typescript
+import rateLimit from "express-rate-limit";
 
 // General API rate limit
 app.use("/api/", rateLimit({

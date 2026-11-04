@@ -1,6 +1,7 @@
 # Date/Time
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const publicationProperty = buildProperty({
     name: "Publication date",

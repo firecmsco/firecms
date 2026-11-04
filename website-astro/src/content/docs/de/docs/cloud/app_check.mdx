@@ -80,53 +80,46 @@ Sie können auch einen benutzerdefinierten Anbieter erstellen, indem Sie die Sch
 
 ## Ihrer Konfiguration überprüfen
 
-FireCMS Cloud kann Abhängigkeiten mit Ihrer hochgeladenen Anwendung teilen. Es ist wichtig, dass Ihre Anwendung und FireCMS Cloud dieselbe Version von Firebase App Check verwenden.
-Stellen Sie dazu sicher, dass Sie in Ihrer `vite.config.ts` die gemeinsam genutzte Abhängigkeit von FireCMS verwenden.
-Sie müssen die Abhängigkeit `@firebase/app-check` in Ihrer `vite.config.ts` im `shared`-Konfigurationsbereich des Federation-Plugins haben.
+FireCMS Cloud stellt Ihrem Code Firebase App Check bereit, sodass der von Ihnen erstellte Provider
+dieselbe Kopie des SDK verwendet wie FireCMS selbst. Dafür sind zwei Dinge nötig:
 
-Hier ist eine Beispielkonfiguration:
+- **Importieren Sie aus `@firebase/app-check`**, wie in den Beispielen oben, nicht aus
+  `firebase/app-check`. Nur Importe, die ein geteiltes Paket exakt benennen, erhalten die Kopie von
+  FireCMS. Ein Import aus `firebase/app-check` lässt den Build auf eine Datei verweisen, die er nie
+  erzeugt, und die App zeigt "Error loading remote config".
+- **Behalten Sie `@firebase/app-check` im Abschnitt `shared`** des Federation-Plugins in Ihrer
+  `vite.config.ts`. Die FireCMS Cloud-Vorlage führt es bereits auf.
 
-```tsx
-import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
-import federation from "@originjs/vite-plugin-federation"
+Der Abschnitt `shared` der Vorlage sieht so aus. `generate: false` bedeutet, dass Ihr Build keine
+Kopie des Pakets enthält und die von FireCMS bereitgestellte verwendet:
 
-// https://vitejs.dev/config/
-export default defineConfig({
-    esbuild: {
-        logOverride: { "this-is-undefined-in-esm": "silent" }
+```ts
+federation({
+    name: "remote_app",
+    filename: "remoteEntry.js",
+    exposes: {
+        "./config": "./src/index"
     },
-    plugins: [
-        react(),
-        federation({
-            name: "remote_app",
-            filename: "remoteEntry.js",
-            exposes: {
-                "./config": "./src/index"
-            },
-            shared: [
-                "react",
-                "react-dom",
-                "@firecms/cloud",
-                "@firecms/core",
-                "@firecms/firebase",
-                "@firecms/ui",
-                "@firebase/firestore",
-                "@firebase/app",
-                "@firebase/functions",
-                "@firebase/auth",
-                "@firebase/storage",
-                "@firebase/analytics",
-                "@firebase/remote-config",
-                "@firebase/app-check" // Diese Zeile hinzufügen
-            ]
-        })
-    ],
-    build: {
-        modulePreload: false,
-        minify: false,
-        target: "ESNEXT",
-        cssCodeSplit: false,
+    shared: {
+        "react": { generate: false },
+        "react-dom": { generate: false },
+        "react/jsx-runtime": { generate: false },
+        "react/jsx-dev-runtime": { generate: false },
+        "@firecms/cloud": { generate: false },
+        "@firecms/core": { generate: false },
+        "@firecms/firebase": { generate: false },
+        "@firecms/ui": { generate: false },
+        "@firebase/firestore": { generate: false },
+        "@firebase/app": { generate: false },
+        "@firebase/functions": { generate: false },
+        "@firebase/auth": { generate: false },
+        "@firebase/storage": { generate: false },
+        "@firebase/analytics": { generate: false },
+        "@firebase/remote-config": { generate: false },
+        "@firebase/app-check": { generate: false },
     }
-});
+})
 ```
+
+Die vollständige Datei finden Sie in der
+[`vite.config.ts` der FireCMS Cloud-Vorlage](https://github.com/firecmsco/firecms/blob/main/packages/cli/templates/template_cloud/vite.config.ts).

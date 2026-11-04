@@ -22,6 +22,9 @@ a component (you can't use it directly from a callback function).
 ### Example
 
 ```tsx
+import React from "react";
+import { useStorageSource } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
 export function FileUploader() {
     const storageSource = useStorageSource();

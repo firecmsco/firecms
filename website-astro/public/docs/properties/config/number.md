@@ -1,6 +1,7 @@
 # Number
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const rangeProperty = buildProperty({
     name: "Range",
@@ -21,6 +22,7 @@ You can use the enum values providing a map of possible
   displayed in the dropdown.
 
 ```tsx
+import { buildProperty, buildEnumValueConfig } from "@firecms/core";
 
 const property = buildProperty({
     name: "Status",

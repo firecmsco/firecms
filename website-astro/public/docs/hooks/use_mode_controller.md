@@ -19,6 +19,9 @@ a component that is a child of the `FireCMS` component.
 ### Example
 
 ```tsx
+import React from "react";
+import { useModeController } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
 export function ThemeToggle() {
     const modeController = useModeController();

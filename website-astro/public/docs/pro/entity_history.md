@@ -29,6 +29,9 @@ If you are using the user management plugin, you can provide a function to resol
 You can also pass your own custom `getUser` function to fetch user details.
 
 ```tsx
+import React from "react";
+import { FireCMS } from "@firecms/core";
+import { useEntityHistoryPlugin } from "@firecms/entity_history";
 
 export default function App() {
 
@@ -69,6 +72,7 @@ export default function App() {
 By default, the history feature is not enabled for any collection. You need to enable it explicitly in your collection configuration:
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 const productsCollection = buildCollection({
     name: "Products",
@@ -112,6 +116,7 @@ const sampleCollection = buildCollection({
 For advanced use cases where you need to create history entries programmatically (outside of the normal save callbacks), you can use the `createHistoryEntry` function:
 
 ```tsx
+import { createHistoryEntry, NewHistoryEntryParams } from "@firecms/entity_history";
 
 // Example: Creating a history entry when importing data
 const handleDataImport = async (context: FireCMSContext, importedData: any[]) => {

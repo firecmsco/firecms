@@ -4,6 +4,7 @@ In a map property you define child properties in the same way you define them
 at the entity schema level:
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const ctaProperty = buildProperty({
     dataType: "map",

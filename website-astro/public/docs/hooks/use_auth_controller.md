@@ -30,6 +30,8 @@ The props provided by this hook are:
 Example:
 
 ```tsx
+import React from "react";
+import { useAuthController } from "@firecms/core";
 
 export function ExampleCMSView() {
 

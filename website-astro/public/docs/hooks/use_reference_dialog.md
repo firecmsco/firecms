@@ -48,6 +48,9 @@ The props provided by this hook are:
 Example:
 
 ```tsx
+import React from "react";
+import { useReferenceDialog, useSnackbarController, Entity } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
 type Product = {
     name: string;

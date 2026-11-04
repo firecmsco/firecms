@@ -72,6 +72,12 @@ You can change the base URL of FireCMS by modifying the `basename` property of t
 For example, if you want to change the base URL to `/admin`, you can do it like this:
 
 ```tsx
+import React from "react"
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+
+import "./index.css"
+import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>

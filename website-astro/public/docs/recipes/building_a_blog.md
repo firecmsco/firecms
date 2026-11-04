@@ -293,7 +293,7 @@ the collection.
 In order to do so, you need to add it to the `entityViews` prop of the FireCMS main app config export:
 
 ```tsx
-
+import { FireCMSAppConfig } from "@firecms/cloud";
 const appConfig: FireCMSAppConfig = {
     version: "1",
     collections: [],
@@ -313,7 +313,7 @@ If you are defining your collection in code, you can also register it
 in the collection itself:
 
 ```tsx
-
+import {buildCollection} from "@firecms/core";
 export const blogCollection = buildCollection<BlogEntry>({
     name: "Blog entry",
     path: "blog",

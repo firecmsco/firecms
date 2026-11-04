@@ -18,6 +18,9 @@ Instead, you could use [Amplify/Storage](https://docs.amplify.aws/react/build-a-
 Below is a template for creating a custom storage source:
 
 ```tsx
+import {StorageSource, UploadFileProps, UploadFileResult, DownloadConfig} from "@firecms/core";
+import {S3Client, PutObjectCommand, GetObjectCommand} from "@aws-sdk/client-s3";
+import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 
 export interface S3StorageSourceProps {
   apiKey: string;
@@ -124,6 +127,27 @@ After creating the custom storage source, you can use it in your FireCMS applica
 Here is an example of how to use the custom storage source in your FireCMS application
 
 ```tsx
+import React from "react";
+import "typeface-rubik";
+import "@fontsource/jetbrains-mono";
+import {
+  FireCMS,
+  ModeControllerProvider,
+  Scaffold,
+  AppBar,
+  Drawer,
+  NavigationRoutes,
+  SideDialogs,
+  SnackbarProvider,
+  useBuildLocalConfigurationPersistence,
+  useBuildModeController,
+  useBuildNavigationController,
+  useValidateAuthenticator,
+  CenteredView,
+  CircularProgressCenter
+} from "@firecms/core";
+import { productsCollection } from "./collections/products_collection";
+import { useCustomStorageSource, CustomStorageSourceProps } from "./hooks/useCustomStorageSource";
 
 const customStorageConfig: CustomStorageSourceProps = {
   apiKey: "your-api-key",

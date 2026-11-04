@@ -26,6 +26,15 @@ including the `authController`, `dataSource`, `storageSource`, `sideDialogsContr
 :::
 
 ```tsx
+import {
+    buildCollection,
+    buildEntityCallbacks,
+    EntityOnDeleteProps,
+    EntityOnSaveProps,
+    EntityOnFetchProps,
+    EntityIdUpdateProps,
+    toSnakeCase
+} from "@firecms/core";
 
 type Product = {
     name: string;

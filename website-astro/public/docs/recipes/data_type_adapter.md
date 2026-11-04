@@ -40,6 +40,7 @@ You can use the `onFetch` callback to convert the data type when reading from th
 a Unix timestamp to a date:
 
 ```typescript
+import {EntityCallbacks, EntityOnFetchProps} from "@firecms/core";
 
 const exerciseCallbacks: EntityCallbacks = {
     onFetch({
@@ -63,6 +64,7 @@ You can use the `onPreSave` callback to convert the data type when saving to the
 you can convert a date to a Unix timestamp:
 
 ```typescript
+import {EntityCallbacks} from "@firecms/core";
 
 const exerciseCallbacks: EntityCallbacks = {
     onPreSave: ({
@@ -86,6 +88,7 @@ const exerciseCallbacks: EntityCallbacks = {
 You can use the `exerciseCallbacks` in your collection definition:
 
 ```typescript
+import {buildCollection, EntityCallbacks, EntityCollection, EntityOnFetchProps} from "@firecms/core";
 
 const exerciseCallbacks: EntityCallbacks = {
     onFetch({

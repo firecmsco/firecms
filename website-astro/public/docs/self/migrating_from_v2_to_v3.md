@@ -77,7 +77,7 @@ You can try replacing imports from `@mui/material` to `@firecms/ui` and will see
 Icons in FireCMS are based on the material icons. You can use all the material icons importing them just like in MUI.
 
 ```tsx
-
+import { AddIcon } from "@firecms/ui";
 ```
 
 The prop `fontSize` is called `size` in FireCMS (because it just makes more sense, MUI).

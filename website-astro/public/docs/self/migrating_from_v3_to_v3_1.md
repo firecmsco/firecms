@@ -43,6 +43,9 @@ npm i tailwindcss@4 @tailwindcss/vite
 Update your `vite.config.ts` to include the new TailwindCSS v4 plugin:
 
 ```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     esbuild: {
@@ -211,6 +214,11 @@ You can now use AI to generate and modify collections directly in the collection
 Enable it by passing a `generateCollection` callback to the collection editor plugin:
 
 ```typescript
+import {
+    useCollectionEditorPlugin,
+    buildCollectionGenerationCallback
+} from "@firecms/collection_editor";
+import { useFirebaseAuthController } from "@firecms/firebase";
 
 const authController = useFirebaseAuthController({ firebaseApp });
 
@@ -240,6 +248,11 @@ DataTalk allows you to query and update your Firestore data using natural langua
 Enable DataTalk in your self-hosted app:
 
 ```typescript
+import {
+    useBuildDataTalkConfig,
+    DataTalkProvider,
+    DataTalkRoutes
+} from "@firecms/datatalk";
 
 // Configure DataTalk - only enable when user is logged in
 const userEmail = authController.user?.email;

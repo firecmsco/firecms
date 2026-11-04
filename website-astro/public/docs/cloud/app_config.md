@@ -57,6 +57,7 @@ An app config is generated for you automatically when you initialise a new proje
 example of how you can customize it:
 
 ```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
 
 const appConfig: FireCMSAppConfig = {
 

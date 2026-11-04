@@ -94,6 +94,7 @@ That's it! FireCMS Cloud automatically connects to your Typesense instance.
 ### Using Typesense in Self-Hosted FireCMS
 
 ```typescript
+import { buildFireCMSSearchController, useFirestoreDelegate } from "@firecms/firebase";
 
 const textSearchControllerBuilder = buildFireCMSSearchController({
   region: "us-central1",  // Your extension's region
@@ -151,6 +152,17 @@ The paths not specified can still be searched with the local text search.
 Example:
 
 ```tsx
+import { algoliasearch, SearchClient } from "algoliasearch";
+
+import {
+    performAlgoliaTextSearch,
+    buildExternalSearchController,
+    FirestoreTextSearchController,
+    buildCollection,
+    FireCMSCloudApp,
+    EntityCollectionsBuilder,
+    FireCMSAppConfig
+} from "@firecms/cloud";
 
 const client: SearchClient | undefined = algoliasearch("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_SEARCH_KEY");
 
@@ -179,6 +191,9 @@ const appConfig: FireCMSAppConfig = {
 For self-hosted FireCMS, you need to define a `FirestoreTextSearchControllerBuilder`.
 
 ```tsx
+import { algoliasearch, SearchClient } from "algoliasearch";
+
+import { buildExternalSearchController, performAlgoliaTextSearch } from "@firecms/firebase";
 
 const client: SearchClient | undefined = algoliasearch("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_SEARCH_KEY");
 

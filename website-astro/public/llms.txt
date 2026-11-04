@@ -268,6 +268,7 @@ An app config is generated for you automatically when you initialise a new proje
 example of how you can customize it:
 
 ```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
 
 const appConfig: FireCMSAppConfig = {
 
@@ -684,6 +685,61 @@ and
 firecms deploy --project=your-project-id
 ```
 
+### Importing Firebase in your code
+
+FireCMS Cloud provides React, the FireCMS packages and the Firebase SDK to your code, so your
+build carries no copy of them. These are the packages listed under `shared` in your
+`vite.config.ts`, and only imports that name one of them exactly get FireCMS's copy.
+
+For Firebase, that means importing from the `@firebase/…` packages, not the `firebase/…`
+entry points:
+
+```ts
+// Don't: the build points at a file it never produces
+import { getFunctions, httpsCallable } from "firebase/functions";
+
+// Do
+import { getApp } from "@firebase/app";
+import { getFunctions, httpsCallable } from "@firebase/functions";
+```
+
+The same goes for `@firebase/firestore`, `@firebase/auth`, `@firebase/storage`,
+`@firebase/analytics`, `@firebase/remote-config` and `@firebase/app-check`. They are installed
+along with `firebase`; if your package manager does not hoist them (pnpm, for example), add the
+ones you import to your `package.json`.
+
+`getApp()` returns your project's Firebase app, the one FireCMS uses. FireCMS may not have
+initialized it yet when your code is loaded, so call `getApp()`, `getFunctions()`,
+`getFirestore()` and the like when your code runs, inside a component or a callback, not at the
+top level of a file.
+
+### Troubleshooting
+
+#### "Error loading remote config"
+
+FireCMS shows this when it cannot load or run your deployed code. Open the browser console to
+see why:
+
+- **A 404 on a file named `__federation_shared_…`**, often followed by a message about a
+  disallowed MIME type (`application/json`): your code imports a shared package through a
+  different path, usually `firebase/…` instead of `@firebase/…`. See
+  [Importing Firebase in your code](#importing-firebase-in-your-code). Newer versions of
+  `firecms deploy` catch this before uploading and name the imports to change.
+- **An exception from your own code**: something threw while your config was loading, such as a
+  call to `getFirestore()` at the top level of a file before Firebase was initialized. The stack
+  trace points at it.
+
+The absence of `__federation_shared_…` files in `dist/assets` is expected, not a sign of a
+broken build: FireCMS provides those packages, so the build does not include them.
+
+#### A 404 on `material-icons-….woff2`
+
+If the console shows a 404 for `/assets/material-icons-….woff2` on `api.firecms.co`, icons in
+your code may not display. Your `vite.config.ts` predates the template's fix for font URLs: copy
+the `experimental.renderBuiltUrl` block from the
+[FireCMS Cloud template's `vite.config.ts`](https://github.com/firecmsco/firecms/blob/main/packages/cli/templates/template_cloud/vite.config.ts)
+into yours, then build and deploy again.
+
 ### Deployment
 
 FireCMS Cloud projects can only be deployed to FireCMS Cloud.
@@ -727,6 +783,8 @@ Make sure you have added the domain `app.firecms.co` to the list of allowed doma
 :::
 
 ```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
+import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
 
 const appConfig: FireCMSAppConfig = {
 
@@ -746,6 +804,8 @@ In order to set up the ReCaptchaV3Provider, you need to create a new reCAPTCHA v
 Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-provider).
 
 ```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
+import {ReCaptchaV3Provider} from "@firebase/app-check";
 
 const appConfig: FireCMSAppConfig = {
 
@@ -765,53 +825,49 @@ You can also create a custom provider by implementing the `AppCheckProvider` int
 
 ### Check your configuration
 
-FireCMS Cloud can share dependencies with your uploaded app. It is important than your app and FireCMS Cloud use the same version of Firebase App Check.
-In order to do so, make sure, in your `vite.config.ts`, you are using the shared dependency provided by FireCMS.
-You need to have the dependency `@firebase/app-check` in your `vite.config.ts`. Federation plugin `shared` configuration.
+FireCMS Cloud provides Firebase App Check to your code, so the provider you create runs on the
+same copy of the SDK as FireCMS itself. Two things make that work:
 
-This is a sample configuration:
+- **Import from `@firebase/app-check`**, as the examples above do, not from `firebase/app-check`.
+  Only imports that name a shared package exactly get FireCMS's copy. A `firebase/app-check`
+  import makes the build point at a file it never produces, and the app shows
+  "Error loading remote config".
+- **Keep `@firebase/app-check` in the `shared` section** of the federation plugin in your
+  `vite.config.ts`. The FireCMS Cloud template already lists it.
 
-```tsx
+The `shared` section of the template looks like this. `generate: false` means your build carries
+no copy of the package and uses the one FireCMS provides:
 
-// https://vitejs.dev/config/
-export default defineConfig({
-    esbuild: {
-        logOverride: { "this-is-undefined-in-esm": "silent" }
+```ts
+federation({
+    name: "remote_app",
+    filename: "remoteEntry.js",
+    exposes: {
+        "./config": "./src/index"
     },
-    plugins: [
-        react(),
-        federation({
-            name: "remote_app",
-            filename: "remoteEntry.js",
-            exposes: {
-                "./config": "./src/index"
-            },
-            shared: [
-                "react",
-                "react-dom",
-                "@firecms/cloud",
-                "@firecms/core",
-                "@firecms/firebase",
-                "@firecms/ui",
-                "@firebase/firestore",
-                "@firebase/app",
-                "@firebase/functions",
-                "@firebase/auth",
-                "@firebase/storage",
-                "@firebase/analytics",
-                "@firebase/remote-config",
-                "@firebase/app-check" // Add this line
-            ]
-        })
-    ],
-    build: {
-        modulePreload: false,
-        minify: false,
-        target: "ESNEXT",
-        cssCodeSplit: false,
+    shared: {
+        "react": { generate: false },
+        "react-dom": { generate: false },
+        "react/jsx-runtime": { generate: false },
+        "react/jsx-dev-runtime": { generate: false },
+        "@firecms/cloud": { generate: false },
+        "@firecms/core": { generate: false },
+        "@firecms/firebase": { generate: false },
+        "@firecms/ui": { generate: false },
+        "@firebase/firestore": { generate: false },
+        "@firebase/app": { generate: false },
+        "@firebase/functions": { generate: false },
+        "@firebase/auth": { generate: false },
+        "@firebase/storage": { generate: false },
+        "@firebase/analytics": { generate: false },
+        "@firebase/remote-config": { generate: false },
+        "@firebase/app-check": { generate: false },
     }
-});
+})
 ```
+
+For the complete file, see the
+[FireCMS Cloud template's `vite.config.ts`](https://github.com/firecmsco/firecms/blob/main/packages/cli/templates/template_cloud/vite.config.ts).
 
 ## Creating a project from a service account
 
@@ -1001,7 +1057,7 @@ of your project needs to be in a specific format.
 The `index.ts` file should export a `FireCMSAppConfig` object, which is defined as follows:
 
 ```typescript
-
+import {CMSView, CMSViewsBuilder, EntityCollection, EntityCollectionsBuilder, EntityCustomView, PropertyConfig} from "./index.ts";
 export type FireCMSAppConfig = {
 
     /**
@@ -1058,7 +1114,7 @@ easy to adapt your collections to the new format.
 To migrate your collections, simply export them in your `index.ts` file:
 
 ```typescript
-
+import { FireCMSAppConfig } from "@firecms/cloud";
 const appConfig: FireCMSAppConfig = {
     version: "1",
     collections: async (props) => {
@@ -1181,6 +1237,9 @@ npm i tailwindcss@4 @tailwindcss/vite
 Add the new Tailwind CSS Vite plugin:
 
 ```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     esbuild: {
@@ -1329,6 +1388,7 @@ All within a single app, [app.firecms.co](https://www.notion.so/e8af421701bb440e
 Here's the full code generated by the UI for the Books collection:
 
 ```tsx
+import { EntityCollection } from "@firecms/core";
 
 const BooksCollection: EntityCollection = {
     id: 'books',
@@ -1536,6 +1596,12 @@ You can change the base URL of FireCMS by modifying the `basename` property of t
 For example, if you want to change the base URL to `/admin`, you can do it like this:
 
 ```tsx
+import React from "react"
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+
+import "./index.css"
+import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
@@ -1772,6 +1838,8 @@ yarn add firebase@^10 @firecms/core@^3.0.0-beta @firecms/firebase@^3.0.0-beta re
 Now let's import the tailwind config of FireCMS. Add the **FireCMS preset** `tailwind.config.js`, as well as the content paths to FireCMS source code, so the right tailwind classes are picked.
 
 ```js
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   presets: [fireCMSConfig],
@@ -1810,6 +1878,8 @@ If you are not running FireCMS in the root path of your app, you need to set the
 
 ```tsx
 "use client";
+import { FireCMSApp } from "@/cms/FireCMSApp";
+import { FireCMSRouter } from "@firecms/core";
 
 export default function CMS() {
     return <FireCMSRouter basePath={"/cms"}>
@@ -2120,6 +2190,7 @@ and navigate to `http://localhost:3000/cms` to see your **FireCMS** app running.
 You get a `StaticImageData` instead of the image URL (as in **vite**).
 You can use it in FireCMS components that expect a URL like, using the `src` property:
 ```tsx
+import logo from "./logo.png";
 
 <FirebaseLoginView
     logo={logo.src}/>
@@ -2485,7 +2556,8 @@ You can also apply classes to the `Scaffold` to style it according to your needs
 ##### Example:
 
 ```jsx
-
+import { Scaffold, AppBar, Drawer, NavigationRoutes, SideDialogs } from "@firecms/core";
+import logo from "./images/logo.png";
 //...
 return <Scaffold
     logo={logo}
@@ -2518,7 +2590,8 @@ The default appbar includes an avatar tied to the logged-user.
 ##### Example:
 
 ```tsx
-
+import { AppBar } from "@firecms/core";
+import { Button, ForumIcon, LogoutIcon, MenuItem, PaymentIcon, Tooltip } from "@firecms/ui";
 //...
 return <AppBar title={title}
                endAdornment={<>
@@ -2550,7 +2623,7 @@ return <AppBar title={title}
 You can replace the default AppBar by wrapping your custom component with the `AppBar`:
 
 ```tsx
-
+import { AppBar, Scaffold } from "@firecms/core";
 //...
 return <Scaffold>
     <AppBar>
@@ -2583,7 +2656,7 @@ You can replace the default Drawer by wrapping your custom component with the `D
 Note that the burger icon will be displayed automatically if you define a custom Drawer.
 
 ```tsx
-
+import { Drawer, Scaffold } from "@firecms/core";
 //...
 return <Scaffold>
     <Drawer>
@@ -2609,7 +2682,7 @@ Note that you can also define your own routes if you need to.
 ##### Example:
 
 ```tsx
-
+import { NavigationRoutes } from "@firecms/core";
 //...
 return <NavigationRoutes homePage={<>My custom home page</>}>
     {/* Define your custom routes here, using react-router */}
@@ -2698,6 +2771,7 @@ This section covers how to create a `users` collection to manage users. This is 
 This collection will store your users.
 
 ```typescript
+import { buildCollection, buildProperty } from "@firecms/core";
 
 export type User = {
   name: string;
@@ -2736,6 +2810,7 @@ Now, let's add a `role` to our users and use it to control access.
 Add a `role` property to your `User` type and collection.
 
 ```typescript
+import { buildCollection, buildProperty } from "@firecms/core";
 
 export enum UserRole {
   admin = "admin",
@@ -2784,6 +2859,72 @@ First, create a new file named `src/custom_authenticator.ts`. This file will con
 
 **`src/custom_authenticator.ts`**
 ```typescript
+import { Authenticator } from "@firecms/core";
+import { FirebaseUserWrapper } from "@firecms/firebase";
+import { User } from "./collections/users"; // Make sure to import your User type
+
+export const roleBasedAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
+  user,
+  authController,
+  dataSourceDelegate
+}) => {
+  if (!user?.email) return false;
+
+  try {
+    const userEntities = await dataSourceDelegate.fetchCollection<User>({
+      path: "users",
+      filter: { email: ["==", user.email] }
+    });
+
+    if (userEntities && userEntities.length > 0) {
+      const member = userEntities[0].values;
+      authController.setExtra({
+        role: member.role
+      });
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.error("Authentication error:", error);
+    return false;
+  }
+};
+```
+
+Now, import the `roleBasedAuthenticator` in your `App.tsx` and pass it to the `FirebaseCMSApp` component.
+
+**`src/App.tsx`**
+```typescript
+import { FirebaseCMSApp } from "@firecms/firebase";
+import { roleBasedAuthenticator } from "./custom_authenticator";
+import { usersCollection } from "./collections/users"; // Make sure to import your collections
+
+// ... other imports
+
+function App() {
+    // ... other component logic
+
+    return (
+        <FirebaseCMSApp
+            name={"My App"}
+            authentication={roleBasedAuthenticator}
+            collections={[usersCollection, /* ...other collections */]}
+            // ... other props
+        />
+    );
+}
+
+export default App;
+```
+
+#### Step 3: Apply Permissions to Collections
+
+Use the `permissions` callback in your collections to control access based on the user's role.
+
+```typescript
+import { buildCollection } from "@firecms/core";
+import { UserRole } from "./collections/users";
 
 export const postsCollection = buildCollection({
   name: "Posts",
@@ -2811,6 +2952,8 @@ You need to set custom claims for a user from a backend environment using the Fi
 
 ```typescript
 // Example Cloud Function to set a role claim
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
 
 admin.initializeApp();
 
@@ -2831,6 +2974,8 @@ export const setUserRole = functions.https.onCall(async (data, context) => {
 This authenticator reads the custom claims from the user's ID token.
 
 ```typescript
+import { Authenticator } from "@firecms/core";
+import { FirebaseUserWrapper } from "@firecms/firebase";
 
 export const claimsAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
   user,
@@ -2855,6 +3000,7 @@ export const claimsAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
 The `permissions` implementation is the same as with the role-based approach, as the role is extracted and placed in `authController.extra`.
 
 ```typescript
+import { buildCollection } from "@firecms/core";
 
 export const articlesCollection = buildCollection({
   name: "Articles",
@@ -3023,6 +3169,92 @@ yarn add @fontsource/noto-serif
 
 and import it in your `App.tsx` file:
 ```tsx
+import "@fontsource/noto-serif";
+```
+
+In Tailwind v4, font families are defined in the `@theme` block. FireCMS UI defines 3 font families:
+`--font-sans`, `--font-headers` and `--font-mono`. You can override them directly in your `index.css`:
+
+```css
+@import 'tailwindcss';
+@import "@firecms/ui/index.css" layer(base);
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+    --font-sans: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    --font-headers: 'Noto Serif', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Space Mono', 'Lucida Console', monospace;
+}
+```
+
+##### Customizing typography styles
+
+Each typography style is defined in `@firecms/ui/index.css` and can be overridden. The `@apply` directive
+lets you apply Tailwind utilities to a class.
+
+Add any of these classes to your `index.css` to override the defaults:
+
+```css
+.typography-h1 {
+    @apply text-6xl font-headers font-light tracking-tight;
+}
+
+.typography-h2 {
+    @apply text-5xl font-headers font-light tracking-tight;
+}
+
+.typography-h3 {
+    @apply text-4xl font-headers font-normal tracking-tight;
+}
+
+.typography-h4 {
+    @apply text-3xl font-headers font-normal tracking-tight;
+}
+
+.typography-h5 {
+    @apply text-2xl font-headers font-normal;
+}
+
+.typography-h6 {
+    @apply text-xl font-headers font-medium;
+}
+
+.typography-subtitle1 {
+    @apply text-lg font-headers font-medium;
+}
+
+.typography-subtitle2 {
+    @apply text-base font-headers font-medium;
+}
+
+.typography-body1 {
+}
+
+.typography-body2 {
+    @apply text-sm;
+}
+
+.typography-caption {
+    @apply text-xs;
+}
+
+.typography-label {
+    @apply text-sm font-medium;
+}
+
+.typography-button {
+    @apply text-sm font-semibold uppercase;
+}
+```
+
+#### Still using Tailwind v3?
+
+If your project is still on Tailwind CSS v3, refer to the
+[`tailwind.config.js`](https://github.com/firecmsco/firecms/blob/main/packages/ui/tailwind.config.js)
+file in the `@firecms/ui` package, which is still shipped for backwards compatibility. You can use it as a preset:
+
+```javascript
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
 
 export default {
     presets: [fireCMSConfig],
@@ -3067,6 +3299,14 @@ example in the [Sample PRO Project](https://firecms.co/docs/pro/sample_pro) page
 below focuses only on the i18n part:
 
 ```tsx
+import {
+    FireCMS,
+    FireCMSi18nProvider,
+    ModeControllerProvider,
+    Scaffold, AppBar, Drawer, NavigationRoutes, SideDialogs,
+    SnackbarProvider,
+    // … other imports
+} from "@firecms/core";
 
 export function MyCMSApp() {
     // … set up controllers (auth, navigation, storage, etc.)
@@ -3118,6 +3358,8 @@ You can replace any FireCMS UI string without touching the library source code.
 Use the `translations` prop on `FireCMSi18nProvider`:
 
 ```tsx
+import { FireCMSi18nProvider } from "@firecms/core";
+import type { FireCMSTranslations } from "@firecms/core";
 
 // Only include the keys you want to change — everything else keeps its default.
 const myTranslations: { [locale: string]: Partial<FireCMSTranslations> } = {
@@ -3152,6 +3394,7 @@ missing keys fall back to English automatically) and pass it under a new locale
 code:
 
 ```tsx
+import { FireCMSi18nProvider } from "@firecms/core";
 
 const ptTranslations = {
     save: "Guardar",
@@ -3305,6 +3548,7 @@ personal preference in `localStorage`.
 To clear the stored preference and force a language change:
 
 ```ts
+import { FIRECMS_LOCALE_STORAGE_KEY } from "@firecms/core";
 
 // Clear user preference, then set the new locale via the `locale` prop
 localStorage.removeItem(FIRECMS_LOCALE_STORAGE_KEY);
@@ -3445,6 +3689,8 @@ Returns an object that includes:
 #### Example
 
 ```tsx
+import {useAppCheck} from "@firecms/firebase";
+import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
 
 const {
     loading,
@@ -3473,6 +3719,8 @@ Make sure you have added the domain `app.firecms.co` to the list of allowed doma
 :::
 
 ```tsx
+import {useAppCheck} from "@firecms/firebase";
+import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
 
 const {
     loading,
@@ -3492,6 +3740,8 @@ In order to set up the ReCaptchaV3Provider, you need to create a new reCAPTCHA v
 Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-provider).
 
 ```tsx
+import {useAppCheck} from "@firecms/firebase";
+import {ReCaptchaV3Provider} from "@firebase/app-check";
 
 const {
     loading,
@@ -3719,6 +3969,8 @@ The main hook to initialize the plugin's functionality is `useBuildUserManagemen
 
 ```jsx
 
+import {useBuildUserManagement} from "@firecms/user_management";
+
 const userManagement = useBuildUserManagement({
     dataSourceDelegate: firestoreDelegate,
     usersPath: "__FIRECMS/config/users",
@@ -3735,6 +3987,9 @@ resulting plugin into the FireCMS configuration. You will usually want to do thi
 #### Example Configuration
 
 ```jsx
+import {FireCMS} from "@firecms/core";
+
+import {useBuildUserManagement, useUserManagementPlugin, userManagementAdminViews} from "@firecms/user_management";
 
 function App() {
 
@@ -3793,6 +4048,7 @@ They are exported as an array from the `@firecms/user_management` package.
 You can add them to your `useBuildNavigationController` hook configuration, in the `adminViews` array.
 
 ```jsx
+import {userManagementAdminViews} from "@firecms/user_management";
 
 const navigationController = useBuildNavigationController({
     collections,
@@ -3958,6 +4214,9 @@ You can define your collections in code or use the UI to define them. It is also
 UI of collections defined in code. You can then merge the collections defined in code with those defined in the UI.
 
 ```jsx
+import { useCallback } from "react";
+import { mergeCollections } from "@firecms/collection_editor";
+import { productsCollection } from "./collections/products_collection";
 
 // The collection builder is passed to the navigation controller
 const collectionsBuilder = useCallback(() => {
@@ -3986,6 +4245,7 @@ This will add an icon in each collection card that allows you to edit the collec
 The main hook to utilize the plugin's functionality is `useCollectionEditorPlugin`. Here's an example of how to use it:
 
 ```jsx
+import { useCollectionEditorPlugin } from "@firecms/collection_editor";
 
 const collectionEditorPlugin = useCollectionEditorPlugin({
     collectionConfigController,
@@ -4014,6 +4274,21 @@ resulting plugin into the FireCMS configuration. This is typically done in your 
 #### Example Configuration
 
 ```jsx
+import React, { useCallback } from "react";
+import { FireCMS, useBuildNavigationController } from "@firecms/core";
+import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import {
+    useFirebaseAuthController,
+    useFirestoreDelegate,
+    useInitialiseFirebase,
+    useValidateAuthenticator
+} from "@firecms/firebase";
+import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
+import { productsCollection } from "./collections/products_collection";
+import { customPermissionsBuilder } from "./config/permissions";
+import { CustomCollectionView } from "./views/CustomCollectionView";
+import { CollectionIcon } from "./components/CollectionIcon";
 
 function App() {
     const {
@@ -4132,6 +4407,7 @@ integrated into the FireCMS navigation and allow users to manage collections.
 #### Example Integration
 
 ```jsx
+import { useCollectionEditorPlugin } from "@firecms/collection_editor";
 
 const collectionEditorPlugin = useCollectionEditorPlugin({
     collectionConfigController,
@@ -4163,6 +4439,7 @@ levels.
 #### Example Usage
 
 ```jsx
+import { useValidateAuthenticator } from "@firecms/core";
 
 const {
     authLoading,
@@ -4254,6 +4531,7 @@ The `collectionEditor` object returned by the `useCollectionEditorPlugin` hook i
 #### Example Access
 
 ```jsx
+import { useCollectionEditorPlugin } from "@firecms/collection_editor";
 
 const collectionEditor = useCollectionEditorPlugin({
     collectionConfigController,
@@ -4286,6 +4564,7 @@ You can modify the UI and functionality of the Collection Editor UI Plugin by pr
 example, customizing the database field renderer:
 
 ```jsx
+import CustomDatabaseFieldComponent from "./components/CustomDatabaseFieldComponent";
 
 const collectionEditorPlugin = useCollectionEditorPlugin({
     collectionConfigController,
@@ -4314,6 +4593,40 @@ Below is an example of how to integrate the Collection Editor UI Plugin into a F
 #### Plugin Setup
 
 ```jsx
+import React, { useCallback, useMemo } from "react";
+
+import "typeface-rubik";
+import "@fontsource/jetbrains-mono";
+import {
+  AppBar,
+  CircularProgressCenter,
+  CMSView,
+  Drawer,
+  FireCMS,
+  ModeControllerProvider,
+  NavigationRoutes,
+  Scaffold,
+  SideDialogs,
+  SnackbarProvider,
+  useBuildLocalConfigurationPersistence,
+  useBuildModeController,
+  useBuildNavigationController,
+  useValidateAuthenticator
+} from "@firecms/core";
+import {
+  FirebaseAuthController,
+  FirebaseLoginView,
+  FirebaseSignInProvider,
+  useFirebaseAuthController,
+  useFirebaseStorageSource,
+  useFirestoreDelegate,
+  useInitialiseFirebase
+} from "@firecms/firebase";
+import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
+
+import { firebaseConfig } from "./firebase_config";
+import { productsCollection } from "./collections/products";
 
 export function App() {
 
@@ -4530,6 +4843,9 @@ The `ExportAllowedParams` type provides context for the `exportAllowed` function
 The main hook to utilize the plugin's functionality is `useExportPlugin`. Here's an example of how to use it:
 
 ```jsx
+import React from "react";
+import { FireCMS } from "@firecms/core";
+import { useExportPlugin } from "@firecms/data_export";
 
 function App() {
     
@@ -4681,6 +4997,10 @@ Use the `useImportPlugin` hook to create the import plugin and include it in the
 #### Example: Integrating the Data Import Plugin
 
 ```jsx
+import React from "react";
+import { CircularProgressCenter, FireCMS, useBuildModeController } from "@firecms/core";
+import { useFirebaseStorageSource } from "@firecms/firebase";
+import { useImportPlugin } from "@firecms/data_import";
 
 export function App() {
 
@@ -4787,6 +5107,9 @@ If you are using the user management plugin, you can provide a function to resol
 You can also pass your own custom `getUser` function to fetch user details.
 
 ```tsx
+import React from "react";
+import { FireCMS } from "@firecms/core";
+import { useEntityHistoryPlugin } from "@firecms/entity_history";
 
 export default function App() {
 
@@ -4827,6 +5150,7 @@ export default function App() {
 By default, the history feature is not enabled for any collection. You need to enable it explicitly in your collection configuration:
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 const productsCollection = buildCollection({
     name: "Products",
@@ -4870,6 +5194,7 @@ const sampleCollection = buildCollection({
 For advanced use cases where you need to create history entries programmatically (outside of the normal save callbacks), you can use the `createHistoryEntry` function:
 
 ```tsx
+import { createHistoryEntry, NewHistoryEntryParams } from "@firecms/entity_history";
 
 // Example: Creating a history entry when importing data
 const handleDataImport = async (context: FireCMSContext, importedData: any[]) => {
@@ -4955,6 +5280,9 @@ Instead, you could use [Amplify/Storage](https://docs.amplify.aws/react/build-a-
 Below is a template for creating a custom storage source:
 
 ```tsx
+import {StorageSource, UploadFileProps, UploadFileResult, DownloadConfig} from "@firecms/core";
+import {S3Client, PutObjectCommand, GetObjectCommand} from "@aws-sdk/client-s3";
+import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 
 export interface S3StorageSourceProps {
   apiKey: string;
@@ -5061,6 +5389,27 @@ After creating the custom storage source, you can use it in your FireCMS applica
 Here is an example of how to use the custom storage source in your FireCMS application
 
 ```tsx
+import React from "react";
+import "typeface-rubik";
+import "@fontsource/jetbrains-mono";
+import {
+  FireCMS,
+  ModeControllerProvider,
+  Scaffold,
+  AppBar,
+  Drawer,
+  NavigationRoutes,
+  SideDialogs,
+  SnackbarProvider,
+  useBuildLocalConfigurationPersistence,
+  useBuildModeController,
+  useBuildNavigationController,
+  useValidateAuthenticator,
+  CenteredView,
+  CircularProgressCenter
+} from "@firecms/core";
+import { productsCollection } from "./collections/products_collection";
+import { useCustomStorageSource, CustomStorageSourceProps } from "./hooks/useCustomStorageSource";
 
 const customStorageConfig: CustomStorageSourceProps = {
   apiKey: "your-api-key",
@@ -5372,6 +5721,8 @@ type AuthController<USER extends User = any> = {
 Your `getAuthToken` implementation is the cornerstone of the entire security model — every request your `DataSourceDelegate` and `StorageSource` make will call it to attach credentials.
 
 ```typescript
+import { useState, useCallback, useEffect } from "react";
+import type { AuthController, User } from "@firecms/core";
 
 interface CustomUser extends User {
   uid: string;
@@ -5454,6 +5805,7 @@ export function useCustomAuthController(): AuthController<CustomUser> {
 The `Authenticator` callback allows you to control **which authenticated users can access FireCMS**. Use it to load the user's role from your database and attach it to the auth controller.
 
 ```typescript
+import type { Authenticator } from "@firecms/core";
 
 const myAuthenticator: Authenticator<CustomUser> = async ({
   user,
@@ -5497,7 +5849,7 @@ This is the most critical rule. Do not use a database driver, a connection strin
 
 ```typescript
 // ❌ DANGEROUS — database credentials shipped to the browser
-
+import { createClient } from "your-database-driver";
 const client = createClient("user:password@your-database-host...");
 
 // ✅ CORRECT — proxy through your authenticated API
@@ -5509,6 +5861,14 @@ const response = await fetch("/api/data/products", {
 #### Example: Secure DataSourceDelegate
 
 ```typescript
+import type {
+  DataSourceDelegate,
+  Entity,
+  FetchCollectionDelegateProps,
+  FetchEntityProps,
+  SaveEntityDelegateProps,
+  DeleteEntityProps
+} from "@firecms/core";
 
 export function useSecureApiDelegate(
   getAuthToken: () => Promise<string>
@@ -5610,6 +5970,7 @@ Your API server (e.g. Express, Fastify, NestJS) must enforce the following on **
 
 ```typescript
 // Express middleware example
+import jwt from "jsonwebtoken";
 
 function authenticate(req, res, next) {
   const token = req.headers.authorization?.replace("Bearer ", "");
@@ -5728,6 +6089,7 @@ interface StorageSource {
 Instead of passing S3/GCS credentials to the browser, have your server generate short-lived pre-signed URLs:
 
 ```typescript
+import type { StorageSource, UploadFileProps, UploadFileResult, DownloadConfig } from "@firecms/core";
 
 export function useSecureStorageSource(
   getAuthToken: () => Promise<string>
@@ -5869,6 +6231,7 @@ FireCMS has a built-in `Permissions` system and a `PermissionsBuilder` callback 
 #### Client-Side Permissions (UI Only)
 
 ```typescript
+import { buildCollection } from "@firecms/core";
 
 export const productsCollection = buildCollection({
   name: "Products",
@@ -5955,6 +6318,7 @@ If a user can modify their own role in the database (e.g. setting `role: "admin"
 Configure CORS on your API server to allow only your FireCMS domain:
 
 ```typescript
+import cors from "cors";
 
 app.use(cors({
   origin: "https://your-admin-panel.example.com",
@@ -5973,6 +6337,7 @@ app.use(cors({
 Protect your API from brute-force attacks and abuse:
 
 ```typescript
+import rateLimit from "express-rate-limit";
 
 // General API rate limit
 app.use("/api/", rateLimit({
@@ -6097,12 +6462,12 @@ Update any imports in your code that previously referenced `@firecms/editor` to 
 
 **Before (v3.1):**
 ```typescript
-
+import { MarkdownField } from "@firecms/editor";
 ```
 
 **After (v3.2):**
 ```typescript
-
+import { MarkdownField } from "@firecms/core";
 ```
 
 ---
@@ -6129,6 +6494,7 @@ FireCMS now features full i18next integration with comprehensive translation cov
 To enable internationalization, you **must** wrap your application in the new `FireCMSi18nProvider` exported from `@firecms/core`. This provider is now required and provides the active locale and translations to all FireCMS components.
 
 ```tsx
+import { FireCMSi18nProvider } from "@firecms/core";
 
 // ...
 
@@ -6232,6 +6598,9 @@ npm i tailwindcss@4 @tailwindcss/vite
 Update your `vite.config.ts` to include the new TailwindCSS v4 plugin:
 
 ```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     esbuild: {
@@ -6400,6 +6769,11 @@ You can now use AI to generate and modify collections directly in the collection
 Enable it by passing a `generateCollection` callback to the collection editor plugin:
 
 ```typescript
+import {
+    useCollectionEditorPlugin,
+    buildCollectionGenerationCallback
+} from "@firecms/collection_editor";
+import { useFirebaseAuthController } from "@firecms/firebase";
 
 const authController = useFirebaseAuthController({ firebaseApp });
 
@@ -6429,6 +6803,11 @@ DataTalk allows you to query and update your Firestore data using natural langua
 Enable DataTalk in your self-hosted app:
 
 ```typescript
+import {
+    useBuildDataTalkConfig,
+    DataTalkProvider,
+    DataTalkRoutes
+} from "@firecms/datatalk";
 
 // Configure DataTalk - only enable when user is logged in
 const userEmail = authController.user?.email;
@@ -6628,13 +7007,13 @@ This is a sample `package.json` with the new config:
 You need to update your imports to use the new package name. For example, if you have a file that imports `firecms`:
 
 ```javascript
-
+import { FireCMS } from "firecms";
 ```
 
 You need to update it to use the new package name:
 
 ```javascript
-
+import { FireCMS } from "@firecms/core";
 ```
 
 #### Vite configuration
@@ -6642,6 +7021,9 @@ You need to update it to use the new package name:
 You also need to update your `vite.config.js` file to include the new package name and config:
 
 ```javascript
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import federation from "@originjs/vite-plugin-federation"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -6787,7 +7169,7 @@ You can try replacing imports from `@mui/material` to `@firecms/ui` and will see
 Icons in FireCMS are based on the material icons. You can use all the material icons importing them just like in MUI.
 
 ```tsx
-
+import { AddIcon } from "@firecms/ui";
 ```
 
 The prop `fontSize` is called `size` in FireCMS (because it just makes more sense, MUI).
@@ -6880,6 +7262,7 @@ functions that will help you detect type and configuration errors
 :::
 
 ```tsx
+import { buildCollection, buildProperty, EntityReference } from "@firecms/core";
 
 type Product = {
   name: string;
@@ -6992,6 +7375,7 @@ your `FireCMSAppConfig` object.
 This applies to **FireCMS Cloud** only.
 
 ```tsx
+import { FireCMSAppConfig } from "@firecms/core";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
@@ -7049,6 +7433,7 @@ If you need to enable filtering/sorting by more than one property at a time, you
 enabled in your Firestore configuration. In order to do so, just pass the indexes configuration to your collection:
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 const productsCollection = buildCollection<Product>({
     id: "products",
@@ -7483,6 +7868,15 @@ including the `authController`, `dataSource`, `storageSource`, `sideDialogsContr
 :::
 
 ```tsx
+import {
+    buildCollection,
+    buildEntityCallbacks,
+    EntityOnDeleteProps,
+    EntityOnSaveProps,
+    EntityOnFetchProps,
+    EntityIdUpdateProps,
+    toSnakeCase
+} from "@firecms/core";
 
 type Product = {
     name: string;
@@ -7637,6 +8031,8 @@ In order to accomplish that you can pass an array of `EntityCustomView`
 to your schema. Like in this example:
 
 ```tsx
+import React from "react";
+import { EntityCustomView, buildCollection } from "@firecms/core";
 
 const sampleView: EntityCustomView = {
     key: "preview",
@@ -7667,6 +8063,8 @@ will bind the value to the entity, and it will be saved when the entity is saved
 In this example we creating a secondary form with a map field, including name and age:
 
 ```tsx
+import { EntityCustomViewParams, PropertyFieldBinding } from "@firecms/core";
+import { Container } from "@firecms/ui";
 
 export function SecondaryForm({
                                   formContext
@@ -7724,6 +8122,7 @@ If you are editing a collection in code you can add your custom view
 directly to the collection:
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 const blogCollection = buildCollection({
     id: "blog",
@@ -7760,6 +8159,7 @@ In FireCMS Cloud, you can add it to the entity view registry in your
 main `FireCMSAppConfig` export:
 
 ```tsx
+import { FireCMSAppConfig } from "@firecms/core";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
@@ -7811,6 +8211,7 @@ It is also possible to use the `entityView` prop in the collection
 with the key of the entity view you want to use:
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 const blogCollection = buildCollection({
     id: "blog",
@@ -7832,6 +8233,7 @@ Views listed in a group are removed from the top-level tabs and displayed under 
 single dropdown button instead.
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 const productsCollection = buildCollection({
     id: "products",
@@ -7876,6 +8278,7 @@ These define the actions that the logged user can perform over an entity.
 In the simpler case, you can directly assign the permissions
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 buildCollection({
     path: "products",
@@ -7901,6 +8304,7 @@ In the example below we check if we have previously saved the role "admin"
 in the extras field in the `AuthController`.
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 buildCollection({
     path: "products",
@@ -7932,6 +8336,8 @@ Quick example of how the `extra.roles` field in the previous example is
 initialised:
 
 ```tsx
+import { Authenticator } from "@firecms/core";
+import { FirebaseUserWrapper } from "@firecms/firebase";
 
 const myAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
                                                                        user,
@@ -7967,6 +8373,7 @@ If you need to add additional fields in your export file, you can create
 them by setting an `ExportConfig` in your `exportable` prop:
 
 ```tsx
+import { ExportMappingFunction, buildCollection } from "@firecms/core";
 
 export const sampleAdditionalExportColumn: ExportMappingFunction = {
     key: "extra",
@@ -8007,6 +8414,11 @@ property values.
 ##### Example
 
 ```tsx
+import {
+    buildCollection,
+    buildCollection,
+    AdditionalFieldDelegate
+} from "@firecms/core";
 
 type User = { name: string }
 
@@ -8035,6 +8447,11 @@ const usersCollection = buildCollection<User>({
 ##### Advanced example
 
 ```tsx
+import {
+    buildCollection,
+    AdditionalFieldDelegate,
+    AsyncPreviewComponent
+} from "@firecms/core";
 
 export const productAdditionalField: AdditionalFieldDelegate<Product> = {
     key: "spanish_title",
@@ -8153,6 +8570,7 @@ That's it! FireCMS Cloud automatically connects to your Typesense instance.
 #### Using Typesense in Self-Hosted FireCMS
 
 ```typescript
+import { buildFireCMSSearchController, useFirestoreDelegate } from "@firecms/firebase";
 
 const textSearchControllerBuilder = buildFireCMSSearchController({
   region: "us-central1",  // Your extension's region
@@ -8210,6 +8628,17 @@ The paths not specified can still be searched with the local text search.
 Example:
 
 ```tsx
+import { algoliasearch, SearchClient } from "algoliasearch";
+
+import {
+    performAlgoliaTextSearch,
+    buildExternalSearchController,
+    FirestoreTextSearchController,
+    buildCollection,
+    FireCMSCloudApp,
+    EntityCollectionsBuilder,
+    FireCMSAppConfig
+} from "@firecms/cloud";
 
 const client: SearchClient | undefined = algoliasearch("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_SEARCH_KEY");
 
@@ -8238,6 +8667,9 @@ const appConfig: FireCMSAppConfig = {
 For self-hosted FireCMS, you need to define a `FirestoreTextSearchControllerBuilder`.
 
 ```tsx
+import { algoliasearch, SearchClient } from "algoliasearch";
+
+import { buildExternalSearchController, performAlgoliaTextSearch } from "@firecms/firebase";
 
 const client: SearchClient | undefined = algoliasearch("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_SEARCH_KEY");
 
@@ -8299,6 +8731,7 @@ Instead of defining your collections as an array, use a `EntityCollectionsBuilde
 a function that returns a promise of an object containing the collections.
 
 ```tsx
+import { EntityCollectionsBuilder } from "@firecms/core";
 
 // ...
 
@@ -8335,6 +8768,8 @@ use it to populate the enum values of a property called `category`, in the `prod
 collection.
 
 ```tsx
+import { useCallback } from "react";
+import { buildCollection, EntityCollectionsBuilder } from "@firecms/core";
 
 const collectionsBuilder: EntityCollectionsBuilder = async ({
                                                                 user,
@@ -8384,6 +8819,7 @@ A typical use case is to store some additional data related to the user, for
 example, the roles or the permissions.
 
 ```tsx
+import { useCallback } from "react";
 
 const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
                                                                             user,
@@ -8482,6 +8918,9 @@ You can also retrieve the **selected filters** and modify them.
 You need to define a component that receives `CollectionActionsProps` as props.
 
 ```tsx
+import React from "react";
+import { CollectionActionsProps, useSnackbarController } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
 export function SampleCollectionActions({ selectionController }: CollectionActionsProps) {
 
@@ -8510,6 +8949,8 @@ export function SampleCollectionActions({ selectionController }: CollectionActio
 then just add it to your collection configuration:
 
 ```tsx
+import { buildCollection, EntitySchema } from "@firecms/core";
+import { SampleCollectionActions } from "./SampleCollectionActions";
 
 export const productCollection: EntitySchema = buildCollection({
     name: "Products",
@@ -8523,6 +8964,9 @@ export const productCollection: EntitySchema = buildCollection({
 This is an example of how you can modify the filters in the collection bar:
 
 ```tsx
+import React from "react";
+import { CollectionActionsProps } from "@firecms/core";
+import { CloseIcon, IconButton, Select, SelectItem } from "@firecms/ui";
 
 export function CustomFiltersActions({
                                          tableController
@@ -8566,6 +9010,8 @@ export function CustomFiltersActions({
 then just add it to your collection configuration:
 
 ```tsx
+import { buildCollection, EntitySchema } from "@firecms/core";
+import { CustomFiltersActions } from "./SampleCollectionActions";
 
 export const productCollection: EntitySchema = buildCollection({
     name: "Products",
@@ -8672,6 +9118,8 @@ We recommend using any of the [FireCMS icons](/docs/icons), which are available 
 #### Defining actions at the collection level
 
 ```tsx
+import { buildCollection } from "@firecms/core";
+import { ArchiveIcon } from "@firecms/ui";
 
 export const productsCollection = buildCollection<Product>({
     id: "products",
@@ -8708,6 +9156,7 @@ You can define entity actions globally by passing them to the `FireCMS` componen
 or in the `FireCMSAppConfig` if you are using FireCMS Cloud.
 
 ```tsx
+import { ShareIcon } from "@firecms/ui";
 
 // Self-hosted
 <FireCMS
@@ -8724,6 +9173,7 @@ or in the `FireCMSAppConfig` if you are using FireCMS Cloud.
 ```
 
 ```tsx
+import { ShareIcon } from "@firecms/ui";
 
 // FireCMS Cloud
 const appConfig: FireCMSAppConfig = {
@@ -8783,6 +9233,8 @@ When the action is clicked, we will call a Google Cloud Function that will run s
 You can use the standard `fetch` API to call any HTTP endpoint, including a Google Cloud Function. This is a general-purpose method that works with any backend.
 
 ```tsx
+import { buildCollection, Product } from "@firecms/core";
+import { ArchiveIcon } from "@firecms/ui";
 
 export const productsCollection = buildCollection<Product>({
     id: "products",
@@ -8827,16 +9279,14 @@ export const productsCollection = buildCollection<Product>({
 
 If you're using Firebase, the recommended approach is to use the Firebase Functions SDK. It simplifies calling functions and automatically handles authentication tokens.
 
-First, ensure you have the `firebase` package installed and initialized in your project.
+First, ensure you have the `firebase` package installed in your project.
 
 Then, you can define your action like this:
 
 ```tsx
-
-// Initialize Firebase Functions
-// Make sure you have initialized Firebase elsewhere in your app
-const functions = getFunctions();
-const archiveProductCallable = httpsCallable(functions, 'archiveProduct');
+import { getFunctions, httpsCallable } from "firebase/functions";
+import { ArchiveIcon } from "@firecms/ui";
+import { buildCollection, Product } from "@firecms/core";
 
 export const productsCollection = buildCollection<Product>({
     id: "products",
@@ -8853,7 +9303,10 @@ export const productsCollection = buildCollection<Product>({
                     }) {
                 const snackbarController = context.snackbarController;
                 try {
-                    await archiveProductCallable({ productId: entity.id });
+                    // Firebase may not be initialized yet when this file is loaded, so get
+                    // the Functions instance when the action runs, not at the top level.
+                    const archiveProduct = httpsCallable(getFunctions(), "archiveProduct");
+                    await archiveProduct({ productId: entity.id });
                     snackbarController.open({
                         message: "Product archived successfully",
                         type: "success"
@@ -8870,6 +9323,16 @@ export const productsCollection = buildCollection<Product>({
     ],
 });
 ```
+
+:::caution
+In **FireCMS Cloud**, import from `@firebase/functions` instead of `firebase/functions`
+(and likewise `@firebase/app`, `@firebase/firestore`, `@firebase/auth` and `@firebase/storage`).
+FireCMS Cloud provides the Firebase SDK to your code, but only to imports that name the
+package exactly. A `firebase/functions` import makes the build point at a file it never
+produces, and the app shows "Error loading remote config". `getFunctions()` then uses your
+project's Firebase app, the same one FireCMS uses. See
+[Importing Firebase in your code](/docs/cloud/deployment#importing-firebase-in-your-code).
+:::
 
 ## Properties
 
@@ -8901,6 +9364,7 @@ If you define a string property with no other configuration parameters, you will
 get a text field:
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "string",
@@ -8926,6 +9390,7 @@ contain line breaks.
 Set the `multiline` flag to `true` in a string property.
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "string",
@@ -8952,6 +9417,7 @@ editing capabilities of text using the Markdown format.
 Set the `markdown` flag to `true` in a string property.
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "string",
@@ -8978,6 +9444,7 @@ user is a valid URL.
 Set the `url` flag to `true` in a string property.
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "string",
@@ -9004,6 +9471,7 @@ end user is a valid email.
 Set the `email` flag to `true` in a string property.
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "string",
@@ -9036,6 +9504,7 @@ of [`EnumValueConfig`](https://firecms.co/docs/../api/type-aliases/EnumValueConf
 or simply as an object with key/value pairs:
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "string",
@@ -9053,6 +9522,7 @@ buildProperty({
 or
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "string",
@@ -9083,6 +9553,7 @@ of [`EnumValueConfig`](https://firecms.co/docs/../api/type-aliases/EnumValueConf
 or simply as an object with key/value pairs:
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     name: "Available locales",
@@ -9179,6 +9650,7 @@ export function getColorSchemeForSeed(seed: string): ChipColorScheme {
 And you can also define custom colors using the HTML syntax `#AAAAAA`:
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "string",
@@ -9260,6 +9732,7 @@ customize the path and name of the file. The available placeholders are:
 ![Field](/img/fields/File_upload.png)
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "string",
@@ -9288,6 +9761,7 @@ is [`StorageUploadFieldBinding`](https://firecms.co/docs/../api/functions/Storag
 ![Field](/img/fields/Multi_file_upload.png)
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "array",
@@ -9335,6 +9809,7 @@ The MIME types supported for custom previews are:
 Simple toggle for selecting `true` or `false` values.
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     name: "Selectable",
@@ -9366,6 +9841,7 @@ is [`DateTimeFieldBinding`](https://firecms.co/docs/../api/functions/DateTimeFie
 ![Field](/img/fields/Date.png)
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "date",
@@ -9379,6 +9855,7 @@ buildProperty({
 ![Field](/img/fields/Date_time.png)
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "date",
@@ -9390,6 +9867,7 @@ buildProperty({
 ##### Update on creation
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "date",
@@ -9401,6 +9879,7 @@ buildProperty({
 ##### Update on update
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "date",
@@ -9424,6 +9903,7 @@ properties.
 ![Field](/img/fields/Reference.png)
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "reference",
@@ -9442,6 +9922,7 @@ is [`ReferenceFieldBinding`](https://firecms.co/docs/../api/functions/ReferenceF
 ![Field](/img/fields/Multi_reference.png)
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "array",
@@ -9471,6 +9952,7 @@ both from the UX and the data model perspective.
 Group fields can be initially expanded or collapsed by default.
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     name: "Address",
@@ -9507,6 +9989,7 @@ To enable this widget, simply set the `dataType` to `map`, and the `keyValue` pr
 to `true`.
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "map",
@@ -9537,6 +10020,7 @@ This fields allows reordering of its entries.
 This component can be expanded or collapsed by default.
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "array",
@@ -9573,6 +10057,7 @@ This fields allows reordering of its entries.
 This component can be expanded or collapsed by default.
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     name: "Content",
@@ -9674,6 +10159,7 @@ The **string property** is the most versatile field type in FireCMS. Use it for 
 - **Email/URL fields**: Validated input types
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const nameProperty = buildProperty({
     name: "Name",
@@ -9746,6 +10232,7 @@ FireCMS supports client-side image optimization before upload:
 * `imageCompression` (deprecated) Legacy image resizing/compression.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const imageProperty = buildProperty({
     dataType: "string",
@@ -9777,6 +10264,7 @@ to `true` to add a link, or one of the supported media types to render a
 preview.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const amazonLinkProperty = buildProperty({
     dataType: "string",
@@ -9788,6 +10276,7 @@ const amazonLinkProperty = buildProperty({
 You can also define the preview type for the url: `image`, `video` or `audio`:
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const imageProperty = buildProperty({
     name: "Image",
@@ -9803,6 +10292,7 @@ rendered with an email-specific input. This is useful for contact forms,
 user profiles, or any field that should contain a valid email.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const emailProperty = buildProperty({
     name: "Email",
@@ -9820,6 +10310,7 @@ You can also use a property builder to specify the user path dynamically
 based on other values of the entity.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const assignedUserProperty = buildProperty({
     name: "Assigned User",
@@ -9840,6 +10331,7 @@ need to ensure the order of the elements, you can pass a `Map` instead of a
 plain object.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const amazonLinkProperty = buildProperty({
     dataType: "string",
@@ -9865,6 +10357,7 @@ in a multiple line field. Defaults to false. If set to `true`, the number
 of lines adapts to the content.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const property = buildProperty({
     name: "Description",
@@ -9884,6 +10377,7 @@ If `true`, the field is rendered as a text editors that supports markdown
 highlight syntax. It also includes a preview of the result.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const property = buildProperty({
     dataType: "string",
@@ -9897,6 +10391,7 @@ const property = buildProperty({
 Should this string be rendered as a tag instead of just text.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const property = buildProperty({
     name: "Tags",
@@ -9952,6 +10447,7 @@ Links:
 ## Number
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const rangeProperty = buildProperty({
     name: "Range",
@@ -9972,6 +10468,7 @@ You can use the enum values providing a map of possible
   displayed in the dropdown.
 
 ```tsx
+import { buildProperty, buildEnumValueConfig } from "@firecms/core";
 
 const property = buildProperty({
     name: "Status",
@@ -10021,6 +10518,7 @@ Links:
 ## Boolean
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const availableProperty = buildProperty({
     name: "Available",
@@ -10044,6 +10542,7 @@ Links:
 ## Reference
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const productsReferenceProperty = buildProperty({
     name: "Product",
@@ -10091,6 +10590,8 @@ You can set the default value by defining an EntityReference:
 
 ```tsx
 
+import { buildProperty, EntityReference } from "@firecms/core";
+
 const productsReferenceProperty = buildProperty({
     name: "Product",
     dataType: "reference",
@@ -10114,6 +10615,7 @@ Links:
 ## Date/Time
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const publicationProperty = buildProperty({
     name: "Publication date",
@@ -10161,6 +10663,7 @@ provide a `oneOf` field otherwise an error will be thrown.
 
 Example `of` array property:
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const productReferences = buildProperty({
   name: "Products",
@@ -10177,6 +10680,7 @@ const productReferences = buildProperty({
 
 You can also specify an array of properties to define a tuple:
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const tupleDates = buildProperty({
   name: "Date Range (Start to End)",
@@ -10212,6 +10716,7 @@ images and text blocks using markdown.
 
 Example of `oneOf` field:
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const contentProperty = buildProperty({
   name: "Content",
@@ -10243,6 +10748,7 @@ This property has no effect if `disabled` is set to `true`.
 
 Example:
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const tagsProperty = buildProperty({
   name: "Tags",
@@ -10262,6 +10768,7 @@ This property has no effect if `disabled` is set to `true`.
 
 Example:
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const readOnlyTagsProperty = buildProperty({
   name: "Tags",
@@ -10306,6 +10813,7 @@ In a map property you define child properties in the same way you define them
 at the entity schema level:
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const ctaProperty = buildProperty({
     dataType: "map",
@@ -10381,6 +10889,7 @@ The geopoint property is used to store geographic coordinates (latitude and
 longitude pairs).
 
 ```tsx
+import { buildProperty } from "./builders";
 
 const locationProperty = buildProperty({
     name: "Location",
@@ -10408,6 +10917,7 @@ Add an icon to clear the value and set it to `null`. Defaults to `false`
 #### Example
 
 ```tsx
+import { buildCollection, buildProperty, GeoPoint } from "@firecms/core";
 
 interface Venue {
     name: string;
@@ -10440,6 +10950,7 @@ The `GeoPoint` class is exported from `@firecms/core` and can be used to create
 geopoint values programmatically:
 
 ```tsx
+import { GeoPoint } from "@firecms/core";
 
 const sanFrancisco = new GeoPoint(37.7749, -122.4194);
 console.log(sanFrancisco.latitude);  // 37.7749
@@ -10478,6 +10989,11 @@ with the `values` prop, but also the value of the property being built with
 Example of field that gets enabled or disabled based on other values:
 
 ```tsx
+import {
+    buildCollection,
+    EntityCollection,
+    EntityReference
+} from "@firecms/core";
 
 type Product = {
     name: string;
@@ -10522,6 +11038,12 @@ A `User` type that has a `source` field that can be of type `facebook`
 or `apple`, and its fields change accordingly
 
 ```tsx
+import {
+    buildCollection,
+    EntityCollection,
+    buildProperty,
+    buildProperties
+} from "@firecms/core";
 
 type User = {
     source: {
@@ -10603,6 +11125,9 @@ If you need dynamic behavior depending on other values, consider using [conditio
 A custom text field with a background color supplied via `customProps` (scroll below for full prop contract and advanced techniques):
 
 ```tsx
+import React from "react";
+import { FieldHelperText, FieldProps, useModeController } from "@firecms/core";
+import { TextField } from "@firecms/ui";
 
 interface CustomColorTextFieldProps {
     color: string;
@@ -10695,6 +11220,7 @@ If your custom field wants to include the UI of another property, use `PropertyF
 This keeps validation and consistency:
 
 ```tsx
+import { PropertyFieldBinding } from "@firecms/core";
 
 <PropertyFieldBinding
   propertyKey="subtitle"
@@ -10812,6 +11338,9 @@ done when defining custom fields.
 Example of a custom preview for a `boolean` property:
 
 ```tsx
+import React from "react";
+import { PropertyPreviewProps } from "@firecms/core";
+import { CheckBoxIcon, CheckBoxOutlineBlankIcon } from "@firecms/ui";
 
 export default function CustomBooleanPreview({
                                                     value, property, size
@@ -11030,6 +11559,8 @@ In the callback, you can use the `user` object to conditionally show or hide vie
 as access the `authentication` and `navigation` hooks.
 
 ```tsx
+import {CMSView, useBuildNavigationController} from "@firecms/core";
+import {useMemo} from "react";
 
 // rest of you main app code
 
@@ -11372,6 +11903,8 @@ The props provided by this hook are:
 Example:
 
 ```tsx
+import React from "react";
+import { useAuthController } from "@firecms/core";
 
 export function ExampleCMSView() {
 
@@ -11421,6 +11954,9 @@ The props provided by this hook are:
 Example:
 
 ```tsx
+import React from "react";
+import { useSideEntityController } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
 export function ExampleCMSView() {
 
@@ -11477,6 +12013,9 @@ The props provided by this hook are:
 Example:
 
 ```tsx
+import React from "react";
+import { useSnackbarController } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
 export function ExampleCMSView() {
 
@@ -11545,6 +12084,9 @@ The props provided by this hook are:
 Example:
 
 ```tsx
+import React from "react";
+import { useReferenceDialog, useSnackbarController, Entity } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
 type Product = {
     name: string;
@@ -11614,6 +12156,8 @@ The props provided by this hook are:
 Example:
 
 ```tsx
+import React from "react";
+import { useFireCMSContext } from "@firecms/core";
 
 export function ExampleCMSView() {
 
@@ -11660,6 +12204,8 @@ the controllers including the `dataSource`.
 #### Example
 
 ```tsx
+import React, { useEffect, useState } from "react";
+import { useDataSource, Entity } from "@firecms/core";
 
 type Product = {
     name: string;
@@ -11711,6 +12257,9 @@ a component (you can't use it directly from a callback function).
 #### Example
 
 ```tsx
+import React from "react";
+import { useStorageSource } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
 export function FileUploader() {
     const storageSource = useStorageSource();
@@ -11758,6 +12307,9 @@ a component that is a child of the `FireCMS` component.
 #### Example
 
 ```tsx
+import React from "react";
+import { useModeController } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
 export function ThemeToggle() {
     const modeController = useModeController();
@@ -12069,7 +12621,7 @@ the collection.
 In order to do so, you need to add it to the `entityViews` prop of the FireCMS main app config export:
 
 ```tsx
-
+import { FireCMSAppConfig } from "@firecms/cloud";
 const appConfig: FireCMSAppConfig = {
     version: "1",
     collections: [],
@@ -12089,7 +12641,7 @@ If you are defining your collection in code, you can also register it
 in the collection itself:
 
 ```tsx
-
+import {buildCollection} from "@firecms/core";
 export const blogCollection = buildCollection<BlogEntry>({
     name: "Blog entry",
     path: "blog",
@@ -12364,6 +12916,7 @@ You can use the `onFetch` callback to convert the data type when reading from th
 a Unix timestamp to a date:
 
 ```typescript
+import {EntityCallbacks, EntityOnFetchProps} from "@firecms/core";
 
 const exerciseCallbacks: EntityCallbacks = {
     onFetch({
@@ -12387,6 +12940,7 @@ You can use the `onPreSave` callback to convert the data type when saving to the
 you can convert a date to a Unix timestamp:
 
 ```typescript
+import {EntityCallbacks} from "@firecms/core";
 
 const exerciseCallbacks: EntityCallbacks = {
     onPreSave: ({
@@ -12410,6 +12964,7 @@ const exerciseCallbacks: EntityCallbacks = {
 You can use the `exerciseCallbacks` in your collection definition:
 
 ```typescript
+import {buildCollection, EntityCallbacks, EntityCollection, EntityOnFetchProps} from "@firecms/core";
 
 const exerciseCallbacks: EntityCallbacks = {
     onFetch({
@@ -13231,6 +13786,7 @@ npx tailwindcss init
 And add then add the fireCMS preset in your `tailwind.config.js`:
 
 ```javascript
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
 
 export default {
     presets: [fireCMSConfig],

@@ -9,6 +9,7 @@ The **string property** is the most versatile field type in FireCMS. Use it for 
 - **Email/URL fields**: Validated input types
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const nameProperty = buildProperty({
     name: "Name",
@@ -81,6 +82,7 @@ FireCMS supports client-side image optimization before upload:
 * `imageCompression` (deprecated) Legacy image resizing/compression.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const imageProperty = buildProperty({
     dataType: "string",
@@ -112,6 +114,7 @@ to `true` to add a link, or one of the supported media types to render a
 preview.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const amazonLinkProperty = buildProperty({
     dataType: "string",
@@ -123,6 +126,7 @@ const amazonLinkProperty = buildProperty({
 You can also define the preview type for the url: `image`, `video` or `audio`:
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const imageProperty = buildProperty({
     name: "Image",
@@ -138,6 +142,7 @@ rendered with an email-specific input. This is useful for contact forms,
 user profiles, or any field that should contain a valid email.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const emailProperty = buildProperty({
     name: "Email",
@@ -155,6 +160,7 @@ You can also use a property builder to specify the user path dynamically
 based on other values of the entity.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const assignedUserProperty = buildProperty({
     name: "Assigned User",
@@ -175,6 +181,7 @@ need to ensure the order of the elements, you can pass a `Map` instead of a
 plain object.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const amazonLinkProperty = buildProperty({
     dataType: "string",
@@ -200,6 +207,7 @@ in a multiple line field. Defaults to false. If set to `true`, the number
 of lines adapts to the content.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const property = buildProperty({
     name: "Description",
@@ -219,6 +227,7 @@ If `true`, the field is rendered as a text editors that supports markdown
 highlight syntax. It also includes a preview of the result.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const property = buildProperty({
     dataType: "string",
@@ -232,6 +241,7 @@ const property = buildProperty({
 Should this string be rendered as a tag instead of just text.
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const property = buildProperty({
     name: "Tags",

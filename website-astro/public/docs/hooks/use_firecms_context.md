@@ -36,6 +36,8 @@ The props provided by this hook are:
 Example:
 
 ```tsx
+import React from "react";
+import { useFireCMSContext } from "@firecms/core";
 
 export function ExampleCMSView() {
 

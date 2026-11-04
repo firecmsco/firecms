@@ -24,6 +24,8 @@ We recommend using any of the [FireCMS icons](/docs/icons), which are available 
 ### Defining actions at the collection level
 
 ```tsx
+import { buildCollection } from "@firecms/core";
+import { ArchiveIcon } from "@firecms/ui";
 
 export const productsCollection = buildCollection<Product>({
     id: "products",
@@ -60,6 +62,7 @@ You can define entity actions globally by passing them to the `FireCMS` componen
 or in the `FireCMSAppConfig` if you are using FireCMS Cloud.
 
 ```tsx
+import { ShareIcon } from "@firecms/ui";
 
 // Self-hosted
 <FireCMS
@@ -76,6 +79,7 @@ or in the `FireCMSAppConfig` if you are using FireCMS Cloud.
 ```
 
 ```tsx
+import { ShareIcon } from "@firecms/ui";
 
 // FireCMS Cloud
 const appConfig: FireCMSAppConfig = {
@@ -135,6 +139,8 @@ When the action is clicked, we will call a Google Cloud Function that will run s
 You can use the standard `fetch` API to call any HTTP endpoint, including a Google Cloud Function. This is a general-purpose method that works with any backend.
 
 ```tsx
+import { buildCollection, Product } from "@firecms/core";
+import { ArchiveIcon } from "@firecms/ui";
 
 export const productsCollection = buildCollection<Product>({
     id: "products",
@@ -179,16 +185,14 @@ export const productsCollection = buildCollection<Product>({
 
 If you're using Firebase, the recommended approach is to use the Firebase Functions SDK. It simplifies calling functions and automatically handles authentication tokens.
 
-First, ensure you have the `firebase` package installed and initialized in your project.
+First, ensure you have the `firebase` package installed in your project.
 
 Then, you can define your action like this:
 
 ```tsx
-
-// Initialize Firebase Functions
-// Make sure you have initialized Firebase elsewhere in your app
-const functions = getFunctions();
-const archiveProductCallable = httpsCallable(functions, 'archiveProduct');
+import { getFunctions, httpsCallable } from "firebase/functions";
+import { ArchiveIcon } from "@firecms/ui";
+import { buildCollection, Product } from "@firecms/core";
 
 export const productsCollection = buildCollection<Product>({
     id: "products",
@@ -205,7 +209,10 @@ export const productsCollection = buildCollection<Product>({
                     }) {
                 const snackbarController = context.snackbarController;
                 try {
-                    await archiveProductCallable({ productId: entity.id });
+                    // Firebase may not be initialized yet when this file is loaded, so get
+                    // the Functions instance when the action runs, not at the top level.
+                    const archiveProduct = httpsCallable(getFunctions(), "archiveProduct");
+                    await archiveProduct({ productId: entity.id });
                     snackbarController.open({
                         message: "Product archived successfully",
                         type: "success"
@@ -222,4 +229,14 @@ export const productsCollection = buildCollection<Product>({
     ],
 });
 ```
+
+:::caution
+In **FireCMS Cloud**, import from `@firebase/functions` instead of `firebase/functions`
+(and likewise `@firebase/app`, `@firebase/firestore`, `@firebase/auth` and `@firebase/storage`).
+FireCMS Cloud provides the Firebase SDK to your code, but only to imports that name the
+package exactly. A `firebase/functions` import makes the build point at a file it never
+produces, and the app shows "Error loading remote config". `getFunctions()` then uses your
+project's Firebase app, the same one FireCMS uses. See
+[Importing Firebase in your code](/docs/cloud/deployment#importing-firebase-in-your-code).
+:::
 

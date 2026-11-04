@@ -161,9 +161,6 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 import { ArchiveIcon } from "@firecms/ui";
 import { buildCollection, Product } from "@firecms/core";
 
-const functions = getFunctions();
-const archiveProductCallable = httpsCallable(functions, 'archiveProduct');
-
 export const productsCollection = buildCollection<Product>({
     id: "products",
     path: "products",
@@ -178,7 +175,10 @@ export const productsCollection = buildCollection<Product>({
                     }) {
                 const snackbarController = context.snackbarController;
                 try {
-                    await archiveProductCallable({ productId: entity.id });
+                    // Firebase ist beim Laden dieser Datei möglicherweise noch nicht initialisiert. Holen Sie
+                    // die Functions-Instanz daher erst, wenn die Aktion ausgeführt wird, nicht auf oberster Ebene.
+                    const archiveProduct = httpsCallable(getFunctions(), "archiveProduct");
+                    await archiveProduct({ productId: entity.id });
                     snackbarController.open({
                         message: "Product archived successfully",
                         type: "success"
@@ -194,3 +194,13 @@ export const productsCollection = buildCollection<Product>({
     ],
 });
 ```
+
+:::caution
+Importieren Sie in **FireCMS Cloud** aus `@firebase/functions` statt aus `firebase/functions`
+(ebenso `@firebase/app`, `@firebase/firestore`, `@firebase/auth` und `@firebase/storage`).
+FireCMS Cloud stellt Ihrem Code das Firebase SDK bereit, aber nur für Importe, die das Paket
+exakt benennen. Ein Import aus `firebase/functions` lässt den Build auf eine Datei verweisen, die
+er nie erzeugt, und die App zeigt "Error loading remote config". `getFunctions()` verwendet dann
+die Firebase-App Ihres Projekts, dieselbe, die FireCMS verwendet. Siehe
+[Firebase in Ihrem Code importieren](/de/docs/cloud/deployment#firebase-in-ihrem-code-importieren).
+:::

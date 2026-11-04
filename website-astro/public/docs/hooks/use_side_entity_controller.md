@@ -28,6 +28,9 @@ The props provided by this hook are:
 Example:
 
 ```tsx
+import React from "react";
+import { useSideEntityController } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
 export function ExampleCMSView() {
 

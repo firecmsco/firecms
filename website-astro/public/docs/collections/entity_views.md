@@ -24,6 +24,8 @@ In order to accomplish that you can pass an array of `EntityCustomView`
 to your schema. Like in this example:
 
 ```tsx
+import React from "react";
+import { EntityCustomView, buildCollection } from "@firecms/core";
 
 const sampleView: EntityCustomView = {
     key: "preview",
@@ -54,6 +56,8 @@ will bind the value to the entity, and it will be saved when the entity is saved
 In this example we creating a secondary form with a map field, including name and age:
 
 ```tsx
+import { EntityCustomViewParams, PropertyFieldBinding } from "@firecms/core";
+import { Container } from "@firecms/ui";
 
 export function SecondaryForm({
                                   formContext
@@ -111,6 +115,7 @@ If you are editing a collection in code you can add your custom view
 directly to the collection:
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 const blogCollection = buildCollection({
     id: "blog",
@@ -147,6 +152,7 @@ In FireCMS Cloud, you can add it to the entity view registry in your
 main `FireCMSAppConfig` export:
 
 ```tsx
+import { FireCMSAppConfig } from "@firecms/core";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
@@ -198,6 +204,7 @@ It is also possible to use the `entityView` prop in the collection
 with the key of the entity view you want to use:
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 const blogCollection = buildCollection({
     id: "blog",
@@ -219,6 +226,7 @@ Views listed in a group are removed from the top-level tabs and displayed under 
 single dropdown button instead.
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 const productsCollection = buildCollection({
     id: "products",

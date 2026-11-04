@@ -65,6 +65,7 @@ npx tailwindcss init
 And add then add the fireCMS preset in your `tailwind.config.js`:
 
 ```javascript
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
 
 export default {
     presets: [fireCMSConfig],

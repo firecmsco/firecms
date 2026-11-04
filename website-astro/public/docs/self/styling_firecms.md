@@ -143,6 +143,92 @@ yarn add @fontsource/noto-serif
 
 and import it in your `App.tsx` file:
 ```tsx
+import "@fontsource/noto-serif";
+```
+
+In Tailwind v4, font families are defined in the `@theme` block. FireCMS UI defines 3 font families:
+`--font-sans`, `--font-headers` and `--font-mono`. You can override them directly in your `index.css`:
+
+```css
+@import 'tailwindcss';
+@import "@firecms/ui/index.css" layer(base);
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+    --font-sans: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    --font-headers: 'Noto Serif', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Space Mono', 'Lucida Console', monospace;
+}
+```
+
+#### Customizing typography styles
+
+Each typography style is defined in `@firecms/ui/index.css` and can be overridden. The `@apply` directive
+lets you apply Tailwind utilities to a class.
+
+Add any of these classes to your `index.css` to override the defaults:
+
+```css
+.typography-h1 {
+    @apply text-6xl font-headers font-light tracking-tight;
+}
+
+.typography-h2 {
+    @apply text-5xl font-headers font-light tracking-tight;
+}
+
+.typography-h3 {
+    @apply text-4xl font-headers font-normal tracking-tight;
+}
+
+.typography-h4 {
+    @apply text-3xl font-headers font-normal tracking-tight;
+}
+
+.typography-h5 {
+    @apply text-2xl font-headers font-normal;
+}
+
+.typography-h6 {
+    @apply text-xl font-headers font-medium;
+}
+
+.typography-subtitle1 {
+    @apply text-lg font-headers font-medium;
+}
+
+.typography-subtitle2 {
+    @apply text-base font-headers font-medium;
+}
+
+.typography-body1 {
+}
+
+.typography-body2 {
+    @apply text-sm;
+}
+
+.typography-caption {
+    @apply text-xs;
+}
+
+.typography-label {
+    @apply text-sm font-medium;
+}
+
+.typography-button {
+    @apply text-sm font-semibold uppercase;
+}
+```
+
+### Still using Tailwind v3?
+
+If your project is still on Tailwind CSS v3, refer to the
+[`tailwind.config.js`](https://github.com/firecmsco/firecms/blob/main/packages/ui/tailwind.config.js)
+file in the `@firecms/ui` package, which is still shipped for backwards compatibility. You can use it as a preset:
+
+```javascript
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
 
 export default {
     presets: [fireCMSConfig],

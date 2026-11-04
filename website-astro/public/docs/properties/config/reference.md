@@ -1,6 +1,7 @@
 # Reference
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const productsReferenceProperty = buildProperty({
     name: "Product",
@@ -47,6 +48,8 @@ Default value for this property.
 You can set the default value by defining an EntityReference:
 
 ```tsx
+
+import { buildProperty, EntityReference } from "@firecms/core";
 
 const productsReferenceProperty = buildProperty({
     name: "Product",

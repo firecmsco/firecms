@@ -61,6 +61,9 @@ The `ExportAllowedParams` type provides context for the `exportAllowed` function
 The main hook to utilize the plugin's functionality is `useExportPlugin`. Here's an example of how to use it:
 
 ```jsx
+import React from "react";
+import { FireCMS } from "@firecms/core";
+import { useExportPlugin } from "@firecms/data_export";
 
 function App() {
     

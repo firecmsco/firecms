@@ -26,6 +26,8 @@ the controllers including the `dataSource`.
 ### Example
 
 ```tsx
+import React, { useEffect, useState } from "react";
+import { useDataSource, Entity } from "@firecms/core";
 
 type Product = {
     name: string;

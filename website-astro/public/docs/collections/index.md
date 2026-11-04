@@ -46,6 +46,7 @@ functions that will help you detect type and configuration errors
 :::
 
 ```tsx
+import { buildCollection, buildProperty, EntityReference } from "@firecms/core";
 
 type Product = {
   name: string;
@@ -158,6 +159,7 @@ your `FireCMSAppConfig` object.
 This applies to **FireCMS Cloud** only.
 
 ```tsx
+import { FireCMSAppConfig } from "@firecms/core";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
@@ -215,6 +217,7 @@ If you need to enable filtering/sorting by more than one property at a time, you
 enabled in your Firestore configuration. In order to do so, just pass the indexes configuration to your collection:
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 const productsCollection = buildCollection<Product>({
     id: "products",

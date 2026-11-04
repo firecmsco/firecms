@@ -19,6 +19,9 @@ done when defining custom fields.
 Example of a custom preview for a `boolean` property:
 
 ```tsx
+import React from "react";
+import { PropertyPreviewProps } from "@firecms/core";
+import { CheckBoxIcon, CheckBoxOutlineBlankIcon } from "@firecms/ui";
 
 export default function CustomBooleanPreview({
                                                     value, property, size

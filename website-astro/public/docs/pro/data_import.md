@@ -40,6 +40,10 @@ Use the `useImportPlugin` hook to create the import plugin and include it in the
 ### Example: Integrating the Data Import Plugin
 
 ```jsx
+import React from "react";
+import { CircularProgressCenter, FireCMS, useBuildModeController } from "@firecms/core";
+import { useFirebaseStorageSource } from "@firecms/firebase";
+import { useImportPlugin } from "@firecms/data_import";
 
 export function App() {
 

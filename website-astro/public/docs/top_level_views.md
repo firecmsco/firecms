@@ -62,6 +62,8 @@ In the callback, you can use the `user` object to conditionally show or hide vie
 as access the `authentication` and `navigation` hooks.
 
 ```tsx
+import {CMSView, useBuildNavigationController} from "@firecms/core";
+import {useMemo} from "react";
 
 // rest of you main app code
 

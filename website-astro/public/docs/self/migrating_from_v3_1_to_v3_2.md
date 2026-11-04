@@ -43,12 +43,12 @@ Update any imports in your code that previously referenced `@firecms/editor` to 
 
 **Before (v3.1):**
 ```typescript
-
+import { MarkdownField } from "@firecms/editor";
 ```
 
 **After (v3.2):**
 ```typescript
-
+import { MarkdownField } from "@firecms/core";
 ```
 
 ---
@@ -75,6 +75,7 @@ FireCMS now features full i18next integration with comprehensive translation cov
 To enable internationalization, you **must** wrap your application in the new `FireCMSi18nProvider` exported from `@firecms/core`. This provider is now required and provides the active locale and translations to all FireCMS components.
 
 ```tsx
+import { FireCMSi18nProvider } from "@firecms/core";
 
 // ...
 

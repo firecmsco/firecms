@@ -4,6 +4,7 @@ The geopoint property is used to store geographic coordinates (latitude and
 longitude pairs).
 
 ```tsx
+import { buildProperty } from "./builders";
 
 const locationProperty = buildProperty({
     name: "Location",
@@ -31,6 +32,7 @@ Add an icon to clear the value and set it to `null`. Defaults to `false`
 ### Example
 
 ```tsx
+import { buildCollection, buildProperty, GeoPoint } from "@firecms/core";
 
 interface Venue {
     name: string;
@@ -63,6 +65,7 @@ The `GeoPoint` class is exported from `@firecms/core` and can be used to create
 geopoint values programmatically:
 
 ```tsx
+import { GeoPoint } from "@firecms/core";
 
 const sanFrancisco = new GeoPoint(37.7749, -122.4194);
 console.log(sanFrancisco.latitude);  // 37.7749

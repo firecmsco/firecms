@@ -13,6 +13,7 @@ properties.
 ![Field](/img/fields/Reference.png)
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "reference",
@@ -31,6 +32,7 @@ is [`ReferenceFieldBinding`](https://firecms.co/docs/https://firecms.co/docs/api
 ![Field](/img/fields/Multi_reference.png)
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "array",

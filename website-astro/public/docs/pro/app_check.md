@@ -34,6 +34,8 @@ Returns an object that includes:
 ### Example
 
 ```tsx
+import {useAppCheck} from "@firecms/firebase";
+import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
 
 const {
     loading,
@@ -62,6 +64,8 @@ Make sure you have added the domain `app.firecms.co` to the list of allowed doma
 :::
 
 ```tsx
+import {useAppCheck} from "@firecms/firebase";
+import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
 
 const {
     loading,
@@ -81,6 +85,8 @@ In order to set up the ReCaptchaV3Provider, you need to create a new reCAPTCHA v
 Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-provider).
 
 ```tsx
+import {useAppCheck} from "@firecms/firebase";
+import {ReCaptchaV3Provider} from "@firebase/app-check";
 
 const {
     loading,

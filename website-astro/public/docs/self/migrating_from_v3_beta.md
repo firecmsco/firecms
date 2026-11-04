@@ -137,13 +137,13 @@ This is a sample `package.json` with the new config:
 You need to update your imports to use the new package name. For example, if you have a file that imports `firecms`:
 
 ```javascript
-
+import { FireCMS } from "firecms";
 ```
 
 You need to update it to use the new package name:
 
 ```javascript
-
+import { FireCMS } from "@firecms/core";
 ```
 
 ### Vite configuration
@@ -151,6 +151,9 @@ You need to update it to use the new package name:
 You also need to update your `vite.config.js` file to include the new package name and config:
 
 ```javascript
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import federation from "@originjs/vite-plugin-federation"
 
 // https://vitejs.dev/config/
 export default defineConfig({

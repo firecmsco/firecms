@@ -85,6 +85,8 @@ yarn add firebase@^10 @firecms/core@^3.0.0-beta @firecms/firebase@^3.0.0-beta re
 Now let's import the tailwind config of FireCMS. Add the **FireCMS preset** `tailwind.config.js`, as well as the content paths to FireCMS source code, so the right tailwind classes are picked.
 
 ```js
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   presets: [fireCMSConfig],
@@ -123,6 +125,8 @@ If you are not running FireCMS in the root path of your app, you need to set the
 
 ```tsx
 "use client";
+import { FireCMSApp } from "@/cms/FireCMSApp";
+import { FireCMSRouter } from "@firecms/core";
 
 export default function CMS() {
     return <FireCMSRouter basePath={"/cms"}>
@@ -433,6 +437,7 @@ and navigate to `http://localhost:3000/cms` to see your **FireCMS** app running.
 You get a `StaticImageData` instead of the image URL (as in **vite**).
 You can use it in FireCMS components that expect a URL like, using the `src` property:
 ```tsx
+import logo from "./logo.png";
 
 <FirebaseLoginView
     logo={logo.src}/>

@@ -11,6 +11,7 @@ provide a `oneOf` field otherwise an error will be thrown.
 
 Example `of` array property:
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const productReferences = buildProperty({
   name: "Products",
@@ -27,6 +28,7 @@ const productReferences = buildProperty({
 
 You can also specify an array of properties to define a tuple:
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const tupleDates = buildProperty({
   name: "Date Range (Start to End)",
@@ -62,6 +64,7 @@ images and text blocks using markdown.
 
 Example of `oneOf` field:
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const contentProperty = buildProperty({
   name: "Content",
@@ -93,6 +96,7 @@ This property has no effect if `disabled` is set to `true`.
 
 Example:
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const tagsProperty = buildProperty({
   name: "Tags",
@@ -112,6 +116,7 @@ This property has no effect if `disabled` is set to `true`.
 
 Example:
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const readOnlyTagsProperty = buildProperty({
   name: "Tags",

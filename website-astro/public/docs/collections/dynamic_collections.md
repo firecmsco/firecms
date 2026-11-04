@@ -9,6 +9,7 @@ Instead of defining your collections as an array, use a `EntityCollectionsBuilde
 a function that returns a promise of an object containing the collections.
 
 ```tsx
+import { EntityCollectionsBuilder } from "@firecms/core";
 
 // ...
 
@@ -45,6 +46,8 @@ use it to populate the enum values of a property called `category`, in the `prod
 collection.
 
 ```tsx
+import { useCallback } from "react";
+import { buildCollection, EntityCollectionsBuilder } from "@firecms/core";
 
 const collectionsBuilder: EntityCollectionsBuilder = async ({
                                                                 user,
@@ -94,6 +97,7 @@ A typical use case is to store some additional data related to the user, for
 example, the roles or the permissions.
 
 ```tsx
+import { useCallback } from "react";
 
 const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
                                                                             user,

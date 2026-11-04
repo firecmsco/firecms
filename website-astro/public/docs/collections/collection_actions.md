@@ -16,6 +16,9 @@ You can also retrieve the **selected filters** and modify them.
 You need to define a component that receives `CollectionActionsProps` as props.
 
 ```tsx
+import React from "react";
+import { CollectionActionsProps, useSnackbarController } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
 export function SampleCollectionActions({ selectionController }: CollectionActionsProps) {
 
@@ -44,6 +47,8 @@ export function SampleCollectionActions({ selectionController }: CollectionActio
 then just add it to your collection configuration:
 
 ```tsx
+import { buildCollection, EntitySchema } from "@firecms/core";
+import { SampleCollectionActions } from "./SampleCollectionActions";
 
 export const productCollection: EntitySchema = buildCollection({
     name: "Products",
@@ -57,6 +62,9 @@ export const productCollection: EntitySchema = buildCollection({
 This is an example of how you can modify the filters in the collection bar:
 
 ```tsx
+import React from "react";
+import { CollectionActionsProps } from "@firecms/core";
+import { CloseIcon, IconButton, Select, SelectItem } from "@firecms/ui";
 
 export function CustomFiltersActions({
                                          tableController
@@ -100,6 +108,8 @@ export function CustomFiltersActions({
 then just add it to your collection configuration:
 
 ```tsx
+import { buildCollection, EntitySchema } from "@firecms/core";
+import { CustomFiltersActions } from "./SampleCollectionActions";
 
 export const productCollection: EntitySchema = buildCollection({
     name: "Products",

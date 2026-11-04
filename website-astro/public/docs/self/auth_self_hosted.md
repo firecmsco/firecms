@@ -49,6 +49,7 @@ This section covers how to create a `users` collection to manage users. This is 
 This collection will store your users.
 
 ```typescript
+import { buildCollection, buildProperty } from "@firecms/core";
 
 export type User = {
   name: string;
@@ -87,6 +88,7 @@ Now, let's add a `role` to our users and use it to control access.
 Add a `role` property to your `User` type and collection.
 
 ```typescript
+import { buildCollection, buildProperty } from "@firecms/core";
 
 export enum UserRole {
   admin = "admin",
@@ -135,6 +137,72 @@ First, create a new file named `src/custom_authenticator.ts`. This file will con
 
 **`src/custom_authenticator.ts`**
 ```typescript
+import { Authenticator } from "@firecms/core";
+import { FirebaseUserWrapper } from "@firecms/firebase";
+import { User } from "./collections/users"; // Make sure to import your User type
+
+export const roleBasedAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
+  user,
+  authController,
+  dataSourceDelegate
+}) => {
+  if (!user?.email) return false;
+
+  try {
+    const userEntities = await dataSourceDelegate.fetchCollection<User>({
+      path: "users",
+      filter: { email: ["==", user.email] }
+    });
+
+    if (userEntities && userEntities.length > 0) {
+      const member = userEntities[0].values;
+      authController.setExtra({
+        role: member.role
+      });
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.error("Authentication error:", error);
+    return false;
+  }
+};
+```
+
+Now, import the `roleBasedAuthenticator` in your `App.tsx` and pass it to the `FirebaseCMSApp` component.
+
+**`src/App.tsx`**
+```typescript
+import { FirebaseCMSApp } from "@firecms/firebase";
+import { roleBasedAuthenticator } from "./custom_authenticator";
+import { usersCollection } from "./collections/users"; // Make sure to import your collections
+
+// ... other imports
+
+function App() {
+    // ... other component logic
+
+    return (
+        <FirebaseCMSApp
+            name={"My App"}
+            authentication={roleBasedAuthenticator}
+            collections={[usersCollection, /* ...other collections */]}
+            // ... other props
+        />
+    );
+}
+
+export default App;
+```
+
+### Step 3: Apply Permissions to Collections
+
+Use the `permissions` callback in your collections to control access based on the user's role.
+
+```typescript
+import { buildCollection } from "@firecms/core";
+import { UserRole } from "./collections/users";
 
 export const postsCollection = buildCollection({
   name: "Posts",
@@ -162,6 +230,8 @@ You need to set custom claims for a user from a backend environment using the Fi
 
 ```typescript
 // Example Cloud Function to set a role claim
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
 
 admin.initializeApp();
 
@@ -182,6 +252,8 @@ export const setUserRole = functions.https.onCall(async (data, context) => {
 This authenticator reads the custom claims from the user's ID token.
 
 ```typescript
+import { Authenticator } from "@firecms/core";
+import { FirebaseUserWrapper } from "@firecms/firebase";
 
 export const claimsAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
   user,
@@ -206,6 +278,7 @@ export const claimsAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
 The `permissions` implementation is the same as with the role-based approach, as the role is extracted and placed in `authController.extra`.
 
 ```typescript
+import { buildCollection } from "@firecms/core";
 
 export const articlesCollection = buildCollection({
   name: "Articles",

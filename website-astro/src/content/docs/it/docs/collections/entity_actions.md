@@ -182,7 +182,7 @@ export const productsCollection = buildCollection<Product>({
 
 Se stai usando Firebase, l'approccio consigliato è usare l'SDK Firebase Functions. Semplifica la chiamata delle funzioni e gestisce automaticamente i token di autenticazione.
 
-Prima, assicurati di avere il pacchetto `firebase` installato e inizializzato nel tuo progetto.
+Prima, assicurati di avere il pacchetto `firebase` installato nel tuo progetto.
 
 Poi, puoi definire la tua azione così:
 
@@ -190,11 +190,6 @@ Poi, puoi definire la tua azione così:
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { ArchiveIcon } from "@firecms/ui";
 import { buildCollection, Product } from "@firecms/core";
-
-// Inizializza Firebase Functions
-// Assicurati di aver inizializzato Firebase altrove nella tua app
-const functions = getFunctions();
-const archiveProductCallable = httpsCallable(functions, 'archiveProduct');
 
 export const productsCollection = buildCollection<Product>({
     id: "products",
@@ -211,7 +206,10 @@ export const productsCollection = buildCollection<Product>({
                     }) {
                 const snackbarController = context.snackbarController;
                 try {
-                    await archiveProductCallable({ productId: entity.id });
+                    // Firebase potrebbe non essere ancora inizializzato quando questo file viene caricato, quindi
+                    // ottieni l'istanza di Functions quando l'azione viene eseguita, non al livello principale.
+                    const archiveProduct = httpsCallable(getFunctions(), "archiveProduct");
+                    await archiveProduct({ productId: entity.id });
                     snackbarController.open({
                         message: "Prodotto archiviato con successo",
                         type: "success"
@@ -228,3 +226,13 @@ export const productsCollection = buildCollection<Product>({
     ],
 });
 ```
+
+:::caution
+In **FireCMS Cloud**, importa da `@firebase/functions` invece che da `firebase/functions`
+(e allo stesso modo `@firebase/app`, `@firebase/firestore`, `@firebase/auth` e `@firebase/storage`).
+FireCMS Cloud fornisce l'SDK di Firebase al tuo codice, ma solo agli import che nominano
+esattamente il pacchetto. Un import da `firebase/functions` fa puntare la build a un file che non
+produce mai, e l'app mostra "Error loading remote config". `getFunctions()` usa così l'app Firebase
+del tuo progetto, la stessa che usa FireCMS. Vedi
+[Importare Firebase nel tuo codice](/it/docs/cloud/deployment#importare-firebase-nel-tuo-codice).
+:::

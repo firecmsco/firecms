@@ -21,6 +21,11 @@ with the `values` prop, but also the value of the property being built with
 Example of field that gets enabled or disabled based on other values:
 
 ```tsx
+import {
+    buildCollection,
+    EntityCollection,
+    EntityReference
+} from "@firecms/core";
 
 type Product = {
     name: string;
@@ -65,6 +70,12 @@ A `User` type that has a `source` field that can be of type `facebook`
 or `apple`, and its fields change accordingly
 
 ```tsx
+import {
+    buildCollection,
+    EntityCollection,
+    buildProperty,
+    buildProperties
+} from "@firecms/core";
 
 type User = {
     source: {

@@ -1,6 +1,7 @@
 # Boolean
 
 ```tsx
+import { buildProperty } from "@firecms/core";
 
 const availableProperty = buildProperty({
     name: "Available",

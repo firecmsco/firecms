@@ -14,6 +14,7 @@ of [`EnumValueConfig`](https://firecms.co/docs/https://firecms.co/docs/api/type-
 or simply as an object with key/value pairs:
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "string",
@@ -31,6 +32,7 @@ buildProperty({
 or
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "string",
@@ -61,6 +63,7 @@ of [`EnumValueConfig`](https://firecms.co/docs/https://firecms.co/docs/api/type-
 or simply as an object with key/value pairs:
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     name: "Available locales",
@@ -157,6 +160,7 @@ export function getColorSchemeForSeed(seed: string): ChipColorScheme {
 And you can also define custom colors using the HTML syntax `#AAAAAA`:
 
 ```typescript jsx
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "string",

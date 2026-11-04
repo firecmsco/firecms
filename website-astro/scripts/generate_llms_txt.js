@@ -50,7 +50,10 @@ async function resolveCodeBlocks(mdxFilePath) {
     // Parse frontmatter
     const parsed = matter(mdxContent);
     const frontmatter = parsed.data;
-    const content = parsed.content;
+    // The imports below are the MDX file's own. The ones inside fenced code blocks are part of
+    // the examples, and stripping them left every example in llms.txt without its import paths,
+    // so set the fences aside until the MDX imports are gone.
+    const { text: content, restore: restoreFences } = setAsideFencedCode(parsed.content);
 
     // Regex to match ALL import statements
     const importPattern = /^import\s+[\s\S]+?\s+from\s+['"](.*?)['"];?$/gm;
@@ -119,8 +122,46 @@ async function resolveCodeBlocks(mdxFilePath) {
     });
 
     // Remove multiple new lines for cleaner output
-    const finalResolvedContent = contentWithoutImports.replace(/\n{3,}/g, "\n\n");
+    const finalResolvedContent = restoreFences(contentWithoutImports).replace(/\n{3,}/g, "\n\n");
     return finalResolvedContent;
+}
+
+/**
+ * Replaces each fenced code block with a placeholder line, and returns a function that puts
+ * them back. A fence closes on a line of at least as many of the same character.
+ * @param {string} content
+ * @returns {{ text: string, restore: (text: string) => string }}
+ */
+function setAsideFencedCode(content) {
+    const fences = [];
+    const out = [];
+    let open = null;
+    for (const line of content.split("\n")) {
+        const marker = line.match(/^\s*(`{3,}|~{3,})/)?.[1];
+        if (!open) {
+            if (marker) {
+                open = { marker, lines: [line] };
+            } else {
+                out.push(line);
+            }
+        } else {
+            open.lines.push(line);
+            if (marker && marker[0] === open.marker[0] && marker.length >= open.marker.length && /^\s*[`~]+\s*$/.test(line)) {
+                out.push(`\u0000FENCE${fences.length}\u0000`);
+                fences.push(open.lines.join("\n"));
+                open = null;
+            }
+        }
+    }
+    // An unclosed fence runs to the end of the file, as in Markdown.
+    if (open) {
+        out.push(`\u0000FENCE${fences.length}\u0000`);
+        fences.push(open.lines.join("\n"));
+    }
+    return {
+        text: out.join("\n"),
+        restore: (text) => text.replace(/\u0000FENCE(\d+)\u0000/g, (_, i) => fences[Number(i)])
+    };
 }
 
 /**

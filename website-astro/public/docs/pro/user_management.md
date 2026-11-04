@@ -61,6 +61,8 @@ The main hook to initialize the plugin's functionality is `useBuildUserManagemen
 
 ```jsx
 
+import {useBuildUserManagement} from "@firecms/user_management";
+
 const userManagement = useBuildUserManagement({
     dataSourceDelegate: firestoreDelegate,
     usersPath: "__FIRECMS/config/users",
@@ -77,6 +79,9 @@ resulting plugin into the FireCMS configuration. You will usually want to do thi
 ### Example Configuration
 
 ```jsx
+import {FireCMS} from "@firecms/core";
+
+import {useBuildUserManagement, useUserManagementPlugin, userManagementAdminViews} from "@firecms/user_management";
 
 function App() {
 
@@ -135,6 +140,7 @@ They are exported as an array from the `@firecms/user_management` package.
 You can add them to your `useBuildNavigationController` hook configuration, in the `adminViews` array.
 
 ```jsx
+import {userManagementAdminViews} from "@firecms/user_management";
 
 const navigationController = useBuildNavigationController({
     collections,

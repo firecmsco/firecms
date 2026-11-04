@@ -10,6 +10,7 @@ These define the actions that the logged user can perform over an entity.
 In the simpler case, you can directly assign the permissions
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 buildCollection({
     path: "products",
@@ -35,6 +36,7 @@ In the example below we check if we have previously saved the role "admin"
 in the extras field in the `AuthController`.
 
 ```tsx
+import { buildCollection } from "@firecms/core";
 
 buildCollection({
     path: "products",
@@ -66,6 +68,8 @@ Quick example of how the `extra.roles` field in the previous example is
 initialised:
 
 ```tsx
+import { Authenticator } from "@firecms/core";
+import { FirebaseUserWrapper } from "@firecms/firebase";
 
 const myAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
                                                                        user,

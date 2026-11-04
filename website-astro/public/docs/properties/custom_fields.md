@@ -32,6 +32,9 @@ If you need dynamic behavior depending on other values, consider using [conditio
 A custom text field with a background color supplied via `customProps` (scroll below for full prop contract and advanced techniques):
 
 ```tsx
+import React from "react";
+import { FieldHelperText, FieldProps, useModeController } from "@firecms/core";
+import { TextField } from "@firecms/ui";
 
 interface CustomColorTextFieldProps {
     color: string;
@@ -124,6 +127,7 @@ If your custom field wants to include the UI of another property, use `PropertyF
 This keeps validation and consistency:
 
 ```tsx
+import { PropertyFieldBinding } from "@firecms/core";
 
 <PropertyFieldBinding
   propertyKey="subtitle"
