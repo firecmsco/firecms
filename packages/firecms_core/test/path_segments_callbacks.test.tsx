@@ -4,7 +4,7 @@
 import { describe, expect, it, jest } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 import { deleteEntityWithCallbacks } from "../src/hooks/data/delete";
-import { saveEntityWithCallbacks } from "../src/hooks/data/save";
+import { EntitySaveError, saveEntityWithCallbacks } from "../src/hooks/data/save";
 import { useBuildDataSource } from "../src/internal/useBuildDataSource";
 
 /**
@@ -94,10 +94,11 @@ describe("save callbacks receive pathSegments", () => {
 
     it("onSaveFailure gets them too", async () => {
         const calls: Record<string, any[]> = {};
+        const saveError = new Error("nope");
         const delegate = {
             key: "failing",
             initialised: true,
-            saveEntity: async () => { throw new Error("nope"); },
+            saveEntity: async () => { throw saveError; },
             delegateToCMSModel: (d: any) => d,
             cmsToDelegateModel: (d: any) => d,
             currentTime: () => new Date()
@@ -109,6 +110,7 @@ describe("save callbacks receive pathSegments", () => {
         }));
 
         let seen: any;
+        let failureError: Error | undefined;
         const collection = {
             id: "accommodation", path: "accommodation", name: "Accommodation", properties: {},
             callbacks: { onSaveFailure: (props: any) => { seen = props; } }
@@ -123,9 +125,12 @@ describe("save callbacks receive pathSegments", () => {
             status: "existing",
             dataSource: result.current,
             context,
-            onSaveFailure: () => undefined
+            onSaveFailure: (e) => {
+                failureError = e;
+            }
         });
 
+        expect(failureError).toBe(saveError);
         expect(seen.pathSegments).toEqual(SEGMENTS);
         expect(calls).toEqual({});
     });
@@ -162,6 +167,41 @@ describe("save callbacks receive pathSegments", () => {
 
         expect(onPreSave).toHaveBeenCalled();
         expect(calls.saveEntity[0].pathSegments).toEqual(SEGMENTS);
+    });
+
+    it("rejects and does not save when onPreSave throws", async () => {
+        const { calls, dataSource } = build();
+        const preSaveError = new Error("pre-save failed");
+        const onPreSaveHookError = jest.fn();
+        const collection = {
+            id: "accommodation",
+            path: "accommodation",
+            name: "Accommodation",
+            properties: {},
+            callbacks: {
+                onPreSave: () => {
+                    throw preSaveError;
+                }
+            }
+        } as any;
+
+        const error = await saveEntityWithCallbacks({
+            path: PATH,
+            pathSegments: SEGMENTS,
+            entityId: "room-1",
+            values: { a: 1 },
+            collection,
+            status: "existing",
+            dataSource,
+            context,
+            onPreSaveHookError
+        }).catch((e) => e);
+
+        expect(error).toBeInstanceOf(EntitySaveError);
+        expect(error.stage).toBe("pre_save");
+        expect(error.cause).toBe(preSaveError);
+        expect(onPreSaveHookError).toHaveBeenCalledWith(preSaveError);
+        expect(calls.saveEntity).toBeUndefined();
     });
 
 });

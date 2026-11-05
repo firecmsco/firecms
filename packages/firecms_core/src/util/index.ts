@@ -29,3 +29,4 @@ export * from "./callbacks";
 export * from "./conditions";
 export * from "./lazy_eager";
 export * from "./date_fns_locales";
+export * from "./errors";

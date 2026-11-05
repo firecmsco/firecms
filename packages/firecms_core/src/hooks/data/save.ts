@@ -1,6 +1,29 @@
 import { DataSource, Entity, EntityCollection, EntityValues, FireCMSContext, SaveEntityProps, User } from "../../types";
 import { useDataSource } from "./useDataSource";
-import { resolveCollection } from "../../util";
+import { asError, resolveCollection } from "../../util";
+
+/**
+ * Which step of {@link saveEntityWithCallbacks} failed.
+ * `pre_save` means `onPreSave` threw and nothing was written.
+ * `save` means the datasource write failed.
+ * @group Hooks and utilities
+ */
+export type EntitySaveStage = "pre_save" | "save";
+
+/**
+ * Rejection from {@link saveEntityWithCallbacks}.
+ * `cause` is the original error. Callbacks still receive that original error.
+ * @group Hooks and utilities
+ */
+export class EntitySaveError extends Error {
+    readonly stage: EntitySaveStage;
+
+    constructor(stage: EntitySaveStage, cause: Error) {
+        super(cause.message, { cause });
+        this.name = "EntitySaveError";
+        this.stage = stage;
+    }
+}
 
 /**
  * @group Hooks and utilities
@@ -94,9 +117,10 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
             });
         } catch (e: any) {
             console.error(e);
+            const error = asError(e);
             if (onPreSaveHookError)
-                onPreSaveHookError(e);
-            return;
+                onPreSaveHookError(error);
+            throw new EntitySaveError("pre_save", error);
         }
     } else {
         updatedValues = values;
