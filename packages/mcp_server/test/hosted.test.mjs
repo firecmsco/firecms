@@ -290,3 +290,94 @@ test("no tool description tells the model what to call or do: each says what its
         await client.close();
     }
 });
+
+/** The hosted endpoint as above, reporting what its transport refused. */
+async function reportingEndpoint(options = {}) {
+    const server = http.createServer(async (request, response) => {
+        const body = await readJson(request).catch(() => "not json");
+        await handleHostedMcpRequest(request, response, {
+            session: sessionFor("alice"),
+            apiUrl: "http://127.0.0.1:1",
+            appUrl: APP_URL,
+            body,
+            ...options,
+        });
+    });
+    const port = await listen(server);
+    return { url: `http://127.0.0.1:${port}/mcp`, close: () => server.close() };
+}
+
+const LIST_TOOLS = { jsonrpc: "2.0", id: 1, method: "tools/list", params: { cursor: "secret-cursor" } };
+
+// About 18% of Claude.ai's POSTs after an idle spell were answered 400, and the reason
+// never reached a log: the transport gives it only to its onerror handler.
+
+test("the hosted endpoint reports why its transport refused a request", async () => {
+    const reported = [];
+    const endpoint = await reportingEndpoint({ onError: (error, details) => reported.push({ message: error.message, details }) });
+    try {
+        const response = await fetch(endpoint.url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json", "Mcp-Protocol-Version": "1999-01-01", "User-Agent": "Claude-User" },
+            body: JSON.stringify(LIST_TOOLS),
+        });
+        assert.equal(response.status, 406);
+
+        assert.equal(reported.length, 1);
+        assert.match(reported[0].message, /Not Acceptable/);
+        assert.equal(reported[0].details.httpMethod, "POST");
+        assert.equal(reported[0].details.accept, "application/json");
+        assert.equal(reported[0].details.userAgent, "Claude-User");
+        assert.equal(reported[0].details.hasSessionId, false);
+        assert.deepEqual(reported[0].details.rpcMethods, ["tools/list"]);
+        assert.doesNotMatch(JSON.stringify(reported), /secret-cursor/, "params are never reported");
+
+        const badVersion = await fetch(endpoint.url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json, text/event-stream", "Mcp-Protocol-Version": "1999-01-01", "Mcp-Session-Id": "stale" },
+            body: JSON.stringify(LIST_TOOLS),
+        });
+        assert.equal(badVersion.status, 400);
+        assert.match(reported[1].message, /Unsupported protocol version: 1999-01-01/);
+        assert.equal(reported[1].details.protocolVersion, "1999-01-01");
+        assert.equal(reported[1].details.hasSessionId, true);
+    } finally {
+        endpoint.close();
+    }
+});
+
+test("by default the reason goes to stderr as a structured warning", async (t) => {
+    const lines = [];
+    t.mock.method(console, "warn", (line) => lines.push(line));
+    const endpoint = await reportingEndpoint();
+    try {
+        const response = await fetch(endpoint.url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json, text/event-stream", Authorization: "Bearer do-not-log" },
+            body: JSON.stringify({ not: "json-rpc" }),
+        });
+        assert.equal(response.status, 400);
+    } finally {
+        endpoint.close();
+    }
+
+    assert.equal(lines.length, 1);
+    const entry = JSON.parse(lines[0]);
+    assert.equal(entry.severity, "WARNING");
+    assert.match(entry.message, /^Hosted MCP request refused: Parse error/);
+    assert.doesNotMatch(lines[0], /do-not-log/, "credentials are never logged");
+});
+
+test("a reporter that throws doesn't change the answer", async () => {
+    const endpoint = await reportingEndpoint({ onError: () => { throw new Error("logger down"); } });
+    try {
+        const response = await fetch(endpoint.url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify(LIST_TOOLS),
+        });
+        assert.equal(response.status, 406);
+    } finally {
+        endpoint.close();
+    }
+});

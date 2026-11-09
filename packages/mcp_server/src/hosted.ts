@@ -26,6 +26,54 @@ export interface HostedMcpRequestOptions {
     appUrl: string;
     /** The request body, when a body parser has already consumed the stream. */
     body?: unknown;
+    /**
+     * Told why the transport refused or failed a request: the 4xx answers it gives on its
+     * own (a body that isn't JSON-RPC, a missing Accept type, an unsupported protocol
+     * version) carry their reason nowhere else. Defaults to a structured warning on
+     * stderr, which Cloud Logging reads.
+     */
+    onError?: (error: Error, details: HostedMcpErrorDetails) => void;
+}
+
+/** What a refused request looked like. Never its params, nor any credential. */
+export interface HostedMcpErrorDetails {
+    httpMethod?: string;
+    accept?: string;
+    contentType?: string;
+    contentLength?: string;
+    protocolVersion?: string;
+    hasSessionId: boolean;
+    userAgent?: string;
+    /** The JSON-RPC methods in the body, when it parsed. */
+    rpcMethods?: string[];
+}
+
+function describeRequest(request: IncomingMessage, body: unknown): HostedMcpErrorDetails {
+    const header = (name: string) => {
+        const value = request.headers[name];
+        return Array.isArray(value) ? value.join(", ") : value;
+    };
+    const messages = Array.isArray(body) ? body : body && typeof body === "object" ? [body] : [];
+    const rpcMethods = messages
+        .map((message: any) => typeof message?.method === "string" ? message.method : message?.id !== undefined ? "(response)" : "(unknown)");
+    return {
+        httpMethod: request.method,
+        accept: header("accept"),
+        contentType: header("content-type"),
+        contentLength: header("content-length"),
+        protocolVersion: header("mcp-protocol-version"),
+        hasSessionId: request.headers["mcp-session-id"] !== undefined,
+        userAgent: header("user-agent"),
+        rpcMethods: messages.length > 0 ? rpcMethods : undefined,
+    };
+}
+
+function logTransportError(error: Error, details: HostedMcpErrorDetails) {
+    console.warn(JSON.stringify({
+        severity: "WARNING",
+        message: `Hosted MCP request refused: ${error.message}`,
+        ...details,
+    }));
 }
 
 /**
@@ -37,7 +85,7 @@ export interface HostedMcpRequestOptions {
 export async function handleHostedMcpRequest(
     request: IncomingMessage,
     response: ServerResponse,
-    { session, apiUrl, appUrl, body }: HostedMcpRequestOptions
+    { session, apiUrl, appUrl, body, onError = logTransportError }: HostedMcpRequestOptions
 ): Promise<void> {
     const server = createFireCMSMcpServer({ session, mode: "hosted", apiUrl, appUrl });
     const transport = new StreamableHTTPServerTransport({
@@ -46,6 +94,16 @@ export async function handleHostedMcpRequest(
         // progress, and a plain response passes through every proxy untouched.
         enableJsonResponse: true,
     });
+    // About 18% of Claude.ai's POSTs after an idle spell got a 400 and nobody could
+    // say why: the transport only reports its reasons here. Set before connecting, so
+    // the server chains its own handler after this one.
+    transport.onerror = (error) => {
+        try {
+            onError(error, describeRequest(request, body));
+        } catch {
+            // Reporting must never change the answer.
+        }
+    };
     response.on("close", () => {
         void transport.close();
         void server.close();
