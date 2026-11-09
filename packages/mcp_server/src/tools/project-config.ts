@@ -3,6 +3,23 @@ import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
 import { describeError } from "./errors.js";
 
+/** The only formats the CMS's theme code reads; anything else crashed the project's CMS. */
+const HexColor = z.string()
+    .trim()
+    .regex(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i, "Must be a hex color, #rgb or #rrggbb (e.g. '#0070F4')");
+
+/** `Intl.DateTimeFormat` throws on anything else (such as "en_US") in every date field. */
+const Locale = z.string()
+    .trim()
+    .refine((locale) => {
+        try {
+            return Intl.getCanonicalLocales(locale).length === 1;
+        } catch {
+            return false;
+        }
+    }, "Must be a BCP 47 language tag, with a hyphen (e.g. 'en', 'es', 'en-US')")
+    .transform((locale) => Intl.getCanonicalLocales(locale)[0]);
+
 /**
  * Register project configuration tools — manage project settings like
  * name, colors, locale, feature toggles, etc. Admin-only operations.
@@ -54,7 +71,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
             description: "Update the display name of a FireCMS project.",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
-                name: z.string().describe("New project name"),
+                name: z.string().trim().min(1, "The project name can't be empty").describe("New project name"),
             },
             annotations: { title: "Rename project", readOnlyHint: false, destructiveHint: true },
         },
@@ -86,8 +103,8 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
             description: "Update the primary and/or secondary brand colors for the CMS UI. Colors should be hex values (e.g., '#0070F4').",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
-                primaryColor: z.string().optional().describe("Primary color hex (e.g., '#0070F4')"),
-                secondaryColor: z.string().optional().describe("Secondary color hex (e.g., '#FF5B79')"),
+                primaryColor: HexColor.optional().describe("Primary color hex, #rgb or #rrggbb (e.g., '#0070F4')"),
+                secondaryColor: HexColor.optional().describe("Secondary color hex, #rgb or #rrggbb (e.g., '#FF5B79')"),
             },
             annotations: { title: "Change brand colors", readOnlyHint: false, destructiveHint: true },
         },
@@ -125,7 +142,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
             description: "Change the default locale for the CMS (affects date formatting, etc.).",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
-                locale: z.string().describe("Locale code (e.g., 'en', 'es', 'de', 'fr', 'it')"),
+                locale: Locale.describe("BCP 47 locale code (e.g., 'en', 'es', 'de', 'fr', 'it', 'en-US'; not 'en_US')"),
             },
             annotations: { title: "Change default locale", readOnlyHint: false, destructiveHint: true },
         },
