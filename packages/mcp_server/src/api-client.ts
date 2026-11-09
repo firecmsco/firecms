@@ -454,6 +454,9 @@ export class FireCMSApiClient {
      * Reads the current schema, sets the property, and writes back the whole
      * `properties` map. New properties are appended to `propertiesOrder` so they are
      * actually visible in the CMS.
+     *
+     * With a `namespace`, the property goes inside that map property's own
+     * `properties` (and its `propertiesOrder`, when it has one).
      */
     async saveProperty(
         projectId: string,
@@ -463,16 +466,24 @@ export class FireCMSApiClient {
         namespace?: string
     ): Promise<any> {
         const current = await this.getCollectionSchema(projectId, collectionId);
+        const properties = structuredClone(current.properties ?? {});
 
-        const properties = { ...(current.properties ?? {}) };
-        const key = namespace ? `${namespace}.${propertyKey}` : propertyKey;
-        properties[key] = property;
+        if (namespace) {
+            const parent = mapPropertyAt(properties, namespace, collectionId);
+            parent.properties[propertyKey] = property;
+            if (Array.isArray(parent.propertiesOrder) && !parent.propertiesOrder.includes(propertyKey)) {
+                parent.propertiesOrder.push(propertyKey);
+            }
+            return this.updateCollectionSchema(projectId, collectionId, { properties });
+        }
+
+        properties[propertyKey] = property;
 
         const propertiesOrder: string[] = Array.isArray(current.propertiesOrder)
             ? [...current.propertiesOrder]
             : Object.keys(current.properties ?? {});
-        if (!propertiesOrder.includes(key)) {
-            propertiesOrder.push(key);
+        if (!propertiesOrder.includes(propertyKey)) {
+            propertiesOrder.push(propertyKey);
         }
 
         return this.updateCollectionSchema(projectId, collectionId, { properties, propertiesOrder });
@@ -480,6 +491,8 @@ export class FireCMSApiClient {
 
     /**
      * Remove a property from a collection schema, and from its display order.
+     *
+     * With a `namespace`, the property is removed from inside that map property.
      */
     async deleteProperty(
         projectId: string,
@@ -488,19 +501,44 @@ export class FireCMSApiClient {
         namespace?: string
     ): Promise<any> {
         const current = await this.getCollectionSchema(projectId, collectionId);
+        const properties = structuredClone(current.properties ?? {});
 
-        const properties = { ...(current.properties ?? {}) };
-        const key = namespace ? `${namespace}.${propertyKey}` : propertyKey;
-        if (!(key in properties)) {
+        if (namespace) {
+            const dottedKey = `${namespace}.${propertyKey}`;
+            // Earlier versions saved a namespaced property under this literal key at the
+            // root, where the CMS never reads it. Let it be cleaned up the same way.
+            if (dottedKey in properties && !hasNestedProperty(properties, namespace, propertyKey)) {
+                delete properties[dottedKey];
+                const propertiesOrder = Array.isArray(current.propertiesOrder)
+                    ? current.propertiesOrder.filter((p: string) => p !== dottedKey)
+                    : undefined;
+                return this.updateCollectionSchema(projectId, collectionId,
+                    propertiesOrder ? { properties, propertiesOrder } : { properties });
+            }
+
+            const parent = mapPropertyAt(properties, namespace, collectionId);
+            if (!(propertyKey in parent.properties)) {
+                throw new Error(
+                    `Property "${dottedKey}" does not exist in collection "${collectionId}".`
+                );
+            }
+            delete parent.properties[propertyKey];
+            if (Array.isArray(parent.propertiesOrder)) {
+                parent.propertiesOrder = parent.propertiesOrder.filter((p: string) => p !== propertyKey);
+            }
+            return this.updateCollectionSchema(projectId, collectionId, { properties });
+        }
+
+        if (!(propertyKey in properties)) {
             throw new Error(
-                `Property "${key}" does not exist in collection "${collectionId}".`
+                `Property "${propertyKey}" does not exist in collection "${collectionId}".`
             );
         }
-        delete properties[key];
+        delete properties[propertyKey];
 
         const propertiesOrder: string[] = (Array.isArray(current.propertiesOrder)
             ? current.propertiesOrder
-            : Object.keys(current.properties ?? {})).filter((p: string) => p !== key);
+            : Object.keys(current.properties ?? {})).filter((p: string) => p !== propertyKey);
 
         return this.updateCollectionSchema(projectId, collectionId, { properties, propertiesOrder });
     }
@@ -625,4 +663,44 @@ export class FireCMSApiClient {
         }
         return id;
     }
+}
+
+/**
+ * The map property a dot-separated namespace names inside a `properties` map, e.g.
+ * "address", or "meta.address" for a map within a map. Its `properties` map is created
+ * when missing, so callers can add to it.
+ *
+ * @throws when a step of the namespace doesn't exist or isn't a map
+ */
+function mapPropertyAt(properties: Record<string, any>, namespace: string, collectionId: string): Record<string, any> {
+    let container = properties;
+    let parent: Record<string, any> | undefined;
+    const path: string[] = [];
+    for (const segment of namespace.split(".")) {
+        path.push(segment);
+        parent = container[segment];
+        if (!parent || typeof parent !== "object") {
+            throw new Error(
+                `Property "${path.join(".")}" does not exist in collection "${collectionId}". ` +
+                `Create it as a map property first: nested properties go inside a map.`
+            );
+        }
+        if (parent.dataType !== "map") {
+            throw new Error(
+                `Property "${path.join(".")}" in collection "${collectionId}" is a ${parent.dataType ?? "untyped"} property, ` +
+                `not a map: nested properties can only go inside a map property.`
+            );
+        }
+        parent.properties ??= {};
+        container = parent.properties;
+    }
+    return parent!;
+}
+
+function hasNestedProperty(properties: Record<string, any>, namespace: string, propertyKey: string): boolean {
+    let container: Record<string, any> | undefined = properties;
+    for (const segment of namespace.split(".")) {
+        container = container?.[segment]?.properties;
+    }
+    return Boolean(container && propertyKey in container);
 }
