@@ -7,9 +7,17 @@ const currentUnlocalizedPath = getUnlocalizedPath(Astro.url);
 
 export interface Props {
     iconOnly?: boolean;
+    /** False on English-only pages: there is no /de/… copy of them to switch to,
+     *  so the other languages lead to their home page instead. */
+    localized?: boolean;
 }
 
-const { iconOnly = false } = Astro.props;
+const { iconOnly = false, localized = true } = Astro.props;
+
+function languagePath(code: string) {
+    if (code === "en") return currentUnlocalizedPath;
+    return localized ? `/${code}${currentUnlocalizedPath}` : `/${code}/`;
+}
 ---
 
 {iconOnly ? (
@@ -24,7 +32,7 @@ const { iconOnly = false } = Astro.props;
             >
                 {Object.entries(languages).map(([code, label]) => (
                         <option
-                                value={code === "en" ? currentUnlocalizedPath : `/${code}${currentUnlocalizedPath}`}
+                                value={languagePath(code)}
                                 selected={code === currentLang}
                         >
                             {label}
@@ -46,7 +54,7 @@ const { iconOnly = false } = Astro.props;
             >
                 {Object.entries(languages).map(([code, label]) => (
                         <option
-                                value={code === "en" ? currentUnlocalizedPath : `/${code}${currentUnlocalizedPath}`}
+                                value={languagePath(code)}
                                 selected={code === currentLang}
                         >
                             {label}

@@ -5,6 +5,8 @@ import { fileURLToPath } from "url";
 /**
  * Checks every internal <a href> in the built site (dist/) the way a browser resolves it:
  * against the page URL with its trailing slash. Reports links to pages that don't exist.
+ * Also checks <link hreflang> alternates: Google crawls them, and the language redirect in
+ * Layout.astro sends visitors to them.
  * Run after `npx astro build`: `node scripts/check_links.mjs`
  */
 
@@ -59,7 +61,7 @@ function exists(urlPath) {
     return servedFiles.has(decoded) || servedFiles.has(decoded + "/index.html");
 }
 
-const hrefPattern = /<a\b[^>]*?\shref="([^"]*)"/g;
+const hrefPattern = /<a\b[^>]*?\shref="([^"]*)"|<link\b(?=[^>]*\shreflang=")[^>]*?\shref="([^"]*)"/g;
 const broken = new Map(); // resolved path -> Set of pages linking to it
 let checked = 0;
 
@@ -67,7 +69,10 @@ for (const htmlFile of distFiles.filter(f => f.endsWith(".html"))) {
     const page = pageUrl(htmlFile);
     const html = fs.readFileSync(htmlFile, "utf-8");
     for (const match of html.matchAll(hrefPattern)) {
-        const href = match[1].replace(/&amp;/g, "&").trim();
+        // Starlight's 404 page declares /de/404/ etc. as alternates; it is served with a 404
+        // status, so neither Google nor the redirect ever follows them.
+        if (match[2] !== undefined && page === "/404.html") continue;
+        const href = (match[1] ?? match[2]).replace(/&amp;/g, "&").trim();
         if (!href || href.startsWith("#") || /^(mailto|tel|javascript|data):/i.test(href)) continue;
         let resolved;
         try {

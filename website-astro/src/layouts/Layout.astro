@@ -19,8 +19,9 @@ export interface Props {
     ogImage?: string;
     ogType?: string;
     /** Set to false for pages that exist only in English (blog posts, comparisons,
-     *  keyword landing pages). Emitting hreflang alternates for them points Google
-     *  at /es/…, /de/… URLs that are never built and return 404. */
+     *  keyword landing pages, policies). Emitting hreflang alternates for them points
+     *  Google at /es/…, /de/… URLs that are never built and return 404, and the
+     *  language redirect below follows those alternates. */
     localized?: boolean;
 }
 
@@ -323,12 +324,6 @@ const faqSchema = faqItems && faqItems.length > 0 ? {
                 // URL a user or a search engine deliberately asked for.
                 if (currentLang !== 'en') return;
 
-                // Compute the unlocalized path (strip any lang prefix)
-                var unlocalizedPath = knownLangs.indexOf(segments[0]) !== -1
-                    ? '/' + segments.slice(1).join('/')
-                    : pathname;
-                if (!unlocalizedPath || unlocalizedPath === '/') unlocalizedPath = '/';
-
                 var stored = null;
                 try { stored = localStorage.getItem('preferred-lang'); } catch (_) {}
 
@@ -353,13 +348,18 @@ const faqSchema = faqItems && faqItems.length > 0 ? {
                     }
                 }
 
-                // Redirect if we're not on the right language path
-                if (targetLang !== currentLang) {
-                    var targetPath = targetLang === 'en'
-                        ? (unlocalizedPath || '/')
-                        : '/' + targetLang + (unlocalizedPath === '/' ? '' : unlocalizedPath);
-                    window.location.replace(targetPath);
-                }
+                if (targetLang === 'en' || knownLangs.indexOf(targetLang) === -1) return;
+
+                // Redirect only to a translation this page declares. English-only
+                // pages (blog, comparisons, keyword landings, policies) set
+                // localized={false} and render no hreflang alternates, so a German
+                // browser stays on /blog/ instead of landing on a /de/blog/ that is
+                // never built. The flag is read from the page rather than baked into
+                // this script so its text stays identical everywhere: the
+                // ClientRouter never re-runs a script it has already seen.
+                var alternate = document.querySelector('link[rel="alternate"][hreflang="' + targetLang + '"]');
+                if (!alternate) return;
+                window.location.replace(new URL(alternate.href).pathname);
             } catch (_) {}
         })();
     </script>
@@ -370,9 +370,9 @@ const faqSchema = faqItems && faqItems.length > 0 ? {
 </head>
 
 <body class="font-sans bg-black text-surface-300 antialiased" style="color-scheme: dark;">
-<Header lang={lang}/>
+<Header lang={lang} localized={localized}/>
 <slot/>
-<Footer lang={lang}/>
+<Footer lang={lang} localized={localized}/>
 <CookieBanner/>
 <script src="../scripts/tracking-params.js"/>
 <script src="../scripts/enhance-app-links.js"/>

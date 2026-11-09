@@ -4,7 +4,7 @@ import NavigationDropdown from "./NavigationDropdown.astro";
 import LanguageSelect from "./LanguageSelect.astro";
 import { useTranslatedPath, useTranslations } from "../i18n/utils";
 
-const { lang = "en" } = Astro.props;
+const { lang = "en", localized = true } = Astro.props;
 const currentPath = Astro.url.pathname.replace(/\/$/, "");
 const tp = useTranslatedPath(lang as any);
 const t = useTranslations(lang as any);
@@ -111,7 +111,7 @@ const navLinks = [
         </div>
         <div class="flex flex-1 justify-end items-center gap-4">
             <div class="hidden sm:block">
-                <LanguageSelect iconOnly={true} />
+                <LanguageSelect iconOnly={true} localized={localized} />
             </div>
             <a
                     href="https://app.firecms.co"
@@ -211,7 +211,7 @@ const navLinks = [
                 </a>
                 
                 <div class="mt-8 pt-8 border-t border-surface-800 w-full flex justify-center">
-                    <LanguageSelect />
+                    <LanguageSelect localized={localized} />
                 </div>
             </nav>
         </div>

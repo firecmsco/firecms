@@ -4,7 +4,7 @@ import SectionBackgroundAccents from "./SectionBackgroundAccents.astro";
 import LanguageSelect from "./LanguageSelect.astro";
 import { useTranslatedPath, useTranslations } from "../i18n/utils";
 
-const { lang = "en" } = Astro.props;
+const { lang = "en", localized = true } = Astro.props;
 const tp = useTranslatedPath(lang as any);
 const t = useTranslations(lang as any);
 
@@ -112,7 +112,7 @@ const footerNavs = [
             <div class="sm:flex sm:items-center sm:justify-between">
                 <span class="text-sm sm:text-center text-surface-400">© 2026 FireCMS. All Rights Reserved.</span>
                 <div class="flex gap-6 mt-4 sm:mt-0 items-center">
-                    <LanguageSelect />
+                    <LanguageSelect localized={localized} />
                     <a href="https://github.com/firecmsco" target="_blank" rel="noopener noreferrer"
                        data-track
                        id="footer-github"

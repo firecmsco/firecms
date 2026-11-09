@@ -693,6 +693,12 @@ export const de = {
   'why.cta.start': "Kostenlos starten",
   'why.cta.explore': "Self-Hosted erkunden",
 
+  'cookie.title': 'Cookie-Einstellungen',
+  'cookie.desc.1': 'Wir verwenden Cookies, um Ihr Surferlebnis zu verbessern und unseren Traffic zu analysieren. Mit einem Klick auf „Akzeptieren“ stimmen Sie ',
+  'cookie.desc.2': 'unserer Verwendung von Cookies zu.',
+  'cookie.decline': 'Ablehnen',
+  'cookie.accept': 'Akzeptieren',
+
   'seo.pro.title': 'FireCMS PRO — Selbst-gehostetes Firebase CMS',
   'seo.pro.description': 'Selbst gehostetes FireCMS PRO: visueller Schema-Editor, Benutzerrollen, Import/Export und Entitätsverlauf. €99/Monat für das erste Projekt, €49 für jedes weitere. 30 Tage kostenlos.',
   'pro.hero.badge': 'Für Agenturen und Produktteams',

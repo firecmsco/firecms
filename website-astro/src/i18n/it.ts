@@ -681,6 +681,12 @@ export const it = {
   'why.cta.start': "Inizia gratis",
   'why.cta.explore': "Esplora Self-Hosted",
 
+  'cookie.title': 'Preferenze sui cookie',
+  'cookie.desc.1': 'Usiamo i cookie per migliorare la tua esperienza di navigazione e analizzare il nostro traffico. Facendo clic su "Accetta", acconsenti ',
+  'cookie.desc.2': 'al nostro uso dei cookie.',
+  'cookie.decline': 'Rifiuta',
+  'cookie.accept': 'Accetta',
+
 
 
 

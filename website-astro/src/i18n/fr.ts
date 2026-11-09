@@ -686,6 +686,12 @@ export const fr = {
   'why.cta.start': "Commencer gratuitement",
   'why.cta.explore': "Explorer l'auto-hébergement",
 
+  'cookie.title': 'Préférences en matière de cookies',
+  'cookie.desc.1': 'Nous utilisons des cookies pour améliorer votre expérience de navigation et analyser notre trafic. En cliquant sur « Accepter », vous consentez à ',
+  'cookie.desc.2': 'notre utilisation des cookies.',
+  'cookie.decline': 'Refuser',
+  'cookie.accept': 'Accepter',
+
   'seo.about.title': "À Propos de FireCMS — L'Équipe du CMS Firebase",
   'seo.about.description': "Découvrez l'équipe derrière FireCMS. D'un projet parallèle de développeur à une plateforme utilisée par Microsoft et IKEA pour gérer les données Firebase et Firestore.",
 

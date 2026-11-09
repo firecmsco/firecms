@@ -563,6 +563,12 @@ export const pt = {
   'why.cta.start': 'Comece a Construir Gratuitamente',
   'why.cta.explore': 'Explorar Self-Hosted',
 
+  'cookie.title': 'Preferências de Cookies',
+  'cookie.desc.1': 'Usamos cookies para melhorar sua experiência de navegação e analisar nosso tráfego. Ao clicar em "Aceitar", você concorda com ',
+  'cookie.desc.2': 'nosso uso de cookies.',
+  'cookie.decline': 'Recusar',
+  'cookie.accept': 'Aceitar',
+
   'features.title': 'Uma Experiência Poderosa e Intuitiva para Toda a Sua Equipe',
   'features.subtitle': 'Do usuário final ao desenvolvedor, o FireCMS foi projetado para tornar a criação e o gerenciamento de aplicações de back-office uma experiência fluida.',
   'features.explore': 'Explore tudo que é incorporado ao FireCMS',
