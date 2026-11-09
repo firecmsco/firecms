@@ -6,7 +6,7 @@ import { FirebaseApp } from "firebase/app";
 import { ProjectSubscriptionData, ProjectSubscriptionPlan } from "../types";
 import { UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
-import { darkenColor, hexToRgbaWithOpacity } from "../utils";
+import { darkenColor, hexColorOr, hexToRgbaWithOpacity } from "../utils";
 import { AppCheckOptions } from "@firecms/firebase";
 import { ProjectsApi } from "../api/projects";
 import { useRetryStalledFirebaseConfig } from "./useRetryStalledFirebaseConfig";
@@ -27,6 +27,19 @@ function permissionDeniedRetryDelay(deniedSince: number, attempts: number): numb
     return Math.min(1000 * 2 ** attempts, 10000);
 }
 const DEFAULT_SECONDARY_COLOR = "#FF5B79";
+
+/**
+ * A stored locale in canonical form, or undefined (the app's own) when `Intl` can't
+ * read it: "en_US" made `Intl.DateTimeFormat` throw in every date field.
+ */
+function canonicalLocale(value: unknown): string | undefined {
+    if (typeof value !== "string") return undefined;
+    try {
+        return Intl.getCanonicalLocales(value.trim())[0];
+    } catch {
+        return undefined;
+    }
+}
 
 export type TypesenseSearchConfig = {
     enabled: boolean;
@@ -109,13 +122,13 @@ export function useBuildProjectConfig({
         // Check for legacy CSS property
         const legacyPrimary = getComputedStyle(document.documentElement)
             .getPropertyValue('--fcms-primary')?.trim();
-        return legacyPrimary || DEFAULT_PRIMARY_COLOR;
+        return hexColorOr(legacyPrimary, DEFAULT_PRIMARY_COLOR);
     });
     const [secondaryColor, setSecondaryColor] = useState<string | undefined>(() => {
         // Check for legacy CSS property
         const legacySecondary = getComputedStyle(document.documentElement)
             .getPropertyValue('--fcms-secondary')?.trim();
-        return legacySecondary || DEFAULT_SECONDARY_COLOR;
+        return hexColorOr(legacySecondary, DEFAULT_SECONDARY_COLOR);
     });
 
     const projectPath = `projects/${projectId}`;
@@ -194,23 +207,14 @@ export function useBuildProjectConfig({
 
     // update css variables when colors change in :root
     useEffect(() => {
-        if (primaryColor) {
-            document.documentElement.style.setProperty("--color-primary", primaryColor);
-            document.documentElement.style.setProperty("--color-primary-dark", darkenColor(primaryColor, 10));
-            document.documentElement.style.setProperty("--fcms-primary", primaryColor);
-        } else {
-            document.documentElement.style.setProperty("--color-primary", DEFAULT_PRIMARY_COLOR);
-            document.documentElement.style.setProperty("--color-primary-dark", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
-            document.documentElement.style.setProperty("--fcms-primary", DEFAULT_PRIMARY_COLOR);
-        }
-        if (secondaryColor) {
-            document.documentElement.style.setProperty("--color-secondary", secondaryColor);
-            document.documentElement.style.setProperty("--fcms-secondary", secondaryColor);
-        } else {
-            document.documentElement.style.setProperty("--color-secondary", DEFAULT_SECONDARY_COLOR);
-            document.documentElement.style.setProperty("--fcms-secondary", DEFAULT_SECONDARY_COLOR);
-        }
-
+        // darkenColor throws on anything but hex: a missing or unreadable color is the default.
+        const primary = hexColorOr(primaryColor, DEFAULT_PRIMARY_COLOR);
+        const secondary = hexColorOr(secondaryColor, DEFAULT_SECONDARY_COLOR);
+        document.documentElement.style.setProperty("--color-primary", primary);
+        document.documentElement.style.setProperty("--color-primary-dark", darkenColor(primary, 10));
+        document.documentElement.style.setProperty("--fcms-primary", primary);
+        document.documentElement.style.setProperty("--color-secondary", secondary);
+        document.documentElement.style.setProperty("--fcms-secondary", secondary);
     }, [primaryColor, secondaryColor]);
 
     const uploadLogo = useCallback(async (file: File): Promise<void> => {
@@ -315,14 +319,14 @@ export function useBuildProjectConfig({
                             setTrialValidUntil(trialTimestamp.toDate());
                         }
 
-                        setPrimaryColor(snapshot.get("primary_color") ?? DEFAULT_PRIMARY_COLOR);
-                        setSecondaryColor(snapshot.get("secondary_color") ?? DEFAULT_SECONDARY_COLOR);
+                        setPrimaryColor(hexColorOr(snapshot.get("primary_color"), DEFAULT_PRIMARY_COLOR));
+                        setSecondaryColor(hexColorOr(snapshot.get("secondary_color"), DEFAULT_SECONDARY_COLOR));
 
                         const currentCustomizationRevision = snapshot.get("current_app_config_revision");
                         setCustomizationRevision(currentCustomizationRevision);
                         setCreationType(snapshot.get("creation_type"));
                         setBlocked(snapshot.get("blocked"));
-                        setDefaultLocale(snapshot.get("default_locale"));
+                        setDefaultLocale(canonicalLocale(snapshot.get("default_locale")));
 
                         const updatedSerializedAppCheck = snapshot.get("app_check");
                         if (updatedSerializedAppCheck) {

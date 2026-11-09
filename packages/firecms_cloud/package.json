@@ -67,6 +67,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+    "test": "node --test test/colors.test.ts",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
   "files": [
