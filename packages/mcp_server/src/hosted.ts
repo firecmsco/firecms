@@ -48,14 +48,19 @@ export interface HostedMcpErrorDetails {
     rpcMethods?: string[];
 }
 
+const MAX_LOGGED_METHODS = 10;
+
 function describeRequest(request: IncomingMessage, body: unknown): HostedMcpErrorDetails {
     const header = (name: string) => {
         const value = request.headers[name];
         return Array.isArray(value) ? value.join(", ") : value;
     };
     const messages = Array.isArray(body) ? body : body && typeof body === "object" ? [body] : [];
+    // A batch can be any size; a few methods and the count say enough, in one log line.
     const rpcMethods = messages
-        .map((message: any) => typeof message?.method === "string" ? message.method : message?.id !== undefined ? "(response)" : "(unknown)");
+        .slice(0, MAX_LOGGED_METHODS)
+        .map((message: any) => typeof message?.method === "string" ? message.method.slice(0, 100) : message?.id !== undefined ? "(response)" : "(unknown)");
+    if (messages.length > MAX_LOGGED_METHODS) rpcMethods.push(`(+${messages.length - MAX_LOGGED_METHODS} more)`);
     return {
         httpMethod: request.method,
         accept: header("accept"),

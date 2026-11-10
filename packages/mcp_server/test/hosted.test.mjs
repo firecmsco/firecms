@@ -368,6 +368,24 @@ test("by default the reason goes to stderr as a structured warning", async (t) =
     assert.doesNotMatch(lines[0], /do-not-log/, "credentials are never logged");
 });
 
+test("a refused batch logs a few of its methods and the count, not all of them", async () => {
+    const reported = [];
+    const endpoint = await reportingEndpoint({ onError: (error, details) => reported.push(details) });
+    try {
+        const batch = Array.from({ length: 50 }, (_, i) => ({ jsonrpc: "2.0", id: i, method: "tools/list" }));
+        const response = await fetch(endpoint.url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify(batch),
+        });
+        assert.equal(response.status, 406);
+        assert.equal(reported[0].rpcMethods.length, 11);
+        assert.equal(reported[0].rpcMethods.at(-1), "(+40 more)");
+    } finally {
+        endpoint.close();
+    }
+});
+
 test("a reporter that throws doesn't change the answer", async () => {
     const endpoint = await reportingEndpoint({ onError: () => { throw new Error("logger down"); } });
     try {
