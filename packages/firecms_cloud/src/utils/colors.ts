@@ -1,7 +1,8 @@
 const HEX_COLOR = /^#([0-9A-Fa-f]{3}){1,2}$/;
 
 /**
- * A stored brand color, if the theme code below can read it, or the fallback.
+ * A stored brand color in its long form, if the theme code below can read it, or the
+ * fallback.
  *
  * Project colors come from Firestore and can be anything: on 2026-11-10 one that
  * wasn't hex, stored through the MCP server, made `darkenColor` throw inside an
@@ -10,7 +11,9 @@ const HEX_COLOR = /^#([0-9A-Fa-f]{3}){1,2}$/;
 export function hexColorOr<T>(value: unknown, fallback: T): string | T {
     if (typeof value !== "string") return fallback;
     const color = value.trim();
-    return HEX_COLOR.test(color) ? color : fallback;
+    if (!HEX_COLOR.test(color)) return fallback;
+    // Long, so the settings page's <input type="color"> doesn't show "#07F" as black.
+    return color.length === 4 ? "#" + color.slice(1).split("").map((digit) => digit + digit).join("") : color;
 }
 
 export function darkenColor(hexColor: string, darkenBy = 10): string {

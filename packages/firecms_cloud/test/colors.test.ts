@@ -6,9 +6,9 @@ import { darkenColor, hexColorOr } from "../src/utils/colors.ts";
 // On 2026-11-10 a project color that wasn't hex, stored through the MCP server, made
 // darkenColor throw inside the theme effect and took the project's whole CMS down.
 
-test("hexColorOr keeps the colors darkenColor can read", () => {
+test("hexColorOr keeps the colors darkenColor can read, short ones in long form", () => {
     assert.equal(hexColorOr("#0070F4", "#000000"), "#0070F4");
-    assert.equal(hexColorOr("#07f", "#000000"), "#07f");
+    assert.equal(hexColorOr("#07f", "#000000"), "#0077ff");
     assert.equal(hexColorOr(" #ff5b79 ", "#000000"), "#ff5b79");
 });
 
