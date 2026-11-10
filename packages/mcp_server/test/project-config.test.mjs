@@ -62,18 +62,49 @@ test("update_project_colors stores hex colors", async () => {
     await close();
 });
 
-test("update_default_locale refuses what Intl can't read, and stores the canonical tag", async () => {
+// The CMS's locale is a date-fns key ("es", "enUS", "ptBR"), handed to date-fns and Intl.
+
+test("update_default_locale stores a FireCMS locale, whatever spelling it comes in", async () => {
     const { call, updates, close } = await withTools();
-    for (const locale of ["en_US", "", "x"]) {
+    for (const locale of ["es", "en", "en_US", "en-us", "pt-BR", "ptBR"]) {
+        const result = await call("update_default_locale", { projectId: "p", locale });
+        assert.equal(result.isError, false, `${locale}: ${result.text}`);
+    }
+    assert.deepEqual(updates.map((u) => u.default_locale), ["es", "en", "enUS", "enUS", "ptBR", "ptBR"]);
+    await close();
+});
+
+test("update_default_locale refuses what isn't a FireCMS locale, naming the closest", async () => {
+    const { call, updates, close } = await withTools();
+    const regional = await call("update_default_locale", { projectId: "p", locale: "es-MX" });
+    assert.equal(regional.isError, true);
+    assert.match(regional.text, /closest one supported is 'es'/);
+    for (const locale of ["", "x", "klingon"]) {
         const result = await call("update_default_locale", { projectId: "p", locale });
         assert.equal(result.isError, true, locale);
     }
     assert.deepEqual(updates, []);
-
-    const result = await call("update_default_locale", { projectId: "p", locale: "en-us" });
-    assert.equal(result.isError, false, result.text);
-    assert.deepEqual(updates, [{ default_locale: "en-US" }]);
     await close();
+});
+
+// JSON Schema patterns carry no flags: a published `/i` pattern refused the tool's own
+// example, "#0070F4", in clients that check arguments against the schema.
+test("the published color pattern accepts upper and lower case, and each field has its own", async () => {
+    const server = new McpServer({ name: "test", version: "0.0.0" });
+    registerProjectConfigTools(server, { assertAdmin: async () => {}, updateProjectConfig: async () => ({}) });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const client = new Client({ name: "test-client", version: "0.0.0" });
+    await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+
+    const tool = (await client.listTools()).tools.find((t) => t.name === "update_project_colors");
+    for (const field of ["primaryColor", "secondaryColor"]) {
+        const schema = tool.inputSchema.properties[field];
+        assert.equal(schema.$ref, undefined, `${field} is inlined`);
+        const pattern = new RegExp(schema.pattern);
+        assert.ok(pattern.test("#0070F4") && pattern.test("#ff5b79") && pattern.test("#07F"), `${field}: ${schema.pattern}`);
+        assert.ok(!pattern.test("red"));
+    }
+    await client.close();
 });
 
 test("update_project_name refuses an empty name and trims a good one", async () => {

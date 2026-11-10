@@ -3,22 +3,51 @@ import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
 import { describeError } from "./errors.js";
 
-/** The only formats the CMS's theme code reads; anything else crashed the project's CMS. */
-const HexColor = z.string()
+/**
+ * The only formats the CMS's theme code reads; anything else crashed the project's CMS.
+ * A fresh schema per field, and no `/i` flag: JSON Schema patterns have no flags, so the
+ * published pattern would refuse "#0070F4", and a shared instance is published as a $ref.
+ */
+const hexColor = () => z.string()
     .trim()
-    .regex(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i, "Must be a hex color, #rgb or #rrggbb (e.g. '#0070F4')");
+    .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "Must be a hex color, #rgb or #rrggbb (e.g. '#0070F4')");
 
-/** `Intl.DateTimeFormat` throws on anything else (such as "en_US") in every date field. */
+/**
+ * The locales FireCMS formats dates in: the `Locale` type of @firecms/core
+ * (packages/firecms_core/src/types/locales.ts), date-fns keys. The CMS hands the stored
+ * value to both date-fns and Intl, so "en_US" did nothing in one and threw in the other.
+ * Keep in sync.
+ */
+const FIRECMS_LOCALES = [
+    "af", "ar", "arDZ", "arMA", "arSA", "az", "be", "bg", "bn", "ca", "cs", "cy", "da", "de", "el",
+    "en", "enAU", "enCA", "enGB", "enIN", "enNZ", "enUS", "eo", "es", "et", "eu", "faIR", "fi", "fil",
+    "fr", "frCA", "frCH", "gd", "gl", "gu", "he", "hi", "hr", "hu", "hy", "id", "is", "it", "ja", "ka",
+    "kk", "kn", "ko", "lb", "lt", "lv", "mk", "ms", "mt", "nb", "nl", "nlBE", "nn", "pl", "pt", "ptBR",
+    "ro", "ru", "sk", "sl", "sr", "srLatn", "sv", "ta", "te", "th", "tr", "ug", "uk", "uz", "vi",
+    "zhCN", "zhTW"
+];
+const localesByFoldedKey = new Map(FIRECMS_LOCALES.map((locale) => [locale.toLowerCase(), locale]));
+
+/** The FireCMS locale a value names in any spelling ("en_US", "en-US" → "enUS"), or its language's. */
+function resolveFireCMSLocale(value: string): { locale?: string; closest?: string } {
+    const parts = value.trim().split(/[-_\s]+/).filter(Boolean);
+    if (parts.length === 0) return {};
+    const locale = localesByFoldedKey.get(parts.join("").toLowerCase());
+    return locale ? { locale } : { closest: localesByFoldedKey.get(parts[0].toLowerCase()) };
+}
+
 const Locale = z.string()
-    .trim()
-    .refine((locale) => {
-        try {
-            return Intl.getCanonicalLocales(locale).length === 1;
-        } catch {
-            return false;
+    .superRefine((value, ctx) => {
+        const { locale, closest } = resolveFireCMSLocale(value);
+        if (!locale) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Must be a FireCMS locale such as 'en', 'es' or 'enUS'" +
+                    (closest ? `; the closest one supported is '${closest}'` : ""),
+            });
         }
-    }, "Must be a BCP 47 language tag, with a hyphen (e.g. 'en', 'es', 'en-US')")
-    .transform((locale) => Intl.getCanonicalLocales(locale)[0]);
+    })
+    .transform((value) => resolveFireCMSLocale(value).locale!);
 
 /**
  * Register project configuration tools — manage project settings like
@@ -103,8 +132,8 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
             description: "Update the primary and/or secondary brand colors for the CMS UI. Colors should be hex values (e.g., '#0070F4').",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
-                primaryColor: HexColor.optional().describe("Primary color hex, #rgb or #rrggbb (e.g., '#0070F4')"),
-                secondaryColor: HexColor.optional().describe("Secondary color hex, #rgb or #rrggbb (e.g., '#FF5B79')"),
+                primaryColor: hexColor().optional().describe("Primary color hex, #rgb or #rrggbb (e.g., '#0070F4')"),
+                secondaryColor: hexColor().optional().describe("Secondary color hex, #rgb or #rrggbb (e.g., '#FF5B79')"),
             },
             annotations: { title: "Change brand colors", readOnlyHint: false, destructiveHint: true },
         },
@@ -142,7 +171,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
             description: "Change the default locale for the CMS (affects date formatting, etc.).",
             inputSchema: {
                 projectId: z.string().describe("Firebase project ID"),
-                locale: Locale.describe("BCP 47 locale code (e.g., 'en', 'es', 'de', 'fr', 'it', 'en-US'; not 'en_US')"),
+                locale: Locale.describe("FireCMS locale for dates (e.g., 'en', 'es', 'de', 'fr', 'it', 'enUS', 'ptBR'); 'en-US' and 'en_US' are read as 'enUS'"),
             },
             annotations: { title: "Change default locale", readOnlyHint: false, destructiveHint: true },
         },
