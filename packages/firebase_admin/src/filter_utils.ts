@@ -178,13 +178,37 @@ export const FILTERABLE_VALUE_TYPES: FieldType[] = [
 // ─── Parse a filter value for the API ──────────────────────────────────────
 
 export function parseFilterValueForApi(filter: FilterDef): { field: string; op: string; value: any } {
-    const { field, op, value } = filter;
+    const { field, op, value, valueType } = filter;
 
     if (op === "is-null") {
         return { field, op: "==", value: null };
     }
 
-    return { field, op, value };
+    return { field, op, value: toApiFilterValue(value, valueType) };
+}
+
+/**
+ * A filter value in the wire format the backend turns back into Firestore types.
+ *
+ * A date went out as a `Date`, which JSON makes an ISO string, and a reference as its
+ * path: Firestore compared a Timestamp or a DocumentReference field to a string, and
+ * the filter never matched anything.
+ */
+function toApiFilterValue(value: any, valueType: FieldType): any {
+    if (Array.isArray(value)) return value.map((item) => toApiFilterValue(item, valueType));
+    if (valueType === "timestamp" && (value instanceof Date || typeof value === "string")) {
+        // Filters restored from localStorage come back as ISO strings.
+        const millis = (value instanceof Date ? value : new Date(value)).getTime();
+        if (!isNaN(millis)) {
+            return { _seconds: Math.floor(millis / 1000), _nanoseconds: (((millis % 1000) + 1000) % 1000) * 1e6 };
+        }
+    }
+    if (valueType === "reference" && typeof value === "string") {
+        const path = value.trim().replace(/^\/+|\/+$/g, "");
+        // Only a document path makes a reference; anything else stays as typed.
+        if (path && path.split("/").length % 2 === 0) return { _ref: path };
+    }
+    return value;
 }
 
 // ─── LocalStorage keys ─────────────────────────────────────────────────────
