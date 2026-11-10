@@ -29,7 +29,8 @@ export function registerDocumentTools(server: McpServer, api: FireCMSApiClient) 
                         "==", "!=", "<", "<=", ">", ">=",
                         "array-contains", "in", "array-contains-any", "not-in",
                     ]).describe("Firestore filter operator"),
-                    value: z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(z.any())]).describe("Value to compare against"),
+                    value: z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(z.any()), z.record(z.any())])
+                        .describe("Value to compare against. Dates, references and geopoints take the form documents are returned in: { _seconds, _nanoseconds }, { _ref: 'collection/docId' }, { _lat, _long }"),
                 })).optional().describe("Optional filters to apply"),
                 databaseId: z.string().optional().describe("Firestore database ID (default: '(default)')"),
             },

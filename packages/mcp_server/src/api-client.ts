@@ -634,13 +634,14 @@ export class FireCMSApiClient {
         merge?: boolean;
         databaseId?: string;
     }): Promise<any> {
-        // Transform documents into BatchOperation format expected by the backend
-        const operations = body.documents.map(doc => ({
-            type: (body.merge ? "update" : "set") as "set" | "update",
-            path: body.path,
-            documentId: doc.id ?? this.generateId(),
-            data: doc.data,
-        }));
+        // Transform documents into BatchOperation format expected by the backend.
+        // A merge is an `update` with `merge: true`, which the backend applies as a set
+        // with merge: it creates a missing document instead of failing the whole batch.
+        // A backend that predates `merge` still runs a plain update, never an overwrite.
+        // A document without an ID is new, so there is nothing to merge into.
+        const operations = body.documents.map(doc => body.merge && doc.id
+            ? { type: "update" as const, merge: true, path: body.path, documentId: doc.id, data: doc.data }
+            : { type: "set" as const, path: body.path, documentId: doc.id ?? this.generateId(), data: doc.data });
 
         return this.request({
             method: "POST",
