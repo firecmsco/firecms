@@ -58,7 +58,8 @@ test("update_project_colors stores hex colors", async () => {
     const { call, updates, close } = await withTools();
     const result = await call("update_project_colors", { projectId: "p", primaryColor: "#0070F4", secondaryColor: " #f5b " });
     assert.equal(result.isError, false, result.text);
-    assert.deepEqual(updates, [{ primary_color: "#0070F4", secondary_color: "#f5b" }]);
+    // A short color goes out long, which <input type="color"> can show.
+    assert.deepEqual(updates, [{ primary_color: "#0070F4", secondary_color: "#ff55bb" }]);
     await close();
 });
 

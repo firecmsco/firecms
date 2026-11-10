@@ -10,7 +10,11 @@ import { describeError } from "./errors.js";
  */
 const hexColor = () => z.string()
     .trim()
-    .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "Must be a hex color, #rgb or #rrggbb (e.g. '#0070F4')");
+    .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "Must be a hex color, #rgb or #rrggbb (e.g. '#0070F4')")
+    // Sent long: the settings page's <input type="color"> shows "#07F" as black.
+    .transform((color) => color.length === 4
+        ? "#" + color.slice(1).split("").map((digit) => digit + digit).join("")
+        : color);
 
 /**
  * The locales FireCMS formats dates in: the `Locale` type of @firecms/core
