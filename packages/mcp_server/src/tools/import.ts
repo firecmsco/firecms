@@ -47,6 +47,24 @@ export function registerImportTools(server: McpServer, api: FireCMSApiClient) {
                     merge: merge ?? false,
                     databaseId,
                 });
+                // The backend answers 200 with the operations that failed, one entry each,
+                // or several for one operation when its whole batch failed to commit.
+                const failures = new Map<number, string>();
+                for (const failure of (result?.failures ?? []) as Array<{ index: number; error: string }>) {
+                    if (!failures.has(failure.index)) failures.set(failure.index, failure.error);
+                }
+                if (failures.size > 0) {
+                    const listed = [...failures].slice(0, 20).map(([index, error]) =>
+                        `- ${documents[index]?.id ? `"${documents[index].id}"` : `document #${index + 1} (no id)`}: ${error}`);
+                    const more = failures.size > listed.length ? `\n- …and ${failures.size - listed.length} more` : "";
+                    return {
+                        content: [{
+                            type: "text" as const,
+                            text: `Imported ${documents.length - failures.size} of ${documents.length} document(s) into "${collectionPath}"; ${failures.size} failed:\n${listed.join("\n")}${more}`,
+                        }],
+                        isError: true,
+                    };
+                }
                 return {
                     content: [{
                         type: "text" as const,

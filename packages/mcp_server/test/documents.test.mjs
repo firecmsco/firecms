@@ -62,3 +62,48 @@ test("list_documents passes a date or reference filter in the wire format", asyn
     assert.deepEqual(calls[0].filters, filters);
     await client.close();
 });
+
+// The backend answers 200 with the operations that failed; import_documents said
+// "Successfully imported N document(s)" all the same.
+
+async function importTool(result) {
+    const { registerImportTools } = await import("../dist/tools/import.js");
+    const server = new McpServer({ name: "test", version: "0.0.0" });
+    registerImportTools(server, { assertAdmin: async () => {}, importDocuments: async () => result });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const client = new Client({ name: "test-client", version: "0.0.0" });
+    await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+    return client;
+}
+
+test("import_documents reports the documents that failed, once each", async () => {
+    const client = await importTool({
+        totalOperations: 3, batchesCompleted: 0, totalBatches: 1,
+        failures: [
+            { index: 1, error: "Value for argument \"documentPath\" must point to a document" },
+            { index: 1, error: "Batch commit failed" },
+            { index: 2, error: "Batch commit failed" },
+        ],
+    });
+    const result = await client.callTool({
+        name: "import_documents",
+        arguments: { projectId: "p", collectionPath: "posts", documents: [{ id: "a", data: {} }, { id: "b", data: { author: { _ref: "authors" } } }, { data: {} }] },
+    });
+    assert.equal(result.isError, true);
+    const text = result.content[0].text;
+    assert.match(text, /Imported 1 of 3 document\(s\) into "posts"; 2 failed/);
+    assert.match(text, /"b": Value for argument "documentPath"/);
+    assert.match(text, /document #3 \(no id\): Batch commit failed/);
+    await client.close();
+});
+
+test("import_documents still says so when everything was imported", async () => {
+    const client = await importTool({ totalOperations: 1, batchesCompleted: 1, totalBatches: 1, failures: [] });
+    const result = await client.callTool({
+        name: "import_documents",
+        arguments: { projectId: "p", collectionPath: "posts", documents: [{ id: "a", data: {} }] },
+    });
+    assert.equal(result.isError, undefined);
+    assert.match(result.content[0].text, /^Successfully imported 1 document\(s\)/);
+    await client.close();
+});
