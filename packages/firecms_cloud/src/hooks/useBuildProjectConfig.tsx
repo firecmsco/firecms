@@ -4,7 +4,7 @@ import { ReCaptchaEnterpriseProvider, ReCaptchaV3Provider } from "firebase/app-c
 
 import { FirebaseApp } from "firebase/app";
 import { ProjectSubscriptionData, ProjectSubscriptionPlan } from "../types";
-import { UploadFileProps } from "@firecms/core";
+import { resolveLocale, UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
 import { darkenColor, hexColorOr, hexToRgbaWithOpacity } from "../utils";
 import { AppCheckOptions } from "@firecms/firebase";
@@ -27,19 +27,6 @@ function permissionDeniedRetryDelay(deniedSince: number, attempts: number): numb
     return Math.min(1000 * 2 ** attempts, 10000);
 }
 const DEFAULT_SECONDARY_COLOR = "#FF5B79";
-
-/**
- * A stored locale in canonical form, or undefined (the app's own) when `Intl` can't
- * read it: "en_US" made `Intl.DateTimeFormat` throw in every date field.
- */
-function canonicalLocale(value: unknown): string | undefined {
-    if (typeof value !== "string") return undefined;
-    try {
-        return Intl.getCanonicalLocales(value.trim())[0];
-    } catch {
-        return undefined;
-    }
-}
 
 export type TypesenseSearchConfig = {
     enabled: boolean;
@@ -326,7 +313,9 @@ export function useBuildProjectConfig({
                         setCustomizationRevision(currentCustomizationRevision);
                         setCreationType(snapshot.get("creation_type"));
                         setBlocked(snapshot.get("blocked"));
-                        setDefaultLocale(canonicalLocale(snapshot.get("default_locale")));
+                        // A FireCMS locale key ("es", "ptBR"); "en_US" or "pt-BR" read as
+                        // their key, anything unreadable as unset (the app's own locale).
+                        setDefaultLocale(resolveLocale(snapshot.get("default_locale")));
 
                         const updatedSerializedAppCheck = snapshot.get("app_check");
                         if (updatedSerializedAppCheck) {

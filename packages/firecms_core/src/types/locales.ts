@@ -17,6 +17,8 @@ export type Locale =
     "da" |
     "de" |
     "el" |
+    // date-fns's built-in English (en-US), what FireCMS Cloud stores for English
+    "en" |
     "enAU" |
     "enCA" |
     "enGB" |

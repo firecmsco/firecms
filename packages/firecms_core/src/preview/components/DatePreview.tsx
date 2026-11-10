@@ -2,7 +2,7 @@ import React from "react";
 
 import { format } from "date-fns";
 import { useCustomizationController } from "../../hooks";
-import { defaultDateFormat, useDateFnsLocale } from "../../util";
+import { defaultDateFormat, localeToLanguageTag, useDateFnsLocale } from "../../util";
 
 export interface DatePreviewProps {
     date: Date;
@@ -15,6 +15,18 @@ export interface DatePreviewProps {
      * When specified, the date will be displayed in this timezone
      */
     timezone?: string;
+}
+
+/**
+ * The locale is a date-fns key ("enUS", "ptBR"), which `Intl` refuses: it threw here,
+ * and took the field down with it, for every region locale.
+ */
+function dateTimeFormat(locale: string | undefined, options: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
+    try {
+        return new Intl.DateTimeFormat(locale ? localeToLanguageTag(locale) : "en-US", options);
+    } catch {
+        return new Intl.DateTimeFormat("en-US", options);
+    }
 }
 
 /**
@@ -47,7 +59,7 @@ export function DatePreview({
             options.minute = "2-digit";
         }
 
-        const formatter = new Intl.DateTimeFormat(customizationController?.locale ?? "en-US", options);
+        const formatter = dateTimeFormat(customizationController?.locale, options);
         const formattedDate = formatter.format(date);
 
         // Get timezone abbreviation

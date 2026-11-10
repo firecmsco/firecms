@@ -166,3 +166,31 @@ export function useDateFnsLocale(locale?: Locale): DateFnsLocale | undefined {
 
     return locale ? cache.get(locale) : undefined;
 }
+
+/** Every value of {@link Locale}, folded to lower case without separators. */
+const supportedLocales = new Map<string, Locale>(
+    ([...Object.keys(loaders), "en", "fil"] as Locale[]).map((locale) => [locale.toLowerCase(), locale])
+);
+
+/**
+ * The {@link Locale} a stored or typed value stands for, or undefined.
+ *
+ * Locales are date-fns keys ("enUS", "ptBR"), but the same setting is often written as
+ * a language tag ("en-US", "pt_BR"). Both spellings resolve to the key; a region
+ * date-fns doesn't have falls back to its language ("es-MX" to "es").
+ */
+export function resolveLocale(value: unknown): Locale | undefined {
+    if (typeof value !== "string") return undefined;
+    const parts = value.trim().split(/[-_\s]+/).filter(Boolean);
+    if (parts.length === 0) return undefined;
+    return supportedLocales.get(parts.join("").toLowerCase())
+        ?? supportedLocales.get(parts[0].toLowerCase());
+}
+
+/**
+ * The BCP 47 language tag of a locale key, for `Intl`: "ptBR" is "pt-BR" and "srLatn"
+ * is "sr-Latn". `Intl.DateTimeFormat` throws on the key itself.
+ */
+export function localeToLanguageTag(locale: string): string {
+    return locale.replace(/^([a-z]{2,3})([A-Z][A-Za-z]+)$/, "$1-$2");
+}
