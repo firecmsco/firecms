@@ -1,3 +1,27 @@
+## [3.5.2] - 2026-11-10
+
+- **MCP server (`@firecms/mcp-server`)**:
+  - `save_property` with a `namespace` puts the property inside that map property (dotted for a map within a map), and into its `propertiesOrder` when it has one. It used to write a literal dotted key such as `meta.color` at the root of the schema, where the CMS never reads it. A namespace that doesn't exist or isn't a map is an error, and `delete_property` also removes a dotted root key an earlier version wrote.
+  - `update_project_colors` takes only `#rgb` or `#rrggbb`, and sends a short color in long form. A color that wasn't hex crashed the project's CMS on load. `update_default_locale` takes FireCMS locale keys (`enUS`, `ptBR`), sends other spellings as their key (`en_US` as `enUS`) and refuses the rest, naming the closest one. `update_project_name` refuses an empty name.
+  - `list_documents` filters on dates, references and geopoints, given in the form documents are returned in (`{_seconds,_nanoseconds}`, `{_ref}`, `{_lat,_long}`).
+  - `import_documents` with `merge: true` merges into documents that exist and creates the ones that don't, instead of failing the whole batch on the first missing document. When some documents fail to write, it says how many were imported and lists the ones that failed with the reason, instead of reporting success.
+  - The published color pattern accepts uppercase hex in clients that check arguments against the schema.
+  - The hosted transport reports why it refuses a request (HTTP method, headers, protocol version, JSON-RPC methods; never params or credentials) to a new `onError` option of `handleHostedMcpRequest`, by default a warning on stderr.
+- **FireCMS Cloud (`@firecms/cloud`)**:
+  - A stored brand color or default locale the CMS can't read falls back to the default instead of taking the whole CMS down. A short color such as `#07F` is read as `#0077ff`, so the settings page's color picker no longer shows it as black.
+- **Core (`@firecms/core`)**:
+  - Date fields no longer crash with a region locale key (`ptBR`, `enUS`): the key is converted to its language tag for `Intl.DateTimeFormat`. `resolveLocale` is exported, and `"en"` joins the `Locale` type.
+  - Links work in a side panel with unsaved changes. Its guard cancelled every same-host link click; it now keeps only the browser's "Leave site?" prompt, and closing a dirty panel still asks before discarding.
+  - "Create and close" on an entity added from a reference dialog no longer closes the entity being edited under the dialog. `SideDialogsController.close(key)` closes a panel without a URL from under another one.
+  - Find by id offers only the ids opened under the same parent (a subcollection used to share the list across parents), remembers only ids that exist, and ignores an id of only spaces.
+  - A side panel shows its subcollection's path, name and count in its own top bar, and small screens fold the breadcrumbs onto two lines instead of hiding them. `EntityCollectionView` takes an optional `onCountChange`.
+  - Block array fields respect `canAddElements` (#1028), and home page cards respect `disabled` (#1008). The rich text editor's link selector no longer submits the surrounding form, and says when a URL is invalid (#1007).
+- **Firestore explorer (`@firecms/firebase_admin`)**:
+  - Date and reference filters match. They were sent as an ISO string and a plain path, which Firestore never matched against a Timestamp or a DocumentReference.
+- **CLI (`@firecms/cli`)**:
+  - **New `firecms migrate rowy`.** It reads a Rowy project's table settings from `_rowy_` and writes one FireCMS collection per table, the scripts Rowy ran (to port by hand) and a `MIGRATION_REPORT.md`. It reads configuration only, never documents, signs in with your gcloud account, and `--input` reads the configuration from JSON instead.
+  - `firecms deploy` refuses a Cloud build that imports federation chunks it never built, such as `firebase/functions` instead of `@firebase/functions`, and names the imports to change. Such a build used to deploy, then fail with "Error loading remote config".
+
 ## [3.5.1] - 2026-09-30
 
 - **MCP server (`@firecms/mcp-server`)**:
