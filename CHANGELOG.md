@@ -1,3 +1,9 @@
+## [3.5.3] - 2026-11-15
+
+- **All packages: types resolve under `"moduleResolution": "nodenext"` and `"node16"`**:
+  - Named imports from every `@firecms/*` package failed to type-check in a project using `nodenext` or `node16`, the default `tsc --init` writes since TypeScript 5.9: `Module '"@firecms/core"' has no exported member 'buildCollection'`. The published declaration files used relative imports without a file extension, which ESM resolution rejects. They now import `./core/index.js` and `./x.js`, and projects using `bundler` or `node` resolution are unaffected.
+  - The packages build with `nodenext` themselves, so an import without an extension fails our build instead of reaching a release.
+
 ## [3.5.2] - 2026-11-10
 
 - **MCP server (`@firecms/mcp-server`)**:
