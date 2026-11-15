@@ -919,6 +919,9 @@ importers:
         specifier: ^6.28.0
         version: 6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     devDependencies:
+      '@firecms/formex':
+        specifier: workspace:^3.4.0
+        version: link:../formex
       '@testing-library/jest-dom':
         specifier: ^6.9.1
         version: 6.9.1

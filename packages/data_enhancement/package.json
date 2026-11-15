@@ -44,6 +44,7 @@
     ]
   },
   "devDependencies": {
+    "@firecms/formex": "workspace:^3.4.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@types/jest": "^29.5.14",
     "@types/react": "^19.2.3",
