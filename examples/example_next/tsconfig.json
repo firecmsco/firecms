@@ -27,37 +27,37 @@
         "./src/*"
       ],
       "@firecms/core": [
-        "../../packages/firecms_core/src"
+        "../../packages/firecms_core"
       ],
       "@firecms/firebase": [
-        "../../packages/firebase_firecms/src"
+        "../../packages/firebase_firecms"
       ],
       "@firecms/ui": [
-        "../../packages/ui/src"
+        "../../packages/ui"
       ],
       "@firecms/datatalk": [
-        "../../packages/datatalk/src"
+        "../../packages/datatalk"
       ],
       "@firecms/data_enhancement": [
-        "../../packages/data_enhancement/src"
+        "../../packages/data_enhancement"
       ],
       "@firecms/collection_editor": [
-        "../../packages/collection_editor/src"
+        "../../packages/collection_editor"
       ],
       "@firecms/collection_editor_firebase": [
-        "../../packages/collection_editor_firebase/src"
+        "../../packages/collection_editor_firebase"
       ],
       "@firecms/data_import": [
-        "../../packages/data_import/src"
+        "../../packages/data_import"
       ],
       "@firecms/data_export": [
-        "../../packages/data_export/src"
+        "../../packages/data_export"
       ],
       "@firecms/user_management": [
-        "../../packages/user_management/src"
+        "../../packages/user_management"
       ],
       "@firecms/schema_inference": [
-        "../../packages/schema_inference/src"
+        "../../packages/schema_inference"
       ]
     },
     "baseUrl": ".",
