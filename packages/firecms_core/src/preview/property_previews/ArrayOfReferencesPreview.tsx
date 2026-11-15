@@ -1,8 +1,8 @@
-import { ResolvedReferenceProperty } from "../../types";
-import { resolveArrayProperty } from "../../util";
-import { useAuthController, useCustomizationController } from "../../hooks";
-import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
-import { ReferencePreview } from "../components/ReferencePreview";
+import { ResolvedReferenceProperty } from "../../types/index.js";
+import { resolveArrayProperty } from "../../util/index.js";
+import { useAuthController, useCustomizationController } from "../../hooks/index.js";
+import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps.js";
+import { ReferencePreview } from "../components/ReferencePreview.js";
 
 /**
  * @group Preview components

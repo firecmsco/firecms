@@ -3,7 +3,7 @@ import { Button, ContentCopyIcon, Dialog, DialogActions, DialogContent, DialogTi
 import React, { useState } from "react";
 import JSON5 from "json5";
 import { Highlight, themes } from "prism-react-renderer"
-import { camelCase } from "./utils/strings";
+import { camelCase } from "./utils/strings.js";
 import { clone } from "@firecms/formex";
 
 export function GetCodeDialog({

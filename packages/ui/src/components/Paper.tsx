@@ -1,7 +1,7 @@
 import React from "react";
 
-import { paperMixin } from "../styles";
-import { cls } from "../util";
+import { paperMixin } from "../styles.js";
+import { cls } from "../util/index.js";
 
 export function Paper({
                           children,

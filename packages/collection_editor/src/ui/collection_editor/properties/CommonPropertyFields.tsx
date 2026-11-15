@@ -1,6 +1,6 @@
 import { Field, getIn, useFormex } from "@firecms/formex";
 import { DebouncedTextField } from "@firecms/ui";
-import { PropertyWithId } from "../PropertyEditView";
+import { PropertyWithId } from "../PropertyEditView.js";
 import React from "react";
 import { FieldCaption, prettifyIdentifier, toSnakeCase, useTranslation } from "@firecms/core";
 

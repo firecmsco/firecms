@@ -1,5 +1,5 @@
 import React from "react";
-import { cls } from "../../util";
+import { cls } from "../../util/index.js";
 
 export function SelectInputLabel({ children, error }: { children: React.ReactNode, error?: boolean }) {
     return <div className={cls("text-sm  font-medium ml-3.5 mb-1",

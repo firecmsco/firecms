@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { DataSourceDelegate, StorageSource } from "@firecms/core";
-import { MediaAsset, MediaManagerController, ThumbnailSize } from "./types";
+import { MediaAsset, MediaManagerController, ThumbnailSize } from "./types/index.js";
 import Compressor from "compressorjs";
 
 export interface UseMediaManagerControllerProps {

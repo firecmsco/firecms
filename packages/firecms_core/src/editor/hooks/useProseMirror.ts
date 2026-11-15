@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { EditorState, Transaction, Plugin } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
-import { schema } from "../schema";
-import { corePlugins } from "../plugins";
-import { parser } from "../markdown";
-import { nodeViews } from "../nodeViews";
-import { createDropImagePlugin } from "../extensions/Image";
+import { schema } from "../schema.js";
+import { corePlugins } from "../plugins/index.js";
+import { parser } from "../markdown.js";
+import { nodeViews } from "../nodeViews/index.js";
+import { createDropImagePlugin } from "../extensions/Image.js";
 import { columnResizing, tableEditing } from "prosemirror-tables";
 
 const trailingNodePlugin = new Plugin({

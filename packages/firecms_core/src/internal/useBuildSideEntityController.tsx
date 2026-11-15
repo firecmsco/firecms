@@ -9,8 +9,8 @@ import {
     SideDialogPanelProps,
     SideDialogsController,
     SideEntityController
-} from "../types";
-import { getNavigationEntriesFromPath, NavigationViewInternal } from "../util/navigation_from_path";
+} from "../types/index.js";
+import { getNavigationEntriesFromPath, NavigationViewInternal } from "../util/navigation_from_path.js";
 import { useLocation } from "react-router-dom";
 import {
     encodeEntityId,
@@ -18,10 +18,10 @@ import {
     resolveCollection,
     resolveDefaultSelectedView,
     resolvedSelectedEntityView
-} from "../util";
-import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
-import { useCustomizationController, useLargeLayout } from "../hooks";
-import { JSON_TAB_VALUE } from "../core/EntityEditView";
+} from "../util/index.js";
+import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common.js";
+import { useCustomizationController, useLargeLayout } from "../hooks/index.js";
+import { JSON_TAB_VALUE } from "../core/EntityEditView.js";
 
 const NEW_URL_HASH = "new_side";
 const SIDE_URL_HASH = "side";

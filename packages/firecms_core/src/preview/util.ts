@@ -1,5 +1,5 @@
-import { CollectionSize } from "../types";
-import { PreviewSize } from "./PropertyPreviewProps";
+import { CollectionSize } from "../types/index.js";
+import { PreviewSize } from "./PropertyPreviewProps.js";
 
 export const SMALL_THUMBNAIL = 40;
 export const MEDIUM_THUMBNAIL = 100;

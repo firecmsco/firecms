@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState} from "react";
 import { Button, CheckIcon, cls, DeleteIcon, focusedDisabled, Popover, Typography } from "@firecms/ui";
-import { useTranslation } from "../../hooks/useTranslation";
-import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
-import { getMarkAttributes, isMarkActive, setMark, unsetMark } from "../utils/prosemirror-utils";
-import { schema } from "../schema";
+import { useTranslation } from "../../hooks/useTranslation.js";
+import { useProseMirrorContext } from "../hooks/useProseMirrorContext.js";
+import { getMarkAttributes, isMarkActive, setMark, unsetMark } from "../utils/prosemirror-utils.js";
+import { schema } from "../schema.js";
 
 export function isValidUrl(url: string) {
     try {

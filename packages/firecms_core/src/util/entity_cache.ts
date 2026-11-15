@@ -1,6 +1,6 @@
-import { EntityReference, GeoPoint, Vector } from "../types";
-import { isObject, isPlainObject } from "./objects";
-import { encodeEntityId } from "./navigation_utils";
+import { EntityReference, GeoPoint, Vector } from "../types/index.js";
+import { isObject, isPlainObject } from "./objects.js";
+import { encodeEntityId } from "./navigation_utils.js";
 
 /**
  * Key identifying one entity in a cache.

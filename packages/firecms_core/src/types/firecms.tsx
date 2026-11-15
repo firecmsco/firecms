@@ -1,19 +1,19 @@
 import React from "react";
-import { User } from "./user";
-import { AuthController } from "./auth";
-import { DataSourceDelegate } from "./datasource";
-import { EntityCollection, EntityCustomView } from "./collections";
-import { CMSView, NavigationController } from "./navigation";
-import { FireCMSContext } from "./firecms_context";
-import { PropertyConfig } from "./property_config";
-import { Locale } from "./locales";
-import { StorageSource } from "./storage";
-import { EntityLinkBuilder } from "./entity_link_builder";
-import { UserConfigurationPersistence } from "./local_config_persistence";
-import { FireCMSPlugin } from "./plugins";
-import { CMSAnalyticsEvent } from "./analytics";
-import { EntityAction } from "./entity_actions";
-import { InternalUserManagement } from "./internal_user_management";
+import { User } from "./user.js";
+import { AuthController } from "./auth.js";
+import { DataSourceDelegate } from "./datasource.js";
+import { EntityCollection, EntityCustomView } from "./collections.js";
+import { CMSView, NavigationController } from "./navigation.js";
+import { FireCMSContext } from "./firecms_context.js";
+import { PropertyConfig } from "./property_config.js";
+import { Locale } from "./locales.js";
+import { StorageSource } from "./storage.js";
+import { EntityLinkBuilder } from "./entity_link_builder.js";
+import { UserConfigurationPersistence } from "./local_config_persistence.js";
+import { FireCMSPlugin } from "./plugins.js";
+import { CMSAnalyticsEvent } from "./analytics.js";
+import { EntityAction } from "./entity_actions.js";
+import { InternalUserManagement } from "./internal_user_management.js";
 
 /**
  * Use this callback to build entity collections dynamically.

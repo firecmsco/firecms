@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 
 import { Field, useFormex } from "@firecms/formex";
 
-import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
-import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { EnumValuesChip } from "../../preview";
-import { FieldProps, FormContext, PropertyFieldBindingProps, PropertyOrBuilder } from "../../types";
-import { getDefaultValueFor, getIconForProperty, mergeDeep, } from "../../util";
-import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components/index.js";
+import { PropertyFieldBinding } from "../PropertyFieldBinding.js";
+import { EnumValuesChip } from "../../preview/index.js";
+import { FieldProps, FormContext, PropertyFieldBindingProps, PropertyOrBuilder } from "../../types/index.js";
+import { getDefaultValueFor, getIconForProperty, mergeDeep, } from "../../util/index.js";
+import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common.js";
 import { cls, ExpandablePanel, paperMixin, Select, SelectItem, Typography, IconButton, CloseIcon } from "@firecms/ui";
-import { useClearRestoreValue } from "../useClearRestoreValue";
-import { ArrayContainer, ArrayEntryParams } from "../../components";
-import { useTranslation } from "../../hooks/useTranslation";
+import { useClearRestoreValue } from "../useClearRestoreValue.js";
+import { ArrayContainer, ArrayEntryParams } from "../../components/index.js";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as

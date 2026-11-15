@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { CustomizationController } from "../types/customization_controller";
-import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
+import { CustomizationController } from "../types/customization_controller.js";
+import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext.js";
 
 /**
  * Use this hook to retrieve the customization controller.

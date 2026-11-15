@@ -1,4 +1,4 @@
-import { ValuesCountEntry } from "./types";
+import { ValuesCountEntry } from "./types.js";
 
 /**
  * Parse a reference string value which can be in the format:

@@ -1,7 +1,7 @@
-import { buildEntityHistoryPath, buildEntityHistoryPathSegments } from "../history_path";
+import { buildEntityHistoryPath, buildEntityHistoryPathSegments } from "../history_path.js";
 import React, { useEffect, useState } from "react";
 import { Entity, useDataSource, User, useTranslation } from "@firecms/core";
-import { useHistoryController } from "../HistoryControllerProvider";
+import { useHistoryController } from "../HistoryControllerProvider.js";
 
 function getRelativeTimeString(date: Date, t: any): string {
     const now = new Date();

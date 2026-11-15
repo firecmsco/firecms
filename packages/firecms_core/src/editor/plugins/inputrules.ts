@@ -7,7 +7,7 @@ import {
     ellipsis,
     InputRule,
 } from "prosemirror-inputrules";
-import { schema } from "../schema";
+import { schema } from "../schema.js";
 import { MarkType } from "prosemirror-model";
 
 const blockQuoteRule = wrappingInputRule(/^\s*>\s$/, schema.nodes.blockquote);

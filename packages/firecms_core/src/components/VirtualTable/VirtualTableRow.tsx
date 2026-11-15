@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 
 import equal from "react-fast-compare"
 
-import { VirtualTableRowProps } from "./types";
+import { VirtualTableRowProps } from "./types.js";
 import { cls } from "@firecms/ui";
 
 export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(

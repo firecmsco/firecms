@@ -1,13 +1,13 @@
 import * as React from "react";
 
-import { Entity, EntityCollection, EntityReference } from "../../types";
-import { useCustomizationController, useEntityFetch, useNavigationController } from "../../hooks";
-import { PreviewSize } from "../PropertyPreviewProps";
+import { Entity, EntityCollection, EntityReference } from "../../types/index.js";
+import { useCustomizationController, useEntityFetch, useNavigationController } from "../../hooks/index.js";
+import { PreviewSize } from "../PropertyPreviewProps.js";
 import { Skeleton } from "@firecms/ui";
-import { ErrorBoundary, ErrorView } from "../../components";
-import { EntityPreview, EntityPreviewContainer } from "../../components/EntityPreview";
-import { jsonStringifyReplacer } from "../../util/objects";
-import { entityCacheKey } from "../../util/entity_cache";
+import { ErrorBoundary, ErrorView } from "../../components/index.js";
+import { EntityPreview, EntityPreviewContainer } from "../../components/EntityPreview.js";
+import { jsonStringifyReplacer } from "../../util/objects.js";
+import { entityCacheKey } from "../../util/entity_cache.js";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;

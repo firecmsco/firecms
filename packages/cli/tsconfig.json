@@ -5,9 +5,9 @@
       "dom",
       "esnext"
     ],
-    "module": "ESNEXT",
+    "module": "nodenext",
     "target": "ESNEXT",
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "declaration": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

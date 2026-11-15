@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useRef, useState, useEffect } from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-import { cls } from "../util";
-import { defaultBorderMixin } from "../styles";
-import { IconButton } from "./IconButton";
-import { ChevronLeftIcon, ChevronRightIcon } from "../icons";
+import { cls } from "../util/index.js";
+import { defaultBorderMixin } from "../styles.js";
+import { IconButton } from "./IconButton.js";
+import { ChevronLeftIcon, ChevronRightIcon } from "../icons/index.js";
 
 type TabsMode = "primary" | "secondary";
 const TabsModeContext = createContext<TabsMode>("primary");

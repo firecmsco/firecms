@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback } from "react";
-import { cardClickableMixin, cardMixin } from "../styles";
-import { cls } from "../util";
+import { cardClickableMixin, cardMixin } from "../styles.js";
+import { cls } from "../util/index.js";
 
 type CardProps = {
     children: React.ReactNode;

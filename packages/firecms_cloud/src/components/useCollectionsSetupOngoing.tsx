@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCollectionsConfigController } from "@firecms/collection_editor";
-import { isCollectionsSetupOngoing, setupStaleAt } from "../utils/collections_setup_status";
+import { isCollectionsSetupOngoing, setupStaleAt } from "../utils/collections_setup_status.js";
 
 /**
  * Whether this project's collection setup is still running, turning false by

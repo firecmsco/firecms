@@ -5,9 +5,9 @@ import {
     useSnackbarController
 } from "@firecms/core";
 import { ContentCopyIcon, DeleteIcon, IconButton, Menu, MenuItem, MoreVertIcon, SettingsIcon, } from "@firecms/ui";
-import { useCollectionEditorController } from "../useCollectionEditorController";
+import { useCollectionEditorController } from "../useCollectionEditorController.js";
 import { useState } from "react";
-import { useCollectionsConfigController } from "../useCollectionsConfigController";
+import { useCollectionsConfigController } from "../useCollectionsConfigController.js";
 
 export function HomePageEditorCollectionAction({
     path,

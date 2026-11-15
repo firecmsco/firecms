@@ -1,5 +1,5 @@
-import { AuthController, Entity, EntityCollection, Permissions, User } from "../types";
-import { collectionSegmentsFrom, fullPathToCollectionSegments } from "./paths";
+import { AuthController, Entity, EntityCollection, Permissions, User } from "../types/index.js";
+import { collectionSegmentsFrom, fullPathToCollectionSegments } from "./paths.js";
 
 const DEFAULT_PERMISSIONS = {
     read: true,

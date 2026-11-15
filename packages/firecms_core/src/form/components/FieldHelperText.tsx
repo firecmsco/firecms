@@ -1,4 +1,4 @@
-import { Property, ResolvedProperty } from "../../types";
+import { Property, ResolvedProperty } from "../../types/index.js";
 import { IconButton, InfoIcon, Tooltip, Typography } from "@firecms/ui";
 
 /**

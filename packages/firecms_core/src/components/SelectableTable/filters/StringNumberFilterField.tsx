@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { EnumValuesChip } from "../../../preview";
-import { VirtualTableWhereFilterOp } from "../../VirtualTable";
+import { EnumValuesChip } from "../../../preview/index.js";
+import { VirtualTableWhereFilterOp } from "../../VirtualTable/index.js";
 import {
     CloseIcon,
     IconButton,
@@ -10,8 +10,8 @@ import {
     SelectItem,
     TextField
 } from "@firecms/ui";
-import { EnumValueConfig } from "../../../types";
-import { filterValueToText, parseFilterTextInput } from "./filter_text_input";
+import { EnumValueConfig } from "../../../types/index.js";
+import { filterValueToText, parseFilterTextInput } from "./filter_text_input.js";
 
 interface StringNumberFilterFieldProps {
     name: string,

@@ -1,9 +1,9 @@
 import React from "react";
 import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
 
-import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
-import { ValidationPanel } from "./validation/ValidationPanel";
-import { SwitchControl } from "../SwitchControl";
+import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation.js";
+import { ValidationPanel } from "./validation/ValidationPanel.js";
+import { SwitchControl } from "../SwitchControl.js";
 import { useTranslation } from "@firecms/core";
 
 export function BooleanPropertyField({ disabled }: {

@@ -1,4 +1,4 @@
-import { buildExternalSearchController } from "./text_search_controller";
+import { buildExternalSearchController } from "./text_search_controller.js";
 
 /**
  * Utility function to perform a text search in an algolia index,

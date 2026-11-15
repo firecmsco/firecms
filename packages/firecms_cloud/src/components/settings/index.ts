@@ -1,2 +1,2 @@
-export * from "./ProjectSettings"
-export * from "./common"
+export * from "./ProjectSettings.js"
+export * from "./common.js"

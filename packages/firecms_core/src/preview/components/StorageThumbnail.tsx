@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 
-import { renderSkeletonImageThumbnail } from "../property_previews/SkeletonPropertyComponent";
-import { UrlComponentPreview } from "./UrlComponentPreview";
-import { useStorageSource } from "../../hooks";
-import { DownloadConfig, FileType } from "../../types";
-import { PreviewSize } from "../PropertyPreviewProps";
-import { ErrorView } from "../../components";
-import { getPreviewTypeFromUrl, isAbsoluteHttpUrl } from "../../util/urls";
+import { renderSkeletonImageThumbnail } from "../property_previews/SkeletonPropertyComponent.js";
+import { UrlComponentPreview } from "./UrlComponentPreview.js";
+import { useStorageSource } from "../../hooks/index.js";
+import { DownloadConfig, FileType } from "../../types/index.js";
+import { PreviewSize } from "../PropertyPreviewProps.js";
+import { ErrorView } from "../../components/index.js";
+import { getPreviewTypeFromUrl, isAbsoluteHttpUrl } from "../../util/urls.js";
 
 type StorageThumbnailProps = {
     storagePathOrDownloadUrl: string;

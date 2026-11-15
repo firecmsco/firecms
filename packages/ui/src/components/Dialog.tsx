@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { paperMixin } from "../styles";
-import { cls } from "../util";
-import { usePortalContainer } from "../hooks/PortalContainerContext";
+import { paperMixin } from "../styles.js";
+import { cls } from "../util/index.js";
+import { usePortalContainer } from "../hooks/PortalContainerContext.js";
 
 export type DialogProps = {
     open?: boolean;

@@ -1,5 +1,5 @@
 import React from "react";
-import { CurrencyOption, getCurrencyString, ProductPrice } from "../../index";
+import { CurrencyOption, getCurrencyString, ProductPrice } from "../../index.js";
 import { Chip, Select, SelectItem } from "@firecms/ui";
 
 export interface SubscriptionPriceSelectParams {

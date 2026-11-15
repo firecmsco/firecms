@@ -1,10 +1,10 @@
 import React from "react";
-import { PropertyPreviewProps } from "../PropertyPreviewProps";
-import { useInternalUserManagementController } from "../../hooks";
-import { UserDisplay } from "../../components/UserDisplay";
-import { EmptyValue } from "./EmptyValue";
+import { PropertyPreviewProps } from "../PropertyPreviewProps.js";
+import { useInternalUserManagementController } from "../../hooks/index.js";
+import { UserDisplay } from "../../components/UserDisplay.js";
+import { EmptyValue } from "./EmptyValue.js";
 import { Typography } from "@firecms/ui";
-import { useTranslation } from "../../hooks/useTranslation";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 /**
  * Preview component for displaying user information.

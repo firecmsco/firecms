@@ -1,4 +1,4 @@
-import { Entity, FilterValues } from "../../types";
+import { Entity, FilterValues } from "../../types/index.js";
 
 const collectionScrollCache = new Map<string, { scrollOffset: number, data: Entity<any>[] }>();
 

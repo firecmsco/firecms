@@ -1,10 +1,10 @@
 export {
     useDataEnhancementPlugin
-} from "./useDataEnhancementPlugin";
+} from "./useDataEnhancementPlugin.js";
 export type {
     DataEnhancementPluginProps
-} from "./useDataEnhancementPlugin";
+} from "./useDataEnhancementPlugin.js";
 
-export type { SubscriptionMessageProps } from "./types/subscriptions_message_props";
+export type { SubscriptionMessageProps } from "./types/subscriptions_message_props.js";
 
-export * from "./editor/useEditorAIController";
+export * from "./editor/useEditorAIController.js";

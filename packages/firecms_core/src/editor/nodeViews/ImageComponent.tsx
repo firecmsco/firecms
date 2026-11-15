@@ -1,5 +1,5 @@
 import React from "react";
-import { ReactNodeViewProps } from "./ReactNodeView";
+import { ReactNodeViewProps } from "./ReactNodeView.js";
 import { cls, defaultBorderMixin } from "@firecms/ui";
 
 export const ImageComponent: React.FC<ReactNodeViewProps> = ({ node, view, getPos }) => {

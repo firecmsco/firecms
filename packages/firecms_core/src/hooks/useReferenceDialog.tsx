@@ -1,7 +1,7 @@
-import { useSideDialogsController } from "./useSideDialogsController";
-import { ReferenceSelectionInnerProps, ReferenceSelectionTable } from "../components";
+import { useSideDialogsController } from "./useSideDialogsController.js";
+import { ReferenceSelectionInnerProps, ReferenceSelectionTable } from "../components/index.js";
 import { useCallback } from "react";
-import { useNavigationController } from "./useNavigationController";
+import { useNavigationController } from "./useNavigationController.js";
 
 /**
  * This hook is used to open a side dialog that allows the selection

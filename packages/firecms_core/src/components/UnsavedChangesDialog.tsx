@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
-import { useTranslation } from "../hooks/useTranslation";
+import { useTranslation } from "../hooks/useTranslation.js";
 
 export interface UnsavedChangesDialogProps {
     open: boolean;

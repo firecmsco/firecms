@@ -1,6 +1,6 @@
 import { execFile } from "child_process";
 import { promisify } from "util";
-import { RowyConfig, RowyProjectSettings, RowySchema } from "./types";
+import { RowyConfig, RowyProjectSettings, RowySchema } from "./types.js";
 
 const FIRESTORE_API = "https://firestore.googleapis.com/v1";
 

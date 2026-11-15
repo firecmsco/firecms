@@ -15,7 +15,7 @@ import {
     TextField,
     Typography,
 } from "@firecms/ui";
-import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitterIcon } from "./social_icons";
+import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitterIcon } from "./social_icons.js";
 import {
     getAuth,
     getMultiFactorResolver,
@@ -29,7 +29,7 @@ import {
     FirebaseSignInProvider,
     RECAPTCHA_CONTAINER_ID,
     useRecaptcha
-} from "../index";
+} from "../index.js";
 
 /**
  * @category Firebase

@@ -12,9 +12,9 @@ import {
     PropertyOrBuilder,
     ResolvedProperties,
     ResolvedProperty
-} from "../types";
-import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
-import { mergeDeep } from "./objects";
+} from "../types/index.js";
+import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common.js";
+import { mergeDeep } from "./objects.js";
 
 export function isReadOnly(property: Property<any> | ResolvedProperty<any>): boolean {
     if (property.readOnly)

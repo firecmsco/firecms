@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { DataType, FieldProps, GeoPoint } from "../../types";
+import { DataType, FieldProps, GeoPoint } from "../../types/index.js";
 
-import { ArrayContainer } from "../../components";
-import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
+import { ArrayContainer } from "../../components/index.js";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components/index.js";
 import {
     AddIcon,
     ArrowDropDownIcon,
@@ -20,10 +20,10 @@ import {
     TextField,
     Typography
 } from "@firecms/ui";
-import { getDefaultValueForDataType, getIconForProperty } from "../../util";
-import { useCustomizationController } from "../../hooks";
+import { getDefaultValueForDataType, getIconForProperty } from "../../util/index.js";
+import { useCustomizationController } from "../../hooks/index.js";
 import { getIn } from "@firecms/formex";
-import { useTranslation } from "../../hooks/useTranslation";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 type MapEditViewRowState = [number, {
     key: string,

@@ -23,10 +23,10 @@ import {
 } from "@firecms/ui";
 
 import { useFormex } from "@firecms/formex";
-import { LayoutModeSwitch } from "./LayoutModeSwitch";
-import { ViewModeSwitch } from "./ViewModeSwitch";
-import { KanbanConfigSection } from "./KanbanConfigSection";
-import { PropertyFormDialog } from "./PropertyEditView";
+import { LayoutModeSwitch } from "./LayoutModeSwitch.js";
+import { ViewModeSwitch } from "./ViewModeSwitch.js";
+import { KanbanConfigSection } from "./KanbanConfigSection.js";
+import { PropertyFormDialog } from "./PropertyEditView.js";
 
 export function DisplaySettingsForm({
     expandKanban

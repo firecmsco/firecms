@@ -1,6 +1,6 @@
-import { CollectionEditorPermissionsBuilder } from "./config_permissions";
+import { CollectionEditorPermissionsBuilder } from "./config_permissions.js";
 import { Entity, Property } from "@firecms/core";
-import { PersistedCollection } from "./persisted_collection";
+import { PersistedCollection } from "./persisted_collection.js";
 
 /**
  * Controller to open the collection editor dialog.

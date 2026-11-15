@@ -1,7 +1,7 @@
 import React from "react";
 
-import { EnumValuesChip, PropertyPreviewProps } from "../../preview";
-import { enumToObjectEntries } from "../../util";
+import { EnumValuesChip, PropertyPreviewProps } from "../../preview/index.js";
+import { enumToObjectEntries } from "../../util/index.js";
 
 /**
  * @group Preview components

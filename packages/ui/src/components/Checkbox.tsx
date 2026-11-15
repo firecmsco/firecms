@@ -1,8 +1,8 @@
 import React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 
-import { CheckIcon, RemoveIcon } from "../icons";
-import { cls } from "../util";
+import { CheckIcon, RemoveIcon } from "../icons/index.js";
+import { cls } from "../util/index.js";
 
 export interface CheckboxProps {
     checked: boolean;

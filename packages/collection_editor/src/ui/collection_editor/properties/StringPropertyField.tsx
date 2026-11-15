@@ -1,6 +1,6 @@
 import React from "react";
-import { StringPropertyValidation } from "./validation/StringPropertyValidation";
-import { ValidationPanel } from "./validation/ValidationPanel";
+import { StringPropertyValidation } from "./validation/StringPropertyValidation.js";
+import { ValidationPanel } from "./validation/ValidationPanel.js";
 import { getIn, useFormex } from "@firecms/formex";
 
 import { TextField } from "@firecms/ui";

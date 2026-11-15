@@ -1,12 +1,12 @@
 import React from "react";
 
-import { resolveArrayProperty } from "../../util";
-import { ResolvedProperty } from "../../types";
+import { resolveArrayProperty } from "../../util/index.js";
+import { ResolvedProperty } from "../../types/index.js";
 
-import { useAuthController, useCustomizationController } from "../../hooks";
-import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
-import { PropertyPreview } from "../PropertyPreview";
-import { ErrorBoundary } from "../../components";
+import { useAuthController, useCustomizationController } from "../../hooks/index.js";
+import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps.js";
+import { PropertyPreview } from "../PropertyPreview.js";
+import { ErrorBoundary } from "../../components/index.js";
 
 /**
  * @group Preview components

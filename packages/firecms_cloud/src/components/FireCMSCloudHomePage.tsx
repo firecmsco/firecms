@@ -7,9 +7,9 @@ import {
     useNavigationController,
     useTranslation
 } from "@firecms/core";
-import { Paywall, SubscriptionPlanWidget } from "./subscriptions";
-import { ADMIN_VIEWS_CONFIG } from "../utils";
-import { useProjectConfig } from "../hooks";
+import { Paywall, SubscriptionPlanWidget } from "./subscriptions/index.js";
+import { ADMIN_VIEWS_CONFIG } from "../utils/index.js";
+import { useProjectConfig } from "../hooks/index.js";
 import { AutoAwesomeIcon, CenteredView, FirestoreIcon } from "@firecms/ui";
 import { useUserManagement } from "@firecms/user_management";
 

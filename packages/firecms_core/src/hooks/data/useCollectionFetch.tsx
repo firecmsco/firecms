@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Entity, EntityCollection, FilterValues, FireCMSContext, User } from "../../types";
-import { useDataSource } from "./useDataSource";
-import { useNavigationController } from "../useNavigationController";
-import { useFireCMSContext } from "../useFireCMSContext";
+import { Entity, EntityCollection, FilterValues, FireCMSContext, User } from "../../types/index.js";
+import { useDataSource } from "./useDataSource.js";
+import { useNavigationController } from "../useNavigationController.js";
+import { useFireCMSContext } from "../useFireCMSContext.js";
 
 /**
  * @group Hooks and utilities

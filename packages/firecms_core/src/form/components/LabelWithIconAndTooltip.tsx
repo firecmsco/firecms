@@ -1,6 +1,6 @@
 import React from "react";
-import { LabelWithIcon } from "./LabelWithIcon";
-import { PropertyIdCopyTooltip } from "../../components/PropertyIdCopyTooltip";
+import { LabelWithIcon } from "./LabelWithIcon.js";
+import { PropertyIdCopyTooltip } from "../../components/PropertyIdCopyTooltip.js";
 
 interface LabelWithIconAndTooltip {
     icon: React.ReactNode;

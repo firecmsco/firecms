@@ -45,14 +45,14 @@ import {
     useBuildProjectConfig,
     useDelegatedLogin,
     useFirestoreExplorerMode
-} from "./hooks";
+} from "./hooks/index.js";
 
-import { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
-import { ProjectLoadingShell } from "./ProjectLoadingShell";
-import { ApiError, FireCMSAppConfig, FireCMSBackend, FireCMSCloudUser, FireCMSCloudUserWithRoles } from "./types";
-import { RESERVED_GROUPS, resolveCollectionConfigPermissions } from "./utils";
-import { CloudErrorView, FireCMSCloudDrawer, FireCMSCloudLoginView, ProjectSettings } from "./components";
-import { FireCMSCloudHomePage } from "./components/FireCMSCloudHomePage";
+import { FireCMSCloudAppProps } from "./FireCMSCloudAppProps.js";
+import { ProjectLoadingShell } from "./ProjectLoadingShell.js";
+import { ApiError, FireCMSAppConfig, FireCMSBackend, FireCMSCloudUser, FireCMSCloudUserWithRoles } from "./types/index.js";
+import { RESERVED_GROUPS, resolveCollectionConfigPermissions } from "./utils/index.js";
+import { CloudErrorView, FireCMSCloudDrawer, FireCMSCloudLoginView, ProjectSettings } from "./components/index.js";
+import { FireCMSCloudHomePage } from "./components/FireCMSCloudHomePage.js";
 import {
     buildFireCMSSearchController,
     FirebaseAuthController,
@@ -66,7 +66,7 @@ import {
 import { useExportPlugin } from "@firecms/data_export";
 import { useImportPlugin } from "@firecms/data_import";
 import { Button, CenteredView, ErrorIcon, Typography } from "@firecms/ui";
-import { useSaasPlugin } from "./hooks/useSaasPlugin";
+import { useSaasPlugin } from "./hooks/useSaasPlugin.js";
 import {
     resolveUserRolePermissions,
     RolesView,
@@ -76,7 +76,7 @@ import {
 } from "@firecms/user_management";
 import { DataTalkRoutes, useDataTalkPlugin } from "@firecms/datatalk";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
-import { useRootCollectionSuggestions } from "./hooks/useRootCollectionSuggestions";
+import { useRootCollectionSuggestions } from "./hooks/useRootCollectionSuggestions.js";
 import { useFirebaseAdminPlugin, FirestoreExplorer, AdminApiProvider, buildAdminApi } from "@firecms/firebase_admin";
 
 /**

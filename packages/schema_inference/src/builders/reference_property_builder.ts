@@ -1,6 +1,6 @@
-import { InferencePropertyBuilderProps } from "../types";
-import { findCommonInitialStringInPath } from "../strings";
-import { Property } from "../cms_types";
+import { InferencePropertyBuilderProps } from "../types.js";
+import { findCommonInitialStringInPath } from "../strings.js";
+import { Property } from "../cms_types.js";
 
 export function buildReferenceProperty({
                                         totalDocsCount,

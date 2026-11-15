@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { BreadcrumbContext } from "../contexts/BreacrumbsContext";
+import { BreadcrumbContext } from "../contexts/BreacrumbsContext.js";
 
 /**
  * @group Hooks and utilities

@@ -1,5 +1,5 @@
-import { AdminDocument } from "./api/admin_api";
-import { getRefPath } from "./FieldEditor";
+import { AdminDocument } from "./api/admin_api.js";
+import { getRefPath } from "./FieldEditor.js";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { ErrorBoundary } from "../../components";
+import { ErrorBoundary } from "../../components/index.js";
 
 export function FormEntry({
                               propertyKey,

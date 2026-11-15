@@ -2,8 +2,8 @@ import React from "react";
 import { getIn, useFormex } from "@firecms/formex";
 import { FieldCaption, NumberProperty, StringProperty, useTranslation } from "@firecms/core";
 import { Select, SelectItem } from "@firecms/ui";
-import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
-import { ValidationPanel } from "./validation/ValidationPanel";
+import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation.js";
+import { ValidationPanel } from "./validation/ValidationPanel.js";
 
 // Common IANA timezones with human-readable labels
 const TIMEZONES = [

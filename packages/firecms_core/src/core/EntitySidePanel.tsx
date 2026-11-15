@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 
-import { EntityCollection, EntitySidePanelProps } from "../types";
-import { useNavigationController, useSideEntityController, useTranslation } from "../hooks";
+import { EntityCollection, EntitySidePanelProps } from "../types/index.js";
+import { useNavigationController, useSideEntityController, useTranslation } from "../hooks/index.js";
 
-import { ErrorBoundary } from "../components";
-import { EntityEditView, OnUpdateParams } from "./EntityEditView";
-import { useSideDialogContext } from "./SideDialogs";
+import { ErrorBoundary } from "../components/index.js";
+import { EntityEditView, OnUpdateParams } from "./EntityEditView.js";
+import { useSideDialogContext } from "./SideDialogs.js";
 import { CloseIcon, IconButton, OpenInFullIcon } from "@firecms/ui";
 import { useLocation, useNavigate } from "react-router-dom";
-import { entityCacheKey, saveEntityToMemoryCache } from "../util/entity_cache";
+import { entityCacheKey, saveEntityToMemoryCache } from "../util/entity_cache.js";
 
 /**
  * This is the component in charge of rendering the side dialog used

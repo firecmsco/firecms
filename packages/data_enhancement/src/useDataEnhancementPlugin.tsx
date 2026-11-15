@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 
 import { EntityCollection, FireCMSPlugin, PluginFieldBuilderParams, useAuthController, User } from "@firecms/core";
-import { DataEnhancementControllerProvider } from "./components/DataEnhancementControllerProvider";
-import { fieldBuilder } from "./components/field_builder";
-import { FormEnhanceAction } from "./components/FormEnhanceAction";
-import { SubscriptionMessageProps } from "./types/subscriptions_message_props";
-import { dataEnhancementTranslationsEn } from "./locales/en";
+import { DataEnhancementControllerProvider } from "./components/DataEnhancementControllerProvider.js";
+import { fieldBuilder } from "./components/field_builder.js";
+import { FormEnhanceAction } from "./components/FormEnhanceAction.js";
+import { SubscriptionMessageProps } from "./types/subscriptions_message_props.js";
+import { dataEnhancementTranslationsEn } from "./locales/en.js";
 
 const DEFAULT_API_KEY = "fcms-U9jdDii0xXWSDC34asfrf54lbkFJBfKfRWcEDEwdc4V5wDWEDF";
 
@@ -88,12 +88,12 @@ export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): Fi
         // Seven languages of strings in every plugin bundle is dead weight for
         // the six nobody is reading.
             en: dataEnhancementTranslationsEn,
-            es: () => import("./locales/es").then((m) => m.dataEnhancementTranslationsEs),
-            de: () => import("./locales/de").then((m) => m.dataEnhancementTranslationsDe),
-            fr: () => import("./locales/fr").then((m) => m.dataEnhancementTranslationsFr),
-            it: () => import("./locales/it").then((m) => m.dataEnhancementTranslationsIt),
-            hi: () => import("./locales/hi").then((m) => m.dataEnhancementTranslationsHi),
-            pt: () => import("./locales/pt").then((m) => m.dataEnhancementTranslationsPt)
+            es: () => import("./locales/es.js").then((m) => m.dataEnhancementTranslationsEs),
+            de: () => import("./locales/de.js").then((m) => m.dataEnhancementTranslationsDe),
+            fr: () => import("./locales/fr.js").then((m) => m.dataEnhancementTranslationsFr),
+            it: () => import("./locales/it.js").then((m) => m.dataEnhancementTranslationsIt),
+            hi: () => import("./locales/hi.js").then((m) => m.dataEnhancementTranslationsHi),
+            pt: () => import("./locales/pt.js").then((m) => m.dataEnhancementTranslationsPt)
         }
         // loading: configController.loading,
     };

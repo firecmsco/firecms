@@ -1,4 +1,4 @@
-import { ConversionResult, Finding, ScriptFile } from "./convert";
+import { ConversionResult, Finding, ScriptFile } from "./convert.js";
 
 export type MigrationTarget = "cloud" | "self-hosted";
 

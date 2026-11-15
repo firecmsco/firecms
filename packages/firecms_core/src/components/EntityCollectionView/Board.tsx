@@ -11,8 +11,8 @@ import {
     useSensors
 } from "@dnd-kit/core";
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from "@dnd-kit/sortable";
-import { BoardColumn } from "./BoardColumn";
-import { BoardItem, BoardItemMap, BoardItemViewProps, BoardProps } from "./board_types";
+import { BoardColumn } from "./BoardColumn.js";
+import { BoardItem, BoardItemMap, BoardItemViewProps, BoardProps } from "./board_types.js";
 import { cls } from "@firecms/ui";
 
 export function Board<M extends Record<string, any>, COLUMN extends string>({

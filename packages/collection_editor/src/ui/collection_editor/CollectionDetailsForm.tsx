@@ -19,11 +19,11 @@ import {
 } from "@firecms/ui";
 
 import { Field, getIn, useFormex } from "@firecms/formex";
-import { useCollectionEditorController } from "../../useCollectionEditorController";
-import { LayoutModeSwitch } from "./LayoutModeSwitch";
-import { ViewModeSwitch } from "./ViewModeSwitch";
-import { KanbanConfigSection } from "./KanbanConfigSection";
-import { PropertyFormDialog } from "./PropertyEditView";
+import { useCollectionEditorController } from "../../useCollectionEditorController.js";
+import { LayoutModeSwitch } from "./LayoutModeSwitch.js";
+import { ViewModeSwitch } from "./ViewModeSwitch.js";
+import { KanbanConfigSection } from "./KanbanConfigSection.js";
+import { PropertyFormDialog } from "./PropertyEditView.js";
 
 export function CollectionDetailsForm({
     isNewCollection,

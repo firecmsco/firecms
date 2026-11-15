@@ -15,10 +15,10 @@ import {
     TextField,
     Typography,
 } from "@firecms/ui";
-import { useFireCMSBackend, useProjectConfig } from "../../hooks";
-import { ProjectSubscriptionPlans } from "../subscriptions";
-import { SecurityRulesInstructions } from "../SecurityRulesInstructions";
-import { AppCheckSettingsView } from "./AppCheckSettingsView";
+import { useFireCMSBackend, useProjectConfig } from "../../hooks/index.js";
+import { ProjectSubscriptionPlans } from "../subscriptions/index.js";
+import { SecurityRulesInstructions } from "../SecurityRulesInstructions.js";
+import { AppCheckSettingsView } from "./AppCheckSettingsView.js";
 
 export function ProjectSettings() {
 

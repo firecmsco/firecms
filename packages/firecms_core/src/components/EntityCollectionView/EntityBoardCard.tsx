@@ -1,16 +1,16 @@
 import React, { memo, useCallback, useMemo } from "react";
-import { Entity, EntityCollection, ResolvedProperty } from "../../types";
+import { Entity, EntityCollection, ResolvedProperty } from "../../types/index.js";
 import {
     getEntityImagePreviewPropertyKey,
     getEntityTitlePropertyKey,
     getValueInPath,
     IconForView,
     resolveCollection
-} from "../../util";
+} from "../../util/index.js";
 import { Checkbox, cls, defaultBorderMixin } from "@firecms/ui";
-import { PropertyPreview } from "../../preview";
-import { useAuthController, useCustomizationController } from "../../hooks";
-import { BoardItemViewProps } from "./board_types";
+import { PropertyPreview } from "../../preview/index.js";
+import { useAuthController, useCustomizationController } from "../../hooks/index.js";
+import { BoardItemViewProps } from "./board_types.js";
 
 export type EntityBoardCardProps<M extends Record<string, any> = any> = BoardItemViewProps<M> & {
     collection: EntityCollection<M>;

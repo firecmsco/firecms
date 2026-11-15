@@ -24,8 +24,8 @@ import {
     isPropertyBuilder,
     useTranslation
 } from "@firecms/core";
-import { PropertyWithId } from "../../PropertyEditView";
-import { getPropertyPaths } from "./property_paths";
+import { PropertyWithId } from "../../PropertyEditView.js";
+import { getPropertyPaths } from "./property_paths.js";
 
 /**
  * Condition types that can be configured

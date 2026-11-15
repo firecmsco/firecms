@@ -5,9 +5,9 @@ import { describe, expect, it } from "@jest/globals";
 import React from "react";
 import { render } from "@testing-library/react";
 
-import { DatePreview } from "../DatePreview";
-import { CustomizationControllerContext } from "../../../contexts/CustomizationControllerContext";
-import { CustomizationController } from "../../../types";
+import { DatePreview } from "../DatePreview.js";
+import { CustomizationControllerContext } from "../../../contexts/CustomizationControllerContext.js";
+import { CustomizationController } from "../../../types/index.js";
 
 // FireCMS locales are date-fns keys. Intl.DateTimeFormat threw on a region key such as
 // "enUS", so a date with a timezone took its whole field down for those projects.

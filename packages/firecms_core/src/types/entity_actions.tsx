@@ -1,10 +1,10 @@
 import React from "react";
-import { FireCMSContext } from "./firecms_context";
-import { Entity } from "./entities";
-import { EntityCollection, SelectionController } from "./collections";
-import { User } from "./user";
-import { SideEntityController } from "./side_entity_controller";
-import { FormContext } from "./fields";
+import { FireCMSContext } from "./firecms_context.js";
+import { Entity } from "./entities.js";
+import { EntityCollection, SelectionController } from "./collections.js";
+import { User } from "./user.js";
+import { SideEntityController } from "./side_entity_controller.js";
+import { FormContext } from "./fields.js";
 
 /**
  * An entity action is a custom action that can be performed on an entity.

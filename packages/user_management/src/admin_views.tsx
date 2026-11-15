@@ -1,5 +1,5 @@
 import { CMSView } from "@firecms/core";
-import { RolesView, UsersView } from "./components";
+import { RolesView, UsersView } from "./components/index.js";
 export const userManagementAdminViews: CMSView[] = [
     {
         path: "users",

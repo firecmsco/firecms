@@ -13,11 +13,11 @@ import {
 } from "@firecms/ui";
 
 import { useFormex } from "@firecms/formex";
-import { CollectionsConfigController } from "../../types/config_controller";
-import { CollectionInference } from "../../types/collection_inference";
-import { SubcollectionsEditTab } from "./SubcollectionsEditTab";
-import { EntityActionsEditTab } from "./EntityActionsEditTab";
-import { PersistedCollection } from "../../types/persisted_collection";
+import { CollectionsConfigController } from "../../types/config_controller.js";
+import { CollectionInference } from "../../types/collection_inference.js";
+import { SubcollectionsEditTab } from "./SubcollectionsEditTab.js";
+import { EntityActionsEditTab } from "./EntityActionsEditTab.js";
+import { PersistedCollection } from "../../types/persisted_collection.js";
 
 export function ExtendSettingsForm({
     collection,

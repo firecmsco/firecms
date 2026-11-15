@@ -1,3 +1,3 @@
-export * from "./permissions";
-export * from "./local_storage";
-export * from "./colors";
+export * from "./permissions.js";
+export * from "./local_storage.js";
+export * from "./colors.js";

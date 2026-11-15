@@ -10,8 +10,8 @@ import {
     DialogActions,
     Dialog,
 } from "@firecms/ui";
-import { useAdminApi } from "./api/AdminApiProvider";
-import { EditableFieldsView, defaultValueForType, FieldType } from "./FieldEditor";
+import { useAdminApi } from "./api/AdminApiProvider.js";
+import { EditableFieldsView, defaultValueForType, FieldType } from "./FieldEditor.js";
 
 export function AddDocumentDialog({
     open,

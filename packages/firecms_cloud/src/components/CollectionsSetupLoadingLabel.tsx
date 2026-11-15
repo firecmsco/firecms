@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Alert, CircularProgress, CloseIcon, IconButton } from "@firecms/ui";
 import { useCollectionsConfigController } from "@firecms/collection_editor";
-import { useCollectionsSetupOngoing } from "./useCollectionsSetupOngoing";
+import { useCollectionsSetupOngoing } from "./useCollectionsSetupOngoing.js";
 
 const ERROR_EXPIRY_MS = 30 * 60 * 1000; // 30 minutes
 

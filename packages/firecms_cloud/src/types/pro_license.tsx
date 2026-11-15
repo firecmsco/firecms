@@ -1,4 +1,4 @@
-import { ProLicensePriceType, SubscriptionStatus } from "../index";
+import { ProLicensePriceType, SubscriptionStatus } from "../index.js";
 
 export type ProLicense = {
     id: string;

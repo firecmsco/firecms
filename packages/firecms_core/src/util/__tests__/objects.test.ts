@@ -1,4 +1,4 @@
-import { removeFunctions, removeUndefined, isPlainObject } from "../objects";
+import { removeFunctions, removeUndefined, isPlainObject } from "../objects.js";
 
 describe("objects utilities", () => {
 

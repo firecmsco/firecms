@@ -1,10 +1,10 @@
 import React from "react";
 import { AIIcon, ConfirmationDialog, useSnackbarController, useTranslation } from "@firecms/core";
 import { LoadingButton, Typography } from "@firecms/ui";
-import { InitialCollectionsSetupDiagnostics, ProjectsApi, RootCollectionInfo } from "../api/projects";
-import { CollectionSetupSelectionDialog } from "./CollectionSetupSelectionDialog";
-import { useCollectionSetupErrors } from "./useCollectionSetupErrors";
-import { useCollectionsSetupOngoing } from "./useCollectionsSetupOngoing";
+import { InitialCollectionsSetupDiagnostics, ProjectsApi, RootCollectionInfo } from "../api/projects.js";
+import { CollectionSetupSelectionDialog } from "./CollectionSetupSelectionDialog.js";
+import { useCollectionSetupErrors } from "./useCollectionSetupErrors.js";
+import { useCollectionsSetupOngoing } from "./useCollectionsSetupOngoing.js";
 
 export function AutoSetUpCollectionsButton({
     projectsApi,

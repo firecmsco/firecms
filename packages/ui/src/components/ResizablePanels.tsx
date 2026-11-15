@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 
 export type ResizablePanelsProps = {
     firstPanel: React.ReactNode;

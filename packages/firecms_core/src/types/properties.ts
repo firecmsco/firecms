@@ -1,11 +1,11 @@
 import React from "react";
-import { FieldProps } from "./fields";
-import { PropertyPreviewProps } from "../preview";
-import { EntityReference, EntityValues, GeoPoint, Vector } from "./entities";
-import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities";
-import { FilterValues } from "./collections";
+import { FieldProps } from "./fields.js";
+import { PropertyPreviewProps } from "../preview/index.js";
+import { EntityReference, EntityValues, GeoPoint, Vector } from "./entities.js";
+import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities.js";
+import { FilterValues } from "./collections.js";
 import { ChipColorKey, ChipColorScheme } from "@firecms/ui";
-import { AuthController } from "./auth";
+import { AuthController } from "./auth.js";
 
 /**
  * @group Entity properties

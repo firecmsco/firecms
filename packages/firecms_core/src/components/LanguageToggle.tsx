@@ -1,6 +1,6 @@
 import React from "react";
 import { CheckIcon, IconButton, Menu, MenuItem, TranslateIcon, Typography } from "@firecms/ui";
-import { useTranslation } from "../hooks";
+import { useTranslation } from "../hooks/index.js";
 
 export function LanguageToggle() {
     const { i18n } = useTranslation();

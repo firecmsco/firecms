@@ -3,13 +3,13 @@ import { doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
 import { ReCaptchaEnterpriseProvider, ReCaptchaV3Provider } from "firebase/app-check";
 
 import { FirebaseApp } from "firebase/app";
-import { ProjectSubscriptionData, ProjectSubscriptionPlan } from "../types";
+import { ProjectSubscriptionData, ProjectSubscriptionPlan } from "../types/index.js";
 import { resolveLocale, UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
-import { darkenColor, hexColorOr, hexToRgbaWithOpacity } from "../utils";
+import { darkenColor, hexColorOr, hexToRgbaWithOpacity } from "../utils/index.js";
 import { AppCheckOptions } from "@firecms/firebase";
-import { ProjectsApi } from "../api/projects";
-import { useRetryStalledFirebaseConfig } from "./useRetryStalledFirebaseConfig";
+import { ProjectsApi } from "../api/projects.js";
+import { useRetryStalledFirebaseConfig } from "./useRetryStalledFirebaseConfig.js";
 
 const DEFAULT_PRIMARY_COLOR = "#0070F4";
 

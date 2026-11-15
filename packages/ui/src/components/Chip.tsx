@@ -1,5 +1,5 @@
 import React from "react";
-import { CHIP_COLORS, cls, getColorSchemeForKey } from "../util";
+import { CHIP_COLORS, cls, getColorSchemeForKey } from "../util/index.js";
 
 export type ChipColorScheme = {
     color: string;

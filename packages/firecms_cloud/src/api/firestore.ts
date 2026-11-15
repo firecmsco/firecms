@@ -1,5 +1,5 @@
 import { DocumentReference, getDoc, QueryDocumentSnapshot } from "firebase/firestore";
-import { Product, ProductPrice, Subscription } from "../types/subscriptions";
+import { Product, ProductPrice, Subscription } from "../types/subscriptions.js";
 
 export async function convertDocToSubscription(doc: QueryDocumentSnapshot) {
     const [price, product] = await Promise.all([fetchPrice(doc.data().price), fetchProduct(doc.data().product)]);

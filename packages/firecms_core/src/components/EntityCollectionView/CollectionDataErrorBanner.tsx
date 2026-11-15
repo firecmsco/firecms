@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography, IconButton, RefreshIcon, Button, Tooltip } from "@firecms/ui";
-import { useTranslation } from "../../hooks";
+import { useTranslation } from "../../hooks/index.js";
 
 export function CollectionDataErrorBanner({ error, onRetry }: { error?: Error, onRetry?: () => void }) {
     const { t } = useTranslation();

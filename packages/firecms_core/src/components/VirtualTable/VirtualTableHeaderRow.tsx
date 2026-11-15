@@ -1,9 +1,9 @@
 import React, { createRef, useCallback, useEffect, useMemo, useState } from "react";
 
-import { VirtualTableColumn, VirtualTableWhereFilterOp } from "./VirtualTableProps";
-import { ErrorBoundary } from "../ErrorBoundary";
-import { VirtualTableHeader } from "./VirtualTableHeader";
-import { VirtualTableContextProps } from "./types";
+import { VirtualTableColumn, VirtualTableWhereFilterOp } from "./VirtualTableProps.js";
+import { ErrorBoundary } from "../ErrorBoundary.js";
+import { VirtualTableHeader } from "./VirtualTableHeader.js";
+import { VirtualTableContextProps } from "./types.js";
 import { cls, defaultBorderMixin } from "@firecms/ui";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";

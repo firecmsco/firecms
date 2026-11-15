@@ -1,12 +1,12 @@
 import React from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
-import { CMSView } from "../types";
-import { DefaultHomePage, ErrorBoundary, NotFoundPage } from "../components";
-import { useNavigationController } from "../hooks";
-import { FireCMSRoute } from "../routes/FireCMSRoute";
-import { CustomCMSRoute } from "../routes/CustomCMSRoute";
-import { HomePageRoute } from "../routes/HomePageRoute";
+import { CMSView } from "../types/index.js";
+import { DefaultHomePage, ErrorBoundary, NotFoundPage } from "../components/index.js";
+import { useNavigationController } from "../hooks/index.js";
+import { FireCMSRoute } from "../routes/FireCMSRoute.js";
+import { CustomCMSRoute } from "../routes/CustomCMSRoute.js";
+import { HomePageRoute } from "../routes/HomePageRoute.js";
 
 /**
  * @group Components

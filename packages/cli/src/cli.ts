@@ -1,9 +1,9 @@
 import chalk from "chalk";
-import { deploy } from "./commands/deploy";
-import { getCurrentUser, login, logout } from "./commands/auth";
+import { deploy } from "./commands/deploy.js";
+import { getCurrentUser, login, logout } from "./commands/auth.js";
 import arg from "arg";
-import { createFireCMSApp } from "./commands/init";
-import { migrateRowy } from "./commands/migrate_rowy";
+import { createFireCMSApp } from "./commands/init.js";
+import { migrateRowy } from "./commands/migrate_rowy/index.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";

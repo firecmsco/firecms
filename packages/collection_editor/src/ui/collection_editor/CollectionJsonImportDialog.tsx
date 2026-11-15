@@ -10,7 +10,7 @@ import {
     Typography
 } from "@firecms/ui";
 import { EntityCollection } from "@firecms/core";
-import { validateCollectionJson, CollectionValidationError } from "../../utils/validateCollectionJson";
+import { validateCollectionJson, CollectionValidationError } from "../../utils/validateCollectionJson.js";
 
 const EXAMPLE_JSON = `{
   "id": "products",

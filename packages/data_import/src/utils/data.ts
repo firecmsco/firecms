@@ -13,9 +13,9 @@ import {
     ResolvedProperty,
     resolveProperty
 } from "@firecms/core";
-import { unflattenObject } from "./transforms";
-import { isPrototypePollutingKey } from "./prototype_keys";
-import { parseBooleanText, parseDateText, parseNumberText } from "./text_values";
+import { unflattenObject } from "./transforms.js";
+import { isPrototypePollutingKey } from "./prototype_keys.js";
+import { parseBooleanText, parseDateText, parseNumberText } from "./text_values.js";
 import { getIn } from "@firecms/formex";
 import { inferTypeFromValue } from "@firecms/schema_inference";
 

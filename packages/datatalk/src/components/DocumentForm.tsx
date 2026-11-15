@@ -11,7 +11,7 @@
 //     PluginFormActionProps,
 //     PropertyFieldBindingProps,
 //     ResolvedEntityCollection
-// } from "../types";
+// } from "../types.js";
 // import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
 // import { PropertyFieldBinding } from "./PropertyFieldBinding";
 // import { CustomFieldValidator, getYupEntitySchema } from "./validation";

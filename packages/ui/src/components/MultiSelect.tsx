@@ -3,11 +3,11 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as React from "react";
 import { ChangeEvent, Children, useEffect, useState } from "react";
 import { Command as CommandPrimitive } from "cmdk";
-import { cls } from "../util";
-import { CheckIcon, CloseIcon, KeyboardArrowDownIcon } from "../icons";
-import { Separator } from "./Separator";
-import { Chip } from "./Chip";
-import { SelectInputLabel } from "./common/SelectInputLabel";
+import { cls } from "../util/index.js";
+import { CheckIcon, CloseIcon, KeyboardArrowDownIcon } from "../icons/index.js";
+import { Separator } from "./Separator.js";
+import { Chip } from "./Chip.js";
+import { SelectInputLabel } from "./common/SelectInputLabel.js";
 import {
     defaultBorderMixin,
     fieldBackgroundDisabledMixin,
@@ -15,9 +15,9 @@ import {
     fieldBackgroundInvisibleMixin,
     fieldBackgroundMixin,
     focusedDisabled
-} from "../styles";
-import { useInjectStyles } from "../hooks";
-import { usePortalContainer } from "../hooks/PortalContainerContext";
+} from "../styles.js";
+import { useInjectStyles } from "../hooks/index.js";
+import { usePortalContainer } from "../hooks/PortalContainerContext.js";
 
 export type MultiSelectValue = string | number | boolean;
 

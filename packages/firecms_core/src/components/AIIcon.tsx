@@ -1,6 +1,6 @@
 import React from "react";
 import { AutoAwesomeIcon } from "@firecms/ui";
-import { useTranslation } from "../hooks";
+import { useTranslation } from "../hooks/index.js";
 
 export interface AIIconProps {
     size?: "smallest" | "small" | "medium" | "large";

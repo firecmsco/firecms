@@ -12,9 +12,9 @@ import {
     setDoc
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { FireCMSBackend, FireCMSCloudUserWithRoles } from "../types";
+import { FireCMSBackend, FireCMSCloudUserWithRoles } from "../types/index.js";
 import { CMSType, PermissionsBuilder, Role, User } from "@firecms/core";
-import { ProjectsApi } from "../api/projects";
+import { ProjectsApi } from "../api/projects.js";
 import { resolveUserRolePermissions, UserManagement } from "@firecms/user_management";
 
 type UserWithRoleIds = User & { roles: string[], firebase_uid: string };

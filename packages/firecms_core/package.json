@@ -159,7 +159,15 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "ts-jest"
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "tsconfig": {
+            "module": "commonjs",
+            "moduleResolution": "node"
+          }
+        }
+      ]
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
     "testPathIgnorePatterns": [
@@ -179,6 +187,7 @@
       "<rootDir>/test/setup_jsdom.js"
     ],
     "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1",
       "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
     }
   }

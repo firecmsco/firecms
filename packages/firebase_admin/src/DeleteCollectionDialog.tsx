@@ -9,8 +9,8 @@ import {
     DeleteIcon,
 } from "@firecms/ui";
 import { useSnackbarController } from "@firecms/core";
-import { useAdminApi, useBackendFirestore } from "./api/AdminApiProvider";
-import { useAdminJob } from "./hooks/useAdminJob";
+import { useAdminApi, useBackendFirestore } from "./api/AdminApiProvider.js";
+import { useAdminJob } from "./hooks/useAdminJob.js";
 
 export function AdminJobSnackbarTracker({
     jobId,

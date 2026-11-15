@@ -1,2 +1,2 @@
-export { VirtualTable } from "./VirtualTable";
-export * from "./VirtualTableProps";
+export { VirtualTable } from "./VirtualTable.js";
+export * from "./VirtualTableProps.js";

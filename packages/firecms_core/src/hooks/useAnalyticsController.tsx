@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { AnalyticsController } from "../types";
-import { AnalyticsContext } from "../contexts/AnalyticsContext";
+import { AnalyticsController } from "../types/index.js";
+import { AnalyticsContext } from "../contexts/AnalyticsContext.js";
 
 /**
  * @group Hooks and utilities

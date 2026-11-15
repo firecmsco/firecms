@@ -4,7 +4,7 @@ import {
     enhanceDataAPIStream,
     fetchEntityPromptSuggestion,
     isPaymentRequiredError
-} from "../api";
+} from "../api.js";
 
 const SEPARATOR = "&$# ";
 

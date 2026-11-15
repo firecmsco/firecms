@@ -23,11 +23,11 @@ import {
     Tooltip,
     Typography,
 } from "@firecms/ui";
-import { CollectionEditorDialog } from "./CollectionEditorDialog";
-import { CollectionsConfigController } from "../../types/config_controller";
-import { PersistedCollection } from "../../types/persisted_collection";
-import { CollectionInference } from "../../types/collection_inference";
-import { EntityCustomViewsSelectDialog } from "./EntityCustomViewsSelectDialog";
+import { CollectionEditorDialog } from "./CollectionEditorDialog.js";
+import { CollectionsConfigController } from "../../types/config_controller.js";
+import { PersistedCollection } from "../../types/persisted_collection.js";
+import { CollectionInference } from "../../types/collection_inference.js";
+import { EntityCustomViewsSelectDialog } from "./EntityCustomViewsSelectDialog.js";
 import { useFormex } from "@firecms/formex";
 
 export function SubcollectionsEditTab({

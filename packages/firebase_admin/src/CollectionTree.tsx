@@ -11,7 +11,7 @@ import {
     CloseIcon,
     DeleteIcon,
 } from "@firecms/ui";
-import { useAdminApi } from "./api/AdminApiProvider";
+import { useAdminApi } from "./api/AdminApiProvider.js";
 
 // Deterministic skeleton widths — avoids Math.random() which causes layout shifts on re-render
 const SKELETON_WIDTHS = [65, 82, 55, 74, 90, 48];

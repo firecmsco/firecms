@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@jest/globals";
-import { filterValueToText, parseFilterTextInput } from "./filter_text_input";
+import { filterValueToText, parseFilterTextInput } from "./filter_text_input.js";
 
 /**
  * Type `text` one character at a time, the way the filter field does, and keep track

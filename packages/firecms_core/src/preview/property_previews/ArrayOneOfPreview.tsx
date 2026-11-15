@@ -1,12 +1,12 @@
 import React from "react";
-import { resolveArrayProperty } from "../../util";
-import { ResolvedProperty } from "../../types";
-import { useAuthController, useCustomizationController } from "../../hooks";
-import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
-import { PropertyPreview } from "../PropertyPreview";
+import { resolveArrayProperty } from "../../util/index.js";
+import { ResolvedProperty } from "../../types/index.js";
+import { useAuthController, useCustomizationController } from "../../hooks/index.js";
+import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps.js";
+import { PropertyPreview } from "../PropertyPreview.js";
 import { cls, defaultBorderMixin } from "@firecms/ui";
-import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
-import { ErrorBoundary } from "../../components";
+import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common.js";
+import { ErrorBoundary } from "../../components/index.js";
 
 /**
  * @group Preview components

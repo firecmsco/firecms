@@ -14,10 +14,10 @@ import {
     Icon
 } from "@firecms/ui";
 import { useTranslation } from "@firecms/core";
-import { useMediaManager } from "../MediaManagerProvider";
-import { MediaAssetCard } from "./MediaAssetCard";
-import { MediaAssetDetails } from "./MediaAssetDetails";
-import { MediaUploadDialog } from "./MediaUploadDialog";
+import { useMediaManager } from "../MediaManagerProvider.js";
+import { MediaAssetCard } from "./MediaAssetCard.js";
+import { MediaAssetDetails } from "./MediaAssetDetails.js";
+import { MediaUploadDialog } from "./MediaUploadDialog.js";
 
 export interface MediaLibraryViewProps {
     maxFileSize?: number;

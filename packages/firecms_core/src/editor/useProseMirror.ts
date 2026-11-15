@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { EditorState, Transaction, Plugin } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
-import { schema } from "./schema";
-import { markdownParser, markdownSerializer } from "./markdown";
-import { removeClassesFromJson } from "./utils/remove_classes";
+import { schema } from "./schema.js";
+import { markdownParser, markdownSerializer } from "./markdown.js";
+import { removeClassesFromJson } from "./utils/remove_classes.js";
 import { DOMParser as ProseMirrorDOMParser, DOMSerializer } from "prosemirror-model";
 
 export interface UseProseMirrorOptions {

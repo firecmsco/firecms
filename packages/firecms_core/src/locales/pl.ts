@@ -1,4 +1,4 @@
-import { FireCMSTranslations } from "../types/translations";
+import { FireCMSTranslations } from "../types/translations.js";
 
 export const pl: FireCMSTranslations = {
     // ─── Form actions ────────────────────────────────────────────

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 
 export interface AlertProps {
     children: React.ReactNode;

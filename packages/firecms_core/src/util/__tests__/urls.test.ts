@@ -1,4 +1,4 @@
-import { getFileExtensionFromUrl, getPreviewTypeFromUrl, isAbsoluteHttpUrl } from "../urls";
+import { getFileExtensionFromUrl, getPreviewTypeFromUrl, isAbsoluteHttpUrl } from "../urls.js";
 
 describe("url utilities", () => {
 

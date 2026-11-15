@@ -4,7 +4,7 @@ import {
     Entity,
     EntityCollection,
     ResolvedProperty
-} from "../../types";
+} from "../../types/index.js";
 import {
     getEntityImagePreviewPropertyKey,
     getEntityPreviewKeys,
@@ -12,7 +12,7 @@ import {
     getValueInPath,
     IconForView,
     resolveCollection
-} from "../../util";
+} from "../../util/index.js";
 import {
     Card,
     Checkbox,
@@ -23,14 +23,14 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
+import { PropertyPreview, SkeletonPropertyComponent } from "../../preview/index.js";
 import {
     useAuthController,
     useCustomizationController,
     useNavigationController,
     useSideEntityController
-} from "../../hooks";
-import { useAnalyticsController } from "../../hooks/useAnalyticsController";
+} from "../../hooks/index.js";
+import { useAnalyticsController } from "../../hooks/useAnalyticsController.js";
 
 export type EntityCardProps<M extends Record<string, any> = any> = {
     entity: Entity<M>;

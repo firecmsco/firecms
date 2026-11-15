@@ -1,7 +1,7 @@
 import { OAuthCredential, User as FirebaseUser } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
-import { ProjectsApi } from "../api/projects";
-import { FireCMSProject } from "./projects";
+import { ProjectsApi } from "../api/projects.js";
+import { FireCMSProject } from "./projects.js";
 
 export type FireCMSBackend = {
 

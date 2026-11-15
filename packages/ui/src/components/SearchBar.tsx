@@ -1,11 +1,11 @@
 "use client";
 import React, { useCallback, useState } from "react";
 
-import { defaultBorderMixin } from "../styles";
-import { CircularProgress, IconButton } from "./index";
-import { CloseIcon, SearchIcon } from "../icons";
-import { cls } from "../util";
-import { useDebounceValue } from "../hooks";
+import { defaultBorderMixin } from "../styles.js";
+import { CircularProgress, IconButton } from "./index.js";
+import { CloseIcon, SearchIcon } from "../icons/index.js";
+import { cls } from "../util/index.js";
+import { useDebounceValue } from "../hooks/index.js";
 
 interface SearchBarProps {
     onClick?: () => void;

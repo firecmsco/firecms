@@ -1,5 +1,5 @@
 import React from "react";
-import { CMSType, PropertyOrBuilder } from "./properties";
+import { CMSType, PropertyOrBuilder } from "./properties.js";
 
 /**
  * This is the configuration object for a property.

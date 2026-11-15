@@ -14,11 +14,11 @@ import {
     Typography
 } from "@firecms/ui";
 import { ErrorView, FireCMSLogo, LanguageToggle, useModeController, useTranslation } from "@firecms/core";
-import { GoogleLoginButton } from "./GoogleLoginButton";
-import { FireCMSBackend } from "../../types";
+import { GoogleLoginButton } from "./GoogleLoginButton.js";
+import { FireCMSBackend } from "../../types/index.js";
 import { LoginButton } from "@firecms/firebase";
-import { CloudUserPasswordForm } from "./CloudUserPasswordForm";
-import { describeGraduatedPrice, formatAmount, preferredCurrency } from "../../utils/pro_pricing";
+import { CloudUserPasswordForm } from "./CloudUserPasswordForm.js";
+import { describeGraduatedPrice, formatAmount, preferredCurrency } from "../../utils/pro_pricing.js";
 
 export interface FireCMSCloudLoginViewProps {
     fireCMSBackend: FireCMSBackend;

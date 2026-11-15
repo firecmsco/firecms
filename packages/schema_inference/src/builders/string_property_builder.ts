@@ -1,7 +1,7 @@
-import { InferencePropertyBuilderProps, ValuesCountEntry } from "../types";
-import { findCommonInitialStringInPath } from "../strings";
-import { extractEnumFromValues } from "../util";
-import { FileType, Property, StringProperty } from "../cms_types";
+import { InferencePropertyBuilderProps, ValuesCountEntry } from "../types.js";
+import { findCommonInitialStringInPath } from "../strings.js";
+import { extractEnumFromValues } from "../util.js";
+import { FileType, Property, StringProperty } from "../cms_types.js";
 
 const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"];
 const AUDIO_EXTENSIONS = [".mp3", ".ogg", ".opus", ".aac"];

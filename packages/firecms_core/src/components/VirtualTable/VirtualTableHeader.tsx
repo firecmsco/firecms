@@ -1,9 +1,9 @@
 import React, { RefObject, useCallback, useEffect, useState } from "react";
 import equal from "react-fast-compare";
 
-import { VirtualTableColumn, VirtualTableSort, VirtualTableWhereFilterOp } from "./VirtualTableProps";
-import { useTranslation } from "../../hooks";
-import { ErrorBoundary } from "../ErrorBoundary";
+import { VirtualTableColumn, VirtualTableSort, VirtualTableWhereFilterOp } from "./VirtualTableProps.js";
+import { useTranslation } from "../../hooks/index.js";
+import { ErrorBoundary } from "../ErrorBoundary.js";
 import {
     ArrowUpwardIcon,
     Badge,

@@ -10,30 +10,30 @@ import {
     ResolvedProperty,
     ResolvedStringProperty,
     StringProperty
-} from "../../types";
+} from "../../types/index.js";
 
-import { VirtualTableInput } from "../VirtualTable/fields/VirtualTableInput";
-import { VirtualTableSelect } from "../VirtualTable/fields/VirtualTableSelect";
-import { VirtualTableNumberInput } from "../VirtualTable/fields/VirtualTableNumberInput";
-import { VirtualTableSwitch } from "../VirtualTable/fields/VirtualTableSwitch";
-import { VirtualTableDateField } from "../VirtualTable/fields/VirtualTableDateField";
-import { VirtualTableUserSelect } from "../VirtualTable/fields/VirtualTableUserSelect";
+import { VirtualTableInput } from "../VirtualTable/fields/VirtualTableInput.js";
+import { VirtualTableSelect } from "../VirtualTable/fields/VirtualTableSelect.js";
+import { VirtualTableNumberInput } from "../VirtualTable/fields/VirtualTableNumberInput.js";
+import { VirtualTableSwitch } from "../VirtualTable/fields/VirtualTableSwitch.js";
+import { VirtualTableDateField } from "../VirtualTable/fields/VirtualTableDateField.js";
+import { VirtualTableUserSelect } from "../VirtualTable/fields/VirtualTableUserSelect.js";
 
-import { TableStorageUpload } from "./fields/TableStorageUpload";
-import { TableReferenceField } from "./fields/TableReferenceField";
+import { TableStorageUpload } from "./fields/TableStorageUpload.js";
+import { TableReferenceField } from "./fields/TableReferenceField.js";
 
-import { PropertyPreview } from "../../preview";
-import { getPreviewSizeFrom } from "../../preview/util";
-import { isReadOnly } from "../../util";
+import { PropertyPreview } from "../../preview/index.js";
+import { getPreviewSizeFrom } from "../../preview/util.js";
+import { isReadOnly } from "../../util/index.js";
 
-import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
+import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation.js";
 
-import { EntityTableCell } from "./internal/EntityTableCell";
-import { EntityTableCellActions } from "./internal/EntityTableCellActions";
+import { EntityTableCell } from "./internal/EntityTableCell.js";
+import { EntityTableCellActions } from "./internal/EntityTableCellActions.js";
 
-import { useSelectableTableController } from "../SelectableTable/SelectableTableContext";
-import { useClearRestoreValue } from "../../form/useClearRestoreValue";
-import { getRowHeight } from "../common/table_height";
+import { useSelectableTableController } from "../SelectableTable/SelectableTableContext.js";
+import { useClearRestoreValue } from "../../form/useClearRestoreValue.js";
+import { getRowHeight } from "../common/table_height.js";
 
 export interface PropertyTableCellProps<T extends CMSType> {
     propertyKey: string;

@@ -18,7 +18,7 @@ import {
     Typography,
 } from "@firecms/ui";
 
-import { editableProperty } from "../../utils/entities";
+import { editableProperty } from "../../utils/entities.js";
 
 export function PropertyFieldPreview({
                                          property,

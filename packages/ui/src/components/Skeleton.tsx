@@ -1,6 +1,6 @@
 import React from "react";
-import { cls } from "../util";
-import { useInjectStyles } from "../hooks";
+import { cls } from "../util/index.js";
+import { useInjectStyles } from "../hooks/index.js";
 
 export type SkeletonProps = {
     width?: number;

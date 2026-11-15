@@ -1,7 +1,7 @@
 import { NodeSelection, Plugin } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { Slice } from "prosemirror-model";
-import { serializeForClipboard } from "./clipboard";
+import { serializeForClipboard } from "./clipboard.js";
 
 export interface DragHandleOptions {
     /**

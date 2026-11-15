@@ -1,1 +1,1 @@
-export * from "./ImportCollectionAction";
+export * from "./ImportCollectionAction.js";

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Popover, Button, Typography, Select, SelectItem, defaultBorderMixin, cls, IconButton, CloseIcon } from "@firecms/ui";
-import { FieldType, fieldTypeFromValue, convertValue, InlineValueEditor, EditableFieldsView, defaultValueForType, isReference, normalizeReference } from "./FieldEditor";
-import { ReferenceEditor } from "./ReferenceEditor";
+import { FieldType, fieldTypeFromValue, convertValue, InlineValueEditor, EditableFieldsView, defaultValueForType, isReference, normalizeReference } from "./FieldEditor.js";
+import { ReferenceEditor } from "./ReferenceEditor.js";
 
 export function PopoverCellEditor({
     columnKey,

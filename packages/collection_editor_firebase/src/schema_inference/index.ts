@@ -7,7 +7,7 @@ import {
     GeoPoint,
     removeInitialAndTrailingSlashes
 } from "@firecms/core";
-import { getDocuments } from "./firestore";
+import { getDocuments } from "./firestore.js";
 
 /**
  * Build the guessed schema from a data collection

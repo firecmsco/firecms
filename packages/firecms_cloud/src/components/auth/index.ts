@@ -1,2 +1,2 @@
-export * from "./FireCMSCloudLoginView";
-export * from "./GoogleLoginButton";
+export * from "./FireCMSCloudLoginView.js";
+export * from "./GoogleLoginButton.js";

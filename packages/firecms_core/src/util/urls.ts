@@ -1,4 +1,4 @@
-import type { PreviewType } from "../types";
+import type { PreviewType } from "../types/index.js";
 
 const ABSOLUTE_HTTP_URL_REGEX = /^https?:\/\//i;
 

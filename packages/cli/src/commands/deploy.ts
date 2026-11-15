@@ -5,13 +5,13 @@ import fs from "fs";
 import axios from "axios";
 import { exec } from "child_process";
 import archiver from "archiver";
-import { getCurrentUser, getTokens, refreshCredentials } from "./auth";
-import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
+import { getCurrentUser, getTokens, refreshCredentials } from "./auth.js";
+import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common.js";
 import ora from "ora";
 import chalk from "chalk";
 import { createWriteStream } from "fs";
-import { authCommand, describeRequestError, isLoginRejected } from "../util/request_error";
-import { checkBuild } from "../util/bundle_check";
+import { authCommand, describeRequestError, isLoginRejected } from "../util/request_error.js";
+import { checkBuild } from "../util/bundle_check.js";
 
 export async function deploy(projectId: string, env: "prod" | "dev", debug: boolean) {
     const currentUser = await getCurrentUser(env, debug);

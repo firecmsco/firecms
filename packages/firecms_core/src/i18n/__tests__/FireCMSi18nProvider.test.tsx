@@ -4,7 +4,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { useTranslation } from "react-i18next";
-import { FireCMSi18nProvider } from "../FireCMSi18nProvider";
+import { FireCMSi18nProvider } from "../FireCMSi18nProvider.js";
 
 /** Reads a key through the same channel application code uses. */
 function Str({ k }: { k: string }) {

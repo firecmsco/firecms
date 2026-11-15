@@ -1,4 +1,4 @@
-import { DataType } from "./cms_types";
+import { DataType } from "./cms_types.js";
 
 export type TypesCount = {
     number?: number,

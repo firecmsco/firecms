@@ -1,6 +1,6 @@
-import { EntityCollection, EntityCustomView } from "../types";
-import { decodeEntityId, getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
-import { resolveEntityView } from "./resolutions";
+import { EntityCollection, EntityCustomView } from "../types/index.js";
+import { decodeEntityId, getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils.js";
+import { resolveEntityView } from "./resolutions.js";
 
 export type NavigationViewInternal<M extends Record<string, any> = any> =
     | NavigationViewEntityInternal<M>

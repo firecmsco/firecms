@@ -24,7 +24,7 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { useUserManagement } from "../../hooks";
+import { useUserManagement } from "../../hooks/index.js";
 import { Formex, getIn, useCreateFormex } from "@firecms/formex";
 
 export const getRoleYupSchema = (t: any) => Yup.object().shape({

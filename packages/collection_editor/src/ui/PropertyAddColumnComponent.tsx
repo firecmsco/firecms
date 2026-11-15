@@ -1,7 +1,7 @@
 import { EntityTableController, getDefaultPropertiesOrder, useAuthController, useTranslation } from "@firecms/core";
 import { AddIcon, Tooltip } from "@firecms/ui";
-import { useCollectionEditorController } from "../useCollectionEditorController";
-import { PersistedCollection } from "../types/persisted_collection";
+import { useCollectionEditorController } from "../useCollectionEditorController.js";
+import { PersistedCollection } from "../types/persisted_collection.js";
 
 export function PropertyAddColumnComponent({
                                                fullPath,

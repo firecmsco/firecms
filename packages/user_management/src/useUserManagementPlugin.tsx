@@ -7,10 +7,10 @@ import {
     useSnackbarController,
     useTranslation
 } from "@firecms/core";
-import { UserManagementProvider } from "./UserManagementProvider";
-import { UserManagement } from "./types";
+import { UserManagementProvider } from "./UserManagementProvider.js";
+import { UserManagement } from "./types/index.js";
 import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
-import { DEFAULT_ROLES } from "./components/roles/default_roles";
+import { DEFAULT_ROLES } from "./components/roles/default_roles.js";
 
 export function useUserManagementPlugin<USER extends User = any>({ userManagement }: {
     userManagement: UserManagement<USER>,

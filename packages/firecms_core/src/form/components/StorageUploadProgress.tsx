@@ -1,8 +1,8 @@
 import React, { useCallback } from "react";
 
-import { useSnackbarController, useStorageSource } from "../../hooks";
-import { StorageFieldItem } from "../../util/useStorageUploadController";
-import { ErrorView } from "../../components";
+import { useSnackbarController, useStorageSource } from "../../hooks/index.js";
+import { StorageFieldItem } from "../../util/useStorageUploadController.js";
+import { ErrorView } from "../../components/index.js";
 import { cls, paperMixin, Skeleton } from "@firecms/ui";
 
 export interface StorageUploadItemProps {

@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { AIIcon, EntityCollection, prettifyIdentifier, useTranslation } from "@firecms/core";
 import { Button, Card, Chip, cls, CodeIcon, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
-import { CollectionJsonImportDialog } from "./CollectionJsonImportDialog";
+import { CollectionJsonImportDialog } from "./CollectionJsonImportDialog.js";
 
-import { productsCollectionTemplate } from "./templates/products_template";
-import { blogCollectionTemplate } from "./templates/blog_template";
-import { usersCollectionTemplate } from "./templates/users_template";
+import { productsCollectionTemplate } from "./templates/products_template.js";
+import { blogCollectionTemplate } from "./templates/blog_template.js";
+import { usersCollectionTemplate } from "./templates/users_template.js";
 import { ImportFileUpload } from "@firecms/data_import";
-import { pagesCollectionTemplate } from "./templates/pages_template";
+import { pagesCollectionTemplate } from "./templates/pages_template.js";
 import { useFormex } from "@firecms/formex";
-import { useCollectionEditorController } from "../../useCollectionEditorController";
-import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
-import { CollectionGenerationCallback } from "../../api/generateCollectionApi";
+import { useCollectionEditorController } from "../../useCollectionEditorController.js";
+import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover.js";
+import { CollectionGenerationCallback } from "../../api/generateCollectionApi.js";
 
 export function CollectionEditorWelcomeView({
     path,

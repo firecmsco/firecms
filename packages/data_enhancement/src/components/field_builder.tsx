@@ -14,11 +14,11 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { useDataEnhancementController } from "./DataEnhancementControllerProvider";
-import { SUPPORTED_FIELDS_ENHANCEMENT } from "../utils/fields";
-import { EnhanceTextFieldBinding } from "./fields/EnhanceTextField";
-import { EnhancedDataResult, EnhanceParams } from "../types/data_enhancement_controller";
-import { countStringCharacters } from "../utils/strings_counter";
+import { useDataEnhancementController } from "./DataEnhancementControllerProvider.js";
+import { SUPPORTED_FIELDS_ENHANCEMENT } from "../utils/fields.js";
+import { EnhanceTextFieldBinding } from "./fields/EnhanceTextField.js";
+import { EnhancedDataResult, EnhanceParams } from "../types/data_enhancement_controller.js";
+import { countStringCharacters } from "../utils/strings_counter.js";
 
 export function fieldBuilder<T extends CMSType = CMSType>
     (params: PluginFieldBuilderParams<T>): React.ComponentType<FieldProps<T>> | null {

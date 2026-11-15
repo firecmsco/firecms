@@ -1,11 +1,11 @@
 import fs from "fs";
 import path from "path";
 import chalk from "chalk";
-import { convertRowyConfig, ConversionResult, ConvertedCollection } from "./convert";
-import { getComments, toTs } from "./codegen";
-import { getGcloudAccessToken, loadRowyConfigFromFirestore } from "./firestore_rest";
-import { buildReport, findCredentials, MigrationTarget, scriptFileContent } from "./report";
-import { RowyConfig } from "./types";
+import { convertRowyConfig, ConversionResult, ConvertedCollection } from "./convert.js";
+import { getComments, toTs } from "./codegen.js";
+import { getGcloudAccessToken, loadRowyConfigFromFirestore } from "./firestore_rest.js";
+import { buildReport, findCredentials, MigrationTarget, scriptFileContent } from "./report.js";
+import { RowyConfig } from "./types.js";
 
 export type MigrateRowyOptions = {
     /** Firebase project to read Rowy's configuration from */

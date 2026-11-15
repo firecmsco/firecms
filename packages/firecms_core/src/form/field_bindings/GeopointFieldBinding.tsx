@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { CloseIcon, IconButton, TextField } from "@firecms/ui";
-import { FieldProps, GeoPoint } from "../../types";
-import { FieldHelperText, LabelWithIcon } from "../components";
-import { PropertyIdCopyTooltip } from "../../components";
-import { useClearRestoreValue } from "../useClearRestoreValue";
-import { getIconForProperty } from "../../util";
-import { formatGeoPoint, getGeoPointCoordinates, parseGeoPoint } from "../../util/geopoint";
+import { FieldProps, GeoPoint } from "../../types/index.js";
+import { FieldHelperText, LabelWithIcon } from "../components/index.js";
+import { PropertyIdCopyTooltip } from "../../components/index.js";
+import { useClearRestoreValue } from "../useClearRestoreValue.js";
+import { getIconForProperty } from "../../util/index.js";
+import { formatGeoPoint, getGeoPointCoordinates, parseGeoPoint } from "../../util/geopoint.js";
 
 type GeopointFieldBindingProps = FieldProps<GeoPoint>;
 

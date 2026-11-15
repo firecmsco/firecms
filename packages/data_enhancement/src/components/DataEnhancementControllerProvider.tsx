@@ -5,7 +5,7 @@ import {
     EnhancedDataResult,
     EnhanceParams,
     InputProperty
-} from "../types/data_enhancement_controller";
+} from "../types/data_enhancement_controller.js";
 import {
     DataSource,
     EditorAIController,
@@ -22,10 +22,10 @@ import {
     useTranslation
 } from "@firecms/core";
 
-import { enhanceDataAPIStream, fetchEntityPromptSuggestion, isPaymentRequiredError } from "../api";
-import { getAppendableSuggestion } from "../utils/suggestions";
-import { getSimplifiedProperties } from "../utils/properties";
-import { useEditorAIController } from "../editor/useEditorAIController";
+import { enhanceDataAPIStream, fetchEntityPromptSuggestion, isPaymentRequiredError } from "../api.js";
+import { getAppendableSuggestion } from "../utils/suggestions.js";
+import { getSimplifiedProperties } from "../utils/properties.js";
+import { useEditorAIController } from "../editor/useEditorAIController.js";
 
 export const DataEnhancementControllerContext = React.createContext<DataEnhancementController>({} as any);
 

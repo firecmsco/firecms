@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { useDropzone } from "react-dropzone";
-import { fieldBackgroundHoverMixin, fieldBackgroundMixin } from "../styles";
-import { cls } from "../util";
-import { Typography } from "./Typography";
+import { fieldBackgroundHoverMixin, fieldBackgroundMixin } from "../styles.js";
+import { cls } from "../util/index.js";
+import { Typography } from "./Typography.js";
 
 export interface FileUploadError {
     message: string;

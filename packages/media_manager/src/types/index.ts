@@ -1,3 +1,3 @@
-export * from "./media_asset";
-export * from "./config";
-export * from "./controller";
+export * from "./media_asset.js";
+export * from "./config.js";
+export * from "./controller.js";

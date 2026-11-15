@@ -1,8 +1,8 @@
 "use client";
 import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
-import { cls } from "../util";
-import { defaultBorderMixin } from "../styles";
+import { cls } from "../util/index.js";
+import { defaultBorderMixin } from "../styles.js";
 
 type LabelProps = React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & {
     border?: boolean,

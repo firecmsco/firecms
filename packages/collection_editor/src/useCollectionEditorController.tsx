@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { CollectionEditorController } from "./types/collection_editor_controller";
-import { CollectionEditorContext } from "./ConfigControllerProvider";
+import { CollectionEditorController } from "./types/collection_editor_controller.js";
+import { CollectionEditorContext } from "./ConfigControllerProvider.js";
 
 /**
  * Hook to access the collection editor controller.

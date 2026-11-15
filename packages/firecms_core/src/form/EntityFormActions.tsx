@@ -6,7 +6,7 @@ import {
     FormContext,
     ResolvedEntityCollection,
     SideEntityController
-} from "../types";
+} from "../types/index.js";
 import {
     Button,
     cls,
@@ -18,8 +18,8 @@ import {
     Typography
 } from "@firecms/ui";
 import { FormexController } from "@firecms/formex";
-import { useFireCMSContext, useSideEntityController } from "../hooks";
-import { useTranslation } from "../hooks/useTranslation";
+import { useFireCMSContext, useSideEntityController } from "../hooks/index.js";
+import { useTranslation } from "../hooks/useTranslation.js";
 
 export interface EntityFormActionsProps {
     fullPath: string;

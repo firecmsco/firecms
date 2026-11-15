@@ -1,7 +1,7 @@
-import { User } from "./user";
-import { Role } from "./roles";
-import { DataSourceDelegate } from "./datasource";
-import { StorageSource } from "./storage";
+import { User } from "./user.js";
+import { Role } from "./roles.js";
+import { DataSourceDelegate } from "./datasource.js";
+import { StorageSource } from "./storage.js";
 
 /**
  * Controller for retrieving the logged user or performing auth related operations.

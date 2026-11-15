@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ArrayProperty, FieldProps, NumberProperty, Property, PropertyConfig, ResolvedProperty, StringProperty } from "../types";
+import { ArrayProperty, FieldProps, NumberProperty, Property, PropertyConfig, ResolvedProperty, StringProperty } from "../types/index.js";
 import {
     ArrayCustomShapedFieldBinding,
     ArrayOfReferencesFieldBinding,
@@ -16,12 +16,12 @@ import {
     SelectFieldBinding,
     SwitchFieldBinding,
     TextFieldBinding
-} from "../form";
-import { lazyEager } from "../util/lazy_eager";
+} from "../form/index.js";
+import { lazyEager } from "../util/lazy_eager.js";
 
-const MarkdownEditorFieldBinding = lazyEager<typeof import("../form/field_bindings/MarkdownEditorFieldBinding")["MarkdownEditorFieldBinding"]>(() => import("../form/field_bindings/MarkdownEditorFieldBinding"), "MarkdownEditorFieldBinding");
-const StorageUploadFieldBinding = lazyEager<typeof import("../form/field_bindings/StorageUploadFieldBinding")["StorageUploadFieldBinding"]>(() => import("../form/field_bindings/StorageUploadFieldBinding"), "StorageUploadFieldBinding");
-import { isPropertyBuilder, mergeDeep } from "../util";
+const MarkdownEditorFieldBinding = lazyEager<typeof import("../form/field_bindings/MarkdownEditorFieldBinding.js")["MarkdownEditorFieldBinding"]>(() => import("../form/field_bindings/MarkdownEditorFieldBinding.js"), "MarkdownEditorFieldBinding");
+const StorageUploadFieldBinding = lazyEager<typeof import("../form/field_bindings/StorageUploadFieldBinding.js")["StorageUploadFieldBinding"]>(() => import("../form/field_bindings/StorageUploadFieldBinding.js"), "StorageUploadFieldBinding");
+import { isPropertyBuilder, mergeDeep } from "../util/index.js";
 
 import {
     AddLinkIcon,
@@ -45,7 +45,7 @@ import {
     VerifiedUserIcon,
     ViewStreamIcon
 } from "@firecms/ui";
-import { UserSelectFieldBinding } from "../form/field_bindings/UserSelectFieldBinding";
+import { UserSelectFieldBinding } from "../form/field_bindings/UserSelectFieldBinding.js";
 
 export function isDefaultFieldConfigId(id: string) {
     return Object.keys(DEFAULT_FIELD_CONFIGS).includes(id);

@@ -1,11 +1,11 @@
 import React, { useMemo, createContext, useContext, PropsWithChildren } from "react";
 import { FireCMSPlugin, CMSView, useTranslation } from "@firecms/core";
-import { MediaManagerConfig } from "./types";
-import { MediaManagerProvider } from "./MediaManagerProvider";
-import { useMediaManagerController } from "./useMediaManagerController";
-import { MediaLibraryCard } from "./components/MediaLibraryCard";
-import { MediaLibraryView } from "./components/MediaLibraryView";
-import { mediaManagerTranslationsEn } from "./locales/en";
+import { MediaManagerConfig } from "./types/index.js";
+import { MediaManagerProvider } from "./MediaManagerProvider.js";
+import { useMediaManagerController } from "./useMediaManagerController.js";
+import { MediaLibraryCard } from "./components/MediaLibraryCard.js";
+import { MediaLibraryView } from "./components/MediaLibraryView.js";
+import { mediaManagerTranslationsEn } from "./locales/en.js";
 
 const DEFAULT_STORAGE_PATH = "media";
 const DEFAULT_COLLECTION_PATH = "media_assets";
@@ -100,12 +100,12 @@ export function useMediaManagerPlugin(props: MediaManagerPluginProps): FireCMSPl
         // Seven languages of strings in every plugin bundle is dead weight for
         // the six nobody is reading.
             en: mediaManagerTranslationsEn,
-            es: () => import("./locales/es").then((m) => m.mediaManagerTranslationsEs),
-            de: () => import("./locales/de").then((m) => m.mediaManagerTranslationsDe),
-            fr: () => import("./locales/fr").then((m) => m.mediaManagerTranslationsFr),
-            it: () => import("./locales/it").then((m) => m.mediaManagerTranslationsIt),
-            hi: () => import("./locales/hi").then((m) => m.mediaManagerTranslationsHi),
-            pt: () => import("./locales/pt").then((m) => m.mediaManagerTranslationsPt)
+            es: () => import("./locales/es.js").then((m) => m.mediaManagerTranslationsEs),
+            de: () => import("./locales/de.js").then((m) => m.mediaManagerTranslationsDe),
+            fr: () => import("./locales/fr.js").then((m) => m.mediaManagerTranslationsFr),
+            it: () => import("./locales/it.js").then((m) => m.mediaManagerTranslationsIt),
+            hi: () => import("./locales/hi.js").then((m) => m.mediaManagerTranslationsHi),
+            pt: () => import("./locales/pt.js").then((m) => m.mediaManagerTranslationsPt)
         }
     } satisfies FireCMSPlugin), []);
 }

@@ -7,7 +7,7 @@ import {
     Property,
     PropertyOrBuilder
 } from "@firecms/core";
-import { InputProperty } from "../types/data_enhancement_controller";
+import { InputProperty } from "../types/data_enhancement_controller.js";
 
 export function getSimplifiedProperties<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, values: M, path = ""): Record<string, InputProperty> {
     if (!properties) return {};

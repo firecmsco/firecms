@@ -1,8 +1,8 @@
 import React from "react";
 
-import { GeoPoint } from "../../types";
-import { PropertyPreviewProps } from "../PropertyPreviewProps";
-import { formatGeoPoint, getGeoPointCoordinates } from "../../util";
+import { GeoPoint } from "../../types/index.js";
+import { PropertyPreviewProps } from "../PropertyPreviewProps.js";
+import { formatGeoPoint, getGeoPointCoordinates } from "../../util/index.js";
 
 export function GeopointPropertyPreview({
                                              value,

@@ -8,7 +8,7 @@ import {
     ResolvedProperty,
     CMSType,
     Role
-} from "../types";
+} from "../types/index.js";
 import { getIn } from "@firecms/formex";
 
 let operationsRegistered = false;

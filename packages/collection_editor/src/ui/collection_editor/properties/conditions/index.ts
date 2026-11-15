@@ -1,6 +1,6 @@
-export { ConditionsPanel } from "./ConditionsPanel";
-export { ConditionsEditor } from "./ConditionsEditor";
-export type { ConditionsEditorProps } from "./ConditionsEditor";
-export { EnumConditionsEditor } from "./EnumConditionsEditor";
-export type { EnumConditionsEditorProps } from "./EnumConditionsEditor";
-export { getPropertyPaths, getGroupedPropertyPaths } from "./property_paths";
+export { ConditionsPanel } from "./ConditionsPanel.js";
+export { ConditionsEditor } from "./ConditionsEditor.js";
+export type { ConditionsEditorProps } from "./ConditionsEditor.js";
+export { EnumConditionsEditor } from "./EnumConditionsEditor.js";
+export type { EnumConditionsEditorProps } from "./EnumConditionsEditor.js";
+export { getPropertyPaths, getGroupedPropertyPaths } from "./property_paths.js";

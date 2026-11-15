@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { NavigationController } from "../types";
-import { NavigationContext } from "../contexts/NavigationContext";
+import { NavigationController } from "../types/index.js";
+import { NavigationContext } from "../contexts/NavigationContext.js";
 
 /**
  * Use this hook to get the navigation of the app.

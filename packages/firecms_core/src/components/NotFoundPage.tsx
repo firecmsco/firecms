@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Typography } from "@firecms/ui";
-import { useTranslation } from "../hooks/useTranslation";
+import { useTranslation } from "../hooks/useTranslation.js";
 
 export function NotFoundPage() {
     const { t } = useTranslation();

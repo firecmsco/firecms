@@ -25,8 +25,8 @@ import {
     useLargeLayout,
     useTranslation,
 } from "@firecms/core";
-import { useDataEnhancementController } from "./DataEnhancementControllerProvider";
-import { SamplePrompt } from "../types/data_enhancement_controller";
+import { useDataEnhancementController } from "./DataEnhancementControllerProvider.js";
+import { SamplePrompt } from "../types/data_enhancement_controller.js";
 
 export function FormEnhanceAction({
     entityId,

@@ -1,1 +1,1 @@
-export * from "./generateCollectionApi";
+export * from "./generateCollectionApi.js";

@@ -3,7 +3,7 @@ import {
     FilterValues,
     ResolvedProperty,
     WhereFilterOp
-} from "../../types";
+} from "../../types/index.js";
 import {
     Button,
     cls,
@@ -14,13 +14,13 @@ import {
     DialogTitle,
     Typography
 } from "@firecms/ui";
-import { useTranslation } from "../../hooks/useTranslation";
-import { StringNumberFilterField } from "../SelectableTable/filters/StringNumberFilterField";
-import { BooleanFilterField } from "../SelectableTable/filters/BooleanFilterField";
-import { DateTimeFilterField } from "../SelectableTable/filters/DateTimeFilterField";
-import { ReferenceFilterField } from "../SelectableTable/filters/ReferenceFilterField";
-import { VirtualTableWhereFilterOp } from "../VirtualTable";
-import { enumToObjectEntries } from "../../util";
+import { useTranslation } from "../../hooks/useTranslation.js";
+import { StringNumberFilterField } from "../SelectableTable/filters/StringNumberFilterField.js";
+import { BooleanFilterField } from "../SelectableTable/filters/BooleanFilterField.js";
+import { DateTimeFilterField } from "../SelectableTable/filters/DateTimeFilterField.js";
+import { ReferenceFilterField } from "../SelectableTable/filters/ReferenceFilterField.js";
+import { VirtualTableWhereFilterOp } from "../VirtualTable/index.js";
+import { enumToObjectEntries } from "../../util/index.js";
 
 export interface FiltersDialogProps {
     open: boolean;

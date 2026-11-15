@@ -11,7 +11,7 @@ import {
     LoadingButton,
     Typography
 } from "@firecms/ui";
-import { ProjectsApi, RootCollectionInfo } from "../api/projects";
+import { ProjectsApi, RootCollectionInfo } from "../api/projects.js";
 
 export function CollectionSetupSelectionDialog({
     open,

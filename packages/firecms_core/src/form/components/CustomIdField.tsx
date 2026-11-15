@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 
 // import { ErrorMessage } from "@firecms/formex";
-import { Entity, EntityStatus, EnumValueConfig, EnumValues } from "../../types";
+import { Entity, EntityStatus, EnumValueConfig, EnumValues } from "../../types/index.js";
 
-import { useClipboard, useSnackbarController } from "../../hooks";
-import { enumToObjectEntries } from "../../util";
+import { useClipboard, useSnackbarController } from "../../hooks/index.js";
+import { enumToObjectEntries } from "../../util/index.js";
 import {
     CircularProgress,
     ContentCopyIcon,
@@ -16,9 +16,9 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { EnumValuesChip } from "../../preview";
-import { useCustomizationController } from "../../hooks/useCustomizationController";
-import { CustomizationController } from "../../types/customization_controller";
+import { EnumValuesChip } from "../../preview/index.js";
+import { useCustomizationController } from "../../hooks/useCustomizationController.js";
+import { CustomizationController } from "../../types/customization_controller.js";
 import { useFormex } from "@firecms/formex";
 
 export function CustomIdField<M extends Record<string, any>>({

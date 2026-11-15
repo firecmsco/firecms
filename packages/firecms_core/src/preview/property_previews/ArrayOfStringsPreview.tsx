@@ -1,10 +1,10 @@
 import React from "react";
-import { ResolvedStringProperty } from "../../types";
+import { ResolvedStringProperty } from "../../types/index.js";
 
-import { resolveArrayProperty } from "../../util";
-import { PropertyPreviewProps, StringPropertyPreview } from "../../preview";
-import { useAuthController, useCustomizationController } from "../../hooks";
-import { ErrorBoundary } from "../../components";
+import { resolveArrayProperty } from "../../util/index.js";
+import { PropertyPreviewProps, StringPropertyPreview } from "../../preview/index.js";
+import { useAuthController, useCustomizationController } from "../../hooks/index.js";
+import { ErrorBoundary } from "../../components/index.js";
 
 /**
  * @group Preview components

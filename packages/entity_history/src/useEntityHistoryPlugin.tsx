@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from "react";
 import { EntityCollection, FireCMSPlugin, mergeCallbacks, User, useTranslation } from "@firecms/core";
-import { EntityHistoryView } from "./components/EntityHistoryView";
+import { EntityHistoryView } from "./components/EntityHistoryView.js";
 import { HistoryIcon } from "@firecms/ui";
-import { entityHistoryCallbacks } from "./entity_history_callbacks";
-import { HistoryControllerProvider } from "./HistoryControllerProvider";
-import { LastEditedByFormAction } from "./components/LastEditedByPluginComponents";
-import { entityHistoryTranslationsEn } from "./locales/en";
+import { entityHistoryCallbacks } from "./entity_history_callbacks.js";
+import { HistoryControllerProvider } from "./HistoryControllerProvider.js";
+import { LastEditedByFormAction } from "./components/LastEditedByPluginComponents.js";
+import { entityHistoryTranslationsEn } from "./locales/en.js";
 
 /**
  * This plugin adds a history view to the entity side panel.
@@ -53,12 +53,12 @@ export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): FireCM
         // Seven languages of strings in every plugin bundle is dead weight for
         // the six nobody is reading.
             en: entityHistoryTranslationsEn,
-            es: () => import("./locales/es").then((m) => m.entityHistoryTranslationsEs),
-            de: () => import("./locales/de").then((m) => m.entityHistoryTranslationsDe),
-            fr: () => import("./locales/fr").then((m) => m.entityHistoryTranslationsFr),
-            it: () => import("./locales/it").then((m) => m.entityHistoryTranslationsIt),
-            hi: () => import("./locales/hi").then((m) => m.entityHistoryTranslationsHi),
-            pt: () => import("./locales/pt").then((m) => m.entityHistoryTranslationsPt)
+            es: () => import("./locales/es.js").then((m) => m.entityHistoryTranslationsEs),
+            de: () => import("./locales/de.js").then((m) => m.entityHistoryTranslationsDe),
+            fr: () => import("./locales/fr.js").then((m) => m.entityHistoryTranslationsFr),
+            it: () => import("./locales/it.js").then((m) => m.entityHistoryTranslationsIt),
+            hi: () => import("./locales/hi.js").then((m) => m.entityHistoryTranslationsHi),
+            pt: () => import("./locales/pt.js").then((m) => m.entityHistoryTranslationsPt)
         }
     } satisfies FireCMSPlugin), [props]);
 }

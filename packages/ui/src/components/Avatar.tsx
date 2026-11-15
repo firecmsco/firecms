@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 
 export interface AvatarProps {
     src?: string;

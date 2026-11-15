@@ -1,8 +1,8 @@
 import React from "react";
 import { defaultBorderMixin, Typography } from "@firecms/ui";
-import { PreviewSize, PropertyPreview } from "../preview";
-import { ResolvedProperties, ResolvedProperty } from "../types";
-import { getValueInPath } from "../util";
+import { PreviewSize, PropertyPreview } from "../preview/index.js";
+import { ResolvedProperties, ResolvedProperty } from "../types/index.js";
+import { getValueInPath } from "../util/index.js";
 
 /**
  * Build a readable label for a path and resolve the property

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@firecms/ui";
-import { useTranslation } from "../../hooks/useTranslation";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 interface RenameGroupDialogProps {
     open: boolean;

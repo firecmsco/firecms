@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { ArrayProperty, getFieldConfig, Property, PropertyConfig } from "@firecms/core";
 import { Button, Paper, Typography } from "@firecms/ui";
 import { Field, getIn, useFormex } from "@firecms/formex";
-import { PropertyFormDialog } from "../PropertyEditView";
-import { PropertyFieldPreview } from "../PropertyFieldPreview";
-import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
-import { ValidationPanel } from "./validation/ValidationPanel";
+import { PropertyFormDialog } from "../PropertyEditView.js";
+import { PropertyFieldPreview } from "../PropertyFieldPreview.js";
+import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation.js";
+import { ValidationPanel } from "./validation/ValidationPanel.js";
 
 export function RepeatPropertyField({
                                         showErrors,

@@ -1,13 +1,13 @@
 import React from "react";
 
-import { FieldProps } from "../../types";
+import { FieldProps } from "../../types/index.js";
 
-import { FieldHelperText, LabelWithIcon } from "../components";
-import { useCustomizationController } from "../../hooks";
-import { getIconForProperty } from "../../util";
+import { FieldHelperText, LabelWithIcon } from "../components/index.js";
+import { useCustomizationController } from "../../hooks/index.js";
+import { getIconForProperty } from "../../util/index.js";
 import { DateTimeField } from "@firecms/ui";
-import { useClearRestoreValue } from "../useClearRestoreValue";
-import { PropertyIdCopyTooltip } from "../../components";
+import { useClearRestoreValue } from "../useClearRestoreValue.js";
+import { PropertyIdCopyTooltip } from "../../components/index.js";
 
 type DateTimeFieldProps = FieldProps<Date>;
 

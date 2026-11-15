@@ -7,10 +7,10 @@ import {
     FormContext,
     ResolvedEntityCollection,
     SideEntityController
-} from "../types";
+} from "../types/index.js";
 
-import { copyEntityAction, deleteEntityAction } from "../components";
-import { canCreateEntity, canDeleteEntity, mergeEntityActions, resolveEntityAction } from "../util";
+import { copyEntityAction, deleteEntityAction } from "../components/index.js";
+import { canCreateEntity, canDeleteEntity, mergeEntityActions, resolveEntityAction } from "../util/index.js";
 import {
     Button,
     CircularProgress,
@@ -30,11 +30,11 @@ import {
     useSideEntityController,
     useSnackbarController,
     useTranslation
-} from "../hooks";
-import { EntityFormActionsProps } from "../form/EntityFormActions";
-import { SideDialogController, useSideDialogContext } from "./SideDialogs";
+} from "../hooks/index.js";
+import { EntityFormActionsProps } from "../form/EntityFormActions.js";
+import { SideDialogController, useSideDialogContext } from "./SideDialogs.js";
 import { FormexController } from "@firecms/formex";
-import { ErrorTooltip } from "../components/ErrorTooltip";
+import { ErrorTooltip } from "../components/ErrorTooltip.js";
 
 export function EntityEditViewFormActions({
                                               collection,

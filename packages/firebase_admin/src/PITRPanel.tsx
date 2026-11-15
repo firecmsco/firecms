@@ -13,8 +13,8 @@ import {
     DateTimeField,
 } from "@firecms/ui";
 import { ConfirmationDialog, jsonStringifyReplacer } from "@firecms/core";
-import { useAdminApi } from "./api/AdminApiProvider";
-import { AdminDocument } from "./api/admin_api";
+import { useAdminApi } from "./api/AdminApiProvider.js";
+import { AdminDocument } from "./api/admin_api.js";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 

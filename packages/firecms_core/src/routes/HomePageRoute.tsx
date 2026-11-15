@@ -1,4 +1,4 @@
-import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
+import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController.js";
 import { useEffect } from "react";
 
 export function HomePageRoute({ children }: {

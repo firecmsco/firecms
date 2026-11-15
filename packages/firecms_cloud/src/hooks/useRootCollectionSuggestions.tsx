@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigationController } from "@firecms/core";
-import { useFireCMSBackend, useProjectConfig } from "../hooks";
-import { RootCollectionInfo } from "../api/projects";
+import { useFireCMSBackend, useProjectConfig } from "../hooks/index.js";
+import { RootCollectionInfo } from "../api/projects.js";
 
 export function useRootCollectionSuggestions({ projectId }: { projectId: string }) {
     const navigationController = useNavigationController();

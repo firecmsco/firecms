@@ -1,4 +1,4 @@
-import { iconSynonyms } from "./icon_synonyms";
+import { iconSynonyms } from "./icon_synonyms.js";
 import { iconKeys } from "@firecms/ui";
 import Fuse from "fuse.js";
 

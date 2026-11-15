@@ -1,6 +1,6 @@
-import { ResolvedNumberProperty, ResolvedStringProperty } from "../../types";
-import { ArrayEnumPreview } from "../components/ArrayEnumPreview";
-import { PropertyPreviewProps } from "../PropertyPreviewProps";
+import { ResolvedNumberProperty, ResolvedStringProperty } from "../../types/index.js";
+import { ArrayEnumPreview } from "../components/ArrayEnumPreview.js";
+import { PropertyPreviewProps } from "../PropertyPreviewProps.js";
 
 /**
  * @group Preview components

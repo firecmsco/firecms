@@ -1,4 +1,4 @@
-import { CMSAnalyticsEvent } from "./analytics";
+import { CMSAnalyticsEvent } from "./analytics.js";
 
 export type AnalyticsController = {
 

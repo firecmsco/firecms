@@ -1,5 +1,5 @@
 import { DataType } from "@firecms/core";
-import { isIsoDateText } from "./text_values";
+import { isIsoDateText } from "./text_values.js";
 
 export function getInferenceType(value: any): DataType {
     if (typeof value === "number")

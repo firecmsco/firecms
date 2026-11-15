@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Highlight, themes } from "prism-react-renderer";
-import { useModeController } from "../hooks";
-import { jsonStringifyReplacer } from "../util/objects";
+import { useModeController } from "../hooks/index.js";
+import { jsonStringifyReplacer } from "../util/objects.js";
 
 export function EntityJsonPreview({ values }: { values: object }) {
     const code = JSON.stringify(values, jsonStringifyReplacer, "\t");

@@ -16,7 +16,7 @@ import {
     DialogContent
 } from "@firecms/ui";
 import { useSnackbarController, useStorageSource, useTranslation } from "@firecms/core";
-import { MediaAsset } from "../types";
+import { MediaAsset } from "../types/index.js";
 
 export interface MediaAssetDetailsProps {
     asset: MediaAsset;

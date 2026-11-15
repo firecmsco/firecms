@@ -25,9 +25,9 @@ import {
     Tooltip,
     Typography,
 } from "@firecms/ui";
-import { useUserManagement } from "../../hooks";
-import { RoleChip } from "../roles";
-import { PersistedUser } from "../../types";
+import { useUserManagement } from "../../hooks/index.js";
+import { RoleChip } from "../roles/index.js";
+import { PersistedUser } from "../../types/index.js";
 
 export function UsersTable({ onUserClicked }: {
     onUserClicked: (user: User) => void;

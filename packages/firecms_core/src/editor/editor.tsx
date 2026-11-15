@@ -2,18 +2,18 @@
 import React, { useEffect, useState, useRef } from "react";
 import { EditorState } from "prosemirror-state";
 import { cls, defaultBorderMixin, Separator, useInjectStyles, TextareaAutosize } from "@firecms/ui";
-import { useTranslation } from "../hooks/useTranslation";
-import { EditorBubble, ImageBubble, SlashCommandMenu, TableBubble, type JSONContent } from "./components";
-import { NodeSelector } from "./selectors/node-selector";
-import { LinkSelector } from "./selectors/link-selector";
-import { TextButtons } from "./selectors/text-buttons";
-import { removeClassesFromJson } from "./utils/remove_classes";
-import { parser, serializer } from "./markdown";
-import { EditorAIController } from "./types";
-import { useProseMirror } from "./hooks/useProseMirror";
-import { ProseMirrorContext } from "./hooks/useProseMirrorContext";
-import { highlightCommands } from "./extensions/HighlightDecorationExtension";
-import { schema } from "./schema";
+import { useTranslation } from "../hooks/useTranslation.js";
+import { EditorBubble, ImageBubble, SlashCommandMenu, TableBubble, type JSONContent } from "./components/index.js";
+import { NodeSelector } from "./selectors/node-selector.js";
+import { LinkSelector } from "./selectors/link-selector.js";
+import { TextButtons } from "./selectors/text-buttons.js";
+import { removeClassesFromJson } from "./utils/remove_classes.js";
+import { parser, serializer } from "./markdown.js";
+import { EditorAIController } from "./types.js";
+import { useProseMirror } from "./hooks/useProseMirror.js";
+import { ProseMirrorContext } from "./hooks/useProseMirrorContext.js";
+import { highlightCommands } from "./extensions/HighlightDecorationExtension.js";
+import { schema } from "./schema.js";
 
 export type CustomEditorComponent = {
   name: string,

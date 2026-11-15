@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
 
-import { AuthController, Authenticator, DataSourceDelegate, StorageSource, User } from "../index";
+import { AuthController, Authenticator, DataSourceDelegate, StorageSource, User } from "../index.js";
 
 /**
  * This hook is used internally for validating an authenticator.

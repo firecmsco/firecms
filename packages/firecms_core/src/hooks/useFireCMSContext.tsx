@@ -1,18 +1,18 @@
-import { AuthController, FireCMSContext, User } from "../types";
-import { useAuthController } from "./useAuthController";
-import { useSideDialogsController } from "./useSideDialogsController";
-import { useNavigationController } from "./useNavigationController";
-import { useSideEntityController } from "./useSideEntityController";
-import { useDataSource } from "./data/useDataSource";
-import { useStorageSource } from "./useStorageSource";
-import { useSnackbarController } from "./useSnackbarController";
-import { useUserConfigurationPersistence } from "./useUserConfigurationPersistence";
-import { useDialogsController } from "./useDialogsController";
-import { useCustomizationController } from "./useCustomizationController";
-import { useAnalyticsController } from "./useAnalyticsController";
+import { AuthController, FireCMSContext, User } from "../types/index.js";
+import { useAuthController } from "./useAuthController.js";
+import { useSideDialogsController } from "./useSideDialogsController.js";
+import { useNavigationController } from "./useNavigationController.js";
+import { useSideEntityController } from "./useSideEntityController.js";
+import { useDataSource } from "./data/useDataSource.js";
+import { useStorageSource } from "./useStorageSource.js";
+import { useSnackbarController } from "./useSnackbarController.js";
+import { useUserConfigurationPersistence } from "./useUserConfigurationPersistence.js";
+import { useDialogsController } from "./useDialogsController.js";
+import { useCustomizationController } from "./useCustomizationController.js";
+import { useAnalyticsController } from "./useAnalyticsController.js";
 import React, { useEffect } from "react";
-import { useInternalUserManagementController } from "./useInternalUserManagementController";
-import { useLicenseStatus } from "./useLicenseStatus";
+import { useInternalUserManagementController } from "./useInternalUserManagementController.js";
+import { useLicenseStatus } from "./useLicenseStatus.js";
 
 /**
  * Hook to retrieve the {@link FireCMSContext}.

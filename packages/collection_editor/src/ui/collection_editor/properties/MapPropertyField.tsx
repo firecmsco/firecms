@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { FieldCaption, MapProperty, Property, PropertyConfig,     useTranslation
 } from "@firecms/core";
 import { AddIcon, BooleanSwitchWithLabel, Button, Paper, Typography } from "@firecms/ui";
-import { PropertyFormDialog } from "../PropertyEditView";
+import { PropertyFormDialog } from "../PropertyEditView.js";
 import { getIn, useFormex } from "@firecms/formex";
-import { PropertyTree } from "../PropertyTree";
-import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath, namespaceToPropertiesPath } from "../util";
+import { PropertyTree } from "../PropertyTree.js";
+import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath, namespaceToPropertiesPath } from "../util.js";
 
 export function MapPropertyField({ disabled, getData, allowDataInference, propertyConfigs, collectionEditable }: {
     disabled: boolean;

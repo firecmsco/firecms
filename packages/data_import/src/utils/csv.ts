@@ -1,4 +1,4 @@
-import { sheetRowsToObjects, type SheetCell } from "./file_headers";
+import { sheetRowsToObjects, type SheetCell } from "./file_headers.js";
 
 /**
  * Delimiters sniffed from the header row, most common first.

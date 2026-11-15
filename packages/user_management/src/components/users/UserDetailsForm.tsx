@@ -20,9 +20,9 @@ import { FieldCaption, Role, useAuthController, User, useSnackbarController, use
 } from "@firecms/core";
 import { Formex, useCreateFormex } from "@firecms/formex";
 
-import { areRolesEqual } from "../../utils";
-import { useUserManagement } from "../../hooks";
-import { RoleChip } from "../roles";
+import { areRolesEqual } from "../../utils/index.js";
+import { useUserManagement } from "../../hooks/index.js";
+import { RoleChip } from "../roles/index.js";
 
 export const getUserYupSchema = (t: any) => Yup.object().shape({
     displayName: Yup.string().required(t("required")),

@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { EntityCollection, randomString } from "@firecms/core";
 import { Button, Checkbox, Label, SendIcon, TextareaAutosize, Tooltip } from "@firecms/ui";
-import { MessageLayout } from "./components/MessageLayout";
-import { streamDataTalkCommand } from "./api";
-import { ChatMessage, FeedbackSlug, Session } from "./types";
-import { buildSchemaContext } from "./utils/schemaContext";
-import { IntroComponent } from "./components/IntroComponent";
+import { MessageLayout } from "./components/MessageLayout.js";
+import { streamDataTalkCommand } from "./api.js";
+import { ChatMessage, FeedbackSlug, Session } from "./types.js";
+import { buildSchemaContext } from "./utils/schemaContext.js";
+import { IntroComponent } from "./components/IntroComponent.js";
 import { useTranslation } from "@firecms/core";
 
 const DEFAULT_API_ENDPOINT = "https://api.firecms.co";

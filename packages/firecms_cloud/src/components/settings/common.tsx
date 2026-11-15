@@ -1,6 +1,6 @@
-import { CurrencyOption, ProductPrice, Subscription } from "../../types/subscriptions";
-import { ProjectSubscriptionPlan } from "../../types/projects";
-import { describeGraduatedPrice, formatAmount, isGraduatedProPrice } from "../../utils/pro_pricing";
+import { CurrencyOption, ProductPrice, Subscription } from "../../types/subscriptions.js";
+import { ProjectSubscriptionPlan } from "../../types/projects.js";
+import { describeGraduatedPrice, formatAmount, isGraduatedProPrice } from "../../utils/pro_pricing.js";
 
 export function getCurrencyString({
                                       key,

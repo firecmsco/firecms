@@ -1,5 +1,5 @@
 import React from "react";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 
 export interface FilterChipProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "children"> {
     /**

@@ -1,4 +1,4 @@
-import { DefaultAppBar, DefaultAppBarProps } from "../core/DefaultAppBar";
+import { DefaultAppBar, DefaultAppBarProps } from "../core/DefaultAppBar.js";
 
 /**
  * This component renders the main app bar of FireCMS.

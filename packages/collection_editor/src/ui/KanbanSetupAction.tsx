@@ -1,7 +1,7 @@
 import React from "react";
 import { EntityCollection, useNavigationController } from "@firecms/core";
 import { Button } from "@firecms/ui";
-import { useCollectionEditorController } from "../useCollectionEditorController";
+import { useCollectionEditorController } from "../useCollectionEditorController.js";
 
 /**
  * Component rendered when Kanban view is missing orderProperty configuration.

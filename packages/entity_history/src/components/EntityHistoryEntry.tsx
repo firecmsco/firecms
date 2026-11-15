@@ -29,8 +29,8 @@ import {
     useTranslation,
     jsonStringifyReplacer
 } from "@firecms/core";
-import { useHistoryController } from "../HistoryControllerProvider";
-import { UserChip } from "./UserChip";
+import { useHistoryController } from "../HistoryControllerProvider.js";
+import { UserChip } from "./UserChip.js";
 
 export type EntityPreviewProps = {
     size: PreviewSize,

@@ -1,5 +1,5 @@
 import React from "react";
-import { AdminDrawerMenu } from "./AdminDrawerMenu";
+import { AdminDrawerMenu } from "./AdminDrawerMenu.js";
 import { DataTalkDrawer } from "@firecms/datatalk";
 import { DrawerLogo, useApp } from "@firecms/core";
 

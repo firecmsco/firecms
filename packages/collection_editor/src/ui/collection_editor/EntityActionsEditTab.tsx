@@ -22,9 +22,9 @@ import {
     Tooltip,
     Typography,
 } from "@firecms/ui";
-import { PersistedCollection } from "../../types/persisted_collection";
+import { PersistedCollection } from "../../types/persisted_collection.js";
 import { useFormex } from "@firecms/formex";
-import { EntityActionsSelectDialog } from "./EntityActionsSelectDialog";
+import { EntityActionsSelectDialog } from "./EntityActionsSelectDialog.js";
 
 export function EntityActionsEditTab({
     collection,

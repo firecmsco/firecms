@@ -1,5 +1,5 @@
 import { CMSType, EntityCollection, NavigationGroupMapping, Property } from "@firecms/core";
-import { PersistedCollection } from "./persisted_collection";
+import { PersistedCollection } from "./persisted_collection.js";
 
 export interface CollectionsSetupInfo {
     status: "ongoing" | "complete" | "error" | "dismissed";

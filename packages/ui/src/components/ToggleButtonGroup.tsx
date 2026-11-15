@@ -1,5 +1,5 @@
 import React from "react";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 
 export type ToggleButtonOption<T extends string = string> = {
     value: T;

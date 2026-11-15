@@ -1,4 +1,4 @@
-import { buildEntityHistoryPath, buildEntityHistoryPathSegments } from "../history_path";
+import { buildEntityHistoryPath, buildEntityHistoryPathSegments } from "../history_path.js";
 import { useEffect, useRef, useState } from "react";
 import {
     useAnalyticsController,
@@ -13,7 +13,7 @@ import {
     useTranslation
 } from "@firecms/core";
 import { cls, HistoryIcon, IconButton, Label, Tooltip, Typography } from "@firecms/ui";
-import { EntityHistoryEntry } from "./EntityHistoryEntry";
+import { EntityHistoryEntry } from "./EntityHistoryEntry.js";
 
 export function EntityHistoryView({
                                       entity,

@@ -1,6 +1,6 @@
-// import { cli } from "./cli";
-// import { main } from "./commands/auth";
-import { entry } from "./cli";
+// import { cli } from "./cli.js";
+// import { main } from "./commands/auth.js";
+import { entry } from "./cli.js";
 
 // const path = require('path');
 // const fs = require('fs');

@@ -1,4 +1,4 @@
-import { AccessResponse, FireCMSPlugin } from "../types";
+import { AccessResponse, FireCMSPlugin } from "../types/index.js";
 
 /**
  * Keys of the plugins that need a FireCMS PRO license.

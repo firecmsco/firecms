@@ -9,7 +9,7 @@ import {
     SearchIcon,
     Typography
 } from "@firecms/ui";
-import { useProjectConfig } from "../../hooks";
+import { useProjectConfig } from "../../hooks/index.js";
 import { EntityCollection, useSnackbarController, useTranslation } from "@firecms/core";
 import { useState } from "react";
 import { CollectionsConfigController } from "@firecms/collection_editor";

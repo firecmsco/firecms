@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 
-import { paperMixin } from "../styles";
-import { Collapse } from "./Collapse";
-import { cls } from "../util";
-import { useOutsideAlerter } from "../hooks";
+import { paperMixin } from "../styles.js";
+import { Collapse } from "./Collapse.js";
+import { cls } from "../util/index.js";
+import { useOutsideAlerter } from "../hooks/index.js";
 
 export type AutocompleteProps = {
     children: React.ReactNode;

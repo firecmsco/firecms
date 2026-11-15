@@ -13,14 +13,14 @@ import {
     PropertyOrBuilder,
     ResolvedEntityCollection,
     ResolvedProperty
-} from "../types";
-import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
+} from "../types/index.js";
+import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding.js";
 
-import { isHidden, isPropertyBuilder, isReadOnly, resolveProperty } from "../util";
-import { useAuthController, useCustomizationController, useTranslation } from "../hooks";
+import { isHidden, isPropertyBuilder, isReadOnly, resolveProperty } from "../util/index.js";
+import { useAuthController, useCustomizationController, useTranslation } from "../hooks/index.js";
 import { Typography } from "@firecms/ui";
-import { getFieldConfig, getFieldId } from "../core";
-import { ErrorBoundary, CircularProgressCenter } from "../components";
+import { getFieldConfig, getFieldId } from "../core/index.js";
+import { ErrorBoundary, CircularProgressCenter } from "../components/index.js";
 
 /**
  * This component renders a form field creating the corresponding configuration

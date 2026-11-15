@@ -6,21 +6,21 @@ import equal from "react-fast-compare"
 import { FixedSizeList as List } from "react-window";
 import useMeasure from "react-use-measure";
 
-import { CircularProgressCenter } from "../CircularProgressCenter";
+import { CircularProgressCenter } from "../CircularProgressCenter.js";
 import {
     OnVirtualTableColumnResizeParams,
     VirtualTableColumn,
     VirtualTableFilterValues,
     VirtualTableProps,
     VirtualTableWhereFilterOp
-} from "./VirtualTableProps";
+} from "./VirtualTableProps.js";
 
-import { VirtualTableContextProps } from "./types";
-import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
-import { VirtualTableRow } from "./VirtualTableRow";
-import { VirtualTableCell } from "./VirtualTableCell";
+import { VirtualTableContextProps } from "./types.js";
+import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow.js";
+import { VirtualTableRow } from "./VirtualTableRow.js";
+import { VirtualTableCell } from "./VirtualTableCell.js";
 import { AssignmentIcon, CenteredView, cls, Typography } from "@firecms/ui";
-import { useDebounceCallback } from "../common/useDebouncedCallback";
+import { useDebounceCallback } from "../common/useDebouncedCallback.js";
 import {
     closestCenter,
     DndContext,

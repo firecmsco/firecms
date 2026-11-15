@@ -5,7 +5,7 @@ import {
     AddIcon,
     defaultBorderMixin,
 } from "@firecms/ui";
-import { FilterRow } from "./FilterRow";
+import { FilterRow } from "./FilterRow.js";
 import {
     FilterDef,
     FilterOp,
@@ -13,7 +13,7 @@ import {
     getOperatorsForType,
     persistFilters,
     FILTERABLE_VALUE_TYPES,
-} from "./filter_utils";
+} from "./filter_utils.js";
 
 // ─── Props ──────────────────────────────────────────────────────────────────
 

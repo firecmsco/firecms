@@ -1,5 +1,5 @@
 import type { i18n } from "i18next";
-import { FireCMSPlugin, PluginTranslations } from "../types";
+import { FireCMSPlugin, PluginTranslations } from "../types/index.js";
 
 const FIRECMS_NS = "firecms_core";
 

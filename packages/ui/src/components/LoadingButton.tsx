@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, ButtonProps } from "./Button";
-import { CircularProgress } from "./CircularProgress";
+import { Button, ButtonProps } from "./Button.js";
+import { CircularProgress } from "./CircularProgress.js";
 
 export type LoadingButtonProps<P extends React.ElementType> = ButtonProps<P> & {
     startIcon?: React.ReactNode;

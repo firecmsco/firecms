@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState, ReactNode } from "react";
 import { Fragment, DOMParser } from "prosemirror-model";
-import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
+import { useProseMirrorContext } from "../hooks/useProseMirrorContext.js";
 import { autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom";
-import { SlashCommandPluginKey } from "../plugins/slashCommandPlugin";
+import { SlashCommandPluginKey } from "../plugins/slashCommandPlugin.js";
 import {
     cls,
     defaultBorderMixin,
@@ -21,13 +21,13 @@ import {
 } from "@firecms/ui";
 import { setBlockType, wrapIn } from "prosemirror-commands";
 import { wrapInList } from "prosemirror-schema-list";
-import { schema } from "../schema";
+import { schema } from "../schema.js";
 import { EditorView } from "prosemirror-view";
 import { TextSelection } from "prosemirror-state";
-import { EditorAIController } from "../types";
-import { onFileRead, UploadFn } from "../extensions/Image";
-import { textLoadingCommands } from "../extensions/TextLoadingDecorationExtension";
-import { parser } from "../markdown";
+import { EditorAIController } from "../types.js";
+import { onFileRead, UploadFn } from "../extensions/Image.js";
+import { textLoadingCommands } from "../extensions/TextLoadingDecorationExtension.js";
+import { parser } from "../markdown.js";
 
 interface SuggestionItem {
     title: string;

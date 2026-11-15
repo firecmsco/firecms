@@ -1,8 +1,8 @@
 import React from "react";
 
 import { format } from "date-fns";
-import { useCustomizationController } from "../../hooks";
-import { defaultDateFormat, localeToLanguageTag, useDateFnsLocale } from "../../util";
+import { useCustomizationController } from "../../hooks/index.js";
+import { defaultDateFormat, localeToLanguageTag, useDateFnsLocale } from "../../util/index.js";
 
 export interface DatePreviewProps {
     date: Date;

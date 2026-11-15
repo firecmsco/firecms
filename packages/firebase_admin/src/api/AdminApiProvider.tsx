@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from "react";
 import { FirebaseApp } from "firebase/app";
 import { getFirestore, Firestore } from "firebase/firestore";
-import { AdminApi } from "./admin_api";
+import { AdminApi } from "./admin_api.js";
 
 interface AdminApiContextValue {
     adminApi: AdminApi;

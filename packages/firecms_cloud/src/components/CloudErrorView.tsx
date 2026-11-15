@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSnackbarController } from "@firecms/core";
 import { BuildIcon, Button, LoadingButton, OpenInNewIcon, Typography } from "@firecms/ui";
-import { ApiError, FireCMSBackend } from "../types";
-import { useFireCMSBackend } from "../hooks";
+import { ApiError, FireCMSBackend } from "../types/index.js";
+import { useFireCMSBackend } from "../hooks/index.js";
 import { useNavigate } from "react-router-dom";
 
 export type CloudError = {

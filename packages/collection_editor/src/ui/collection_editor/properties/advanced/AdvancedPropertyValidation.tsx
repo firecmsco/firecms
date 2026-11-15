@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Field, FormexFieldProps } from "@firecms/formex";
-import { SwitchControl } from "../../SwitchControl";
+import { SwitchControl } from "../../SwitchControl.js";
 import { useTranslation } from "@firecms/core";
 
 export function AdvancedPropertyValidation({ disabled }: {

@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import { ChipColorKey, ChipColorScheme } from "@firecms/ui";
-import { Entity } from "../../types";
+import { Entity } from "../../types/index.js";
 
 /**
  * Item wrapper for entities in the Board component

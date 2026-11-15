@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
-import { useCustomizationController, useFireCMSContext, useTranslation } from "../../hooks";
-import { NavigationEntry, PluginHomePageActionsProps } from "../../types";
-import { IconForView } from "../../util";
-import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
+import { useCustomizationController, useFireCMSContext, useTranslation } from "../../hooks/index.js";
+import { NavigationEntry, PluginHomePageActionsProps } from "../../types/index.js";
+import { IconForView } from "../../util/index.js";
+import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence.js";
 import { IconButton, StarIcon } from "@firecms/ui";
-import { NavigationCard } from "./NavigationCard";
-import { SmallNavigationCard } from "./SmallNavigationCard";
+import { NavigationCard } from "./NavigationCard.js";
+import { SmallNavigationCard } from "./SmallNavigationCard.js";
 import React from "react";
 
 /**

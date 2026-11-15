@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { CellRendererParams, VirtualTable, VirtualTableColumn } from "@firecms/core";
 import { getIn } from "@firecms/formex";
-import { DataTableCell } from "./DataTableCell";
+import { DataTableCell } from "./DataTableCell.js";
 import { FileDownloadIcon, IconButton, Paper, Typography } from "@firecms/ui";
 import { downloadDataAsCsv } from "@firecms/data_export";
 

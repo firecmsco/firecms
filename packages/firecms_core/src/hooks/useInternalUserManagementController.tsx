@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { InternalUserManagement, NavigationController, User } from "../types";
-import { NavigationContext } from "../contexts/NavigationContext";
-import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext";
+import { InternalUserManagement, NavigationController, User } from "../types/index.js";
+import { NavigationContext } from "../contexts/NavigationContext.js";
+import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext.js";
 
 /**
  * Use this hook to get the internal user management of the app.

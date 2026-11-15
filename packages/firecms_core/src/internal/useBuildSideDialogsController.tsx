@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SideDialogPanelProps, SideDialogsController } from "../types";
+import { SideDialogPanelProps, SideDialogsController } from "../types/index.js";
 import equal from "react-fast-compare"
 
 export function useBuildSideDialogsController(): SideDialogsController {

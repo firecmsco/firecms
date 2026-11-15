@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import { CircularProgressCenter, EntityCollection, useNavigationController } from "@firecms/core";
-import { DataTalkConfig, useDataTalk } from "./DataTalkProvider";
-import { DataTalkSession } from "./DataTalkSession";
-import { Session } from "./types";
-import { DataTalkSessionsPanel } from "./components/DataTalkSessionsPanel";
+import { DataTalkConfig, useDataTalk } from "./DataTalkProvider.js";
+import { DataTalkSession } from "./DataTalkSession.js";
+import { Session } from "./types.js";
+import { DataTalkSessionsPanel } from "./components/DataTalkSessionsPanel.js";
 
 const DEFAULT_API_ENDPOINT = "https://api.firecms.co";
 

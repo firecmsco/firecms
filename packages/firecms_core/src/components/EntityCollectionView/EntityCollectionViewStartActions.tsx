@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { useCustomizationController, useFireCMSContext, useLargeLayout } from "../../hooks";
+import { useCustomizationController, useFireCMSContext, useLargeLayout } from "../../hooks/index.js";
 import {
     CollectionActionsProps,
     EntityCollection,
     EntityTableController,
     ResolvedProperty,
     SelectionController
-} from "../../types";
-import { toArray } from "../../util/arrays";
-import { ErrorBoundary } from "../ErrorBoundary";
-import { ClearFilterSortButton } from "../ClearFilterSortButton";
-import { FiltersDialog } from "./FiltersDialog";
+} from "../../types/index.js";
+import { toArray } from "../../util/arrays.js";
+import { ErrorBoundary } from "../ErrorBoundary.js";
+import { ClearFilterSortButton } from "../ClearFilterSortButton.js";
+import { FiltersDialog } from "./FiltersDialog.js";
 import { Badge, Button, cls, FilterListIcon, IconButton, Tooltip } from "@firecms/ui";
-import { useTranslation } from "../../hooks/useTranslation";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 export type EntityCollectionViewStartActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;

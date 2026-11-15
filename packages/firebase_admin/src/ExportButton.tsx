@@ -8,15 +8,15 @@ import {
     FileDownloadIcon,
 } from "@firecms/ui";
 import { useSnackbarController } from "@firecms/core";
-import { useAdminApi } from "./api/AdminApiProvider";
-import { AdminDocument } from "./api/admin_api";
+import { useAdminApi } from "./api/AdminApiProvider.js";
+import { AdminDocument } from "./api/admin_api.js";
 import {
     documentsToCSV,
     documentsToJSON,
     downloadFile,
     collectionFilename,
     ExportFormat,
-} from "./export_utils";
+} from "./export_utils.js";
 
 export function ExportButton({
     projectId,

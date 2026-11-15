@@ -2,9 +2,9 @@
 import React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
-import { cls } from "../util";
-import { useInjectStyles } from "../hooks";
-import { usePortalContainer } from "../hooks/PortalContainerContext";
+import { cls } from "../util/index.js";
+import { useInjectStyles } from "../hooks/index.js";
+import { usePortalContainer } from "../hooks/PortalContainerContext.js";
 
 export type TooltipProps = {
     open?: boolean,

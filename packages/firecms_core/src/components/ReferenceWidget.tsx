@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from "react";
 
-import { Entity, EntityCollection, EntityReference, FilterValues } from "../types";
-import { getReferenceFrom } from "../util";
-import { PreviewSize, ReferencePreview } from "../preview";
-import { useNavigationController, useReferenceDialog, useTranslation } from "../hooks";
+import { Entity, EntityCollection, EntityReference, FilterValues } from "../types/index.js";
+import { getReferenceFrom } from "../util/index.js";
+import { PreviewSize, ReferencePreview } from "../preview/index.js";
+import { useNavigationController, useReferenceDialog, useTranslation } from "../hooks/index.js";
 import { Button, cls } from "@firecms/ui";
 
 export type ReferenceWidgetProps<M extends Record<string, any>> = {

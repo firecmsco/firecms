@@ -1,4 +1,4 @@
-import { useInjectStyles } from "./useInjectStyles";
+import { useInjectStyles } from "./useInjectStyles.js";
 
 export type IconStyle = {
     fill?: boolean;

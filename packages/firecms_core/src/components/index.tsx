@@ -1,46 +1,46 @@
-export type { ErrorViewProps } from "./ErrorView";
-export { ErrorView } from "./ErrorView";
+export type { ErrorViewProps } from "./ErrorView.js";
+export { ErrorView } from "./ErrorView.js";
 
-export type { EntityViewProps } from "./EntityView";
-export { EntityView } from "./EntityView";
+export type { EntityViewProps } from "./EntityView.js";
+export { EntityView } from "./EntityView.js";
 
-export type { ReferenceSelectionInnerProps } from "./ReferenceTable/ReferenceSelectionTable";
-export { ReferenceSelectionTable } from "./ReferenceTable/ReferenceSelectionTable";
+export type { ReferenceSelectionInnerProps } from "./ReferenceTable/ReferenceSelectionTable.js";
+export { ReferenceSelectionTable } from "./ReferenceTable/ReferenceSelectionTable.js";
 
-export { CircularProgressCenter } from "./CircularProgressCenter";
+export { CircularProgressCenter } from "./CircularProgressCenter.js";
 
-export * from "./common";
+export * from "./common/index.js";
 
-export * from "./HomePage";
-export * from "./SelectableTable/SelectableTable";
-export * from "./SelectableTable/SelectableTableContext";
-export * from "./EntityCollectionView/EntityCollectionView";
-export * from "./EntityCollectionView/EntityCollectionViewActions";
-export * from "./EntityCollectionView/EntityCollectionCardView";
-export * from "./EntityCollectionView/EntityCard";
-export * from "./EntityCollectionView/useSelectionController";
+export * from "./HomePage/index.js";
+export * from "./SelectableTable/SelectableTable.js";
+export * from "./SelectableTable/SelectableTableContext.js";
+export * from "./EntityCollectionView/EntityCollectionView.js";
+export * from "./EntityCollectionView/EntityCollectionViewActions.js";
+export * from "./EntityCollectionView/EntityCollectionCardView.js";
+export * from "./EntityCollectionView/EntityCard.js";
+export * from "./EntityCollectionView/useSelectionController.js";
 
-export * from "./PropertyConfigBadge";
-export * from "./PropertyIdCopyTooltip";
+export * from "./PropertyConfigBadge.js";
+export * from "./PropertyIdCopyTooltip.js";
 
-export * from "./EntityCollectionTable";
-export * from "./NotFoundPage";
+export * from "./EntityCollectionTable/index.js";
+export * from "./NotFoundPage.js";
 
-export * from "./VirtualTable";
-export * from "./ErrorBoundary";
-export * from "./ConfirmationDialog";
+export * from "./VirtualTable/index.js";
+export * from "./ErrorBoundary.js";
+export * from "./ConfirmationDialog.js";
 
-export * from "./FireCMSLogo";
+export * from "./FireCMSLogo.js";
 
-export * from "../core/DefaultAppBar";
+export * from "../core/DefaultAppBar.js";
 
-export * from "./ArrayContainer";
-export * from "./ReferenceWidget";
-export * from "./SearchIconsView";
-export * from "./FieldCaption";
+export * from "./ArrayContainer.js";
+export * from "./ReferenceWidget.js";
+export * from "./SearchIconsView.js";
+export * from "./FieldCaption.js";
 
-export * from "./EntityPreview";
+export * from "./EntityPreview.js";
 
-export * from "./AIIcon";
-export * from "./LanguageToggle";
-export * from "./LicenseBanner";
+export * from "./AIIcon.js";
+export * from "./LanguageToggle.js";
+export * from "./LicenseBanner.js";

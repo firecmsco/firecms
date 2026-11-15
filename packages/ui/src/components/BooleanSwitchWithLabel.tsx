@@ -5,9 +5,9 @@ import {
     fieldBackgroundHoverMixin,
     fieldBackgroundMixin,
     focusedClasses
-} from "../styles";
-import { BooleanSwitch, BooleanSwitchProps } from "./BooleanSwitch";
-import { cls } from "../util";
+} from "../styles.js";
+import { BooleanSwitch, BooleanSwitchProps } from "./BooleanSwitch.js";
+import { cls } from "../util/index.js";
 
 export type BooleanSwitchWithLabelProps = BooleanSwitchProps & {
     position?: "start" | "end",

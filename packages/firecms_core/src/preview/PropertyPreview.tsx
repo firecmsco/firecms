@@ -9,33 +9,33 @@ import {
     ResolvedMapProperty,
     ResolvedNumberProperty,
     ResolvedStringProperty
-} from "../types";
+} from "../types/index.js";
 
-import { resolveProperty } from "../util";
-import { jsonStringifyReplacer } from "../util/objects";
+import { resolveProperty } from "../util/index.js";
+import { jsonStringifyReplacer } from "../util/objects.js";
 
-import { PropertyPreviewProps } from "./PropertyPreviewProps";
-import { useAuthController, useCustomizationController } from "../hooks";
-import { EmptyValue } from "./components/EmptyValue";
-import { UrlComponentPreview } from "./components/UrlComponentPreview";
-import { StorageThumbnail } from "./components/StorageThumbnail";
+import { PropertyPreviewProps } from "./PropertyPreviewProps.js";
+import { useAuthController, useCustomizationController } from "../hooks/index.js";
+import { EmptyValue } from "./components/EmptyValue.js";
+import { UrlComponentPreview } from "./components/UrlComponentPreview.js";
+import { StorageThumbnail } from "./components/StorageThumbnail.js";
 import { Markdown } from "@firecms/ui";
-import { StringPropertyPreview } from "./property_previews/StringPropertyPreview";
-import { ArrayPropertyPreview } from "./property_previews/ArrayPropertyPreview";
-import { ArrayOfReferencesPreview } from "./property_previews/ArrayOfReferencesPreview";
-import { ArrayOfStorageComponentsPreview } from "./property_previews/ArrayOfStorageComponentsPreview";
-import { ArrayPropertyEnumPreview } from "./property_previews/ArrayPropertyEnumPreview";
-import { ArrayOfStringsPreview } from "./property_previews/ArrayOfStringsPreview";
-import { ArrayOneOfPreview } from "./property_previews/ArrayOneOfPreview";
-import { MapPropertyPreview } from "./property_previews/MapPropertyPreview";
-import { GeopointPropertyPreview } from "./property_previews/GeopointPropertyPreview";
-import { ReferencePreview } from "./components/ReferencePreview";
-import { DatePreview } from "./components/DatePreview";
-import { BooleanPreview } from "./components/BooleanPreview";
-import { NumberPropertyPreview } from "./property_previews/NumberPropertyPreview";
-import { ErrorView } from "../components";
-import { UserPreview } from "./components/UserPreview";
-import { getGeoPointCoordinates } from "../util";
+import { StringPropertyPreview } from "./property_previews/StringPropertyPreview.js";
+import { ArrayPropertyPreview } from "./property_previews/ArrayPropertyPreview.js";
+import { ArrayOfReferencesPreview } from "./property_previews/ArrayOfReferencesPreview.js";
+import { ArrayOfStorageComponentsPreview } from "./property_previews/ArrayOfStorageComponentsPreview.js";
+import { ArrayPropertyEnumPreview } from "./property_previews/ArrayPropertyEnumPreview.js";
+import { ArrayOfStringsPreview } from "./property_previews/ArrayOfStringsPreview.js";
+import { ArrayOneOfPreview } from "./property_previews/ArrayOneOfPreview.js";
+import { MapPropertyPreview } from "./property_previews/MapPropertyPreview.js";
+import { GeopointPropertyPreview } from "./property_previews/GeopointPropertyPreview.js";
+import { ReferencePreview } from "./components/ReferencePreview.js";
+import { DatePreview } from "./components/DatePreview.js";
+import { BooleanPreview } from "./components/BooleanPreview.js";
+import { NumberPropertyPreview } from "./property_previews/NumberPropertyPreview.js";
+import { ErrorView } from "../components/index.js";
+import { UserPreview } from "./components/UserPreview.js";
+import { getGeoPointCoordinates } from "../util/index.js";
 
 /**
  * @group Preview components

@@ -13,8 +13,8 @@ import {
     CollectionGenerationCallback,
     CollectionGenerationApiError,
     CollectionOperation
-} from "../../api/generateCollectionApi";
-import { PersistedCollection } from "../../types/persisted_collection";
+} from "../../api/generateCollectionApi.js";
+import { PersistedCollection } from "../../types/persisted_collection.js";
 
 export interface AICollectionGeneratorPopoverProps {
     /**

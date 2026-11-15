@@ -1,5 +1,5 @@
 import { FirebaseApp } from "firebase/app";
-import { getInferredEntityCollection } from "./schema_inference";
+import { getInferredEntityCollection } from "./schema_inference/index.js";
 import { CollectionInference } from "@firecms/collection_editor";
 import { getFirestore } from "firebase/firestore";
 import { FilterValues } from "@firecms/core";

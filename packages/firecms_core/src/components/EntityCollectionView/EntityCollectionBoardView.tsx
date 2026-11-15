@@ -7,10 +7,10 @@ import {
     FilterValues,
     ResolvedStringProperty,
     SelectionController
-} from "../../types";
-import { Board } from "./Board";
-import { BoardItem, BoardItemViewProps, ColumnLoadingState } from "./board_types";
-import { EntityBoardCard } from "./EntityBoardCard";
+} from "../../types/index.js";
+import { Board } from "./Board.js";
+import { BoardItem, BoardItemViewProps, ColumnLoadingState } from "./board_types.js";
+import { EntityBoardCard } from "./EntityBoardCard.js";
 import {
     Button,
     ChipColorKey,
@@ -22,7 +22,7 @@ import {
     getColorSchemeForSeed,
     Typography
 } from "@firecms/ui";
-import { getPropertyInPath, resolveCollection, resolveEnumValues } from "../../util";
+import { getPropertyInPath, resolveCollection, resolveEnumValues } from "../../util/index.js";
 import {
     saveEntityWithCallbacks,
     useAuthController,
@@ -30,13 +30,13 @@ import {
     useDataSource,
     useFireCMSContext,
     useSideEntityController
-} from "../../hooks";
-import { useAnalyticsController } from "../../hooks/useAnalyticsController";
-import { SaveEntityProps } from "../../types/datasource";
+} from "../../hooks/index.js";
+import { useAnalyticsController } from "../../hooks/useAnalyticsController.js";
+import { SaveEntityProps } from "../../types/datasource.js";
 import { setIn } from "@firecms/formex";
-import { useBoardDataController } from "./useBoardDataController";
-import { CollectionDataErrorBanner } from "./CollectionDataErrorBanner";
-import { useTranslation } from "../../hooks/useTranslation";
+import { useBoardDataController } from "./useBoardDataController.js";
+import { CollectionDataErrorBanner } from "./CollectionDataErrorBanner.js";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 export type EntityCollectionBoardViewProps<M extends Record<string, any> = any> = {
     collection: EntityCollection<M>;

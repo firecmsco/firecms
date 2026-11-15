@@ -1,6 +1,6 @@
-import { UserConfigurationPersistence } from "../types";
+import { UserConfigurationPersistence } from "../types/index.js";
 import { useContext } from "react";
-import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext";
+import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext.js";
 
 /**
  * Use this controller to access the configuration that is stored externally,

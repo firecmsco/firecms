@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { useDebouncedCallback } from "../../../util";
+import { useDebouncedCallback } from "../../../util/index.js";
 import { focusedDisabled, TextareaAutosize } from "@firecms/ui";
 
 export function VirtualTableInput(props: {

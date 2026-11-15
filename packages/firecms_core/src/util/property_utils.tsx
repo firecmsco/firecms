@@ -8,11 +8,11 @@ import {
     PropertyOrBuilder,
     ResolvedProperties,
     ResolvedProperty
-} from "../types";
-import { isPropertyBuilder } from "./entities";
-import { resolveProperty } from "./resolutions";
+} from "../types/index.js";
+import { isPropertyBuilder } from "./entities.js";
+import { resolveProperty } from "./resolutions.js";
 import { CircleIcon, FunctionsIcon } from "@firecms/ui";
-import { getFieldConfig } from "../core";
+import { getFieldConfig } from "../core/index.js";
 
 export function isReferenceProperty(
     authController: AuthController,

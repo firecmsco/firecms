@@ -1,6 +1,6 @@
 "use client";
 import React, { ChangeEvent, useCallback, useDeferredValue, useEffect } from "react";
-import { TextField, TextFieldProps } from "./index";
+import { TextField, TextFieldProps } from "./index.js";
 
 export function DebouncedTextField<T extends string | number>(props: TextFieldProps<T>) {
 

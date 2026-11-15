@@ -8,7 +8,7 @@ import {
     TextField,
     Typography
 } from "@firecms/ui";
-import { useProjectConfig } from "../../hooks";
+import { useProjectConfig } from "../../hooks/index.js";
 import { useState } from "react";
 import { useSnackbarController, useTranslation } from "@firecms/core";
 

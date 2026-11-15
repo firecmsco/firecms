@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from "react";
-import { VirtualTableWhereFilterOp } from "../../VirtualTable";
-import { Entity, EntityCollection, EntityReference } from "../../../types";
-import { ReferencePreview } from "../../../preview";
-import { getReferenceFrom } from "../../../util";
-import { useNavigationController, useReferenceDialog, useTranslation } from "../../../hooks";
+import { VirtualTableWhereFilterOp } from "../../VirtualTable/index.js";
+import { Entity, EntityCollection, EntityReference } from "../../../types/index.js";
+import { ReferencePreview } from "../../../preview/index.js";
+import { getReferenceFrom } from "../../../util/index.js";
+import { useNavigationController, useReferenceDialog, useTranslation } from "../../../hooks/index.js";
 import { Button, Checkbox, Label, Select, SelectItem } from "@firecms/ui";
 
 interface ReferenceFilterFieldProps {

@@ -21,7 +21,7 @@ import {
     VerticalAlignBottomIcon,
     VerticalAlignTopIcon
 } from "@firecms/ui";
-import { NonEditablePropertyPreview, PropertyFieldPreview } from "./PropertyFieldPreview";
+import { NonEditablePropertyPreview, PropertyFieldPreview } from "./PropertyFieldPreview.js";
 import {
     closestCenter,
     DndContext,
@@ -40,9 +40,9 @@ import {
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 import { CSS } from "@dnd-kit/utilities";
-import { getFullId, getFullIdPath } from "./util";
-import { editableProperty } from "../../utils/entities";
-import { useAIModifiedPaths } from "./AIModifiedPathsContext";
+import { getFullId, getFullIdPath } from "./util.js";
+import { editableProperty } from "../../utils/entities.js";
+import { useAIModifiedPaths } from "./AIModifiedPathsContext.js";
 
 export const PropertyTree = React.memo(
     function PropertyTree<M extends {

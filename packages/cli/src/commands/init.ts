@@ -8,10 +8,10 @@ import { promisify } from "util";
 import { execa } from "execa";
 import { Listr } from "listr2";
 import axios from "axios";
-import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
-import { getCurrentUser, getTokens, login, refreshCredentials } from "./auth";
-import { authCommand, describeRequestError } from "../util/request_error";
-import { isFirebaseProjectId, pinnedFireCMSVersion } from "../util/scaffold";
+import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common.js";
+import { getCurrentUser, getTokens, login, refreshCredentials } from "./auth.js";
+import { authCommand, describeRequestError } from "../util/request_error.js";
+import { isFirebaseProjectId, pinnedFireCMSVersion } from "../util/scaffold.js";
 import ora from "ora";
 
 import fsExtra from "fs-extra";

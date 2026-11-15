@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { EntityCollection, FireCMSPlugin } from "@firecms/core";
-import { ExportCollectionAction } from "./export";
+import { ExportCollectionAction } from "./export/index.js";
 
 /**
  * Use this plugin to be able to export collections data as JSON or CSV

@@ -9,8 +9,8 @@ import {
     TextField,
     Typography
 } from "@firecms/ui";
-import { useProjectConfig } from "../../hooks";
-import { TypesenseSearchConfig } from "../../hooks/useBuildProjectConfig";
+import { useProjectConfig } from "../../hooks/index.js";
+import { TypesenseSearchConfig } from "../../hooks/useBuildProjectConfig.js";
 
 export function TypesenseSettingsView() {
     const projectConfig = useProjectConfig();

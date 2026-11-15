@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, IconProps } from "./Icon";
+import { Icon, IconProps } from "./Icon.js";
 
 /**
  * Build one of the generated icon components.

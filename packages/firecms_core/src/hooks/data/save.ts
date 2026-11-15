@@ -1,6 +1,6 @@
-import { DataSource, Entity, EntityCollection, EntityValues, FireCMSContext, SaveEntityProps, User } from "../../types";
-import { useDataSource } from "./useDataSource";
-import { resolveCollection } from "../../util";
+import { DataSource, Entity, EntityCollection, EntityValues, FireCMSContext, SaveEntityProps, User } from "../../types/index.js";
+import { useDataSource } from "./useDataSource.js";
+import { resolveCollection } from "../../util/index.js";
 
 /**
  * @group Hooks and utilities

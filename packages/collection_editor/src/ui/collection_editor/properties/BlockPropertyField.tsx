@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
 import { getIn, useFormex } from "@firecms/formex";
-import { OnPropertyChangedParams, PropertyFormDialog } from "../PropertyEditView";
+import { OnPropertyChangedParams, PropertyFormDialog } from "../PropertyEditView.js";
 import {
     getFullId,
     getFullIdPath,
     idToPropertiesPath,
     namespaceToPropertiesOrderPath,
     namespaceToPropertiesPath
-} from "../util";
-import { PropertyTree } from "../PropertyTree";
+} from "../util.js";
+import { PropertyTree } from "../PropertyTree.js";
 import { ArrayProperty, PropertyConfig } from "@firecms/core";
 
 export function BlockPropertyField({

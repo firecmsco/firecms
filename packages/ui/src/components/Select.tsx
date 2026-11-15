@@ -8,11 +8,11 @@ import {
     fieldBackgroundInvisibleMixin,
     fieldBackgroundMixin,
     focusedDisabled
-} from "../styles";
-import { CheckIcon, KeyboardArrowDownIcon } from "../icons";
-import { cls } from "../util";
-import { SelectInputLabel } from "./common/SelectInputLabel";
-import { usePortalContainer } from "../hooks/PortalContainerContext";
+} from "../styles.js";
+import { CheckIcon, KeyboardArrowDownIcon } from "../icons/index.js";
+import { cls } from "../util/index.js";
+import { SelectInputLabel } from "./common/SelectInputLabel.js";
+import { usePortalContainer } from "../hooks/PortalContainerContext.js";
 
 export type SelectValue = string | number | boolean;
 

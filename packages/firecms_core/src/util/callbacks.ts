@@ -1,5 +1,5 @@
-import { EntityCallbacks } from "../types";
-import { mergeDeep } from "./objects";
+import { EntityCallbacks } from "../types/index.js";
+import { mergeDeep } from "./objects.js";
 
 export const mergeCallbacks = (
     baseCallbacks: EntityCallbacks = {},

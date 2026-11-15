@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { User } from "./user.js";
 
 export type InternalUserManagement<USER extends User = User> = {
 

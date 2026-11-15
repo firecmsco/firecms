@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { FormexController } from "./types";
+import { FormexController } from "./types.js";
 
 const FormexContext = React.createContext<FormexController<any>>({} as any);
 

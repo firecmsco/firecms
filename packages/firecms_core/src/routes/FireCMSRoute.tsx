@@ -1,24 +1,24 @@
 import { Blocker, useBlocker, useLocation } from "react-router";
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigationController } from "../hooks";
+import { useNavigationController } from "../hooks/index.js";
 import { useNavigate } from "react-router-dom";
 import {
     getNavigationEntriesFromPath,
     NavigationViewCollectionInternal,
     NavigationViewEntityCustomInternal,
     NavigationViewInternal
-} from "../util/navigation_from_path";
-import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
-import { toArray } from "../util/arrays";
-import { addInitialSlash, encodeEntityId } from "../util/navigation_utils";
-import { shouldBlockEntityNavigation } from "../util/navigation_blocking";
-import { NotFoundPage } from "../components";
-import { lazyEager } from "../util/lazy_eager";
+} from "../util/navigation_from_path.js";
+import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController.js";
+import { toArray } from "../util/arrays.js";
+import { addInitialSlash, encodeEntityId } from "../util/navigation_utils.js";
+import { shouldBlockEntityNavigation } from "../util/navigation_blocking.js";
+import { NotFoundPage } from "../components/index.js";
+import { lazyEager } from "../util/lazy_eager.js";
 
-const EntityEditView = lazyEager<typeof import("../core/EntityEditView")["EntityEditView"]>(() => import("../core/EntityEditView"), "EntityEditView");
-const EntityCollectionView = lazyEager<typeof import("../components/EntityCollectionView/EntityCollectionView")["EntityCollectionView"]>(() => import("../components/EntityCollectionView/EntityCollectionView"), "EntityCollectionView");
-import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
-import { EntityCollection } from "../types";
+const EntityEditView = lazyEager<typeof import("../core/EntityEditView.js")["EntityEditView"]>(() => import("../core/EntityEditView.js"), "EntityEditView");
+const EntityCollectionView = lazyEager<typeof import("../components/EntityCollectionView/EntityCollectionView.js")["EntityCollectionView"]>(() => import("../components/EntityCollectionView/EntityCollectionView.js"), "EntityCollectionView");
+import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog.js";
+import { EntityCollection } from "../types/index.js";
 
 export function FireCMSRoute() {
 

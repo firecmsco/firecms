@@ -1,12 +1,12 @@
 import React from "react";
 
-import { ResolvedMapProperty } from "../../types";
-import { PropertyPreviewProps } from "../PropertyPreviewProps";
-import { PropertyPreview } from "../PropertyPreview";
+import { ResolvedMapProperty } from "../../types/index.js";
+import { PropertyPreviewProps } from "../PropertyPreviewProps.js";
+import { PropertyPreview } from "../PropertyPreview.js";
 import { cls, defaultBorderMixin, Typography } from "@firecms/ui";
-import { ErrorBoundary } from "../../components";
-import { EmptyValue } from "../components/EmptyValue";
-import { DatePreview } from "../components/DatePreview";
+import { ErrorBoundary } from "../../components/index.js";
+import { EmptyValue } from "../components/EmptyValue.js";
+import { DatePreview } from "../components/DatePreview.js";
 
 /**
  * @group Preview components

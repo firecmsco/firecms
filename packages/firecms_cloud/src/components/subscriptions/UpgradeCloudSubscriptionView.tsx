@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Alert, LoadingButton, RocketLaunchIcon } from "@firecms/ui";
-import { ProductPrice, ProductWithPrices } from "../../types";
-import { useSubscriptionsForUserController } from "../../hooks";
-import { CurrencyPriceSelect } from "./CurrencyPriceSelect";
+import { ProductPrice, ProductWithPrices } from "../../types/index.js";
+import { useSubscriptionsForUserController } from "../../hooks/index.js";
+import { CurrencyPriceSelect } from "./CurrencyPriceSelect.js";
 import { useTranslation } from "@firecms/core";
 
 function getDefaultCurrency(productPrice: ProductPrice) {

@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useFormex } from "./Formex";
-import { getIn, isFunction, isObject } from "./utils";
-import { FormexController } from "./types";
+import { useFormex } from "./Formex.js";
+import { getIn, isFunction, isObject } from "./utils.js";
+import { FormexController } from "./types.js";
 
 export interface FieldInputProps<Value> {
     /** Value of the field */

@@ -1,4 +1,4 @@
-import { Entity, EntityCallbacks, EntityCollection } from "../types";
+import { Entity, EntityCallbacks, EntityCollection } from "../types/index.js";
 import React, { useCallback, useMemo, useState } from "react";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle } from "@firecms/ui";
 import {
@@ -8,10 +8,10 @@ import {
     useDataSource,
     useFireCMSContext,
     useSnackbarController
-} from "../hooks";
-import { resolveCollection } from "../util";
-import { EntityView } from "./EntityView";
-import { useTranslation } from "../hooks/useTranslation";
+} from "../hooks/index.js";
+import { resolveCollection } from "../util/index.js";
+import { EntityView } from "./EntityView.js";
+import { useTranslation } from "../hooks/useTranslation.js";
 
 export interface DeleteEntityDialogProps<M extends Record<string, any>> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],

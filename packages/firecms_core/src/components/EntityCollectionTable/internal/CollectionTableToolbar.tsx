@@ -6,7 +6,7 @@ import {
     defaultBorderMixin,
     SearchBar
 } from "@firecms/ui";
-import { useLargeLayout, useTranslation } from "../../../hooks";
+import { useLargeLayout, useTranslation } from "../../../hooks/index.js";
 
 interface CollectionTableToolbarProps {
     loading: boolean;

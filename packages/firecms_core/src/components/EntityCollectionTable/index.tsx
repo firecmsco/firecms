@@ -1,12 +1,12 @@
 export {
     EntityCollectionTable
-} from "./EntityCollectionTable";
+} from "./EntityCollectionTable.js";
 
 export type {
     EntityCollectionTableProps,
-} from "./EntityCollectionTableProps";
+} from "./EntityCollectionTableProps.js";
 
-export * from "./PropertyTableCell";
-export * from "./EntityCollectionRowActions";
-export * from "../common/useDataSourceTableController";
-export * from "./column_utils";
+export * from "./PropertyTableCell.js";
+export * from "./EntityCollectionRowActions.js";
+export * from "../common/useDataSourceTableController.js";
+export * from "./column_utils.js";

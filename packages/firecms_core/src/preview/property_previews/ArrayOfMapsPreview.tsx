@@ -1,9 +1,9 @@
 import React from "react";
-import { ErrorBoundary } from "../../components";
-import { useAuthController, useCustomizationController } from "../../hooks";
-import { PropertyPreviewProps } from "../PropertyPreviewProps";
-import { PropertyPreview } from "../PropertyPreview";
-import { resolveArrayProperty } from "../../util";
+import { ErrorBoundary } from "../../components/index.js";
+import { useAuthController, useCustomizationController } from "../../hooks/index.js";
+import { PropertyPreviewProps } from "../PropertyPreviewProps.js";
+import { PropertyPreview } from "../PropertyPreview.js";
+import { resolveArrayProperty } from "../../util/index.js";
 
 /**
  * @group Preview components

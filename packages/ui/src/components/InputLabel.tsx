@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
-import { cls } from "../util";
-import { defaultBorderMixin } from "../styles";
+import { cls } from "../util/index.js";
+import { defaultBorderMixin } from "../styles.js";
 
 export type InputLabelProps = {
     children?: React.ReactNode;

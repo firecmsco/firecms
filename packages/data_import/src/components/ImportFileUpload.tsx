@@ -1,5 +1,5 @@
 import { FileUpload, UploadIcon } from "@firecms/ui";
-import { convertFileToJson } from "../utils/file_to_json";
+import { convertFileToJson } from "../utils/file_to_json.js";
 import { useSnackbarController, useTranslation } from "@firecms/core";
 
 export function ImportFileUpload({ onDataAdded }: {

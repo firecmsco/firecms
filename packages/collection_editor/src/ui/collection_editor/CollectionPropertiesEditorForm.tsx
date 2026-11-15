@@ -30,12 +30,12 @@ import {
     Typography,
 } from "@firecms/ui";
 
-import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "./util";
-import { OnPropertyChangedParams, PropertyForm, PropertyFormDialog } from "./PropertyEditView";
-import { PropertyTree } from "./PropertyTree";
-import { PersistedCollection } from "../../types/persisted_collection";
-import { GetCodeDialog } from "./GetCodeDialog";
-import { useAIModifiedPaths } from "./AIModifiedPathsContext";
+import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "./util.js";
+import { OnPropertyChangedParams, PropertyForm, PropertyFormDialog } from "./PropertyEditView.js";
+import { PropertyTree } from "./PropertyTree.js";
+import { PersistedCollection } from "../../types/persisted_collection.js";
+import { GetCodeDialog } from "./GetCodeDialog.js";
+import { useAIModifiedPaths } from "./AIModifiedPathsContext.js";
 
 type CollectionEditorFormProps = {
     showErrors: boolean;

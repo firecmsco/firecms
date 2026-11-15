@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { collection, onSnapshot, query, where, orderBy, Firestore } from "firebase/firestore";
-import { AdminJobState } from "./useAdminJob";
+import { AdminJobState } from "./useAdminJob.js";
 
 /**
  * Hook that listens to all running admin jobs for a project in real-time.

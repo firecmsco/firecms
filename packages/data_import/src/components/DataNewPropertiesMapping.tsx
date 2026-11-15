@@ -14,7 +14,7 @@ import {
     TextField,
     Typography
 } from "@firecms/ui";
-import { ImportConfig } from "../types";
+import { ImportConfig } from "../types/index.js";
 import { getIn, setIn } from "@firecms/formex";
 import { useTranslation } from "@firecms/core";
 

@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import { useDataSource, useFireCMSContext, useNavigationController } from "../../hooks";
-import { useDataOrder } from "../../hooks/data/useDataOrder";
+import { useDataSource, useFireCMSContext, useNavigationController } from "../../hooks/index.js";
+import { useDataOrder } from "../../hooks/data/useDataOrder.js";
 import {
     DataType,
     Entity,
@@ -12,11 +12,11 @@ import {
     FireCMSContext,
     SelectedCellProps,
     User
-} from "../../types";
-import { useDebouncedData } from "./useDebouncedData";
-import { ScrollRestorationController } from "./useScrollRestoration";
-import { isDataTypeFilterable } from "../../util";
-import { encodeFilterAndSort, parseFilterAndSort } from "./table_url_params";
+} from "../../types/index.js";
+import { useDebouncedData } from "./useDebouncedData.js";
+import { ScrollRestorationController } from "./useScrollRestoration.js";
+import { isDataTypeFilterable } from "../../util/index.js";
+import { encodeFilterAndSort, parseFilterAndSort } from "./table_url_params.js";
 
 const DEFAULT_PAGE_SIZE = 50;
 

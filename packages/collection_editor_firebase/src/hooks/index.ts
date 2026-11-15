@@ -1,1 +1,1 @@
-export * from "./useFirestoreCollectionsConfigController";
+export * from "./useFirestoreCollectionsConfigController.js";

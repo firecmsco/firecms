@@ -11,11 +11,11 @@ import {
     Timestamp
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { Session } from "./types";
-import { getDataTalkSamplePrompts } from "./api";
-import { SchemaContext } from "./utils/schemaContext";
-import { datatalkTranslationsEn } from "./locales/en";
-import { datatalkTranslationsEs } from "./locales/es";
+import { Session } from "./types.js";
+import { getDataTalkSamplePrompts } from "./api.js";
+import { SchemaContext } from "./utils/schemaContext.js";
+import { datatalkTranslationsEn } from "./locales/en.js";
+import { datatalkTranslationsEs } from "./locales/es.js";
 
 export type DataTalkConfig = {
     loading: boolean;

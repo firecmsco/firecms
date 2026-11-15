@@ -12,9 +12,9 @@ import {
     where
 } from "firebase/firestore";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useFireCMSBackend } from "./useFireCMSBackend";
-import { ProLicense, Subscription } from "../types";
-import { convertDocToSubscription } from "../api/firestore";
+import { useFireCMSBackend } from "./useFireCMSBackend.js";
+import { ProLicense, Subscription } from "../types/index.js";
+import { convertDocToSubscription } from "../api/firestore.js";
 
 const CUSTOMERS_COLLECTION = "customers";
 const LICENSES_COLLECTION = "licenses";

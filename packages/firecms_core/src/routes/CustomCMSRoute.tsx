@@ -1,5 +1,5 @@
-import { CMSView } from "../types";
-import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
+import { CMSView } from "../types/index.js";
+import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController.js";
 import { useEffect } from "react";
 
 export function CustomCMSRoute({ cmsView }: {

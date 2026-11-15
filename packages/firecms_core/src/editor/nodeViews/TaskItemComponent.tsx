@@ -1,5 +1,5 @@
 import React from "react";
-import { ReactNodeViewProps } from "./ReactNodeView";
+import { ReactNodeViewProps } from "./ReactNodeView.js";
 
 export const TaskItemComponent: React.FC<ReactNodeViewProps> = ({ node, view, getPos }) => {
     const checked = node.attrs.checked;

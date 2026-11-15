@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMemo } from "react";
 
-import { Entity, EntityCollection, ResolvedProperty } from "../types";
+import { Entity, EntityCollection, ResolvedProperty } from "../types/index.js";
 
 import {
     getEntityImagePreviewPropertyKey,
@@ -11,16 +11,16 @@ import {
     getValueInPath,
     IconForView,
     resolveCollection
-} from "../util";
+} from "../util/index.js";
 import { cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
-import { PreviewSize, PropertyPreview, SkeletonPropertyComponent } from "../preview";
+import { PreviewSize, PropertyPreview, SkeletonPropertyComponent } from "../preview/index.js";
 import {
     useAuthController,
     useCustomizationController,
     useNavigationController,
     useSideEntityController
-} from "../hooks";
-import { useAnalyticsController } from "../hooks/useAnalyticsController";
+} from "../hooks/index.js";
+import { useAnalyticsController } from "../hooks/useAnalyticsController.js";
 
 export type EntityPreviewProps = {
     size?: PreviewSize,

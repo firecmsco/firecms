@@ -7,8 +7,8 @@ import {
     StorageConfig,
     StringProperty,
     UploadedFileContext
-} from "../types";
-import { randomString } from "./strings";
+} from "../types/index.js";
+import { randomString } from "./strings.js";
 
 interface ResolveFilenameStringParams<M extends object> {
     input: string | ((context: UploadedFileContext) => (Promise<string> | string));

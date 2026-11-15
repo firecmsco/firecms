@@ -1,3 +1,3 @@
-export * from "./hooks";
-export * from "./infer_firestore_collection";
-export * from "./schema_inference";
+export * from "./hooks/index.js";
+export * from "./infer_firestore_collection.js";
+export * from "./schema_inference/index.js";

@@ -1,8 +1,8 @@
 import { useMemo } from "react";
-import { EntityCollection, ResolvedEntityCollection, ResolvedProperty } from "../../types";
-import { getPropertyInPath } from "../../util";
-import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
-import { PropertyColumnConfig } from "../EntityCollectionTable/EntityCollectionTableProps";
+import { EntityCollection, ResolvedEntityCollection, ResolvedProperty } from "../../types/index.js";
+import { getPropertyInPath } from "../../util/index.js";
+import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common.js";
+import { PropertyColumnConfig } from "../EntityCollectionTable/EntityCollectionTableProps.js";
 
 export const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 

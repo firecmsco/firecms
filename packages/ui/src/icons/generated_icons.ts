@@ -5,7 +5,7 @@
  * published `@firecms/ui` surface and is resolved by name out of the share scope
  * by tenant bundles, so entries are only ever added.
  */
-import { createIcon } from "./create_icon";
+import { createIcon } from "./create_icon.js";
 
 export const AbcIcon = /* @__PURE__ */ createIcon("abc");
 export const AcUnitIcon = /* @__PURE__ */ createIcon("ac_unit");

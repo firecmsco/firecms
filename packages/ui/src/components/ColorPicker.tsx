@@ -1,8 +1,8 @@
 import React from "react";
-import { CHIP_COLORS, cls } from "../util";
-import { ChipColorKey, ChipColorScheme } from "./Chip";
-import { CheckIcon } from "../icons";
-import { Tooltip } from "./Tooltip";
+import { CHIP_COLORS, cls } from "../util/index.js";
+import { ChipColorKey, ChipColorScheme } from "./Chip.js";
+import { CheckIcon } from "../icons/index.js";
+import { Tooltip } from "./Tooltip.js";
 
 export interface ColorPickerProps {
     /**

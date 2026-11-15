@@ -1,6 +1,6 @@
 import { Chip } from "@firecms/ui";
-import { ProjectSubscriptionPlan } from "../../types";
-import { getSubscriptionPlanName } from "../settings/common";
+import { ProjectSubscriptionPlan } from "../../types/index.js";
+import { getSubscriptionPlanName } from "../settings/common.js";
 import { useTranslation } from "@firecms/core";
 
 export function PlanChip({ subscriptionPlan }: { subscriptionPlan: ProjectSubscriptionPlan }) {

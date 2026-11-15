@@ -1,13 +1,13 @@
 import React, { useCallback, useRef } from "react";
 import { Button, cls, focusedDisabled, IconButton, KeyboardTabIcon, Popover, SearchIcon, Tooltip } from "@firecms/ui";
-import { EntityCollection, EntityReference } from "../../types";
-import { navigateToEntity } from "../../util/navigation_utils";
-import { ReferencePreview } from "../../preview";
-import { useNavigationController } from "../../hooks/useNavigationController";
-import { useSideEntityController } from "../../hooks/useSideEntityController";
-import { useTranslation } from "../../hooks/useTranslation";
-import { useDataSource } from "../../hooks/data/useDataSource";
-import { addRecentId, getRecentIds, removeRecentIds } from "./utils";
+import { EntityCollection, EntityReference } from "../../types/index.js";
+import { navigateToEntity } from "../../util/navigation_utils.js";
+import { ReferencePreview } from "../../preview/index.js";
+import { useNavigationController } from "../../hooks/useNavigationController.js";
+import { useSideEntityController } from "../../hooks/useSideEntityController.js";
+import { useTranslation } from "../../hooks/useTranslation.js";
+import { useDataSource } from "../../hooks/data/useDataSource.js";
+import { addRecentId, getRecentIds, removeRecentIds } from "./utils.js";
 
 const DEFAULT_ENTITY_OPEN_MODE: "side_panel" | "full_screen" = "side_panel";
 

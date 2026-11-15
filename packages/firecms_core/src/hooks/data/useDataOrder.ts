@@ -1,4 +1,4 @@
-import { Entity } from "../../types";
+import { Entity } from "../../types/index.js";
 
 export interface DataOrderProps<M extends Record<string, any>> {
     data: Entity<M>[];

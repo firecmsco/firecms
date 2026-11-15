@@ -2,11 +2,11 @@
 // a static re-export here would pull ProseMirror into every consumer of
 // `@firecms/core`. The types come straight from the implementation and are
 // erased at build time, so they cost nothing.
-export { FireCMSEditor } from "./lazy_editor";
+export { FireCMSEditor } from "./lazy_editor.js";
 export type {
     CustomEditorComponent,
     MarkdownEditorConfig,
     FireCMSEditorTextSize,
     FireCMSEditorProps
-} from "./editor";
-export * from "./types";
+} from "./editor.js";
+export * from "./types.js";

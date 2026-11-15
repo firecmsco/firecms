@@ -1,4 +1,4 @@
-import { EntityCollection } from "./collections";
+import { EntityCollection } from "./collections.js";
 
 /**
  * Use to resolve the collection properties for specific path, entity id or values.

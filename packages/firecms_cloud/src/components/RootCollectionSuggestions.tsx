@@ -2,13 +2,13 @@ import React from "react";
 import { prettifyIdentifier, useAuthController, useNavigationController, useSnackbarController, useTranslation } from "@firecms/core";
 import { AddIcon, Button, Chip, CircularProgress, Collapse, StorageIcon, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
-import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
-import { useFireCMSBackend, useProjectConfig } from "../hooks";
-import { RootCollectionInfo } from "../api/projects";
+import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton.js";
+import { useFireCMSBackend, useProjectConfig } from "../hooks/index.js";
+import { RootCollectionInfo } from "../api/projects.js";
 import { useNavigate } from "react-router";
-import { createConcurrencyLimit } from "../utils/concurrency_limit";
-import { useCollectionSetupErrors } from "./useCollectionSetupErrors";
-import { useCollectionsSetupOngoing } from "./useCollectionsSetupOngoing";
+import { createConcurrencyLimit } from "../utils/concurrency_limit.js";
+import { useCollectionSetupErrors } from "./useCollectionSetupErrors.js";
+import { useCollectionsSetupOngoing } from "./useCollectionsSetupOngoing.js";
 
 /**
  * Chips set up at most this many collections at once; later clicks wait their

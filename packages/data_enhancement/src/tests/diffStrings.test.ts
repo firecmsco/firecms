@@ -1,7 +1,7 @@
 // Import the diffStrings function from your module
 // import { diffStrings } from './your-module';
 
-import { Change, diffStrings } from "../utils/diffStrings";
+import { Change, diffStrings } from "../utils/diffStrings.js";
 
 describe("diffStrings", () => {
     test("equal strings", () => {

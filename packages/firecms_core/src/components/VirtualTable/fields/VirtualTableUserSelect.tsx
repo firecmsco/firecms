@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { MultiSelect, MultiSelectItem, Select, SelectItem } from "@firecms/ui";
-import { useInternalUserManagementController } from "../../../hooks";
-import { UserDisplay } from "../../UserDisplay";
+import { useInternalUserManagementController } from "../../../hooks/index.js";
+import { UserDisplay } from "../../UserDisplay.js";
 
 export function VirtualTableUserSelect(props: {
     name: string;

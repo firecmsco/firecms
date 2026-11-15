@@ -24,10 +24,10 @@ import {
 } from "@firecms/ui";
 import { ConfirmationDialog, jsonStringifyReplacer, useNavigationController } from "@firecms/core";
 import { useCreateFormex } from "@firecms/formex";
-import { useAdminApi } from "./api/AdminApiProvider";
-import { AdminDocument } from "./api/admin_api";
-import { EditableFieldsView, defaultValueForType, FieldType } from "./FieldEditor";
-import { PITRDocumentView } from "./PITRPanel";
+import { useAdminApi } from "./api/AdminApiProvider.js";
+import { AdminDocument } from "./api/admin_api.js";
+import { EditableFieldsView, defaultValueForType, FieldType } from "./FieldEditor.js";
+import { PITRDocumentView } from "./PITRPanel.js";
 
 /**
  * Sentinel value sent to the backend to signal that a field should be deleted.

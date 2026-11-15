@@ -1,5 +1,5 @@
 import React, { createContext, PropsWithChildren, useContext } from "react";
-import { MediaManagerController } from "./types";
+import { MediaManagerController } from "./types/index.js";
 
 const MediaManagerContext = createContext<MediaManagerController | undefined>(undefined);
 

@@ -13,7 +13,7 @@ import {
     IconButton,
     Tooltip
 } from "@firecms/ui";
-import { downloadEntitiesExport } from "./export";
+import { downloadEntitiesExport } from "./export.js";
 
 export type BasicExportActionProps = {
     data: Entity<any>[];

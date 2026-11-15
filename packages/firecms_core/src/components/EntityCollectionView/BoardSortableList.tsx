@@ -3,8 +3,8 @@ import { useDroppable } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { CircularProgress, cls } from "@firecms/ui";
-import { BoardItem, BoardItemViewProps } from "./board_types";
-import { useTranslation } from "../../hooks";
+import { BoardItem, BoardItemViewProps } from "./board_types.js";
+import { useTranslation } from "../../hooks/index.js";
 
 interface BoardSortableListProps<M extends Record<string, any>> {
     columnId: string;

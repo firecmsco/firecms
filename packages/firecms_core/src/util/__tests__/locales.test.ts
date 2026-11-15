@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@jest/globals";
-import { localeToLanguageTag, resolveLocale } from "../date_fns_locales";
+import { localeToLanguageTag, resolveLocale } from "../date_fns_locales.js";
 
 // FireCMS locales are date-fns keys ("enUS", "ptBR"). On 2026-11-10 FireCMS Cloud stored
 // "en_US" through the MCP server, and a key such as "enUS" itself made

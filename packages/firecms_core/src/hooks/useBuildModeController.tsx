@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { ModeController } from "./index";
-import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "../util/local_storage";
+import { ModeController } from "./index.js";
+import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "../util/local_storage.js";
 
 /**
  * Use this hook to build a color mode controller that determines

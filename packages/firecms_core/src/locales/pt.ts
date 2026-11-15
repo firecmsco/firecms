@@ -1,4 +1,4 @@
-import { FireCMSTranslations } from "../types/translations";
+import { FireCMSTranslations } from "../types/translations.js";
 
 /**
  * Portuguese (pt) translations for @firecms/core.

@@ -5,10 +5,10 @@ import {
     PropertiesOrBuilders,
     Property,
     PropertyOrBuilder
-} from "../types";
-import { mergeDeep } from "./objects";
-import { sortProperties } from "./collections";
-import { isPropertyBuilder } from "./entities";
+} from "../types/index.js";
+import { mergeDeep } from "./objects.js";
+import { sortProperties } from "./collections.js";
+import { isPropertyBuilder } from "./entities.js";
 
 function applyModifyFunction(modifyCollection: ((props: ModifyCollectionProps) => (EntityCollection | void)) | undefined,
     collection: EntityCollection,

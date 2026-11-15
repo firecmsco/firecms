@@ -1,8 +1,8 @@
 import { collection, Firestore, getDocs, getFirestore, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
-import { ProductPrice, ProductWithPrices, Subscription, SubscriptionType } from "../types/subscriptions";
-import { useFireCMSBackend } from "./useFireCMSBackend";
-import { convertDocToSubscription } from "../api/firestore";
+import { ProductPrice, ProductWithPrices, Subscription, SubscriptionType } from "../types/subscriptions.js";
+import { useFireCMSBackend } from "./useFireCMSBackend.js";
+import { convertDocToSubscription } from "../api/firestore.js";
 import { useSnackbarController } from "@firecms/core";
 
 const SUBSCRIPTIONS_COLLECTION = "subscriptions";

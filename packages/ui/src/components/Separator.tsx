@@ -1,5 +1,5 @@
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 
 export function Separator({
                               orientation,

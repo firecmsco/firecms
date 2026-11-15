@@ -12,13 +12,13 @@ import {
     StorageConfig,
     StorageSource,
     StringProperty
-} from "../types";
+} from "../types/index.js";
 import { useCallback, useEffect, useState } from "react";
-import { PreviewSize } from "../preview";
-import { randomString } from "./strings";
-import { resolveStorageFilenameString, resolveStoragePathString } from "./storage";
-import { resolveProperty } from "./resolutions";
-import { useAuthController } from "../hooks";
+import { PreviewSize } from "../preview/index.js";
+import { randomString } from "./strings.js";
+import { resolveStorageFilenameString, resolveStoragePathString } from "./storage.js";
+import { resolveProperty } from "./resolutions.js";
+import { useAuthController } from "../hooks/index.js";
 
 /**
  * Internal representation of an item in the storage

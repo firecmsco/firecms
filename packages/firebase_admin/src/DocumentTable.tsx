@@ -36,13 +36,13 @@ import {
     ConfirmationDialog,
     jsonStringifyReplacer,
 } from "@firecms/core";
-import { useAdminApi } from "./api/AdminApiProvider";
-import { AdminDocument } from "./api/admin_api";
-import { AddDocumentDialog } from "./AddDocumentDialog";
-import { ExportButton } from "./ExportButton";
-import { PopoverCellEditor } from "./PopoverCellEditor";
-import { FilterBar } from "./FilterBar";
-import { PITRToolbar } from "./PITRPanel";
+import { useAdminApi } from "./api/AdminApiProvider.js";
+import { AdminDocument } from "./api/admin_api.js";
+import { AddDocumentDialog } from "./AddDocumentDialog.js";
+import { ExportButton } from "./ExportButton.js";
+import { PopoverCellEditor } from "./PopoverCellEditor.js";
+import { FilterBar } from "./FilterBar.js";
+import { PITRToolbar } from "./PITRPanel.js";
 import {
     FilterDef,
     FieldType,
@@ -52,9 +52,9 @@ import {
     persistFilters,
     getOperatorsForType,
     FILTERABLE_VALUE_TYPES,
-} from "./filter_utils";
-import { ReferencePreview } from "./ReferenceEditor";
-import { isReference, getRefPath } from "./FieldEditor";
+} from "./filter_utils.js";
+import { ReferencePreview } from "./ReferenceEditor.js";
+import { isReference, getRefPath } from "./FieldEditor.js";
 
 // Row shape fed to VirtualTable: the document values plus _doc metadata
 type AdminRow = Record<string, any> & {

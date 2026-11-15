@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
-import { EntityCollection } from "../../types";
-import { useCustomizationController, useDataSource, useFireCMSContext } from "../../hooks";
+import { EntityCollection } from "../../types/index.js";
+import { useCustomizationController, useDataSource, useFireCMSContext } from "../../hooks/index.js";
 
 export interface UseTableSearchHelperParams<M extends Record<string, any>> {
     collection: EntityCollection<M>;

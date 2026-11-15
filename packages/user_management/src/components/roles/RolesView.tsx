@@ -3,9 +3,9 @@ import React, { useCallback, useState } from "react";
 import { isProPaused, Role, useLicenseStatus, useNavigationController, useTranslation
 } from "@firecms/core";
 import { AddIcon, Button, Container, Typography } from "@firecms/ui";
-import { RolesTable } from "./RolesTable";
-import { RolesDetailsForm } from "./RolesDetailsForm";
-import { UserManagementPausedNotice } from "../UserManagementPausedNotice";
+import { RolesTable } from "./RolesTable.js";
+import { RolesDetailsForm } from "./RolesDetailsForm.js";
+import { UserManagementPausedNotice } from "../UserManagementPausedNotice.js";
 
 export const RolesView = React.memo(
     function RolesView({ children }: { children?: React.ReactNode }) {

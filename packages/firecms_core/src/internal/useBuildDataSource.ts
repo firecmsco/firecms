@@ -17,8 +17,8 @@ import {
     PropertyConfig,
     ResolvedProperties,
     SaveEntityProps
-} from "../types";
-import { resolveCollection, updateDateAutoValues } from "../util";
+} from "../types/index.js";
+import { resolveCollection, updateDateAutoValues } from "../util/index.js";
 
 /**
  * Use this hook to build a {@link DataSource} based on Firestore

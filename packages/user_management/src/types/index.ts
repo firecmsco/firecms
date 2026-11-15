@@ -1,2 +1,2 @@
-export * from "./user_management";
-export * from "./persisted_user";
+export * from "./user_management.js";
+export * from "./persisted_user.js";

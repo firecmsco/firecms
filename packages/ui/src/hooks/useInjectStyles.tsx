@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { usePortalContainer } from "./PortalContainerContext";
+import { usePortalContainer } from "./PortalContainerContext.js";
 
 /**
  * Use this hook to create a `<style>` element and inject it into the DOM.

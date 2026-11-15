@@ -1,10 +1,10 @@
 import React from "react";
 import { Alert, Button, LoadingButton } from "@firecms/ui";
-import { PaywallDialog } from "./Paywall";
-import { useFireCMSBackend, useProjectConfig } from "../../hooks";
-import { useProjectSubscriptions } from "../../hooks/useProjectSubscriptions";
-import { Subscription } from "../../types";
-import { useOpenStripePortal } from "./useOpenStripePortal";
+import { PaywallDialog } from "./Paywall.js";
+import { useFireCMSBackend, useProjectConfig } from "../../hooks/index.js";
+import { useProjectSubscriptions } from "../../hooks/useProjectSubscriptions.js";
+import { Subscription } from "../../types/index.js";
+import { useOpenStripePortal } from "./useOpenStripePortal.js";
 
 export type SubscriptionPlanWidgetProps = {}
 

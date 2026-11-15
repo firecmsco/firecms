@@ -27,10 +27,10 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-import { NavigationCardBinding } from "./NavigationCardBinding";
-import { NavigationEntry } from "../../types";
+import { NavigationCardBinding } from "./NavigationCardBinding.js";
+import { NavigationEntry } from "../../types/index.js";
 import { cls, defaultBorderMixin } from "@firecms/ui";
-import { useTranslation } from "../../hooks";
+import { useTranslation } from "../../hooks/index.js";
 
 const animateLayoutChanges: AnimateLayoutChanges = (args) =>
     defaultAnimateLayoutChanges({

@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { useLayoutEffect } from "react";
-import { debounce } from "../util";
+import { debounce } from "../util/index.js";
 
 type State = {
     outerHeightStyle: number;

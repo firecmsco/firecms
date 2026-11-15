@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { CollectionSize, Entity, EntityCollection, EntityTableController, SelectionController } from "../../types";
-import { EntityCard } from "./EntityCard";
+import { CollectionSize, Entity, EntityCollection, EntityTableController, SelectionController } from "../../types/index.js";
+import { EntityCard } from "./EntityCard.js";
 import { CircularProgress, cls, Typography } from "@firecms/ui";
-import { useAuthController, useCustomizationController, useTranslation } from "../../hooks";
+import { useAuthController, useCustomizationController, useTranslation } from "../../hooks/index.js";
 
 export type EntityCollectionCardViewProps<M extends Record<string, any> = any> = {
     collection: EntityCollection<M>;

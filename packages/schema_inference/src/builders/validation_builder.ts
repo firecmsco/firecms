@@ -1,5 +1,5 @@
-import { InferencePropertyBuilderProps } from "../types";
-import { PropertyValidationSchema } from "../cms_types";
+import { InferencePropertyBuilderProps } from "../types.js";
+import { PropertyValidationSchema } from "../cms_types.js";
 
 export function buildValidation({
                                     totalDocsCount,

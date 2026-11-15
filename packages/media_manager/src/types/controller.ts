@@ -1,4 +1,4 @@
-import { MediaAsset } from "./media_asset";
+import { MediaAsset } from "./media_asset.js";
 
 /**
  * Controller interface for managing media assets.

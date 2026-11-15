@@ -1,4 +1,4 @@
-import { JSONContent } from "./components";
+import { JSONContent } from "./components/index.js";
 export type { JSONContent };
 
 export type EditorAIController = {

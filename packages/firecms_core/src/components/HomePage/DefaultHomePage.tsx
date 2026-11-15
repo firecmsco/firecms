@@ -6,31 +6,31 @@ import {
     useCustomizationController,
     useFireCMSContext,
     useNavigationController
-} from "../../hooks";
+} from "../../hooks/index.js";
 import {
     CMSAnalyticsEvent,
     NavigationEntry,
     NavigationGroupMapping,
     PluginGenericProps,
     PluginHomePageAdditionalCardsProps
-} from "../../types";
-import { toArray } from "../../util/arrays";
-import { FavouritesView } from "./FavouritesView";
-import { useRestoreScroll } from "../../internal/useRestoreScroll";
-import { NavigationGroup } from "./NavigationGroup";
+} from "../../types/index.js";
+import { toArray } from "../../util/arrays.js";
+import { FavouritesView } from "./FavouritesView.js";
+import { useRestoreScroll } from "../../internal/useRestoreScroll.js";
+import { NavigationGroup } from "./NavigationGroup.js";
 import {
     NavigationGroupDroppable,
     NewGroupDropZone,
     SortableNavigationCard,
     SortableNavigationGroup,
     useHomePageDnd
-} from "./HomePageDnD";
+} from "./HomePageDnD.js";
 import { DndContext, DragOverlay, MeasuringStrategy } from "@dnd-kit/core";
-import { NavigationCardBinding } from "./NavigationCardBinding";
+import { NavigationCardBinding } from "./NavigationCardBinding.js";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis, restrictToWindowEdges } from "@dnd-kit/modifiers";
-import { RenameGroupDialog } from "./RenameGroupDialog";
-import { useTranslation } from "../../hooks/useTranslation";
+import { RenameGroupDialog } from "./RenameGroupDialog.js";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 /**
  * Internal sentinel key for ungrouped navigation entries.

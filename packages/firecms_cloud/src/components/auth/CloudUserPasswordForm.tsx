@@ -1,7 +1,7 @@
 import { useSnackbarController } from "@firecms/core";
 import { useEffect, useState } from "react";
 import { ArrowBackIcon, Button, CircularProgress, IconButton, LoadingButton, TextField, Typography } from "@firecms/ui";
-import { FireCMSBackend } from "../../types";
+import { FireCMSBackend } from "../../types/index.js";
 import { useTranslation } from "@firecms/core";
 
 type LoginFormMode = "login" | "signup";

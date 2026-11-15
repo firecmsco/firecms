@@ -1,8 +1,8 @@
 import { Node as ProseMirrorNode } from "prosemirror-model";
 import { EditorView, NodeView } from "prosemirror-view";
-import { ReactNodeView, ReactNodeViewComponent } from "./ReactNodeView";
-import { TaskItemComponent } from "./TaskItemComponent";
-import { ImageComponent } from "./ImageComponent";
+import { ReactNodeView, ReactNodeViewComponent } from "./ReactNodeView.js";
+import { TaskItemComponent } from "./TaskItemComponent.js";
+import { ImageComponent } from "./ImageComponent.js";
 
 function createReactNodeView(
     Component: ReactNodeViewComponent,

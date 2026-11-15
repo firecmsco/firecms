@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-import { UserManagement } from "./types";
+import { UserManagement } from "./types/index.js";
 import { User } from "@firecms/core";
 
 export const UserManagementContext = React.createContext<UserManagement<any>>({} as any);

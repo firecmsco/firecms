@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState } from "react";
 import { cls, EditIcon, IconButton, Typography, ExpandablePanel } from "@firecms/ui";
-import { useTranslation } from "../../hooks/useTranslation";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 export function NavigationGroup({
     children,

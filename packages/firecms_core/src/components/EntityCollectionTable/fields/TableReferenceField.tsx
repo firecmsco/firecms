@@ -1,16 +1,16 @@
 import React, { useCallback } from "react";
 import equal from "react-fast-compare"
 
-import { ReferencePreview } from "../../../preview";
-import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues } from "../../../types";
+import { ReferencePreview } from "../../../preview/index.js";
+import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues } from "../../../types/index.js";
 
-import { getPreviewSizeFrom } from "../../../preview/util";
-import { getReferenceFrom, IconForView } from "../../../util";
-import { useCustomizationController, useNavigationController, useReferenceDialog } from "../../../hooks";
-import { ErrorView } from "../../ErrorView";
+import { getPreviewSizeFrom } from "../../../preview/util.js";
+import { getReferenceFrom, IconForView } from "../../../util/index.js";
+import { useCustomizationController, useNavigationController, useReferenceDialog } from "../../../hooks/index.js";
+import { ErrorView } from "../../ErrorView.js";
 import { cls, EditIcon } from "@firecms/ui";
-import { EntityPreviewContainer } from "../../EntityPreview";
-import { useTranslation } from "../../../hooks";
+import { EntityPreviewContainer } from "../../EntityPreview.js";
+import { useTranslation } from "../../../hooks/index.js";
 
 type TableReferenceFieldProps = {
     name: string;

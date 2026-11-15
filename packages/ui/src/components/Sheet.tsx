@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { cls } from "../util";
-import { defaultBorderMixin } from "../styles";
+import { cls } from "../util/index.js";
+import { defaultBorderMixin } from "../styles.js";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { usePortalContainer } from "../hooks/PortalContainerContext";
+import { usePortalContainer } from "../hooks/PortalContainerContext.js";
 
 interface SheetProps {
     children: React.ReactNode;

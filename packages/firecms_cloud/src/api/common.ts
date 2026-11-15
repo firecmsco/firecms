@@ -1,4 +1,4 @@
-import { ApiError } from "../types/errors";
+import { ApiError } from "../types/errors.js";
 
 
 export async function handleApiResponse<T>(res: Response, projectId: string): Promise<T> {

@@ -1,6 +1,6 @@
-import { AuthController, User } from "../types";
+import { AuthController, User } from "../types/index.js";
 import { useContext } from "react";
-import { AuthControllerContext } from "../contexts/AuthControllerContext";
+import { AuthControllerContext } from "../contexts/AuthControllerContext.js";
 
 /**
  * Hook to retrieve the AuthContext.

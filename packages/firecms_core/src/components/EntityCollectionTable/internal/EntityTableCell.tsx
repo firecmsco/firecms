@@ -3,9 +3,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import useMeasure from "react-use-measure";
 
 import { cls, DoNotDisturbOnIcon, Tooltip } from "@firecms/ui";
-import { ErrorBoundary } from "../../../components";
-import { getRowHeight, TableSize } from "../../common/table_height";
-import { ErrorTooltip } from "../../ErrorTooltip";
+import { ErrorBoundary } from "../../../components/index.js";
+import { getRowHeight, TableSize } from "../../common/table_height.js";
+import { ErrorTooltip } from "../../ErrorTooltip.js";
 
 interface EntityTableCellProps {
     children: React.ReactNode;

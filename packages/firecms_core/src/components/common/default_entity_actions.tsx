@@ -3,10 +3,10 @@
 // should override the action name by creating their own EntityAction objects or
 // by using the entityActions prop with custom names for their locale.
 import { DeleteIcon, EditIcon, FileCopyIcon } from "@firecms/ui";
-import { EntityAction } from "../../types";
-import { DeleteEntityDialog } from "../DeleteEntityDialog";
-import { addRecentId } from "../EntityCollectionView/utils";
-import { navigateToEntity, resolveDefaultSelectedView } from "../../util";
+import { EntityAction } from "../../types/index.js";
+import { DeleteEntityDialog } from "../DeleteEntityDialog.js";
+import { addRecentId } from "../EntityCollectionView/utils.js";
+import { navigateToEntity, resolveDefaultSelectedView } from "../../util/index.js";
 
 export const editEntityAction: EntityAction = {
     icon: <EditIcon size={"small"}/>,

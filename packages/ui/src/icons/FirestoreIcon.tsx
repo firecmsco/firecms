@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IconProps } from "./Icon";
+import { IconProps } from "./Icon.js";
 
 const sizeMap: Record<string, number> = {
     smallest: 16,

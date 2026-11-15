@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
 
-import { ImagePreview } from "./ImagePreview";
-import { getThumbnailMeasure } from "../util";
-import { PreviewType } from "../../types";
-import { PreviewSize } from "../PropertyPreviewProps";
+import { ImagePreview } from "./ImagePreview.js";
+import { getThumbnailMeasure } from "../util.js";
+import { PreviewType } from "../../types/index.js";
+import { PreviewSize } from "../PropertyPreviewProps.js";
 import { cls, DescriptionIcon, OpenInNewIcon, Tooltip, Typography } from "@firecms/ui";
-import { EmptyValue } from "./EmptyValue";
-import { useTranslation } from "../../hooks/useTranslation";
+import { EmptyValue } from "./EmptyValue.js";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 /**
  * @group Preview components

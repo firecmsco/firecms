@@ -1,11 +1,11 @@
 import React from "react";
 
-import { ResolvedStringProperty } from "../../types";
-import { PreviewSize, PropertyPreview } from "../../preview";
+import { ResolvedStringProperty } from "../../types/index.js";
+import { PreviewSize, PropertyPreview } from "../../preview/index.js";
 
 import { cls, DescriptionIcon, IconButton, paperMixin, RemoveIcon, Tooltip } from "@firecms/ui";
-import { ErrorBoundary } from "../../components";
-import { useTranslation } from "../../hooks/useTranslation";
+import { ErrorBoundary } from "../../components/index.js";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 interface StorageItemPreviewProps {
     name: string;

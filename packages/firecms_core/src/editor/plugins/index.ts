@@ -1,17 +1,17 @@
 import { keymap } from "prosemirror-keymap";
 import { history, undo, redo } from "prosemirror-history";
-import { slashCommandPlugin } from "./slashCommandPlugin";
-import { dragHandlePlugin, globalDragDropPlugin } from "../extensions/drag-and-drop";
+import { slashCommandPlugin } from "./slashCommandPlugin.js";
+import { dragHandlePlugin, globalDragDropPlugin } from "../extensions/drag-and-drop.js";
 import { baseKeymap, setBlockType, toggleMark, chainCommands, exitCode, joinUp, joinDown, lift, selectParentNode } from "prosemirror-commands";
-import { highlightDecorationPlugin } from "../extensions/HighlightDecorationExtension";
-import { textLoadingDecorationPlugin } from "../extensions/TextLoadingDecorationExtension";
+import { highlightDecorationPlugin } from "../extensions/HighlightDecorationExtension.js";
+import { textLoadingDecorationPlugin } from "../extensions/TextLoadingDecorationExtension.js";
 import { splitListItem, liftListItem, sinkListItem } from "prosemirror-schema-list";
-import { schema } from "../schema";
+import { schema } from "../schema.js";
 import { Plugin } from "prosemirror-state";
 import { gapCursor } from "prosemirror-gapcursor";
 import { dropCursor } from "prosemirror-dropcursor";
-import { markdownInputRules } from "./inputrules";
-import { placeholderPlugin } from "./placeholderPlugin";
+import { markdownInputRules } from "./inputrules.js";
+import { placeholderPlugin } from "./placeholderPlugin.js";
 import { goToNextCell } from "prosemirror-tables";
 
 const customKeymap = {

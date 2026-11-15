@@ -1,4 +1,4 @@
-import { autocompleteStream } from "../api";
+import { autocompleteStream } from "../api.js";
 import { EditorAIController } from "@firecms/core";
 
 export function useEditorAIController({ getAuthToken }: { getAuthToken?: () => Promise<string> }): EditorAIController {

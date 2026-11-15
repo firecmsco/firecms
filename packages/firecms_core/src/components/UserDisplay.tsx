@@ -1,6 +1,6 @@
-import { User } from "../types";
+import { User } from "../types/index.js";
 import { AccountCircleIcon, cls, defaultBorderMixin } from "@firecms/ui";
-import { EmptyValue } from "../preview";
+import { EmptyValue } from "../preview/index.js";
 
 /**
  * Component to render a single user with name and email

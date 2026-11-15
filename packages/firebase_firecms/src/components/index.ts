@@ -1,1 +1,1 @@
-export * from "./FirebaseLoginView";
+export * from "./FirebaseLoginView.js";

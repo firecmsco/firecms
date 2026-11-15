@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { useSnackbarController, useTranslation } from "@firecms/core";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@firecms/ui";
-import { CloudError, CloudErrorView } from "./CloudErrorView";
-import { useFireCMSBackend } from "../hooks";
-import { collectionSetupErrorDetail, collectionSetupErrorKind } from "../utils/collection_setup_errors";
+import { CloudError, CloudErrorView } from "./CloudErrorView.js";
+import { useFireCMSBackend } from "../hooks/index.js";
+import { collectionSetupErrorDetail, collectionSetupErrorKind } from "../utils/collection_setup_errors.js";
 
 /**
  * Tell the user why a collection setup failed, and offer the fix where there is one.

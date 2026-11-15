@@ -22,8 +22,8 @@ import {
     EnumValueConfig,
     isPropertyBuilder
 } from "@firecms/core";
-import { PropertyWithId } from "../../PropertyEditView";
-import { getPropertyPaths } from "./property_paths";
+import { PropertyWithId } from "../../PropertyEditView.js";
+import { getPropertyPaths } from "./property_paths.js";
 
 /**
  * Enum condition types - maps to PropertyConditions structure:

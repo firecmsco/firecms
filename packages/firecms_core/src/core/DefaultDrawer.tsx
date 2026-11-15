@@ -5,11 +5,11 @@ import {
     useLargeLayout,
     useNavigationController,
     useTranslation
-} from "../hooks";
+} from "../hooks/index.js";
 
 import { Link, useNavigate } from "react-router-dom";
-import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "../types";
-import { IconForView } from "../util";
+import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "../types/index.js";
+import { IconForView } from "../util/index.js";
 import {
     cls,
     KeyboardDoubleArrowLeftIcon,
@@ -20,10 +20,10 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { useAnalyticsController } from "../hooks/useAnalyticsController";
-import { DrawerNavigationGroup } from "./DrawerNavigationGroup";
-import { FireCMSLogo } from "../components";
-import { useApp } from "../app/useApp";
+import { useAnalyticsController } from "../hooks/useAnalyticsController.js";
+import { DrawerNavigationGroup } from "./DrawerNavigationGroup.js";
+import { FireCMSLogo } from "../components/index.js";
+import { useApp } from "../app/useApp.js";
 
 /**
  * Default drawer used in the CMS

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { EntityCustomViewParams, useSnackbarController } from "@firecms/core";
 import { CircularProgress, Typography } from "@firecms/ui";
-import { useAdminApi, useAdminProjectId } from "./api/AdminApiProvider";
-import { AdminDocument } from "./api/admin_api";
-import { DocumentPanel } from "./DocumentPanel";
+import { useAdminApi, useAdminProjectId } from "./api/AdminApiProvider.js";
+import { AdminDocument } from "./api/admin_api.js";
+import { DocumentPanel } from "./DocumentPanel.js";
 
 /**
  * Thin wrapper that bridges the EntityCustomViewParams interface

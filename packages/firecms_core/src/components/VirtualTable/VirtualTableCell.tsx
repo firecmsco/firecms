@@ -2,7 +2,7 @@ import React from "react";
 
 import equal from "react-fast-compare"
 
-import { CellRendererParams, VirtualTableColumn } from "./VirtualTableProps";
+import { CellRendererParams, VirtualTableColumn } from "./VirtualTableProps.js";
 
 type VirtualTableCellProps<T extends any> = {
     dataKey: string;

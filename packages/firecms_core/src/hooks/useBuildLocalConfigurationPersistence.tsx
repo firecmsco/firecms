@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { PartialEntityCollection, UserConfigurationPersistence } from "../types";
-import { mergeDeep, stripCollectionPath } from "../util";
-import { getLocalStorageJSON, setLocalStorageItem } from "../util/local_storage";
+import { PartialEntityCollection, UserConfigurationPersistence } from "../types/index.js";
+import { mergeDeep, stripCollectionPath } from "../util/index.js";
+import { getLocalStorageJSON, setLocalStorageItem } from "../util/local_storage.js";
 
 export function useBuildLocalConfigurationPersistence(): UserConfigurationPersistence {
 

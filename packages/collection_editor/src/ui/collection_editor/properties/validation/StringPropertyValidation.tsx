@@ -3,8 +3,8 @@ import React from "react";
 import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
 import { FieldCaption, serializeRegExp, useTranslation } from "@firecms/core";
 import { DebouncedTextField, } from "@firecms/ui";
-import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
-import { SwitchControl } from "../../SwitchControl";
+import { GeneralPropertyValidation } from "./GeneralPropertyValidation.js";
+import { SwitchControl } from "../../SwitchControl.js";
 
 export function StringPropertyValidation({
                                              length,

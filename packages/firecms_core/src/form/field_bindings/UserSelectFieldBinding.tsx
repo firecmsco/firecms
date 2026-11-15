@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 
-import { FieldProps, User } from "../../types";
-import { FieldHelperText, LabelWithIcon } from "../components";
-import { getIconForProperty } from "../../util";
+import { FieldProps, User } from "../../types/index.js";
+import { FieldHelperText, LabelWithIcon } from "../components/index.js";
+import { getIconForProperty } from "../../util/index.js";
 import { CloseIcon, cls, IconButton, Select, SelectItem } from "@firecms/ui";
-import { PropertyIdCopyTooltip } from "../../components";
-import { useInternalUserManagementController } from "../../hooks";
-import { UserDisplay } from "../../components/UserDisplay";
+import { PropertyIdCopyTooltip } from "../../components/index.js";
+import { useInternalUserManagementController } from "../../hooks/index.js";
+import { UserDisplay } from "../../components/UserDisplay.js";
 
 type UserSelectProps = FieldProps<string>;
 

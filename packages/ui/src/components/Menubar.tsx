@@ -1,9 +1,9 @@
 import * as React from "react";
 
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
-import { cls } from "../util";
-import { CheckIcon, ChevronRightIcon } from "../icons";
-import { usePortalContainer } from "../hooks/PortalContainerContext";
+import { cls } from "../util/index.js";
+import { CheckIcon, ChevronRightIcon } from "../icons/index.js";
+import { usePortalContainer } from "../hooks/PortalContainerContext.js";
 
 export function Menubar({
                             children,

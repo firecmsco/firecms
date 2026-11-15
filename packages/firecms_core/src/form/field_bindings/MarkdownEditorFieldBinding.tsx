@@ -10,15 +10,15 @@ import {
     ResolvedStringProperty,
     useAuthController,
     useStorageSource
-} from "../../index";
+} from "../../index.js";
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, IconButton, CloseIcon } from "@firecms/ui";
-import type { FireCMSEditorProps } from "../../editor";
-import { resolveProperty, resolveStorageFilenameString, resolveStoragePathString } from "../../util";
-import { isImageFile, resizeImage } from "../../util/useStorageUploadController";
-import { lazyEager } from "../../util/lazy_eager";
-import { CircularProgressCenter } from "../../components/CircularProgressCenter";
+import type { FireCMSEditorProps } from "../../editor/index.js";
+import { resolveProperty, resolveStorageFilenameString, resolveStoragePathString } from "../../util/index.js";
+import { isImageFile, resizeImage } from "../../util/useStorageUploadController.js";
+import { lazyEager } from "../../util/lazy_eager.js";
+import { CircularProgressCenter } from "../../components/CircularProgressCenter.js";
 
-const FireCMSEditor = lazyEager<typeof import("../../editor/editor")["FireCMSEditor"]>(() => import("../../editor/editor"), "FireCMSEditor");
+const FireCMSEditor = lazyEager<typeof import("../../editor/editor.js")["FireCMSEditor"]>(() => import("../../editor/editor.js"), "FireCMSEditor");
 
 interface MarkdownEditorFieldProps {
     highlight?: { from: number, to: number };

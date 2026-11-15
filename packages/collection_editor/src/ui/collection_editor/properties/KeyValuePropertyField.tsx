@@ -1,6 +1,6 @@
 import React from "react";
-import { ValidationPanel } from "./validation/ValidationPanel";
-import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
+import { ValidationPanel } from "./validation/ValidationPanel.js";
+import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation.js";
 
 export function KeyValuePropertyField({ disabled }: {
     disabled: boolean;

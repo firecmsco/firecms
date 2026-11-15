@@ -4,7 +4,7 @@
 import React, { useCallback } from "react";
 import { createRoot, Root } from "react-dom/client";
 import { useCreateFormex } from "@firecms/formex";
-import { AdvancedTextField } from "../components/fields/AdvancedTextField";
+import { AdvancedTextField } from "../components/fields/AdvancedTextField.js";
 
 // Real scheduling, as in the browser: the loop only shows up when updates are
 // left to React's scheduler between input events rather than flushed by act().

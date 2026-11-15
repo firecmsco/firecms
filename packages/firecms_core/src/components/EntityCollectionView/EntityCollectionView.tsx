@@ -15,13 +15,13 @@ import {
     ResolvedProperty,
     SaveEntityProps,
     ViewMode
-} from "../../types";
+} from "../../types/index.js";
 import {
     EntityCollectionRowActions,
     EntityCollectionTable,
     useDataSourceTableController
-} from "../EntityCollectionTable";
-import { CollectionTableToolbar } from "../EntityCollectionTable/internal/CollectionTableToolbar";
+} from "../EntityCollectionTable/index.js";
+import { CollectionTableToolbar } from "../EntityCollectionTable/internal/CollectionTableToolbar.js";
 
 import {
     canCreateEntity,
@@ -34,8 +34,8 @@ import {
     resolveCollection,
     resolveEntityAction,
     resolveProperty
-} from "../../util";
-import { ReferencePreview } from "../../preview";
+} from "../../util/index.js";
+import { ReferencePreview } from "../../preview/index.js";
 import {
     saveEntityWithCallbacks,
     useAuthController,
@@ -46,14 +46,14 @@ import {
     useNavigationController,
     useSideEntityController,
     useTranslation
-} from "../../hooks";
-import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
-import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
-import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
-import { EntityCollectionCardView } from "./EntityCollectionCardView";
-import { EntityCollectionBoardView } from "./EntityCollectionBoardView";
-import { CollectionDataErrorBanner } from "./CollectionDataErrorBanner";
-import { ViewModeToggle, KanbanPropertyOption } from "./ViewModeToggle";
+} from "../../hooks/index.js";
+import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController.js";
+import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence.js";
+import { EntityCollectionViewActions } from "./EntityCollectionViewActions.js";
+import { EntityCollectionCardView } from "./EntityCollectionCardView.js";
+import { EntityCollectionBoardView } from "./EntityCollectionBoardView.js";
+import { CollectionDataErrorBanner } from "./CollectionDataErrorBanner.js";
+import { ViewModeToggle, KanbanPropertyOption } from "./ViewModeToggle.js";
 import {
     AddIcon,
     Button,
@@ -64,7 +64,7 @@ import {
     Typography
 } from "@firecms/ui";
 import { setIn } from "@firecms/formex";
-import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
+import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common.js";
 import {
     COLLECTION_GROUP_PARENT_ID,
     copyEntityAction,
@@ -75,17 +75,17 @@ import {
     UniqueFieldValidator,
     useColumnIds,
     useTableSearchHelper
-} from "../common";
-import { PopupFormField } from "../EntityCollectionTable/internal/popup_field/PopupFormField";
-import { GetPropertyForProps } from "../EntityCollectionTable/EntityCollectionTableProps";
-import { DeleteEntityDialog } from "../DeleteEntityDialog";
-import { useAnalyticsController } from "../../hooks/useAnalyticsController";
-import { useSelectionController } from "./useSelectionController";
-import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions";
-import { addRecentId } from "./utils";
-import { EntityIdHeaderWidget } from "./EntityIdHeaderWidget";
-import { useScrollRestoration } from "../common/useScrollRestoration";
-import { entityCacheKey } from "../../util/entity_cache";
+} from "../common/index.js";
+import { PopupFormField } from "../EntityCollectionTable/internal/popup_field/PopupFormField.js";
+import { GetPropertyForProps } from "../EntityCollectionTable/EntityCollectionTableProps.js";
+import { DeleteEntityDialog } from "../DeleteEntityDialog.js";
+import { useAnalyticsController } from "../../hooks/useAnalyticsController.js";
+import { useSelectionController } from "./useSelectionController.js";
+import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions.js";
+import { addRecentId } from "./utils.js";
+import { EntityIdHeaderWidget } from "./EntityIdHeaderWidget.js";
+import { useScrollRestoration } from "../common/useScrollRestoration.js";
+import { entityCacheKey } from "../../util/entity_cache.js";
 
 const DEFAULT_ENTITY_OPEN_MODE: "side_panel" | "full_screen" = "side_panel";
 

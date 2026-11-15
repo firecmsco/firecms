@@ -1,5 +1,5 @@
 import React from "react";
-import { AccessResponse } from "../types";
+import { AccessResponse } from "../types/index.js";
 
 /**
  * License status of the enclosing `FireCMS`. `undefined` means there is no

@@ -1,4 +1,4 @@
-import { DefaultDrawer } from "../core";
+import { DefaultDrawer } from "../core/index.js";
 
 /**
  * This component is in charge of rendering the drawer.

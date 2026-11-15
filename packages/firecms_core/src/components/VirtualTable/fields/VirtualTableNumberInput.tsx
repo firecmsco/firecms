@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDebouncedCallback } from "../../../util";
+import { useDebouncedCallback } from "../../../util/index.js";
 import { cls, focusedDisabled } from "@firecms/ui";
 
 export function VirtualTableNumberInput(props: {

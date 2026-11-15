@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { CMSType, FieldProps, PropertyFieldBindingProps, ResolvedProperty } from "../../types";
-import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
-import { ArrayContainer, ArrayEntryParams, ErrorBoundary } from "../../components";
-import { getArrayResolvedProperties, getDefaultValueFor, getIconForProperty, mergeDeep } from "../../util";
-import { PropertyFieldBinding } from "../PropertyFieldBinding";
+import { CMSType, FieldProps, PropertyFieldBindingProps, ResolvedProperty } from "../../types/index.js";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components/index.js";
+import { ArrayContainer, ArrayEntryParams, ErrorBoundary } from "../../components/index.js";
+import { getArrayResolvedProperties, getDefaultValueFor, getIconForProperty, mergeDeep } from "../../util/index.js";
+import { PropertyFieldBinding } from "../PropertyFieldBinding.js";
 import { ExpandablePanel, Typography, IconButton, CloseIcon } from "@firecms/ui";
-import { useClearRestoreValue } from "../useClearRestoreValue";
-import { useAuthController } from "../../hooks";
-import { useTranslation } from "../../hooks/useTranslation";
+import { useClearRestoreValue } from "../useClearRestoreValue.js";
+import { useAuthController } from "../../hooks/index.js";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 /**
  * Generic array field that allows reordering and renders the child property

@@ -2,6 +2,7 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "module": "commonjs",
+        "moduleResolution": "node",
         "jsx": "react-jsx",
         "allowJs": true,
         "esModuleInterop": true

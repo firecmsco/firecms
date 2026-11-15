@@ -1,8 +1,8 @@
 import { collection, Firestore, getFirestore, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
-import { Subscription } from "../types/subscriptions";
-import { useFireCMSBackend } from "./useFireCMSBackend";
-import { convertDocToSubscription } from "../api/firestore";
+import { Subscription } from "../types/subscriptions.js";
+import { useFireCMSBackend } from "./useFireCMSBackend.js";
+import { convertDocToSubscription } from "../api/firestore.js";
 
 /**
  * Hook to listen for subscriptions stored under the project subcollection

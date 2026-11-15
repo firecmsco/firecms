@@ -2,30 +2,30 @@
 
 import React, { useEffect, useMemo, useRef } from "react";
 import { CenteredView } from "@firecms/ui";
-import { AppliedBundles, applyPluginTranslations, createAppliedBundles } from "./plugin_translations";
-import { filterPausedPlugins, isProPaused } from "./pro_plugins";
-import { AuthController } from "../types";
-import { CustomizationController, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
-import { AuthControllerContext, ModeControllerProvider } from "../contexts";
-import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
-import { useCustomizationController, useFireCMSContext, useTranslation, ModeController } from "../hooks";
-import { useBuildModeController } from "../hooks/useBuildModeController";
-import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
-import { ErrorView } from "../components";
-import { StorageSourceContext } from "../contexts/StorageSourceContext";
-import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext";
-import { DataSourceContext } from "../contexts/DataSourceContext";
-import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext";
-import { NavigationContext } from "../contexts/NavigationContext";
-import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
-import { DialogsProvider } from "../contexts/DialogsProvider";
-import { useBuildDataSource } from "../internal/useBuildDataSource";
-import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
-import { AnalyticsContext } from "../contexts/AnalyticsContext";
-import { useProjectLog } from "../hooks/useProjectLog";
-import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
-import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext";
-import { LicenseStatusContext, publishLicenseStatus } from "../contexts/LicenseStatusContext";
+import { AppliedBundles, applyPluginTranslations, createAppliedBundles } from "./plugin_translations.js";
+import { filterPausedPlugins, isProPaused } from "./pro_plugins.js";
+import { AuthController } from "../types/index.js";
+import { CustomizationController, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types/index.js";
+import { AuthControllerContext, ModeControllerProvider } from "../contexts/index.js";
+import { useBuildSideEntityController } from "../internal/useBuildSideEntityController.js";
+import { useCustomizationController, useFireCMSContext, useTranslation, ModeController } from "../hooks/index.js";
+import { useBuildModeController } from "../hooks/useBuildModeController.js";
+import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController.js";
+import { ErrorView } from "../components/index.js";
+import { StorageSourceContext } from "../contexts/StorageSourceContext.js";
+import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext.js";
+import { DataSourceContext } from "../contexts/DataSourceContext.js";
+import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext.js";
+import { NavigationContext } from "../contexts/NavigationContext.js";
+import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext.js";
+import { DialogsProvider } from "../contexts/DialogsProvider.js";
+import { useBuildDataSource } from "../internal/useBuildDataSource.js";
+import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext.js";
+import { AnalyticsContext } from "../contexts/AnalyticsContext.js";
+import { useProjectLog } from "../hooks/useProjectLog.js";
+import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext.js";
+import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext.js";
+import { LicenseStatusContext, publishLicenseStatus } from "../contexts/LicenseStatusContext.js";
 
 /**
  * If you are using independent components of the CMS

@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 import { useApp, useNavigationController, useTranslation } from "@firecms/core";
-import { useDataTalk } from "../DataTalkProvider";
+import { useDataTalk } from "../DataTalkProvider.js";
 import { cls, ManageSearchIcon, Typography } from "@firecms/ui";
 
 export function DataTalkDrawer() {

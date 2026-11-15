@@ -1,13 +1,13 @@
 import React from "react";
-import { FieldProps, MapProperty, Properties, PropertyFieldBindingProps, ResolvedProperties } from "../../types";
+import { FieldProps, MapProperty, Properties, PropertyFieldBindingProps, ResolvedProperties } from "../../types/index.js";
 
-import { ErrorBoundary } from "../../components";
-import { getIconForProperty, isHidden, isReadOnly, pick } from "../../util";
-import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
-import { FormEntry } from "../components/FormEntry";
-import { PropertyFieldBinding } from "../PropertyFieldBinding";
+import { ErrorBoundary } from "../../components/index.js";
+import { getIconForProperty, isHidden, isReadOnly, pick } from "../../util/index.js";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components/index.js";
+import { FormEntry } from "../components/FormEntry.js";
+import { PropertyFieldBinding } from "../PropertyFieldBinding.js";
 import { cls, ExpandablePanel, InputLabel, Select, SelectItem, IconButton, CloseIcon } from "@firecms/ui";
-import { useTranslation } from "../../hooks";
+import { useTranslation } from "../../hooks/index.js";
 
 /**
  * Field that renders the children property fields

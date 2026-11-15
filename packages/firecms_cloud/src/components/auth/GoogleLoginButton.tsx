@@ -1,4 +1,4 @@
-import { googleIcon } from "./social_icons";
+import { googleIcon } from "./social_icons.js";
 import React from "react"
 
 import { Button, cls } from "@firecms/ui";

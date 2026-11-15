@@ -8,9 +8,9 @@ import {
     FormContext,
     PluginFormActionProps,
     User
-} from "../types";
+} from "../types/index.js";
 
-import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
+import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components/index.js";
 import {
     buildSubcollectionPathSegments,
     canEditEntity,
@@ -19,7 +19,7 @@ import {
     resolveCollection,
     resolveDefaultSelectedView,
     resolvedSelectedEntityView
-} from "../util";
+} from "../util/index.js";
 
 import {
     useAuthController,
@@ -28,15 +28,15 @@ import {
     useEntityFetch,
     useFireCMSContext,
     useLargeLayout
-} from "../hooks";
+} from "../hooks/index.js";
 import { CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typography, Menu, MenuItem, ExpandMoreIcon } from "@firecms/ui";
-import { entityCacheKey, getEntityFromMemoryCache } from "../util/entity_cache";
-import { EntityForm, EntityFormProps } from "../form";
-import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
-import { EntityJsonPreview } from "../components/EntityJsonPreview";
-import { createFormexStub } from "../util/createFormexStub";
-import { useTranslation } from "../hooks/useTranslation";
-import { CollectionPathTitle } from "../components/EntityCollectionView/CollectionPathTitle";
+import { entityCacheKey, getEntityFromMemoryCache } from "../util/entity_cache.js";
+import { EntityForm, EntityFormProps } from "../form/index.js";
+import { EntityEditViewFormActions } from "./EntityEditViewFormActions.js";
+import { EntityJsonPreview } from "../components/EntityJsonPreview.js";
+import { createFormexStub } from "../util/createFormexStub.js";
+import { useTranslation } from "../hooks/useTranslation.js";
+import { CollectionPathTitle } from "../components/EntityCollectionView/CollectionPathTitle.js";
 
 export const MAIN_TAB_VALUE = "__main_##Q$SC^#S6";
 export const JSON_TAB_VALUE = "__json";

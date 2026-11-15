@@ -1,6 +1,6 @@
-import { sheetRowsToObjects, type SheetCell } from "./file_headers";
-import { parseCsvToObjects } from "./csv";
-import { mapJsonParse, unflattenObject } from "./transforms";
+import { sheetRowsToObjects, type SheetCell } from "./file_headers.js";
+import { parseCsvToObjects } from "./csv.js";
+import { mapJsonParse, unflattenObject } from "./transforms.js";
 
 // Part of this package's public API since before it moved to ./transforms.
 export { unflattenObject };

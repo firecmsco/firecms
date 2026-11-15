@@ -1,4 +1,4 @@
-import { isPrototypePollutingKey, pathTraversesPrototype } from "./prototype_keys";
+import { isPrototypePollutingKey, pathTraversesPrototype } from "./prototype_keys.js";
 
 /**
  * The own value at `key` when it is an object to descend into. An inherited one is

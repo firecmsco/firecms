@@ -11,8 +11,8 @@ import {
 } from "@firecms/core";
 import { AddIcon, IconButton, Tooltip } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
-import { RESERVED_GROUPS } from "../utils";
-import { AdminDrawerMenu } from "./AdminDrawerMenu";
+import { RESERVED_GROUPS } from "../utils/index.js";
+import { AdminDrawerMenu } from "./AdminDrawerMenu.js";
 
 /**
  * Default drawer used in FireCMS Cloud

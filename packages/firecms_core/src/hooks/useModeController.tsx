@@ -1,4 +1,4 @@
-import { ModeControllerContext } from "../contexts/ModeController";
+import { ModeControllerContext } from "../contexts/ModeController.js";
 import { useContext } from "react";
 
 /**

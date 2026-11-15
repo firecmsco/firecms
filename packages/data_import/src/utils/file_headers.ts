@@ -1,4 +1,4 @@
-import { isPrototypePollutingKey } from "./prototype_keys";
+import { isPrototypePollutingKey } from "./prototype_keys.js";
 
 /**
  * The header row of a spreadsheet, as a column index → name map.

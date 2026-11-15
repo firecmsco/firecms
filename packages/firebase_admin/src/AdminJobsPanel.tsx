@@ -5,9 +5,9 @@ import {
     Typography,
     DeleteIcon,
 } from "@firecms/ui";
-import { useBackendFirestore } from "./api/AdminApiProvider";
-import { useActiveAdminJobs } from "./hooks/useActiveAdminJobs";
-import { AdminJobState } from "./hooks/useAdminJob";
+import { useBackendFirestore } from "./api/AdminApiProvider.js";
+import { useActiveAdminJobs } from "./hooks/useActiveAdminJobs.js";
+import { AdminJobState } from "./hooks/useAdminJob.js";
 
 interface AdminJobsPanelProps {
     projectId: string;

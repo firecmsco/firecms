@@ -6,18 +6,18 @@ import {
     FilterValues,
     ResolvedProperty,
     SelectedCellProps
-} from "../../types";
-import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
-import { enumToObjectEntries } from "../../util";
-import { OnCellValueChange, OnColumnResizeParams } from "../common";
-import { FilterFormFieldProps } from "../VirtualTable/VirtualTableHeader";
-import { ReferenceFilterField } from "./filters/ReferenceFilterField";
-import { StringNumberFilterField } from "./filters/StringNumberFilterField";
-import { BooleanFilterField } from "./filters/BooleanFilterField";
-import { DateTimeFilterField } from "./filters/DateTimeFilterField";
+} from "../../types/index.js";
+import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable/index.js";
+import { enumToObjectEntries } from "../../util/index.js";
+import { OnCellValueChange, OnColumnResizeParams } from "../common/index.js";
+import { FilterFormFieldProps } from "../VirtualTable/VirtualTableHeader.js";
+import { ReferenceFilterField } from "./filters/ReferenceFilterField.js";
+import { StringNumberFilterField } from "./filters/StringNumberFilterField.js";
+import { BooleanFilterField } from "./filters/BooleanFilterField.js";
+import { DateTimeFilterField } from "./filters/DateTimeFilterField.js";
 import { useOutsideAlerter } from "@firecms/ui";
-import { SelectableTableContext } from "./SelectableTableContext";
-import { getRowHeight } from "../common/table_height";
+import { SelectableTableContext } from "./SelectableTableContext.js";
+import { getRowHeight } from "../common/table_height.js";
 
 export type SelectableTableProps<M extends Record<string, any>> = {
 

@@ -1,5 +1,5 @@
-import { EntityCollection, StorageSource } from "../types";
-import { StorageSourceContext } from "../contexts/StorageSourceContext";
+import { EntityCollection, StorageSource } from "../types/index.js";
+import { StorageSourceContext } from "../contexts/StorageSourceContext.js";
 import { useContext } from "react";
 
 /**

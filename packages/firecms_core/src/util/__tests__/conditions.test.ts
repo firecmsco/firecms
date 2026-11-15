@@ -3,8 +3,8 @@ import {
     buildConditionContext,
     evaluateCondition,
     registerConditionOperations
-} from "../conditions";
-import { ConditionContext, ResolvedProperty } from "../../types";
+} from "../conditions.js";
+import { ConditionContext, ResolvedProperty } from "../../types/index.js";
 
 describe("Property Conditions", () => {
 

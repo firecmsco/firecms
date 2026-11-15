@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useSideDialogsController } from "../hooks";
-import { EntitySidePanelProps, SideDialogPanelProps } from "../types";
+import { useSideDialogsController } from "../hooks/index.js";
+import { EntitySidePanelProps, SideDialogPanelProps } from "../types/index.js";
 import { Sheet } from "@firecms/ui";
-import { useLeavePageConfirmation } from "../internal/useLeavePageConfirmation";
-import { ErrorBoundary } from "../components";
-import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
-import { EntitySidePanel } from "./EntitySidePanel";
+import { useLeavePageConfirmation } from "../internal/useLeavePageConfirmation.js";
+import { ErrorBoundary } from "../components/index.js";
+import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog.js";
+import { EntitySidePanel } from "./EntitySidePanel.js";
 
 export type SideDialogController = {
     blocked: boolean,

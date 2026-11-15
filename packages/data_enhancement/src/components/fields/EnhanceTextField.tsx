@@ -9,7 +9,7 @@ import {
     PropertyIdCopyTooltip,
     useClearRestoreValue
 } from "@firecms/core";
-import { AdvancedTextField, InputType } from "./AdvancedTextField";
+import { AdvancedTextField, InputType } from "./AdvancedTextField.js";
 
 /**
  * Generic text field.

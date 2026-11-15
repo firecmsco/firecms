@@ -1,17 +1,17 @@
-import { DataSource } from "./datasource";
-import { StorageSource } from "./storage";
-import { NavigationController } from "./navigation";
-import { SideEntityController } from "./side_entity_controller";
-import { AuthController } from "./auth";
-import { User } from "./user";
-import { SnackbarController } from "../hooks";
-import { UserConfigurationPersistence } from "./local_config_persistence";
-import { SideDialogsController } from "./side_dialogs_controller";
-import { DialogsController } from "./dialogs_controller";
-import { CustomizationController } from "./customization_controller";
-import { AnalyticsController } from "./analytics_controller";
-import { InternalUserManagement } from "./internal_user_management";
-import { AccessResponse } from "./license";
+import { DataSource } from "./datasource.js";
+import { StorageSource } from "./storage.js";
+import { NavigationController } from "./navigation.js";
+import { SideEntityController } from "./side_entity_controller.js";
+import { AuthController } from "./auth.js";
+import { User } from "./user.js";
+import { SnackbarController } from "../hooks/index.js";
+import { UserConfigurationPersistence } from "./local_config_persistence.js";
+import { SideDialogsController } from "./side_dialogs_controller.js";
+import { DialogsController } from "./dialogs_controller.js";
+import { CustomizationController } from "./customization_controller.js";
+import { AnalyticsController } from "./analytics_controller.js";
+import { InternalUserManagement } from "./internal_user_management.js";
+import { AccessResponse } from "./license.js";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.

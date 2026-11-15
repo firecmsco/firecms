@@ -1,12 +1,12 @@
 import { AddIcon, Button, Container, Typography } from "@firecms/ui";
 
-import { UsersTable } from "./UsersTable";
-import { UserDetailsForm } from "./UserDetailsForm";
+import { UsersTable } from "./UsersTable.js";
+import { UserDetailsForm } from "./UserDetailsForm.js";
 import React, { useCallback, useState } from "react";
-import { useUserManagement } from "../../hooks/useUserManagement";
+import { useUserManagement } from "../../hooks/useUserManagement.js";
 import { isProPaused, useLicenseStatus, User, useTranslation
 } from "@firecms/core";
-import { UserManagementPausedNotice } from "../UserManagementPausedNotice";
+import { UserManagementPausedNotice } from "../UserManagementPausedNotice.js";
 
 export const UsersView = function UsersView({ children }: { children?: React.ReactNode }) {
     const { t } = useTranslation();

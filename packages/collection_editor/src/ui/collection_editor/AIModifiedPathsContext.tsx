@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
-import { CollectionOperation } from "../../api/generateCollectionApi";
+import { CollectionOperation } from "../../api/generateCollectionApi.js";
 
 export interface AIModifiedPathsContextType {
     /** Set of paths that were modified by AI */

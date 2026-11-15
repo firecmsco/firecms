@@ -1,9 +1,9 @@
 import React from "react";
 import { cls, ExpandMoreIcon, Typography } from "@firecms/ui";
-import { NavigationEntry } from "../types";
-import { IconForView } from "../util";
-import { DrawerNavigationItem } from "./DrawerNavigationItem";
-import { useTranslation } from "../hooks/useTranslation";
+import { NavigationEntry } from "../types/index.js";
+import { IconForView } from "../util/index.js";
+import { DrawerNavigationItem } from "./DrawerNavigationItem.js";
+import { useTranslation } from "../hooks/useTranslation.js";
 
 export interface DrawerNavigationGroupProps {
     /**

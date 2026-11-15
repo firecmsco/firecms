@@ -21,13 +21,13 @@ import {
     Tooltip,
 } from "@firecms/ui";
 import { useLargeLayout } from "@firecms/core";
-import { CollectionTree } from "./CollectionTree";
-import { DocumentTable } from "./DocumentTable";
-import { DocumentPanel } from "./DocumentPanel";
-import { AdminDocument } from "./api/admin_api";
-import { useAdminApi } from "./api/AdminApiProvider";
-import { DeleteCollectionDialog, AdminJobSnackbarTracker } from "./DeleteCollectionDialog";
-import { AdminJobsPanel } from "./AdminJobsPanel";
+import { CollectionTree } from "./CollectionTree.js";
+import { DocumentTable } from "./DocumentTable.js";
+import { DocumentPanel } from "./DocumentPanel.js";
+import { AdminDocument } from "./api/admin_api.js";
+import { useAdminApi } from "./api/AdminApiProvider.js";
+import { DeleteCollectionDialog, AdminJobSnackbarTracker } from "./DeleteCollectionDialog.js";
+import { AdminJobsPanel } from "./AdminJobsPanel.js";
 
 // ─── LocalStorage helpers ───────────────────────────────────────────────────
 const LS_SIDEBAR_SIZE = "firecms_explorer_sidebar_size";

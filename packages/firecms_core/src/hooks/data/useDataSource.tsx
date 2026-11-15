@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { DataSource, EntityCollection } from "../../types";
-import { DataSourceContext } from "../../contexts/DataSourceContext";
+import { DataSource, EntityCollection } from "../../types/index.js";
+import { DataSourceContext } from "../../contexts/DataSourceContext.js";
 
 /**
  * Use this hook to get the datasource being used

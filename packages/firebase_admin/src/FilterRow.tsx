@@ -19,8 +19,8 @@ import {
     TYPE_BADGES,
     FILTERABLE_VALUE_TYPES,
     isMultiValueOp,
-} from "./filter_utils";
-import { FIELD_TYPE_OPTIONS } from "./FieldEditor";
+} from "./filter_utils.js";
+import { FIELD_TYPE_OPTIONS } from "./FieldEditor.js";
 
 // ─── Props ──────────────────────────────────────────────────────────────────
 

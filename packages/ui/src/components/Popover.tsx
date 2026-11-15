@@ -2,10 +2,10 @@
 import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 
-import { paperMixin } from "../styles";
-import { cls } from "../util";
-import { useInjectStyles } from "../hooks";
-import { usePortalContainer } from "../hooks/PortalContainerContext";
+import { paperMixin } from "../styles.js";
+import { cls } from "../util/index.js";
+import { useInjectStyles } from "../hooks/index.js";
+import { usePortalContainer } from "../hooks/PortalContainerContext.js";
 
 export type PopoverSide = "top" | "right" | "bottom" | "left";
 export type PopoverAlign = "start" | "center" | "end";

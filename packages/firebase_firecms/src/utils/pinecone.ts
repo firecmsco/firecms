@@ -1,5 +1,5 @@
 import { User as FirebaseUser } from "firebase/auth";
-import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types";
+import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types/index.js";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 
 const DEFAULT_SERVER = "https://api.firecms.co";

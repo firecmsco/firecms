@@ -1,5 +1,5 @@
-import { ChipColorKey, ChipColorScheme } from "../components";
-import { hashString } from "./hash";
+import { ChipColorKey, ChipColorScheme } from "../components/index.js";
+import { hashString } from "./hash.js";
 
 export const CHIP_COLORS: Record<string, ChipColorScheme> = {
     blueLighter: { color: "#cfdfff", text: "#102046" },

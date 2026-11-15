@@ -1,6 +1,6 @@
 "use client";
 import React, { ForwardRefRenderFunction } from "react";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 
 export type ContainerProps = {
     children: React.ReactNode;

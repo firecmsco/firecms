@@ -1,6 +1,6 @@
 import { Decoration, DecorationSet, EditorView } from "prosemirror-view";
 import { Plugin, PluginKey } from "prosemirror-state";
-import { schema } from "../../schema";
+import { schema } from "../../schema.js";
 
 export type UploadFn = (image: File) => Promise<string>;
 

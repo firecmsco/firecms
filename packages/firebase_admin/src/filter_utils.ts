@@ -1,4 +1,4 @@
-import { AdminDocument } from "./api/admin_api";
+import { AdminDocument } from "./api/admin_api.js";
 
 // ─── Field type inference ──────────────────────────────────────────────────
 

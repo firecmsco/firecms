@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo } from "react";
 
-import { Entity, EntityCollection, EntityReference, FieldProps } from "../../types";
-import { useNavigationController, useReferenceDialog } from "../../hooks";
-import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
-import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
-import { ErrorView } from "../../components";
-import { EmptyValue, ReferencePreview } from "../../preview";
-import { getIconForProperty, getReferenceFrom, IconForView } from "../../util";
-import { useClearRestoreValue } from "../useClearRestoreValue";
-import { EntityPreviewContainer } from "../../components/EntityPreview";
+import { Entity, EntityCollection, EntityReference, FieldProps } from "../../types/index.js";
+import { useNavigationController, useReferenceDialog } from "../../hooks/index.js";
+import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding.js";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components/index.js";
+import { ErrorView } from "../../components/index.js";
+import { EmptyValue, ReferencePreview } from "../../preview/index.js";
+import { getIconForProperty, getReferenceFrom, IconForView } from "../../util/index.js";
+import { useClearRestoreValue } from "../useClearRestoreValue.js";
+import { EntityPreviewContainer } from "../../components/EntityPreview.js";
 import { cls, IconButton, CloseIcon } from "@firecms/ui";
 
 /**

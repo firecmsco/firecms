@@ -1,4 +1,4 @@
-import { EntityAction } from "../types";
+import { EntityAction } from "../types/index.js";
 
 const reservedKeys = ["edit", "copy", "delete"];
 

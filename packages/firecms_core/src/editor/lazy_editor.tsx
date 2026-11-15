@@ -2,8 +2,8 @@
 
 import React from "react";
 
-import { CircularProgressCenter } from "../components/CircularProgressCenter";
-import type { FireCMSEditorProps } from "./editor";
+import { CircularProgressCenter } from "../components/CircularProgressCenter.js";
+import type { FireCMSEditorProps } from "./editor.js";
 
 /**
  * `FireCMSEditor`, loaded on demand.
@@ -20,7 +20,7 @@ import type { FireCMSEditorProps } from "./editor";
  * a consumer rendering it without a boundary of their own still works.
  */
 const LazyFireCMSEditor = React.lazy(() =>
-    import("./editor").then((module) => ({ default: module.FireCMSEditor })));
+    import("./editor.js").then((module) => ({ default: module.FireCMSEditor })));
 
 export function FireCMSEditor(props: FireCMSEditorProps) {
     return (

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { Container } from "./Container";
-import { cls } from "../util";
+import { Container } from "./Container.js";
+import { cls } from "../util/index.js";
 
 export type CenteredViewProps = {
     children: React.ReactNode;

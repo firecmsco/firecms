@@ -1,11 +1,11 @@
 import React, { PropsWithChildren, useCallback } from "react";
 import { cls, defaultBorderMixin, IconButton, MenuIcon, Sheet } from "@firecms/ui";
 import equal from "react-fast-compare"
-import { useLargeLayout } from "../hooks";
-import { ErrorBoundary } from "../components";
-import { LicenseBanner } from "../components/LicenseBanner";
-import { AppContext } from "./useApp";
-import { useTranslation } from "../hooks/useTranslation";
+import { useLargeLayout } from "../hooks/index.js";
+import { ErrorBoundary } from "../components/index.js";
+import { LicenseBanner } from "../components/LicenseBanner.js";
+import { AppContext } from "./useApp.js";
+import { useTranslation } from "../hooks/useTranslation.js";
 
 export const DRAWER_WIDTH = 280;
 

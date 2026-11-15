@@ -1,6 +1,6 @@
-import { getIconForWidget } from "../util";
-import { PropertyConfig } from "../types";
-import { getDefaultFieldConfig } from "../core";
+import { getIconForWidget } from "../util/index.js";
+import { PropertyConfig } from "../types/index.js";
+import { getDefaultFieldConfig } from "../core/index.js";
 
 export function PropertyConfigBadge({
                                         propertyConfig,

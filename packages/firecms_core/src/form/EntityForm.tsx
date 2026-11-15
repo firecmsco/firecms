@@ -12,10 +12,10 @@ import {
     PropertyConfig,
     PropertyFieldBindingProps,
     ResolvedEntityCollection
-} from "../types";
+} from "../types/index.js";
 import equal from "react-fast-compare";
 
-import { ErrorBoundary, getFormFieldKeys } from "../components";
+import { ErrorBoundary, getFormFieldKeys } from "../components/index.js";
 import {
     getDefaultValuesFor,
     getEntityTitlePropertyKey,
@@ -27,7 +27,7 @@ import {
     mergeDeep,
     resolveCollection,
     useDebouncedCallback
-} from "../util";
+} from "../util/index.js";
 
 import {
     saveEntityWithCallbacks,
@@ -38,14 +38,14 @@ import {
     useNavigationController,
     useSideEntityController,
     useSnackbarController
-} from "../hooks";
+} from "../hooks/index.js";
 import { Alert, CheckIcon, Chip, cls, EditIcon, NotesIcon, paperMixin, Tooltip, Typography } from "@firecms/ui";
 import { Formex, FormexController, getIn, setIn, useCreateFormex,
     useFormex
 } from "@firecms/formex";
-import { useTranslation } from "../hooks";
-import { useAnalyticsController } from "../hooks/useAnalyticsController";
-import { FormEntry, FormLayout, LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
+import { useTranslation } from "../hooks/index.js";
+import { useAnalyticsController } from "../hooks/useAnalyticsController.js";
+import { FormEntry, FormLayout, LabelWithIconAndTooltip, PropertyFieldBinding } from "../form/index.js";
 import { ValidationError } from "yup";
 import {
     entityCacheKey,
@@ -54,12 +54,12 @@ import {
     removeEntityFromCache,
     removeEntityFromMemoryCache,
     saveEntityToCache
-} from "../util/entity_cache";
-import { CustomIdField } from "./components/CustomIdField";
-import { ErrorFocus } from "./components/ErrorFocus";
-import { CustomFieldValidator, getYupEntitySchema } from "./validation";
-import { EntityFormActions, EntityFormActionsProps } from "./EntityFormActions";
-import { LocalChangesMenu } from "./components/LocalChangesMenu";
+} from "../util/entity_cache.js";
+import { CustomIdField } from "./components/CustomIdField.js";
+import { ErrorFocus } from "./components/ErrorFocus.js";
+import { CustomFieldValidator, getYupEntitySchema } from "./validation.js";
+import { EntityFormActions, EntityFormActionsProps } from "./EntityFormActions.js";
+import { LocalChangesMenu } from "./components/LocalChangesMenu.js";
 
 export type OnUpdateParams = {
     entity: Entity<any>,

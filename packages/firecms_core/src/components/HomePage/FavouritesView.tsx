@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { useNavigationController } from "../../hooks";
-import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
-import { NavigationEntry } from "../../types";
+import { useNavigationController } from "../../hooks/index.js";
+import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence.js";
+import { NavigationEntry } from "../../types/index.js";
 import { Chip, Collapse, StarIcon } from "@firecms/ui";
 
 function NavigationChip({ entry }: { entry: NavigationEntry }) {

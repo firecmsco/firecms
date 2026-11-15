@@ -1,3 +1,3 @@
-export * from "./export";
-export * from "./BasicExportAction";
-export * from "./ExportCollectionAction";
+export * from "./export.js";
+export * from "./BasicExportAction.js";
+export * from "./ExportCollectionAction.js";

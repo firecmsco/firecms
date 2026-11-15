@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { EntityCollectionTableController } from "../common/types";
+import { EntityCollectionTableController } from "../common/types.js";
 
 export const SelectableTableContext = React.createContext<EntityCollectionTableController<any>>({} as any);
 

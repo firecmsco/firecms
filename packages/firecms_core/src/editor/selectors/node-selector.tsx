@@ -1,6 +1,6 @@
 import { EditorState, Transaction } from "prosemirror-state";
-import { EditorBubbleItem } from "../components";
-import { useTranslation } from "../../hooks/useTranslation";
+import { EditorBubbleItem } from "../components/index.js";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 import {
     Button,
@@ -17,9 +17,9 @@ import {
     Popover,
     TextFieldsIcon
 } from "@firecms/ui";
-import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
-import { isNodeActive } from "../utils/prosemirror-utils";
-import { schema } from "../schema";
+import { useProseMirrorContext } from "../hooks/useProseMirrorContext.js";
+import { isNodeActive } from "../utils/prosemirror-utils.js";
+import { schema } from "../schema.js";
 import { setBlockType, wrapIn } from "prosemirror-commands";
 import { wrapInList } from "prosemirror-schema-list";
 

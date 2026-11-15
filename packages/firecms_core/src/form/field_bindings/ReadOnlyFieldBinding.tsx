@@ -1,11 +1,11 @@
 import React from "react";
 
-import { FieldProps } from "../../types";
+import { FieldProps } from "../../types/index.js";
 
-import { PropertyPreview } from "../../preview";
-import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
-import { ErrorBoundary } from "../../components";
-import { getIconForProperty } from "../../util";
+import { PropertyPreview } from "../../preview/index.js";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components/index.js";
+import { ErrorBoundary } from "../../components/index.js";
+import { getIconForProperty } from "../../util/index.js";
 import { cls, paperMixin } from "@firecms/ui";
 
 /**

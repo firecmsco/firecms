@@ -1,14 +1,14 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { Entity, EntityStatus, EntityValues } from "./entities";
-import { User } from "./user";
-import { FireCMSContext } from "./firecms_context";
-import { EntityCallbacks } from "./entity_callbacks";
-import { Permissions, PermissionsBuilder } from "./permissions";
-import { EnumValues, PropertiesOrBuilders } from "./properties";
-import { FormContext } from "./fields";
-import { EntityAction } from "./entity_actions";
-import { ExportConfig } from "./export_import";
-import { EntityOverrides } from "./entity_overrides";
+import { Entity, EntityStatus, EntityValues } from "./entities.js";
+import { User } from "./user.js";
+import { FireCMSContext } from "./firecms_context.js";
+import { EntityCallbacks } from "./entity_callbacks.js";
+import { Permissions, PermissionsBuilder } from "./permissions.js";
+import { EnumValues, PropertiesOrBuilders } from "./properties.js";
+import { FormContext } from "./fields.js";
+import { EntityAction } from "./entity_actions.js";
+import { ExportConfig } from "./export_import.js";
+import { EntityOverrides } from "./entity_overrides.js";
 
 /**
  * This interface represents a view that includes a collection of entities.

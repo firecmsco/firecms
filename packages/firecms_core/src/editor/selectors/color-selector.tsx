@@ -1,9 +1,9 @@
 import type { Dispatch, SetStateAction } from "react";
-import { EditorBubbleItem } from "../components";
+import { EditorBubbleItem } from "../components/index.js";
 import { Button, CheckIcon, KeyboardArrowDownIcon, Popover } from "@firecms/ui";
-import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
-import { isMarkActive, getMarkAttributes, setMark, unsetMark } from "../utils/prosemirror-utils";
-import { schema } from "../schema";
+import { useProseMirrorContext } from "../hooks/useProseMirrorContext.js";
+import { isMarkActive, getMarkAttributes, setMark, unsetMark } from "../utils/prosemirror-utils.js";
+import { schema } from "../schema.js";
 
 export interface BubbleColorMenuItem {
     name: string;

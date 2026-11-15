@@ -1,7 +1,7 @@
-import { CMSType, Property, PropertyOrBuilder } from "./properties";
-import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
+import { CMSType, Property, PropertyOrBuilder } from "./properties.js";
+import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities.js";
 import { FormexController } from "@firecms/formex";
-import { Entity } from "./entities";
+import { Entity } from "./entities.js";
 
 /**
  * When building a custom field you need to create a React component that takes

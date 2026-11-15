@@ -1,5 +1,5 @@
 import React from "react";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 
 // The text colour is set explicitly rather than inherited: these backgrounds
 // flip between themes, so a label rendered outside a Scaffold (which supplies

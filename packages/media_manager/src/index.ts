@@ -1,10 +1,10 @@
 // Types
-export * from "./types";
+export * from "./types/index.js";
 
 // Provider and hooks
-export * from "./MediaManagerProvider";
-export * from "./useMediaManagerController";
-export * from "./useMediaManagerPlugin";
+export * from "./MediaManagerProvider.js";
+export * from "./useMediaManagerController.js";
+export * from "./useMediaManagerPlugin.js";
 
 // Components
-export * from "./components";
+export * from "./components/index.js";

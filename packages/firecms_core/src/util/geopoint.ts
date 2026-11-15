@@ -1,4 +1,4 @@
-import { GeoPoint } from "../types";
+import { GeoPoint } from "../types/index.js";
 
 export type GeoPointLike = GeoPoint | {
     latitude?: number;

@@ -1,5 +1,5 @@
 import React, { ReactEventHandler } from "react";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 
 export type TypographyVariant = keyof typeof typographyVariants;
 export type TypographyProps<C extends React.ElementType = "span"> = {

@@ -1,8 +1,8 @@
 import React from "react";
 
 import { coolIconKeys, debounce, Icon, IconButton, iconKeys, SearchBar, Tooltip } from "@firecms/ui";
-import { iconSynonyms, iconsSearch } from "../util";
-import { useTranslation } from "../hooks/useTranslation";
+import { iconSynonyms, iconsSearch } from "../util/index.js";
+import { useTranslation } from "../hooks/useTranslation.js";
 
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
 

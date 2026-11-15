@@ -35,10 +35,10 @@ import {
     UploadIcon,
 } from "@firecms/ui";
 import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
-import { useImportConfig } from "../hooks";
-import { convertDataToEntity, getInferenceType } from "../utils";
-import { DataNewPropertiesMapping, ImportFileUpload, ImportSaveInProgress } from "../components";
-import { ImportConfig } from "../types";
+import { useImportConfig } from "../hooks/index.js";
+import { convertDataToEntity, getInferenceType } from "../utils/index.js";
+import { DataNewPropertiesMapping, ImportFileUpload, ImportSaveInProgress } from "../components/index.js";
+import { ImportConfig } from "../types/index.js";
 
 type ImportState = "initial" | "mapping" | "preview" | "import_data_saving";
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Entity, EntityCollection, FilterValues } from "../../types";
-import { useDataSource, useFireCMSContext, useNavigationController } from "../../hooks";
+import { Entity, EntityCollection, FilterValues } from "../../types/index.js";
+import { useDataSource, useFireCMSContext, useNavigationController } from "../../hooks/index.js";
 
 const DEFAULT_PAGE_SIZE = 20;
 

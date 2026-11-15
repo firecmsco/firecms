@@ -4,12 +4,12 @@ import fs from "fs";
 import http from "http";
 import path from "path";
 import axios from "axios";
-import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
+import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common.js";
 import * as os from "os";
 import EventEmitter from "events";
 import chalk from "chalk";
-import { done_html } from "../util/done_html";
-import { authCommand, describeRequestError } from "../util/request_error";
+import { done_html } from "../util/done_html.js";
+import { authCommand, describeRequestError } from "../util/request_error.js";
 
 import https from "https";
 

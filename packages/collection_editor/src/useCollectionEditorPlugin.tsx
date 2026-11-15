@@ -1,24 +1,24 @@
 import React from "react";
 import { FireCMSPlugin, useAuthController, useNavigationController, User, useTranslation } from "@firecms/core";
-import { ConfigControllerProvider } from "./ConfigControllerProvider";
-import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
-import { EditorCollectionAction } from "./ui/EditorCollectionAction";
-import { HomePageEditorCollectionAction } from "./ui/HomePageEditorCollectionAction";
-import { PersistedCollection } from "./types/persisted_collection";
-import { CollectionInference } from "./types/collection_inference";
-import { CollectionsConfigController } from "./types/config_controller";
-import { CollectionGenerationCallback } from "./api/generateCollectionApi";
-import { CollectionViewHeaderAction } from "./ui/CollectionViewHeaderAction";
-import { PropertyAddColumnComponent } from "./ui/PropertyAddColumnComponent";
-import { NewCollectionButton } from "./ui/NewCollectionButton";
+import { ConfigControllerProvider } from "./ConfigControllerProvider.js";
+import { CollectionEditorPermissionsBuilder } from "./types/config_permissions.js";
+import { EditorCollectionAction } from "./ui/EditorCollectionAction.js";
+import { HomePageEditorCollectionAction } from "./ui/HomePageEditorCollectionAction.js";
+import { PersistedCollection } from "./types/persisted_collection.js";
+import { CollectionInference } from "./types/collection_inference.js";
+import { CollectionsConfigController } from "./types/config_controller.js";
+import { CollectionGenerationCallback } from "./api/generateCollectionApi.js";
+import { CollectionViewHeaderAction } from "./ui/CollectionViewHeaderAction.js";
+import { PropertyAddColumnComponent } from "./ui/PropertyAddColumnComponent.js";
+import { NewCollectionButton } from "./ui/NewCollectionButton.js";
 import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
-import { useCollectionEditorController } from "./useCollectionEditorController";
-import { EditorCollectionActionStart } from "./ui/EditorCollectionActionStart";
-import { NewCollectionCard } from "./ui/NewCollectionCard";
-import { EditorEntityAction } from "./ui/EditorEntityAction";
-import { KanbanSetupAction } from "./ui/KanbanSetupAction";
-import { AddKanbanColumnAction } from "./ui/AddKanbanColumnAction";
-import { collectionEditorTranslationsEn } from "./locales/en";
+import { useCollectionEditorController } from "./useCollectionEditorController.js";
+import { EditorCollectionActionStart } from "./ui/EditorCollectionActionStart.js";
+import { NewCollectionCard } from "./ui/NewCollectionCard.js";
+import { EditorEntityAction } from "./ui/EditorEntityAction.js";
+import { KanbanSetupAction } from "./ui/KanbanSetupAction.js";
+import { AddKanbanColumnAction } from "./ui/AddKanbanColumnAction.js";
+import { collectionEditorTranslationsEn } from "./locales/en.js";
 
 export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, USER extends User = User> {
 
@@ -137,12 +137,12 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         // Seven languages of strings in every plugin bundle is dead weight for
         // the six nobody is reading.
             en: collectionEditorTranslationsEn,
-            es: () => import("./locales/es").then((m) => m.collectionEditorTranslationsEs),
-            de: () => import("./locales/de").then((m) => m.collectionEditorTranslationsDe),
-            fr: () => import("./locales/fr").then((m) => m.collectionEditorTranslationsFr),
-            it: () => import("./locales/it").then((m) => m.collectionEditorTranslationsIt),
-            hi: () => import("./locales/hi").then((m) => m.collectionEditorTranslationsHi),
-            pt: () => import("./locales/pt").then((m) => m.collectionEditorTranslationsPt)
+            es: () => import("./locales/es.js").then((m) => m.collectionEditorTranslationsEs),
+            de: () => import("./locales/de.js").then((m) => m.collectionEditorTranslationsDe),
+            fr: () => import("./locales/fr.js").then((m) => m.collectionEditorTranslationsFr),
+            it: () => import("./locales/it.js").then((m) => m.collectionEditorTranslationsIt),
+            hi: () => import("./locales/hi.js").then((m) => m.collectionEditorTranslationsHi),
+            pt: () => import("./locales/pt.js").then((m) => m.collectionEditorTranslationsPt)
         }
     };
 }

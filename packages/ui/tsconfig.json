@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "outDir": "dist",
-        "module": "es2022",
+        "module": "nodenext",
         "target": "ESNEXT",
         "lib": [
             "dom",
@@ -10,7 +10,7 @@
         ],
         "emitDeclarationOnly": true,
         "allowImportingTsExtensions": true,
-        "moduleResolution": "node",
+        "moduleResolution": "nodenext",
         "jsx": "react-jsx",
         "noFallthroughCasesInSwitch": true,
 

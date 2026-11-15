@@ -1,21 +1,21 @@
 import React, { useCallback, useMemo, useRef } from "react";
-import { AdditionalFieldDelegate, CollectionSize, Entity, FireCMSContext, User } from "../../types";
-import { PropertyTableCell } from "./PropertyTableCell";
-import { ErrorBoundary } from "../ErrorBoundary";
-import { useFireCMSContext, useLargeLayout } from "../../hooks";
-import { CellRendererParams, VirtualTableColumn } from "../VirtualTable";
-import { getValueInPath } from "../../util";
-import { EntityCollectionRowActions } from "./EntityCollectionRowActions";
-import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
-import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
-import { EntityTableCell } from "./internal/EntityTableCell";
-import { CustomFieldValidator } from "../../form/validation";
-import { renderSkeletonText } from "../../preview";
-import { propertiesToColumns } from "./column_utils";
-import { ErrorView } from "../ErrorView";
-import { SelectableTable } from "../SelectableTable/SelectableTable";
+import { AdditionalFieldDelegate, CollectionSize, Entity, FireCMSContext, User } from "../../types/index.js";
+import { PropertyTableCell } from "./PropertyTableCell.js";
+import { ErrorBoundary } from "../ErrorBoundary.js";
+import { useFireCMSContext, useLargeLayout } from "../../hooks/index.js";
+import { CellRendererParams, VirtualTableColumn } from "../VirtualTable/index.js";
+import { getValueInPath } from "../../util/index.js";
+import { EntityCollectionRowActions } from "./EntityCollectionRowActions.js";
+import { CollectionTableToolbar } from "./internal/CollectionTableToolbar.js";
+import { EntityCollectionTableProps } from "./EntityCollectionTableProps.js";
+import { EntityTableCell } from "./internal/EntityTableCell.js";
+import { CustomFieldValidator } from "../../form/validation.js";
+import { renderSkeletonText } from "../../preview/index.js";
+import { propertiesToColumns } from "./column_utils.js";
+import { ErrorView } from "../ErrorView.js";
+import { SelectableTable } from "../SelectableTable/SelectableTable.js";
 import { cls } from "@firecms/ui";
-import { getRowHeight } from "../common/table_height";
+import { getRowHeight } from "../common/table_height.js";
 
 /**
  * This component is in charge of rendering a collection table with a high

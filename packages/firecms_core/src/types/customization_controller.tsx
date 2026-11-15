@@ -1,10 +1,10 @@
 import React from "react";
-import { EntityLinkBuilder } from "./entity_link_builder";
-import { FireCMSPlugin } from "./plugins";
-import { EntityCustomView } from "./collections";
-import { Locale } from "./locales";
-import { PropertyConfig } from "./property_config";
-import { EntityAction } from "./entity_actions";
+import { EntityLinkBuilder } from "./entity_link_builder.js";
+import { FireCMSPlugin } from "./plugins.js";
+import { EntityCustomView } from "./collections.js";
+import { Locale } from "./locales.js";
+import { PropertyConfig } from "./property_config.js";
+import { EntityAction } from "./entity_actions.js";
 
 export type CustomizationController = {
 

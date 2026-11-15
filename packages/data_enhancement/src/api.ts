@@ -4,9 +4,9 @@ import {
     InputEntity,
     InputProperty,
     SamplePromptsResult
-} from "./types/data_enhancement_controller";
+} from "./types/data_enhancement_controller.js";
 import { DataSource, EntityValues } from "@firecms/core";
-import { flatMapEntityValues } from "./utils/values";
+import { flatMapEntityValues } from "./utils/values.js";
 
 // const DEFAULT_SERVER = "http://localhost:5001/firecms-dev-2da42/europe-west3/api"; // Local
 

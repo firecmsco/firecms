@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { EntityCollection, useTranslation } from "@firecms/core";
-import { MarkdownElement, parseMarkdown } from "../utils/parser";
-import { CodeBlock } from "./CodeBlock";
+import { MarkdownElement, parseMarkdown } from "../utils/parser.js";
+import { CodeBlock } from "./CodeBlock.js";
 import {
     Button,
     CheckIcon,
@@ -19,7 +19,7 @@ import {
     ThumbDownOffAltIcon,
     Tooltip
 } from "@firecms/ui";
-import { FeedbackSlug } from "../types";
+import { FeedbackSlug } from "../types.js";
 
 export function SystemMessage({
                                   text,

@@ -5,7 +5,7 @@ import {
     ModifyCollectionProps,
     Properties
 } from "@firecms/core";
-import { PersistedCollection } from "../types/persisted_collection";
+import { PersistedCollection } from "../types/persisted_collection.js";
 
 /**
  * Function in charge of merging collections defined in code with those stored in the backend.

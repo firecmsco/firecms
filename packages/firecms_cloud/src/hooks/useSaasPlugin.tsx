@@ -2,16 +2,16 @@ import React, { useCallback } from "react";
 import { AIIcon, EntityCollection, FireCMSPlugin, InternalUserManagement, useAuthController, useNavigationController, useTranslation } from "@firecms/core";
 import { CollectionsConfigController, mergeCollections, useCollectionEditorController } from "@firecms/collection_editor";
 import { AddIcon, ArticleIcon, Button, Card, cls, HistoryIcon, Typography } from "@firecms/ui";
-import { ProjectConfig } from "./useBuildProjectConfig";
-import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
-import { FireCMSAppConfig, FireCMSBackend } from "../types";
-import { RootCollectionSuggestions } from "../components/RootCollectionSuggestions";
-import { PermissionErrorView } from "../components/PermissionErrorView";
+import { ProjectConfig } from "./useBuildProjectConfig.js";
+import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog.js";
+import { FireCMSAppConfig, FireCMSBackend } from "../types/index.js";
+import { RootCollectionSuggestions } from "../components/RootCollectionSuggestions.js";
+import { PermissionErrorView } from "../components/PermissionErrorView.js";
 
-import { AutoSetUpCollectionsButton } from "../components/AutoSetUpCollectionsButton";
-import { EnableEntityHistoryView } from "../components/EnableEntityHistoryView";
-import { CollectionsSetupLoadingLabel } from "../components/CollectionsSetupLoadingLabel";
-import { RootCollectionInfo } from "../api/projects";
+import { AutoSetUpCollectionsButton } from "../components/AutoSetUpCollectionsButton.js";
+import { EnableEntityHistoryView } from "../components/EnableEntityHistoryView.js";
+import { CollectionsSetupLoadingLabel } from "../components/CollectionsSetupLoadingLabel.js";
+import { RootCollectionInfo } from "../api/projects.js";
 
 export function useSaasPlugin({
     projectConfig,

@@ -19,7 +19,7 @@ import {
     Typography
 } from "@firecms/ui";
 import { useFormex } from "@firecms/formex";
-import { PropertyFormDialog } from "./PropertyEditView";
+import { PropertyFormDialog } from "./PropertyEditView.js";
 
 export function KanbanConfigSection({
     className,

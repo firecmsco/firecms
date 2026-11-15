@@ -42,26 +42,26 @@ import {
     Tabs,
     Typography
 } from "@firecms/ui";
-import { YupSchema } from "./CollectionYupValidation";
-import { GeneralSettingsForm } from "./GeneralSettingsForm";
-import { DisplaySettingsForm } from "./DisplaySettingsForm";
-import { CollectionPropertiesEditorForm } from "./CollectionPropertiesEditorForm";
-import { UnsavedChangesDialog } from "./UnsavedChangesDialog";
-import { ExtendSettingsForm } from "./ExtendSettingsForm";
-import { CollectionsConfigController } from "../../types/config_controller";
-import { CollectionEditorWelcomeView } from "./CollectionEditorWelcomeView";
-import { CollectionInference } from "../../types/collection_inference";
+import { YupSchema } from "./CollectionYupValidation.js";
+import { GeneralSettingsForm } from "./GeneralSettingsForm.js";
+import { DisplaySettingsForm } from "./DisplaySettingsForm.js";
+import { CollectionPropertiesEditorForm } from "./CollectionPropertiesEditorForm.js";
+import { UnsavedChangesDialog } from "./UnsavedChangesDialog.js";
+import { ExtendSettingsForm } from "./ExtendSettingsForm.js";
+import { CollectionsConfigController } from "../../types/config_controller.js";
+import { CollectionEditorWelcomeView } from "./CollectionEditorWelcomeView.js";
+import { CollectionInference } from "../../types/collection_inference.js";
 import { getInferenceType, ImportSaveInProgress, useImportConfig } from "@firecms/data_import";
 import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
-import { CollectionEditorImportMapping } from "./import/CollectionEditorImportMapping";
-import { CollectionEditorImportDataPreview } from "./import/CollectionEditorImportDataPreview";
-import { cleanPropertiesFromImport } from "./import/clean_import_data";
-import { PersistedCollection } from "../../types/persisted_collection";
+import { CollectionEditorImportMapping } from "./import/CollectionEditorImportMapping.js";
+import { CollectionEditorImportDataPreview } from "./import/CollectionEditorImportDataPreview.js";
+import { cleanPropertiesFromImport } from "./import/clean_import_data.js";
+import { PersistedCollection } from "../../types/persisted_collection.js";
 import { Formex, FormexController, useCreateFormex } from "@firecms/formex";
-import { getFullIdPath } from "./util";
-import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
-import { AIModifiedPathsProvider, useAIModifiedPaths } from "./AIModifiedPathsContext";
-import { CollectionOperation, CollectionGenerationCallback } from "../../api/generateCollectionApi";
+import { getFullIdPath } from "./util.js";
+import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover.js";
+import { AIModifiedPathsProvider, useAIModifiedPaths } from "./AIModifiedPathsContext.js";
+import { CollectionOperation, CollectionGenerationCallback } from "../../api/generateCollectionApi.js";
 
 export interface CollectionEditorDialogProps {
     open: boolean;

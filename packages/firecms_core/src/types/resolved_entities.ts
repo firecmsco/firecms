@@ -9,9 +9,9 @@ import {
     NumberProperty,
     ReferenceProperty,
     StringProperty
-} from "./properties";
-import { EntityReference, GeoPoint } from "./entities";
-import { EntityCollection } from "./collections";
+} from "./properties.js";
+import { EntityReference, GeoPoint } from "./entities.js";
+import { EntityCollection } from "./collections.js";
 
 /**
  * This is the same entity collection you define, only all the property builders

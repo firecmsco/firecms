@@ -10,11 +10,11 @@ import { getFieldConfig, getFieldId, Properties, Property, PropertyConfig, Prope
 } from "@firecms/core";
 import { cls, Container, Select, SelectItem, Tooltip, Typography } from "@firecms/ui";
 import React, { useState } from "react";
-import { OnPropertyChangedParams, PropertyFormDialog, PropertyWithId } from "../PropertyEditView";
-import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";
-import { PersistedCollection } from "../../../types/persisted_collection";
-import { updatePropertyFromWidget } from "../utils/update_property_for_widget";
-import { supportedFields } from "../utils/supported_fields";
+import { OnPropertyChangedParams, PropertyFormDialog, PropertyWithId } from "../PropertyEditView.js";
+import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util.js";
+import { PersistedCollection } from "../../../types/persisted_collection.js";
+import { updatePropertyFromWidget } from "../utils/update_property_for_widget.js";
+import { supportedFields } from "../utils/supported_fields.js";
 import { buildPropertyFromData } from "@firecms/schema_inference";
 
 export function CollectionEditorImportMapping({

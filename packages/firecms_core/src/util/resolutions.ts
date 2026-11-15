@@ -24,13 +24,13 @@ import {
     ResolvedStringProperty,
     StringProperty,
     UserConfigurationPersistence
-} from "../types";
-import { getValueInPath, mergeDeep } from "./objects";
-import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
-import { DEFAULT_ONE_OF_TYPE } from "./common";
+} from "../types/index.js";
+import { getValueInPath, mergeDeep } from "./objects.js";
+import { getDefaultValuesFor, isPropertyBuilder } from "./entities.js";
+import { DEFAULT_ONE_OF_TYPE } from "./common.js";
 import { getIn } from "@firecms/formex";
-import { enumToObjectEntries } from "./enums";
-import { isDefaultFieldConfigId } from "../core";
+import { enumToObjectEntries } from "./enums.js";
+import { isDefaultFieldConfigId } from "../core/index.js";
 
 export const resolveCollection = <M extends Record<string, any>,>
     ({

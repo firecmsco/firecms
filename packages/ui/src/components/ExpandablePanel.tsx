@@ -2,10 +2,10 @@
 import React, { PropsWithChildren, useEffect, useState } from "react";
 
 import * as Collapsible from "@radix-ui/react-collapsible";
-import { defaultBorderMixin, fieldBackgroundMixin } from "../styles";
-import { KeyboardArrowDownIcon } from "../icons";
-import { cls } from "../util";
-import { useInjectStyles } from "../hooks";
+import { defaultBorderMixin, fieldBackgroundMixin } from "../styles.js";
+import { KeyboardArrowDownIcon } from "../icons/index.js";
+import { cls } from "../util/index.js";
+import { useInjectStyles } from "../hooks/index.js";
 
 export function ExpandablePanel({
                                     title,

@@ -1,6 +1,6 @@
 import { AddIcon, Button } from "@firecms/ui";
 import { useTranslation } from "@firecms/core";
-import { useCollectionEditorController } from "../useCollectionEditorController";
+import { useCollectionEditorController } from "../useCollectionEditorController.js";
 
 export function NewCollectionButton() {
     const { t } = useTranslation();

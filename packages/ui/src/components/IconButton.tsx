@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 
 export type IconButtonProps<C extends React.ElementType> =
     Omit<(C extends "button" ? React.ButtonHTMLAttributes<HTMLButtonElement> : React.ComponentProps<C>), "onClick">

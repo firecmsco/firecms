@@ -1,9 +1,9 @@
 import React, { memo, useMemo } from "react";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { BoardSortableList } from "./BoardSortableList";
-import { BoardColumnTitle } from "./BoardColumnTitle";
-import { BoardItem, BoardItemViewProps } from "./board_types";
+import { BoardSortableList } from "./BoardSortableList.js";
+import { BoardColumnTitle } from "./BoardColumnTitle.js";
+import { BoardItem, BoardItemViewProps } from "./board_types.js";
 import { AddIcon, ChipColorKey, ChipColorScheme, cls, defaultBorderMixin, IconButton } from "@firecms/ui";
 
 export interface BoardColumnProps<M extends Record<string, any>> {

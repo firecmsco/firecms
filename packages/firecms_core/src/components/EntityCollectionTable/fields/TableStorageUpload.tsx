@@ -1,16 +1,16 @@
 import * as React from "react";
 import { useMemo } from "react";
 
-import { Entity, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "../../../types";
+import { Entity, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "../../../types/index.js";
 import { useDropzone } from "react-dropzone";
-import { PreviewSize, PropertyPreview } from "../../../preview";
-import { ErrorBoundary } from "../../ErrorBoundary";
-import { useSnackbarController, useStorageSource } from "../../../hooks";
-import { getThumbnailMeasure } from "../../../preview/util";
-import { StorageFieldItem, useStorageUploadController } from "../../../util/useStorageUploadController";
-import { StorageUploadProgress } from "../../../form/components/StorageUploadProgress";
+import { PreviewSize, PropertyPreview } from "../../../preview/index.js";
+import { ErrorBoundary } from "../../ErrorBoundary.js";
+import { useSnackbarController, useStorageSource } from "../../../hooks/index.js";
+import { getThumbnailMeasure } from "../../../preview/util.js";
+import { StorageFieldItem, useStorageUploadController } from "../../../util/useStorageUploadController.js";
+import { StorageUploadProgress } from "../../../form/components/StorageUploadProgress.js";
 import { cls, EditIcon, IconButton, Typography } from "@firecms/ui";
-import { EntityTableCellActions } from "../internal/EntityTableCellActions";
+import { EntityTableCellActions } from "../internal/EntityTableCellActions.js";
 
 const dropZoneClasses = "max-w-full box-border relative pt-[2px] items-center border border-transparent outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const activeDropClasses = "pt-0 border-2 border-solid"

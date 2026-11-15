@@ -2,8 +2,8 @@ import React from "react";
 
 import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
 import { DebouncedTextField } from "@firecms/ui";
-import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
-import { SwitchControl } from "../../SwitchControl";
+import { GeneralPropertyValidation } from "./GeneralPropertyValidation.js";
+import { SwitchControl } from "../../SwitchControl.js";
 import { useTranslation } from "@firecms/core";
 
 export function NumberPropertyValidation({ disabled }: {

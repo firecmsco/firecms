@@ -6,13 +6,13 @@ import {
     ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig
-} from "../../types";
+} from "../../types/index.js";
 import { useDropzone } from "react-dropzone";
-import { PreviewSize } from "../../preview";
-import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
+import { PreviewSize } from "../../preview/index.js";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components/index.js";
 
-import { getIconForProperty, isReadOnly, resolveProperty } from "../../util";
-import { useAuthController, useSnackbarController, useStorageSource } from "../../hooks";
+import { getIconForProperty, isReadOnly, resolveProperty } from "../../util/index.js";
+import { useAuthController, useSnackbarController, useStorageSource } from "../../hooks/index.js";
 import {
     closestCenter,
     DndContext,
@@ -30,9 +30,9 @@ import {
     useSortable
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { StorageFieldItem, useStorageUploadController } from "../../util/useStorageUploadController";
-import { StorageUploadProgress } from "../components/StorageUploadProgress";
-import { StorageItemPreview } from "../components/StorageItemPreview";
+import { StorageFieldItem, useStorageUploadController } from "../../util/useStorageUploadController.js";
+import { StorageUploadProgress } from "../components/StorageUploadProgress.js";
+import { StorageItemPreview } from "../components/StorageItemPreview.js";
 import {
     cls,
     fieldBackgroundDisabledMixin,
@@ -42,8 +42,8 @@ import {
     IconButton,
     CloseIcon
 } from "@firecms/ui";
-import { useClearRestoreValue } from "../useClearRestoreValue";
-import { useTranslation } from "../../hooks/useTranslation";
+import { useClearRestoreValue } from "../useClearRestoreValue.js";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = fieldBackgroundDisabledMixin;

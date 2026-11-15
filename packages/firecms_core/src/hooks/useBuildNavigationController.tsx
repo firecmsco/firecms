@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import equal from "react-fast-compare"
 import { useBlocker, useNavigate } from "react-router-dom";
-import { filterPausedPlugins, isProPaused } from "../core/pro_plugins";
-import { useLicenseStatus } from "./useLicenseStatus";
+import { filterPausedPlugins, isProPaused } from "../core/pro_plugins.js";
+import { useLicenseStatus } from "./useLicenseStatus.js";
 
 import {
     AuthController,
@@ -21,7 +21,7 @@ import {
     PermissionsBuilder,
     User,
     UserConfigurationPersistence
-} from "../types";
+} from "../types/index.js";
 import {
     applyPermissionsFunctionIfEmpty,
     collectionSegmentsFrom,
@@ -33,8 +33,8 @@ import {
     resolveCollectionPathIds,
     resolveCollectionPathSegments,
     resolvePermissions
-} from "../util";
-import { getParentReferencesFromPath } from "../util/parent_references_from_path";
+} from "../util/index.js";
+import { getParentReferencesFromPath } from "../util/parent_references_from_path.js";
 
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";

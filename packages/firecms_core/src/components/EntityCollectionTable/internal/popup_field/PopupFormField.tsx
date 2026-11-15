@@ -12,16 +12,16 @@ import {
     ResolvedEntityCollection,
     ResolvedProperties,
     ResolvedProperty
-} from "../../../../types";
+} from "../../../../types/index.js";
 import { Formex, useCreateFormex } from "@firecms/formex";
-import { useDraggable } from "./useDraggable";
-import { CustomFieldValidator, getYupEntitySchema } from "../../../../form/validation";
-import { useWindowSize } from "./useWindowSize";
-import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
+import { useDraggable } from "./useDraggable.js";
+import { CustomFieldValidator, getYupEntitySchema } from "../../../../form/validation.js";
+import { useWindowSize } from "./useWindowSize.js";
+import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util/index.js";
 import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
-import { PropertyFieldBinding, yupToFormErrors } from "../../../../form";
-import { useAuthController, useCustomizationController, useDataSource, useFireCMSContext, useTranslation } from "../../../../hooks";
-import { OnCellValueChangeParams } from "../../../common";
+import { PropertyFieldBinding, yupToFormErrors } from "../../../../form/index.js";
+import { useAuthController, useCustomizationController, useDataSource, useFireCMSContext, useTranslation } from "../../../../hooks/index.js";
+import { OnCellValueChangeParams } from "../../../common/index.js";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     customFieldValidator?: CustomFieldValidator;

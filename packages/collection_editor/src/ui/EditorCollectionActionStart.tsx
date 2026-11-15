@@ -3,9 +3,9 @@ import equal from "react-fast-compare"
 import { CollectionActionsProps, mergeDeep, useAuthController, useSnackbarController } from "@firecms/core";
 import { Button, SaveIcon, Tooltip, UndoIcon, } from "@firecms/ui";
 
-import { useCollectionEditorController } from "../useCollectionEditorController";
-import { useCollectionsConfigController } from "../useCollectionsConfigController";
-import { PersistedCollection } from "../types/persisted_collection";
+import { useCollectionEditorController } from "../useCollectionEditorController.js";
+import { useCollectionsConfigController } from "../useCollectionsConfigController.js";
+import { PersistedCollection } from "../types/persisted_collection.js";
 
 export function EditorCollectionActionStart({
                                            path: fullPath,

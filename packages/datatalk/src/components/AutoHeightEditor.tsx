@@ -1,6 +1,6 @@
 import { useModeController } from "@firecms/core";
 
-import Editor from "@monaco-editor/react";
+import { Editor } from "@monaco-editor/react";
 import React, { useEffect, useRef } from "react";
 
 export type AutoHeightEditorProps = {

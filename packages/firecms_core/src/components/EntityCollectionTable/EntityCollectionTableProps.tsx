@@ -9,9 +9,9 @@ import {
     ResolvedProperty,
     SelectionController,
     User
-} from "../../types";
-import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator } from "../common/types";
-import { VirtualTableColumn } from "../VirtualTable";
+} from "../../types/index.js";
+import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator } from "../common/types.js";
+import { VirtualTableColumn } from "../VirtualTable/index.js";
 
 /**
  * @group Collection components

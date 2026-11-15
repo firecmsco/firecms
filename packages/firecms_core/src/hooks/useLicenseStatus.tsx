@@ -1,11 +1,11 @@
 import { useContext, useSyncExternalStore } from "react";
-import { AccessResponse } from "../types";
+import { AccessResponse } from "../types/index.js";
 import {
     getLicenseStatusSnapshot,
     getServerLicenseStatusSnapshot,
     LicenseStatusContext,
     subscribeLicenseStatus
-} from "../contexts/LicenseStatusContext";
+} from "../contexts/LicenseStatusContext.js";
 
 /**
  * The FireCMS license status of this project: whether PRO runs on a trial, is

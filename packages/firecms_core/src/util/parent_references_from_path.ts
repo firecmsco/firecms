@@ -1,10 +1,10 @@
-import { EntityCollection, EntityReference } from "../types";
+import { EntityCollection, EntityReference } from "../types/index.js";
 import {
     decodeEntityId,
     getCollectionPathsCombinations,
     removeInitialAndTrailingSlashes,
     walkPathSegments
-} from "./navigation_utils";
+} from "./navigation_utils.js";
 
 /**
  * References to every parent entity in a path.

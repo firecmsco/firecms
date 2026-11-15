@@ -5,8 +5,8 @@
 import React from 'react';
 /* eslint-disable i18next/no-literal-string */
 import { render, act } from '@testing-library/react';
-import { VirtualTable } from './VirtualTable';
-import { VirtualTableProps } from './VirtualTableProps';
+import { VirtualTable } from './VirtualTable.js';
+import { VirtualTableProps } from './VirtualTableProps.js';
 
 // Mock VirtualTableRow to track renders
 const renderCallback = jest.fn();

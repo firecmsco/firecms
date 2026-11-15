@@ -10,7 +10,7 @@ import {
     CheckIcon,
     defaultBorderMixin
 } from "@firecms/ui";
-import { MediaAsset } from "../types";
+import { MediaAsset } from "../types/index.js";
 
 export interface MediaAssetCardProps {
     asset: MediaAsset;

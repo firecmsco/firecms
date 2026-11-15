@@ -7,9 +7,9 @@ import {
     fieldBackgroundInvisibleMixin,
     fieldBackgroundMixin,
     focusedInvisibleMixin
-} from "../styles";
-import { InputLabel } from "./InputLabel";
-import { cls } from "../util";
+} from "../styles.js";
+import { InputLabel } from "./InputLabel.js";
+import { cls } from "../util/index.js";
 
 export type InputType =
     | "text"

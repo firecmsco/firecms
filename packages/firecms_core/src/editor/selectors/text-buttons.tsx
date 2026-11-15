@@ -1,6 +1,6 @@
 import { EditorState, Transaction } from "prosemirror-state";
-import { EditorBubbleItem } from "../components";
-import type { SelectorItem } from "./node-selector";
+import { EditorBubbleItem } from "../components/index.js";
+import type { SelectorItem } from "./node-selector.js";
 import {
     Button,
     cls,
@@ -10,9 +10,9 @@ import {
     FormatStrikethroughIcon,
     FormatUnderlinedIcon
 } from "@firecms/ui";
-import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
-import { isMarkActive } from "../utils/prosemirror-utils";
-import { schema } from "../schema";
+import { useProseMirrorContext } from "../hooks/useProseMirrorContext.js";
+import { isMarkActive } from "../utils/prosemirror-utils.js";
+import { schema } from "../schema.js";
 import { toggleMark } from "prosemirror-commands";
 
 export const TextButtons = () => {

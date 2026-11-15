@@ -1,5 +1,5 @@
-import { getLocalChangesBackup } from "../collections";
-import { EntityCollection } from "../../types";
+import { getLocalChangesBackup } from "../collections.js";
+import { EntityCollection } from "../../types/index.js";
 
 function collectionWith(localChangesBackup?: "manual_apply" | "auto_apply" | false): EntityCollection {
     return {

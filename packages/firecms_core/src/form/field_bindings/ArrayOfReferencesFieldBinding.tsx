@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from "react";
-import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "../../types";
-import { ReferencePreview } from "../../preview";
-import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
-import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
-import { getIconForProperty, getReferenceFrom } from "../../util";
-import { useNavigationController, useReferenceDialog, useTranslation } from "../../hooks";
+import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "../../types/index.js";
+import { ReferencePreview } from "../../preview/index.js";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components/index.js";
+import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components/index.js";
+import { getIconForProperty, getReferenceFrom } from "../../util/index.js";
+import { useNavigationController, useReferenceDialog, useTranslation } from "../../hooks/index.js";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography, IconButton, CloseIcon } from "@firecms/ui";
-import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useClearRestoreValue } from "../useClearRestoreValue.js";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
 

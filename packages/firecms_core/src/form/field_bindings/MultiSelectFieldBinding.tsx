@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 
-import { EnumType, FieldProps, ResolvedProperty } from "../../types";
-import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
-import { EnumValuesChip } from "../../preview";
-import { enumToObjectEntries, getIconForProperty, getLabelOrConfigFrom } from "../../util";
+import { EnumType, FieldProps, ResolvedProperty } from "../../types/index.js";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components/index.js";
+import { EnumValuesChip } from "../../preview/index.js";
+import { enumToObjectEntries, getIconForProperty, getLabelOrConfigFrom } from "../../util/index.js";
 import { CloseIcon, MultiSelect, MultiSelectItem, IconButton } from "@firecms/ui";
-import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useClearRestoreValue } from "../useClearRestoreValue.js";
 
 /**
  * This fields renders a dropdown with multiple selection.

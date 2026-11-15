@@ -1,5 +1,5 @@
 import { ErrorIcon, IconButton } from "@firecms/ui";
-import { ErrorTooltip } from "../../ErrorTooltip";
+import { ErrorTooltip } from "../../ErrorTooltip.js";
 import { useCallback, useEffect, useRef } from "react";
 
 export interface EntityTableCellActionsProps {

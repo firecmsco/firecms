@@ -21,7 +21,7 @@ import {
     TextField,
     Typography
 } from "@firecms/ui";
-import { useCollectionsConfigController } from "../useCollectionsConfigController";
+import { useCollectionsConfigController } from "../useCollectionsConfigController.js";
 
 /**
  * Component rendered at the end of the Kanban board to add new columns (enum values).

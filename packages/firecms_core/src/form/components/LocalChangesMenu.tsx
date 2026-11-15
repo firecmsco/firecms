@@ -16,11 +16,11 @@ import {
     WarningIcon
 } from "@firecms/ui";
 import { FormexController } from "@firecms/formex";
-import { useSnackbarController, useTranslation } from "../../hooks";
-import { mergeDeep } from "../../util";
-import { flattenKeys, removeEntityFromCache } from "../../util/entity_cache";
-import { ResolvedProperties } from "../../types";
-import { PropertyCollectionView } from "../../components/PropertyCollectionView";
+import { useSnackbarController, useTranslation } from "../../hooks/index.js";
+import { mergeDeep } from "../../util/index.js";
+import { flattenKeys, removeEntityFromCache } from "../../util/entity_cache.js";
+import { ResolvedProperties } from "../../types/index.js";
+import { PropertyCollectionView } from "../../components/PropertyCollectionView.js";
 
 interface LocalChangesMenuProps<M extends object> {
     cacheKey: string;

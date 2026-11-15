@@ -35,25 +35,25 @@ import {
     Typography,
     WarningIcon
 } from "@firecms/ui";
-import { EnumPropertyField } from "./properties/EnumPropertyField";
-import { StoragePropertyField } from "./properties/StoragePropertyField";
-import { MapPropertyField } from "./properties/MapPropertyField";
-import { RepeatPropertyField } from "./properties/RepeatPropertyField";
-import { CommonPropertyFields } from "./properties/CommonPropertyFields";
-import { StringPropertyField } from "./properties/StringPropertyField";
-import { BooleanPropertyField } from "./properties/BooleanPropertyField";
-import { BlockPropertyField } from "./properties/BlockPropertyField";
-import { NumberPropertyField } from "./properties/NumberPropertyField";
-import { ReferencePropertyField } from "./properties/ReferencePropertyField";
-import { DateTimePropertyField } from "./properties/DateTimePropertyField";
-import { AdvancedPropertyValidation } from "./properties/advanced/AdvancedPropertyValidation";
-import { ConditionsPanel, ConditionsEditor, EnumConditionsEditor } from "./properties/conditions";
-import { editableProperty } from "../../utils/entities";
-import { KeyValuePropertyField } from "./properties/KeyValuePropertyField";
-import { updatePropertyFromWidget } from "./utils/update_property_for_widget";
-import { UrlPropertyField } from "./properties/UrlPropertyField";
-import { supportedFields } from "./utils/supported_fields";
-import { MarkdownPropertyField } from "./properties/MarkdownPropertyField";
+import { EnumPropertyField } from "./properties/EnumPropertyField.js";
+import { StoragePropertyField } from "./properties/StoragePropertyField.js";
+import { MapPropertyField } from "./properties/MapPropertyField.js";
+import { RepeatPropertyField } from "./properties/RepeatPropertyField.js";
+import { CommonPropertyFields } from "./properties/CommonPropertyFields.js";
+import { StringPropertyField } from "./properties/StringPropertyField.js";
+import { BooleanPropertyField } from "./properties/BooleanPropertyField.js";
+import { BlockPropertyField } from "./properties/BlockPropertyField.js";
+import { NumberPropertyField } from "./properties/NumberPropertyField.js";
+import { ReferencePropertyField } from "./properties/ReferencePropertyField.js";
+import { DateTimePropertyField } from "./properties/DateTimePropertyField.js";
+import { AdvancedPropertyValidation } from "./properties/advanced/AdvancedPropertyValidation.js";
+import { ConditionsPanel, ConditionsEditor, EnumConditionsEditor } from "./properties/conditions/index.js";
+import { editableProperty } from "../../utils/entities.js";
+import { KeyValuePropertyField } from "./properties/KeyValuePropertyField.js";
+import { updatePropertyFromWidget } from "./utils/update_property_for_widget.js";
+import { UrlPropertyField } from "./properties/UrlPropertyField.js";
+import { supportedFields } from "./utils/supported_fields.js";
+import { MarkdownPropertyField } from "./properties/MarkdownPropertyField.js";
 
 export type PropertyWithId = Property & {
     id?: string

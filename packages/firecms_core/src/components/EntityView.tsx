@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
-import { Entity, EntityCollection, ResolvedEntityCollection, ResolvedProperties } from "../types";
-import { resolveCollection } from "../util";
+import { Entity, EntityCollection, ResolvedEntityCollection, ResolvedProperties } from "../types/index.js";
+import { resolveCollection } from "../util/index.js";
 import { cls, defaultBorderMixin, IconButton, OpenInNewIcon, Typography } from "@firecms/ui";
-import { CustomizationController } from "../types/customization_controller";
-import { useCustomizationController } from "../hooks/useCustomizationController";
-import { useAuthController, useTranslation } from "../hooks";
-import { PropertyCollectionView } from "./PropertyCollectionView";
+import { CustomizationController } from "../types/customization_controller.js";
+import { useCustomizationController } from "../hooks/useCustomizationController.js";
+import { useAuthController, useTranslation } from "../hooks/index.js";
+import { PropertyCollectionView } from "./PropertyCollectionView.js";
 
 /**
  * @group Components

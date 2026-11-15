@@ -1,13 +1,13 @@
 import React from "react";
 
-import { canCreateEntity, canDeleteEntity } from "../../util";
-import { useAuthController, useCustomizationController, useFireCMSContext, useLargeLayout } from "../../hooks";
+import { canCreateEntity, canDeleteEntity } from "../../util/index.js";
+import { useAuthController, useCustomizationController, useFireCMSContext, useLargeLayout } from "../../hooks/index.js";
 import {
     CollectionActionsProps,
     EntityCollection,
     EntityTableController,
     SelectionController
-} from "../../types";
+} from "../../types/index.js";
 import {
     AddIcon,
     Button,
@@ -15,9 +15,9 @@ import {
     IconButton,
     Tooltip
 } from "@firecms/ui";
-import { toArray } from "../../util/arrays";
-import { ErrorBoundary } from "../ErrorBoundary";
-import { useTranslation } from "../../hooks/useTranslation";
+import { toArray } from "../../util/arrays.js";
+import { ErrorBoundary } from "../ErrorBoundary.js";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;

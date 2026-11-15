@@ -13,8 +13,8 @@ import {
     Typography
 } from "@firecms/ui";
 
-import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
-import { useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
+import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView.js";
+import { useProjectConfig, useSubscriptionsForUserController } from "../../hooks/index.js";
 
 export function PaywallDialog({
                                   open,

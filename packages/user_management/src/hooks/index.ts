@@ -1,2 +1,2 @@
-export * from "./useBuildUserManagement";
-export * from "./useUserManagement";
+export * from "./useBuildUserManagement.js";
+export * from "./useUserManagement.js";

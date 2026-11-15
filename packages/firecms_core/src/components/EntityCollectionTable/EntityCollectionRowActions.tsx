@@ -1,11 +1,11 @@
 import React, { MouseEvent, useCallback } from "react";
 
-import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../types";
+import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../types/index.js";
 import { Badge, Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip } from "@firecms/ui";
-import { useFireCMSContext, useLargeLayout } from "../../hooks";
-import { entityCacheKey, getEntityFromCache } from "../../util/entity_cache";
-import { getLocalChangesBackup } from "../../util";
-import { getChanges } from "../../form/EntityForm";
+import { useFireCMSContext, useLargeLayout } from "../../hooks/index.js";
+import { entityCacheKey, getEntityFromCache } from "../../util/entity_cache.js";
+import { getLocalChangesBackup } from "../../util/index.js";
+import { getChanges } from "../../form/EntityForm.js";
 
 /**
  *

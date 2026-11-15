@@ -1,5 +1,5 @@
 import { forwardRef, type ReactNode, useEffect, useRef, useState } from "react";
-import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
+import { useProseMirrorContext } from "../hooks/useProseMirrorContext.js";
 import { autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom";
 import { NodeSelection } from "prosemirror-state";
 

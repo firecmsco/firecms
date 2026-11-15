@@ -2,9 +2,9 @@ import React, { PropsWithChildren, useCallback, useMemo } from "react";
 import { EntityCollection, FireCMSContext, FireCMSPlugin } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
 import { FirestoreIcon } from "@firecms/ui";
-import { buildAdminApi } from "./api/admin_api";
-import { AdminApiProvider } from "./api/AdminApiProvider";
-import { RawDataView } from "./RawDataView";
+import { buildAdminApi } from "./api/admin_api.js";
+import { AdminApiProvider } from "./api/AdminApiProvider.js";
+import { RawDataView } from "./RawDataView.js";
 
 export type UseFirebaseAdminPluginProps = {
     /**

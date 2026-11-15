@@ -1,4 +1,4 @@
-import type { PriceInterval } from "../types/subscriptions";
+import type { PriceInterval } from "../types/subscriptions.js";
 
 /**
  * Pricing arithmetic for FireCMS PRO licenses. Pure: no React, no Firebase, so

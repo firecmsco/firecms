@@ -1,5 +1,5 @@
 import React, { ErrorInfo, PropsWithChildren } from "react";
-import { useTranslation } from "../hooks/useTranslation";
+import { useTranslation } from "../hooks/useTranslation.js";
 
 import { ErrorIcon, Typography } from "@firecms/ui";
 

@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { focusedDisabled, paperMixin } from "../styles";
-import { cls } from "../util";
-import { usePortalContainer } from "../hooks/PortalContainerContext";
+import { focusedDisabled, paperMixin } from "../styles.js";
+import { cls } from "../util/index.js";
+import { usePortalContainer } from "../hooks/PortalContainerContext.js";
 
 export type MenuProps = {
     children: React.ReactNode;

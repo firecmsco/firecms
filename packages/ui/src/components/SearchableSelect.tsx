@@ -3,9 +3,9 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { Command as CommandPrimitive } from "cmdk";
-import { cls } from "../util";
-import { CheckIcon, KeyboardArrowDownIcon } from "../icons";
-import { Separator } from "./Separator";
+import { cls } from "../util/index.js";
+import { CheckIcon, KeyboardArrowDownIcon } from "../icons/index.js";
+import { Separator } from "./Separator.js";
 import {
     defaultBorderMixin,
     fieldBackgroundDisabledMixin,
@@ -13,9 +13,9 @@ import {
     fieldBackgroundInvisibleMixin,
     fieldBackgroundMixin,
     focusedDisabled
-} from "../styles";
-import { useInjectStyles } from "../hooks";
-import { usePortalContainer } from "../hooks/PortalContainerContext";
+} from "../styles.js";
+import { useInjectStyles } from "../hooks/index.js";
+import { usePortalContainer } from "../hooks/PortalContainerContext.js";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 

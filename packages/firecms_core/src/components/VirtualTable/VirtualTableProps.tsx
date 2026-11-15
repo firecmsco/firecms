@@ -1,6 +1,6 @@
 import React from "react";
-import { WhereFilterOp } from "../../types";
-import { FilterFormFieldProps } from "./VirtualTableHeader";
+import { WhereFilterOp } from "../../types/index.js";
+import { FilterFormFieldProps } from "./VirtualTableHeader.js";
 
 export type OnRowClickParams<T extends Record<string, any>> = {
     rowData: T;

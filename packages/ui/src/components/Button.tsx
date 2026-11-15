@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 
 export type ButtonProps<C extends React.ElementType = "button"> = {
     children?: React.ReactNode;

@@ -1,10 +1,10 @@
 import React, { PropsWithChildren, useContext, useEffect, useMemo, useRef } from "react";
 import i18next, { i18n } from "i18next";
 import { I18nContext, I18nextProvider, initReactI18next } from "react-i18next";
-import { en } from "../locales/en";
-import { es } from "../locales/es";
-import { FireCMSTranslations } from "../types/translations";
-import { getLocalStorageItem, setLocalStorageItem } from "../util/local_storage";
+import { en } from "../locales/en.js";
+import { es } from "../locales/es.js";
+import { FireCMSTranslations } from "../types/translations.js";
+import { getLocalStorageItem, setLocalStorageItem } from "../util/local_storage.js";
 
 const FIRECMS_NS = "firecms_core";
 
@@ -23,12 +23,12 @@ const FIRECMS_NS = "firecms_core";
  * can see them and emit one chunk per locale.
  */
 const localeLoaders: Record<string, () => Promise<FireCMSTranslations>> = {
-    de: () => import("../locales/de").then((m) => m.de),
-    fr: () => import("../locales/fr").then((m) => m.fr),
-    it: () => import("../locales/it").then((m) => m.it),
-    hi: () => import("../locales/hi").then((m) => m.hi),
-    pt: () => import("../locales/pt").then((m) => m.pt),
-    pl: () => import("../locales/pl").then((m) => m.pl)
+    de: () => import("../locales/de.js").then((m) => m.de),
+    fr: () => import("../locales/fr.js").then((m) => m.fr),
+    it: () => import("../locales/it.js").then((m) => m.it),
+    hi: () => import("../locales/hi.js").then((m) => m.hi),
+    pt: () => import("../locales/pt.js").then((m) => m.pt),
+    pl: () => import("../locales/pl.js").then((m) => m.pl)
 };
 
 /**

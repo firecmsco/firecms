@@ -1,6 +1,6 @@
 import { type ComponentPropsWithoutRef, type ReactNode, forwardRef } from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
+import { useProseMirrorContext } from "../hooks/useProseMirrorContext.js";
 
 interface EditorBubbleItemProps {
   children: ReactNode;

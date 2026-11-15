@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Link, useNavigate } from "react-router-dom";
-import { ErrorBoundary, LanguageToggle } from "../components";
+import { ErrorBoundary, LanguageToggle } from "../components/index.js";
 import {
     Avatar,
     BrightnessMediumIcon,
@@ -16,13 +16,13 @@ import {
     Skeleton,
     Typography
 } from "@firecms/ui";
-import { useAuthController, useLargeLayout, useModeController, useNavigationController, useTranslation } from "../hooks";
-import { User } from "../types";
-import { useApp } from "../app/useApp";
-import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
-import { DrawerLogo } from "./DefaultDrawer";
-import { CollectionCountBadge } from "../components/EntityCollectionView/CollectionCountBadge";
-import { PathTitle } from "../components/EntityCollectionView/CollectionPathTitle";
+import { useAuthController, useLargeLayout, useModeController, useNavigationController, useTranslation } from "../hooks/index.js";
+import { User } from "../types/index.js";
+import { useApp } from "../app/useApp.js";
+import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController.js";
+import { DrawerLogo } from "./DefaultDrawer.js";
+import { CollectionCountBadge } from "../components/EntityCollectionView/CollectionCountBadge.js";
+import { PathTitle } from "../components/EntityCollectionView/CollectionPathTitle.js";
 
 export type DefaultAppBarProps<ADDITIONAL_PROPS = object> = {
 

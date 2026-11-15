@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 

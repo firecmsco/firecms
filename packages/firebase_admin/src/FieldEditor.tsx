@@ -32,7 +32,7 @@ import {
     ArrowUpwardIcon,
     ArrowDownwardIcon,
 } from "@firecms/ui";
-import { ReferenceEditor } from "./ReferenceEditor";
+import { ReferenceEditor } from "./ReferenceEditor.js";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types & Constants

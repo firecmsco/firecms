@@ -1,6 +1,6 @@
 import React from "react";
 import { PluginFormActionProps } from "@firecms/core";
-import { LastEditedByIndicator } from "./LastEditedByIndicator";
+import { LastEditedByIndicator } from "./LastEditedByIndicator.js";
 
 /**
  * Renders the "last edited by" indicator in the entity form top bar.

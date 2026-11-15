@@ -1,11 +1,11 @@
 import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
-import { CollectionSize, Entity, EntityCollection, FilterValues } from "../../types";
+import { CollectionSize, Entity, EntityCollection, FilterValues } from "../../types/index.js";
 
 import {
     EntityCollectionRowActions,
     EntityCollectionTable,
     useDataSourceTableController
-} from "../EntityCollectionTable";
+} from "../EntityCollectionTable/index.js";
 import {
     useAuthController,
     useCustomizationController,
@@ -14,14 +14,14 @@ import {
     useNavigationController,
     useSideEntityController,
     useTranslation
-} from "../../hooks";
-import { ErrorView } from "../ErrorView";
+} from "../../hooks/index.js";
+import { ErrorView } from "../ErrorView.js";
 import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
-import { canCreateEntity, IconForView, resolveCollection } from "../../util";
-import { useSelectionController } from "../EntityCollectionView/useSelectionController";
-import { useColumnIds, useTableSearchHelper } from "../common";
-import { useSideDialogContext } from "../../core";
-import { useAnalyticsController } from "../../hooks/useAnalyticsController";
+import { canCreateEntity, IconForView, resolveCollection } from "../../util/index.js";
+import { useSelectionController } from "../EntityCollectionView/useSelectionController.js";
+import { useColumnIds, useTableSearchHelper } from "../common/index.js";
+import { useSideDialogContext } from "../../core/index.js";
+import { useAnalyticsController } from "../../hooks/useAnalyticsController.js";
 
 /**
  * @group Components

@@ -44,9 +44,9 @@ import {
     where as whereClause
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types/text_search";
+import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types/text_search.js";
 import { useCallback, useEffect, useRef } from "react";
-import { localSearchControllerBuilder } from "../utils";
+import { localSearchControllerBuilder } from "../utils/index.js";
 import { getAuth } from "firebase/auth";
 
 /**

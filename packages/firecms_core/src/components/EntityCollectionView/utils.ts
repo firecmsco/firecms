@@ -1,4 +1,4 @@
-import { getLocalStorageJSON, setLocalStorageItem } from "../../util/local_storage";
+import { getLocalStorageJSON, setLocalStorageItem } from "../../util/local_storage.js";
 
 export function addRecentId(key: string, id: string) {
     const recentIds = getRecentIds(key);

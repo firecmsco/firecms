@@ -1,5 +1,5 @@
 // import { DataType, getPropertyInPath, Properties, Property } from "@firecms/core";
-// import { DataTypeMapping } from "../types";
+// import { DataTypeMapping } from "../types/index.js";
 //
 // export function getPropertiesMapping(originProperties: Properties,
 //                                      newProperties: Properties,

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { AccessResponse, AuthController, DataSourceDelegate, FireCMSPlugin } from "../types";
-import { PRO_PLUGIN_KEYS } from "../core/pro_plugins";
+import { AccessResponse, AuthController, DataSourceDelegate, FireCMSPlugin } from "../types/index.js";
+import { PRO_PLUGIN_KEYS } from "../core/pro_plugins.js";
 
 export const DEFAULT_SERVER_DEV = "https://api-kdoe6pj3qq-ey.a.run.app";
 export const DEFAULT_SERVER = "https://api.firecms.co";

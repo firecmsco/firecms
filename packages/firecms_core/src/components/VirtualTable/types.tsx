@@ -6,8 +6,8 @@ import {
     VirtualTableColumn,
     VirtualTableFilterValues,
     VirtualTableWhereFilterOp
-} from "./VirtualTableProps";
-import { FilterFormFieldProps } from "./VirtualTableHeader";
+} from "./VirtualTableProps.js";
+import { FilterFormFieldProps } from "./VirtualTableHeader.js";
 
 export type VirtualTableRowProps<T> = {
     style: any,

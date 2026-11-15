@@ -6,10 +6,10 @@ import {
     ResolvedMapProperty,
     ResolvedProperties,
     ResolvedProperty
-} from "../types";
+} from "../types/index.js";
 import * as yup from "yup";
 import { AnySchema, ArraySchema, BooleanSchema, DateSchema, NumberSchema, ObjectSchema, StringSchema } from "yup";
-import { enumToObjectEntries, getValueInPath, hydrateRegExp, isPropertyBuilder } from "../util";
+import { enumToObjectEntries, getValueInPath, hydrateRegExp, isPropertyBuilder } from "../util/index.js";
 
 // Add custom unique function for array values
 declare module "yup" {

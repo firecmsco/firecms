@@ -1,6 +1,6 @@
 import { FilterListOffIcon, Button, Tooltip } from "@firecms/ui";
-import { EntityTableController } from "../types";
-import { useTranslation } from "../hooks";
+import { EntityTableController } from "../types/index.js";
+import { useTranslation } from "../hooks/index.js";
 
 export function ClearFilterSortButton({
     tableController,

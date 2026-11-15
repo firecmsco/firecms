@@ -15,9 +15,9 @@ import {
 } from "@firecms/ui";
 import { ConfirmationDialog, Role, useTranslation
 } from "@firecms/core";
-import { useUserManagement } from "../../hooks";
-import { RoleChip } from "./RoleChip";
-import { DEFAULT_ROLES } from "./default_roles";
+import { useUserManagement } from "../../hooks/index.js";
+import { RoleChip } from "./RoleChip.js";
+import { DEFAULT_ROLES } from "./default_roles.js";
 
 export function RolesTable({
                                onRoleClicked,

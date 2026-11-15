@@ -1,7 +1,7 @@
-import { buildEntityPropertiesFromData, buildPropertiesOrder, InferenceTypeBuilder } from "./collection_builder";
-import { prettifyIdentifier } from "./util";
-import { removeInitialAndTrailingSlashes } from "./strings";
-import { Properties } from "./cms_types";
+import { buildEntityPropertiesFromData, buildPropertiesOrder, InferenceTypeBuilder } from "./collection_builder.js";
+import { prettifyIdentifier } from "./util.js";
+import { removeInitialAndTrailingSlashes } from "./strings.js";
+import { Properties } from "./cms_types.js";
 
 /**
  * The parts of a collection that can be derived from data alone.

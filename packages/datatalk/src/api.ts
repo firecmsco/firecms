@@ -1,5 +1,5 @@
-import { ChatMessage } from "./types";
-import { SchemaContext } from "./utils/schemaContext";
+import { ChatMessage } from "./types.js";
+import { SchemaContext } from "./utils/schemaContext.js";
 
 const DEFAULT_API_ENDPOINT = "https://api.firecms.co";
 

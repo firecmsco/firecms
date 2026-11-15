@@ -2,7 +2,7 @@ import React from "react";
 import { IconForView, useApp, useTranslation } from "@firecms/core";
 import { cls, Menu, MenuItem, MoreVertIcon, Tooltip, } from "@firecms/ui";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_VIEWS_CONFIG } from "../utils";
+import { ADMIN_VIEWS_CONFIG } from "../utils/index.js";
 
 export function AdminDrawerMenu({
                                     menuOpen,

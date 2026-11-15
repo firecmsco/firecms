@@ -2,11 +2,11 @@ import React, { useMemo } from "react";
 import { getIn, useFormex } from "@firecms/formex";
 import { EnumValueConfig, resolveEnumValues, useSnackbarController, useTranslation } from "@firecms/core";
 import { Select, SelectItem } from "@firecms/ui";
-import { EnumForm } from "../EnumForm";
-import { StringPropertyValidation } from "./validation/StringPropertyValidation";
-import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
-import { ValidationPanel } from "./validation/ValidationPanel";
-import { PropertyWithId } from "../PropertyEditView";
+import { EnumForm } from "../EnumForm.js";
+import { StringPropertyValidation } from "./validation/StringPropertyValidation.js";
+import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation.js";
+import { ValidationPanel } from "./validation/ValidationPanel.js";
+import { PropertyWithId } from "../PropertyEditView.js";
 
 export function EnumPropertyField({
     multiselect,

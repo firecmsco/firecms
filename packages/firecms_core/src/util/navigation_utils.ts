@@ -1,4 +1,4 @@
-import { EntityCollection, NavigationController, SideEntityController } from "../types";
+import { EntityCollection, NavigationController, SideEntityController } from "../types/index.js";
 
 export function removeInitialAndTrailingSlashes(s: string): string {
     return removeInitialSlash(removeTrailingSlash(s));

@@ -1,5 +1,5 @@
-import { commentOn, formatKey, Raw, toFileName, toIdentifier } from "./codegen";
-import { RowyColumn, RowyConfig, RowySchema, RowyTableSettings } from "./types";
+import { commentOn, formatKey, Raw, toFileName, toIdentifier } from "./codegen.js";
+import { RowyColumn, RowyConfig, RowySchema, RowyTableSettings } from "./types.js";
 
 /**
  * Converts Rowy's table configuration into FireCMS collection configs.

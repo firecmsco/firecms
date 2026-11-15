@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 
 import { CloseIcon, Collapse, IconButton, TextField, TextareaAutosize, fieldBackgroundHoverMixin, fieldBackgroundMixin, cls } from "@firecms/ui";
-import { FieldProps, PreviewType } from "../../types";
-import { FieldHelperText, LabelWithIcon } from "../components";
-import { getIconForProperty } from "../../util";
-import { PropertyPreview } from "../../preview";
-import { useClearRestoreValue } from "../useClearRestoreValue";
-import { PropertyIdCopyTooltip } from "../../components/PropertyIdCopyTooltip";
+import { FieldProps, PreviewType } from "../../types/index.js";
+import { FieldHelperText, LabelWithIcon } from "../components/index.js";
+import { getIconForProperty } from "../../util/index.js";
+import { PropertyPreview } from "../../preview/index.js";
+import { useClearRestoreValue } from "../useClearRestoreValue.js";
+import { PropertyIdCopyTooltip } from "../../components/PropertyIdCopyTooltip.js";
 
 interface TextFieldBindingProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean

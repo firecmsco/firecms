@@ -32,8 +32,8 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { downloadEntitiesExport } from "./export";
-import { fetchSelectedEntities } from "./selected_entities";
+import { downloadEntitiesExport } from "./export.js";
+import { fetchSelectedEntities } from "./selected_entities.js";
 
 const DOCS_LIMIT = 500;
 

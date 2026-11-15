@@ -47,7 +47,7 @@ export function saveIconFiles(iconKeys: string[]) {
  * published \`@firecms/ui\` surface and is resolved by name out of the share scope
  * by tenant bundles, so entries are only ever added.
  */
-import { createIcon } from "./create_icon";
+import { createIcon } from "./create_icon.js";
 
 ${exportLines.join("\n")}
 `;

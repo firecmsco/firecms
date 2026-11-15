@@ -1,7 +1,7 @@
-import { AuthController, EntityCollection, Property, PropertyConfig, ResolvedEntityCollection, ResolvedProperties } from "../types";
-import { isReferenceProperty } from "./property_utils";
-import { isPropertyBuilder } from "./entities";
-import { getFieldConfig } from "../core";
+import { AuthController, EntityCollection, Property, PropertyConfig, ResolvedEntityCollection, ResolvedProperties } from "../types/index.js";
+import { isReferenceProperty } from "./property_utils.js";
+import { isPropertyBuilder } from "./entities.js";
+import { getFieldConfig } from "../core/index.js";
 
 export function getEntityPreviewKeys(
     authController: AuthController,

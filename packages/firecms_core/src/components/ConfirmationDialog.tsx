@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, LoadingButton } from "@firecms/ui";
-import { useTranslation } from "../hooks/useTranslation";
+import { useTranslation } from "../hooks/useTranslation.js";
 
 export function ConfirmationDialog({
                                        open,

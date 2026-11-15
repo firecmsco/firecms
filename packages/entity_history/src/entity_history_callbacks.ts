@@ -1,7 +1,7 @@
-import { buildEntityHistoryPath, buildEntityHistoryPathSegments } from "./history_path";
+import { buildEntityHistoryPath, buildEntityHistoryPathSegments } from "./history_path.js";
 import { EntityCallbacks, FireCMSContext, User } from "@firecms/core";
 import equal from "react-fast-compare"
-import { HistoryEntry, NewHistoryEntryParams } from "./types";
+import { HistoryEntry, NewHistoryEntryParams } from "./types.js";
 
 
 

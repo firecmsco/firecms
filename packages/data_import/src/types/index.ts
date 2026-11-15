@@ -1,1 +1,1 @@
-export * from "./column_mapping";
+export * from "./column_mapping.js";

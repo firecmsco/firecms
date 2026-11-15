@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useRef } from "react";
-import { defaultBorderMixin } from "../styles";
-import { cls } from "../util";
+import { defaultBorderMixin } from "../styles.js";
+import { cls } from "../util/index.js";
 
 export type TableProps = {
     children: React.ReactNode;

@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 import type { Locale as DateFnsLocale } from "date-fns";
-import { Locale } from "../types";
+import { Locale } from "../types/index.js";
 
 /**
  * On-demand loading of date-fns locales.

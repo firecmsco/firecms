@@ -1,5 +1,5 @@
-import { SideDialogsController } from "../types";
-import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
+import { SideDialogsController } from "../types/index.js";
+import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext.js";
 import { useContext } from "react";
 
 /**

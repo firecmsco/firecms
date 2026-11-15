@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { CollectionSize, ViewMode } from "../../types";
+import { CollectionSize, ViewMode } from "../../types/index.js";
 import {
     AppsIcon,
     Button,
@@ -12,7 +12,7 @@ import {
     ViewColumnIcon,
     ViewKanbanIcon
 } from "@firecms/ui";
-import { useTranslation } from "../../hooks/useTranslation";
+import { useTranslation } from "../../hooks/useTranslation.js";
 
 export type KanbanPropertyOption = {
     key: string;

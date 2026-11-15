@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Alert, Button, CloseIcon, IconButton } from "@firecms/ui";
-import { AccessResponse, ProSuggestion } from "../types";
-import { getLicenseSubscribeUrl, PRO_PLUGIN_KEYS } from "../core/pro_plugins";
-import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
-import { useLicenseStatus } from "../hooks/useLicenseStatus";
-import { useTranslation } from "../hooks/useTranslation";
+import { AccessResponse, ProSuggestion } from "../types/index.js";
+import { getLicenseSubscribeUrl, PRO_PLUGIN_KEYS } from "../core/pro_plugins.js";
+import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext.js";
+import { useLicenseStatus } from "../hooks/useLicenseStatus.js";
+import { useTranslation } from "../hooks/useTranslation.js";
 
 const DISMISSED_STORAGE_KEY = "firecms_license_banner_dismissed";
 const DISMISSED_SUGGESTIONS_STORAGE_KEY = "firecms_pro_suggestions_dismissed";

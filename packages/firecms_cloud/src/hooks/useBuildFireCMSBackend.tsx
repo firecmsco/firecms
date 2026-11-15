@@ -1,6 +1,6 @@
 import { doc, Firestore, getDoc, getFirestore, onSnapshot } from "firebase/firestore";
 
-import { FireCMSBackend, FireCMSProject } from "../types";
+import { FireCMSBackend, FireCMSProject } from "../types/index.js";
 import { FirebaseApp } from "firebase/app";
 import {
     createUserWithEmailAndPassword as createUserWithEmailAndPasswordFirebase,
@@ -16,8 +16,8 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { buildProjectsApi } from "../api/projects";
-import { clearDelegatedLoginTokensCache } from "../utils";
+import { buildProjectsApi } from "../api/projects.js";
+import { clearDelegatedLoginTokensCache } from "../utils/index.js";
 
 const AUTH_SCOPES = [
     "https://www.googleapis.com/auth/cloud-platform"

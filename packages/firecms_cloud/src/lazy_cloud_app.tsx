@@ -1,10 +1,10 @@
 import React from "react";
 import { CircularProgressCenter, lazyEager } from "@firecms/core";
 
-import type { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
-import type { FireCMSClientProps } from "./FireCMSCloudApp";
-import type { CloudUserManagement, ProjectConfig } from "./hooks";
-import { ProjectLoadingShell } from "./ProjectLoadingShell";
+import type { FireCMSCloudAppProps } from "./FireCMSCloudAppProps.js";
+import type { FireCMSClientProps } from "./FireCMSCloudApp.js";
+import type { CloudUserManagement, ProjectConfig } from "./hooks/index.js";
+import { ProjectLoadingShell } from "./ProjectLoadingShell.js";
 
 /**
  * The three app-level components of this package, loaded on demand.
@@ -28,12 +28,12 @@ import { ProjectLoadingShell } from "./ProjectLoadingShell";
  * for as long as it took to arrive. And the fallback is the project chrome, not
  * a bare spinner, so the bar stays on screen while it does.
  */
-let modulePromise: Promise<typeof import("./FireCMSCloudApp")> | null = null;
-const load = () => (modulePromise ??= import("./FireCMSCloudApp"));
+let modulePromise: Promise<typeof import("./FireCMSCloudApp.js")> | null = null;
+const load = () => (modulePromise ??= import("./FireCMSCloudApp.js"));
 
-const LazyFireCMSCloudApp = lazyEager<typeof import("./FireCMSCloudApp")["FireCMSCloudApp"]>(load, "FireCMSCloudApp");
-const LazyFireCMSClient = lazyEager<typeof import("./FireCMSCloudApp")["FireCMSClient"]>(load, "FireCMSClient");
-const LazyFireCMSClientWithController = lazyEager<typeof import("./FireCMSCloudApp")["FireCMSClientWithController"]>(load, "FireCMSClientWithController");
+const LazyFireCMSCloudApp = lazyEager<typeof import("./FireCMSCloudApp.js")["FireCMSCloudApp"]>(load, "FireCMSCloudApp");
+const LazyFireCMSClient = lazyEager<typeof import("./FireCMSCloudApp.js")["FireCMSClient"]>(load, "FireCMSClient");
+const LazyFireCMSClientWithController = lazyEager<typeof import("./FireCMSCloudApp.js")["FireCMSClientWithController"]>(load, "FireCMSClientWithController");
 
 /**
  * This one keeps the bare spinner: it is the component that mounts the Router,

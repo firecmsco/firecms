@@ -1,6 +1,6 @@
 import React from "react";
 import { cls, DateTimeField, focusedDisabled } from "@firecms/ui";
-import { useCustomizationController } from "../../../hooks";
+import { useCustomizationController } from "../../../hooks/index.js";
 
 export function VirtualTableDateField(props: {
     name: string;

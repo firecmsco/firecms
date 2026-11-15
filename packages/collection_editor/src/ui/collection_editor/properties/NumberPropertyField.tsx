@@ -1,6 +1,6 @@
 import React from "react";
-import { NumberPropertyValidation } from "./validation/NumberPropertyValidation";
-import { ValidationPanel } from "./validation/ValidationPanel";
+import { NumberPropertyValidation } from "./validation/NumberPropertyValidation.js";
+import { ValidationPanel } from "./validation/ValidationPanel.js";
 import { TextField } from "@firecms/ui";
 import { getIn, useFormex } from "@firecms/formex";
 import { useTranslation } from "@firecms/core";

@@ -1,4 +1,4 @@
-import { EnumValueConfig, EnumValues } from "./cms_types";
+import { EnumValueConfig, EnumValues } from "./cms_types.js";
 
 export function extractEnumFromValues(values: unknown[]) {
     if (!Array.isArray(values)) {

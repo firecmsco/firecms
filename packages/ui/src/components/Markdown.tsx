@@ -4,7 +4,7 @@ import equal from "react-fast-compare"
 
 // @ts-ignore
 import MarkdownIt from "markdown-it";
-import { cls } from "../util";
+import { cls } from "../util/index.js";
 
 export interface MarkdownProps {
     source: string,

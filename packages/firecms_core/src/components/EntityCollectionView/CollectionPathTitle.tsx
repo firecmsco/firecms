@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import { cls, Typography } from "@firecms/ui";
-import { useNavigationController } from "../../hooks/useNavigationController";
-import { getNavigationEntriesFromPath } from "../../util/navigation_from_path";
-import { CollectionCountBadge } from "./CollectionCountBadge";
+import { useNavigationController } from "../../hooks/useNavigationController.js";
+import { getNavigationEntriesFromPath } from "../../util/navigation_from_path.js";
+import { CollectionCountBadge } from "./CollectionCountBadge.js";
 
 /**
  * A name and its entity count, under what is above it: breadcrumbs folded on two lines

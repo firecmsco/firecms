@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { FireCMSPlugin } from "@firecms/core";
-import { ImportCollectionAction } from "./import";
+import { ImportCollectionAction } from "./import/index.js";
 
 /**
  *

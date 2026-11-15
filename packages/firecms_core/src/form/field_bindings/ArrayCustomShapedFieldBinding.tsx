@@ -1,11 +1,11 @@
 import React from "react";
-import { FieldProps } from "../../types";
-import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
-import { PropertyFieldBinding } from "../PropertyFieldBinding";
+import { FieldProps } from "../../types/index.js";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components/index.js";
+import { PropertyFieldBinding } from "../PropertyFieldBinding.js";
 import { ExpandablePanel, IconButton, CloseIcon } from "@firecms/ui";
-import { getArrayResolvedProperties, getIconForProperty, isReadOnly } from "../../util";
-import { useClearRestoreValue } from "../useClearRestoreValue";
-import { useAuthController } from "../../hooks";
+import { getArrayResolvedProperties, getIconForProperty, isReadOnly } from "../../util/index.js";
+import { useClearRestoreValue } from "../useClearRestoreValue.js";
+import { useAuthController } from "../../hooks/index.js";
 
 /**
  * Array field used for custom

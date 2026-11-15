@@ -12,7 +12,7 @@ import markdownItMark from "markdown-it-mark";
 // @ts-ignore
 import markdownItIns from "markdown-it-ins";
 
-import { schema } from "./schema";
+import { schema } from "./schema.js";
 
 const parserTokens: any = {
     ...defaultMarkdownParser.tokens,

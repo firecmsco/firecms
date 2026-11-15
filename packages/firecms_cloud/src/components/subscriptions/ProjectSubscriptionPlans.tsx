@@ -1,14 +1,14 @@
 import React from "react";
 import { useBrowserTitleAndIcon, useTranslation } from "@firecms/core";
 import { AutoAwesomeIcon, Button, Card, Chip, CircularProgress, cls, LoadingButton, Typography, } from "@firecms/ui";
-import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
-import { useProjectSubscriptions } from "../../hooks/useProjectSubscriptions";
-import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
-import { formatPrice, getPriceString, getSubscriptionStatusText } from "../settings/common";
-import { Subscription } from "../../types";
-import { StripeDisclaimer } from "./StripeDisclaimer";
-import { useFireCMSBackend, useProjectConfig } from "../../hooks";
-import { useOpenStripePortal } from "./useOpenStripePortal";
+import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController.js";
+import { useProjectSubscriptions } from "../../hooks/useProjectSubscriptions.js";
+import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView.js";
+import { formatPrice, getPriceString, getSubscriptionStatusText } from "../settings/common.js";
+import { Subscription } from "../../types/index.js";
+import { StripeDisclaimer } from "./StripeDisclaimer.js";
+import { useFireCMSBackend, useProjectConfig } from "../../hooks/index.js";
+import { useOpenStripePortal } from "./useOpenStripePortal.js";
 
 export function ProjectSubscriptionPlans() {
 

@@ -1,5 +1,5 @@
-import { EntityReference, FilterValues, WhereFilterOp } from "../../types";
-import { decodeEntityId, encodeEntityId } from "../../util/navigation_utils";
+import { EntityReference, FilterValues, WhereFilterOp } from "../../types/index.js";
+import { decodeEntityId, encodeEntityId } from "../../util/navigation_utils.js";
 
 /**
  * Internal helpers used by `useDataSourceTableController` to persist the state of a

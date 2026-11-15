@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ProjectConfig } from "./useBuildProjectConfig";
+import { ProjectConfig } from "./useBuildProjectConfig.js";
 
 export const ProjectConfigContext = React.createContext({} as ProjectConfig);
 

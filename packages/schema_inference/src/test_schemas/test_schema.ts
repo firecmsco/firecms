@@ -1,15 +1,12 @@
-import { buildEntityPropertiesFromData } from "../collection_builder";
+import { buildEntityPropertiesFromData } from "../collection_builder.js";
 
 // import usage from "./usage.json" assert {
 //         type: "json",
 //         integrity: "sha384-ABC123"
 //         };
-import usage from "./pop_products.json" assert {
-        type: "json",
-        integrity: "sha384-ABC123"
-        };
+import usage from "./pop_products.json" with { type: "json" };
 import * as util from "util";
-import { DataType } from "../cms_types";
+import { DataType } from "../cms_types.js";
 
 buildEntityPropertiesFromData(usage, getType)
     .then((res) => console.log(util.inspect(res, { showHidden: false, depth: null, colors: true })));

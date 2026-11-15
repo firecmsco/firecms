@@ -1,4 +1,4 @@
-import { FireCMSAppConfig } from "./types";
+import { FireCMSAppConfig } from "./types/index.js";
 
 /**
  * Main entry point that defines the FireCMS Cloud configuration

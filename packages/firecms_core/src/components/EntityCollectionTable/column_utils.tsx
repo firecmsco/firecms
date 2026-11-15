@@ -1,9 +1,9 @@
 import React from "react";
-import { getTableCellAlignment, getTablePropertyColumnWidth } from "./internal/common";
-import { FilterValues, ResolvedProperties, ResolvedProperty } from "../../types";
-import { VirtualTableColumn } from "../VirtualTable";
-import { getIconForProperty, getResolvedPropertyInPath, isDataTypeFilterable } from "../../util";
-import { getColumnKeysForProperty } from "../common/useColumnsIds";
+import { getTableCellAlignment, getTablePropertyColumnWidth } from "./internal/common.js";
+import { FilterValues, ResolvedProperties, ResolvedProperty } from "../../types/index.js";
+import { VirtualTableColumn } from "../VirtualTable/index.js";
+import { getIconForProperty, getResolvedPropertyInPath, isDataTypeFilterable } from "../../util/index.js";
+import { getColumnKeysForProperty } from "../common/useColumnsIds.js";
 
 export function buildIdColumn(largeLayout?: boolean): VirtualTableColumn {
     return {

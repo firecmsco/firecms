@@ -1,4 +1,4 @@
-import { Permissions } from "../index";
+import { Permissions } from "../index.js";
 
 export type Role = {
 

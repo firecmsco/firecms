@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { getIn, setIn } from "./utils";
+import { getIn, setIn } from "./utils.js";
 import equal from "react-fast-compare";
 
-import { FormexController, FormexResetProps } from "./types";
+import { FormexController, FormexResetProps } from "./types.js";
 
 export function useCreateFormex<T extends object>({
     initialValues,

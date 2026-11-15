@@ -2,10 +2,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import * as firestoreLibrary from "firebase/firestore";
 import { CircularProgressCenter, EntityCollection } from "@firecms/core";
 import { Button, cls, Paper, useDebounceValue } from "@firecms/ui";
-import { AutoHeightEditor } from "./AutoHeightEditor";
-import { extractStringLiterals } from "../utils/extract_literals";
-import { QueryTableResults } from "./QueryTableResults";
-import { DataTable } from "./DataTable";
+import { AutoHeightEditor } from "./AutoHeightEditor.js";
+import { extractStringLiterals } from "../utils/extract_literals.js";
+import { QueryTableResults } from "./QueryTableResults.js";
+import { DataTable } from "./DataTable.js";
 import { firestoreToCMSModel } from "@firecms/firebase";
 
 // @ts-ignore

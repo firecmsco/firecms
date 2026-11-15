@@ -4,10 +4,10 @@ import {
     ResolvedProperties,
     ResolvedProperty,
     ResolvedStringProperty
-} from "../../types";
+} from "../../types/index.js";
 import React from "react";
-import { getThumbnailMeasure } from "../util";
-import { PreviewSize } from "../PropertyPreviewProps";
+import { getThumbnailMeasure } from "../util.js";
+import { PreviewSize } from "../PropertyPreviewProps.js";
 import { Skeleton } from "@firecms/ui";
 
 export interface SkeletonPropertyComponentProps {

@@ -1,7 +1,7 @@
-import { Entity, EntityCollection, EntityCustomView, FireCMSContext, User } from "../types";
+import { Entity, EntityCollection, EntityCustomView, FireCMSContext, User } from "../types/index.js";
 import { useEffect, useState } from "react";
-import { getNavigationEntriesFromPath } from "../util/navigation_from_path";
-import { useFireCMSContext } from "./useFireCMSContext";
+import { getNavigationEntriesFromPath } from "../util/navigation_from_path.js";
+import { useFireCMSContext } from "./useFireCMSContext.js";
 
 /**
  * @see resolveNavigationFrom

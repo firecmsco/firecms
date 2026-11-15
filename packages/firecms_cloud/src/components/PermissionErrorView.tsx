@@ -12,7 +12,7 @@ import {
     Typography,
 } from "@firecms/ui";
 import { EntityCollection, useTranslation } from "@firecms/core";
-import { ProjectsApi } from "../api/projects";
+import { ProjectsApi } from "../api/projects.js";
 
 const FIRECMS_RULE_SNIPPET = `match /{document=**} {
     allow read, write: if request.auth.token.fireCMSUser;

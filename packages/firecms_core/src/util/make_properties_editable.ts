@@ -1,5 +1,5 @@
-import { Properties, PropertiesOrBuilders } from "../types";
-import { isPropertyBuilder } from "./entities";
+import { Properties, PropertiesOrBuilders } from "../types/index.js";
+import { isPropertyBuilder } from "./entities.js";
 
 export function makePropertiesEditable(properties: Properties) {
     Object.keys(properties).forEach((key) => {
