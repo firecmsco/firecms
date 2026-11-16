@@ -50,6 +50,8 @@ Whether you need a headless CMS for Firebase, an internal admin tool, or a full-
 
 Trusted by teams at **Google**, **Microsoft**, and **IKEA** — and thousands of developers worldwide.
 
+> 🐘 **On Postgres instead of Firebase?** The FireCMS team also builds **[Rebase](https://github.com/rebasepro/rebase)**, an open-source backend for your own Postgres: REST, a typed SDK, auth, storage, realtime and row-level security, plus an admin panel generated from your schema. If it looks useful, [a star on GitHub](https://github.com/rebasepro/rebase) helps a lot.
+
 ---
 
 ### ✨ Key Highlights
