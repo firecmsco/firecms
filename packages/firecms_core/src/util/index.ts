@@ -29,3 +29,4 @@ export * from "./callbacks.js";
 export * from "./conditions.js";
 export * from "./lazy_eager.js";
 export * from "./date_fns_locales.js";
+export * from "./media_picker.js";

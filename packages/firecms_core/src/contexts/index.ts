@@ -11,3 +11,4 @@ export * from "./StorageSourceContext.js";
 export * from "./UserConfigurationPersistenceContext.js";
 export * from "./DialogsProvider.js";
 export * from "./InternalUserManagementContext.js";
+export * from "./MediaPickerContext.js";

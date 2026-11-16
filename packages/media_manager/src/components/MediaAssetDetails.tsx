@@ -327,7 +327,7 @@ export function MediaAssetDetails({
                         {t("media_delete_asset")}
                     </Typography>
                     <Typography className="text-surface-accent-600 dark:text-surface-accent-400">
-                        {t("media_delete_confirmation", { name: asset.title || asset.fileName })}
+                        Deleting this file also removes it from storage. Records that use it may stop displaying it. This cannot be undone.
                     </Typography>
                 </DialogContent>
                 <DialogActions>
