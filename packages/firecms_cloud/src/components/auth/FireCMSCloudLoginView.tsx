@@ -75,6 +75,26 @@ export function FireCMSCloudLoginView({
     const [fadeIn, setFadeIn] = useState(false);
     const [passwordLoginSelected, setPasswordLoginSelected] = useState(false);
 
+    // Why people leave this screen is the funnel's largest unknown: between a
+    // third and a half of everyone who reaches it never clicks any method, and
+    // the only events were "screen shown" and "method clicked", with nothing in
+    // between to tell those cases apart. These refs let the view say what the
+    // visitor did before they went.
+    const attemptedRef = React.useRef(false);
+    const abandonReportedRef = React.useRef(false);
+    const shownAtRef = React.useRef(Date.now());
+    const timesBlockedRef = React.useRef(0);
+    const termsAcceptedRef = React.useRef(false);
+    // Host apps pass a fresh closure on every render, so the abandonment effect
+    // reads the callback through a ref and never re-subscribes on it.
+    const onAnalyticsEventRef = React.useRef(onAnalyticsEvent);
+    onAnalyticsEventRef.current = onAnalyticsEvent;
+
+    const attemptMethod = (event: string) => {
+        attemptedRef.current = true;
+        onAnalyticsEvent?.(event);
+    };
+
     // The consent checkbox gates sign in, but it used to do it by disabling both
     // buttons, so a click landed on a dead control that never said why. Roughly
     // a third of everyone who reached this screen left without attempting any
@@ -86,7 +106,8 @@ export function FireCMSCloudLoginView({
             return true;
         }
         setTermsMissing(true);
-        onAnalyticsEvent?.("terms_required_blocked");
+        timesBlockedRef.current += 1;
+        onAnalyticsEvent?.("terms_required_blocked", { times_blocked: timesBlockedRef.current });
         termsRowRef.current?.querySelector("button")?.focus();
         return false;
     };
@@ -95,9 +116,42 @@ export function FireCMSCloudLoginView({
         const timer = setTimeout(() => {
             setFadeIn(true);
         }, 10);
-        onAnalyticsEvent?.("view_displayed", { variant });
+        onAnalyticsEvent?.("view_displayed", {
+            variant,
+            terms_required: includeTermsAndNewsLetter,
+            admin_scopes: includeGoogleAdminScopes,
+            // Narrow is the stacked one-column layout, so a drop-off that is
+            // only happening on phones can be told from a general one.
+            layout: typeof window === "undefined"
+                ? "unknown"
+                : (window.innerWidth < 1024 ? "narrow" : "wide")
+        });
         return () => clearTimeout(timer);
     }, [onAnalyticsEvent, variant]);
+
+    // Leaving without trying to sign in. `pagehide` is the signal that fires on
+    // mobile, where `beforeunload` does not; the cleanup covers navigating away
+    // inside the app. Both are guarded so this is sent at most once, and never
+    // once a method has been attempted — a successful sign-in unmounts this
+    // view and must not look like an abandonment.
+    useEffect(() => {
+        const report = (reason: string) => {
+            if (attemptedRef.current || abandonReportedRef.current) return;
+            abandonReportedRef.current = true;
+            onAnalyticsEventRef.current?.("view_abandoned", {
+                reason,
+                seconds_on_screen: Math.round((Date.now() - shownAtRef.current) / 1000),
+                terms_accepted: termsAcceptedRef.current,
+                times_blocked: timesBlockedRef.current
+            });
+        };
+        const onPageHide = () => report("page_hidden");
+        window.addEventListener("pagehide", onPageHide);
+        return () => {
+            window.removeEventListener("pagehide", onPageHide);
+            report("unmounted");
+        };
+    }, []);
 
     function buildErrorView() {
         let errorView: any;
@@ -170,7 +224,7 @@ export function FireCMSCloudLoginView({
 
                         <GoogleLoginButton
                             onClick={() => {
-                                onAnalyticsEvent?.("google_attempt");
+                                attemptMethod("google_attempt");
                                 fireCMSBackend.googleLogin(includeGoogleAdminScopes).then((user) => {
                                     onAnalyticsEvent?.("google_success");
                                 }).catch((error) => {
@@ -306,7 +360,9 @@ export function FireCMSCloudLoginView({
                                     checked={termsAccepted}
                                     onCheckedChange={(checked) => {
                                         setTermsAccepted(checked);
+                                        termsAcceptedRef.current = checked;
                                         if (checked) setTermsMissing(false);
+                                        onAnalyticsEvent?.("terms_toggled", { accepted: checked });
                                     }}
                                     size="small"
                                 />
@@ -353,7 +409,7 @@ export function FireCMSCloudLoginView({
                     {!passwordLoginSelected && <GoogleLoginButton
                         onClick={() => {
                             if (!consentSatisfied()) return;
-                            onAnalyticsEvent?.("google_attempt");
+                            attemptMethod("google_attempt");
                             fireCMSBackend.googleLogin(includeGoogleAdminScopes).then((user) => {
                                 onAnalyticsEvent?.("google_success");
                                 if (subscribeToNewsletter && user?.email) {
@@ -369,7 +425,7 @@ export function FireCMSCloudLoginView({
                         icon={<MailIcon size={24}/>}
                         onClick={() => {
                             if (!consentSatisfied()) return;
-                            onAnalyticsEvent?.("password_method_selected");
+                            attemptMethod("password_method_selected");
                             setPasswordLoginSelected(true);
                         }}/>}
 
