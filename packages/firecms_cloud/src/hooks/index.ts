@@ -9,3 +9,4 @@ export * from "./useBuildCloudUserManagement.js";
 export * from "./useDataTalkMode.js";
 export * from "./useFirestoreExplorerMode.js";
 export * from "./useLicensesForUserController.js";
+export * from "./useAbandonmentReporter.js";
