@@ -19,6 +19,7 @@ import { FireCMSBackend } from "../../types/index.js";
 import { LoginButton } from "@firecms/firebase";
 import { CloudUserPasswordForm } from "./CloudUserPasswordForm.js";
 import { describeGraduatedPrice, formatAmount, preferredCurrency } from "../../utils/pro_pricing.js";
+import { useAbandonmentReporter } from "../../hooks/useAbandonmentReporter.js";
 
 export interface FireCMSCloudLoginViewProps {
     fireCMSBackend: FireCMSBackend;
@@ -76,22 +77,23 @@ export function FireCMSCloudLoginView({
     const [passwordLoginSelected, setPasswordLoginSelected] = useState(false);
 
     // Why people leave this screen is the funnel's largest unknown: between a
-    // third and a half of everyone who reaches it never clicks any method, and
-    // the only events were "screen shown" and "method clicked", with nothing in
-    // between to tell those cases apart. These refs let the view say what the
-    // visitor did before they went.
-    const attemptedRef = React.useRef(false);
-    const abandonReportedRef = React.useRef(false);
-    const shownAtRef = React.useRef(Date.now());
+    // third and a half of everyone who reaches it never clicks any method. These
+    // two refs are what the view has to say about such a visitor; the reporting
+    // itself is useAbandonmentReporter's.
     const timesBlockedRef = React.useRef(0);
     const termsAcceptedRef = React.useRef(false);
-    // Host apps pass a fresh closure on every render, so the abandonment effect
-    // reads the callback through a ref and never re-subscribes on it.
-    const onAnalyticsEventRef = React.useRef(onAnalyticsEvent);
-    onAnalyticsEventRef.current = onAnalyticsEvent;
+
+    const { markResolved } = useAbandonmentReporter((reason, secondsOnScreen) => {
+        onAnalyticsEvent?.("view_abandoned", {
+            reason,
+            seconds_on_screen: secondsOnScreen,
+            terms_accepted: termsAcceptedRef.current,
+            times_blocked: timesBlockedRef.current
+        });
+    });
 
     const attemptMethod = (event: string) => {
-        attemptedRef.current = true;
+        markResolved();
         onAnalyticsEvent?.(event);
     };
 
@@ -128,30 +130,6 @@ export function FireCMSCloudLoginView({
         });
         return () => clearTimeout(timer);
     }, [onAnalyticsEvent, variant]);
-
-    // Leaving without trying to sign in. `pagehide` is the signal that fires on
-    // mobile, where `beforeunload` does not; the cleanup covers navigating away
-    // inside the app. Both are guarded so this is sent at most once, and never
-    // once a method has been attempted — a successful sign-in unmounts this
-    // view and must not look like an abandonment.
-    useEffect(() => {
-        const report = (reason: string) => {
-            if (attemptedRef.current || abandonReportedRef.current) return;
-            abandonReportedRef.current = true;
-            onAnalyticsEventRef.current?.("view_abandoned", {
-                reason,
-                seconds_on_screen: Math.round((Date.now() - shownAtRef.current) / 1000),
-                terms_accepted: termsAcceptedRef.current,
-                times_blocked: timesBlockedRef.current
-            });
-        };
-        const onPageHide = () => report("page_hidden");
-        window.addEventListener("pagehide", onPageHide);
-        return () => {
-            window.removeEventListener("pagehide", onPageHide);
-            report("unmounted");
-        };
-    }, []);
 
     function buildErrorView() {
         let errorView: any;
