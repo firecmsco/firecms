@@ -12,6 +12,12 @@ import { DownloadConfig, DownloadMetadata, StorageListResult, StorageSource, Upl
 
 const ABSOLUTE_HTTP_URL_REGEX = /^https?:\/\//i;
 
+function storageBucketArgument(app: FirebaseApp, bucket?: string): string | undefined {
+    const normalize = (value: string) => value.replace(/^gs:\/\//, "").replace(/\/$/, "");
+    if (!bucket || (app.options.storageBucket && normalize(bucket) === normalize(app.options.storageBucket))) return undefined;
+    return bucket.startsWith("gs://") ? bucket : `gs://${bucket}`;
+}
+
 /**
  * @group Firebase
  */
@@ -43,7 +49,7 @@ export function useFirebaseStorageSource({
             try {
                 if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
                 const storageBucketUrl = bucket ?? bucketUrl;
-                const storage = getStorage(firebaseApp, storageBucketUrl);
+                const storage = getStorage(firebaseApp, storageBucketArgument(firebaseApp, storageBucketUrl));
                 if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
                 const usedFilename = fileName ?? file.name;
 
@@ -132,7 +138,7 @@ export function useFirebaseStorageSource({
             try {
                 if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
                 const storageBucketUrl = bucket ?? bucketUrl;
-                const storage = getStorage(firebaseApp, storageBucketUrl);
+                const storage = getStorage(firebaseApp, storageBucketArgument(firebaseApp, storageBucketUrl));
                 if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
                 const fileRef = ref(storage, path);
                 const url = await getDownloadURL(fileRef);
@@ -167,11 +173,12 @@ export function useFirebaseStorageSource({
             }
 
             const storageBucketUrl = resolvedBucket ?? bucketUrl;
-            const storage = getStorage(firebaseApp, storageBucketUrl);
+            const storage = getStorage(firebaseApp, storageBucketArgument(firebaseApp, storageBucketUrl));
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
 
-            if (urlsCache[storagePathOrUrl])
-                return urlsCache[storagePathOrUrl];
+            const cacheKey = `${storageBucketUrl ?? ""}\n${storagePathOrUrl}`;
+            if (urlsCache[cacheKey])
+                return urlsCache[cacheKey];
             try {
                 const fileRef = ref(storage, resolvedPathOrUrl);
                 const [url, metadata] = await Promise.all([getDownloadURL(fileRef), getMetadata(fileRef)]);
@@ -179,7 +186,7 @@ export function useFirebaseStorageSource({
                     url,
                     metadata: metadata as DownloadMetadata
                 }
-                urlsCache[storagePathOrUrl] = result;
+                urlsCache[cacheKey] = result;
                 return result;
             } catch (e: any) {
                 if (e?.code === "storage/object-not-found") return {
@@ -195,7 +202,7 @@ export function useFirebaseStorageSource({
                 // real content type keeps being reported by `getMetadata`.
                 if (e?.code === "storage/invalid-url" && ABSOLUTE_HTTP_URL_REGEX.test(storagePathOrUrl)) {
                     const result: DownloadConfig = { url: storagePathOrUrl };
-                    urlsCache[storagePathOrUrl] = result;
+                    urlsCache[cacheKey] = result;
                     return result;
                 }
                 throw e;
@@ -209,7 +216,7 @@ export function useFirebaseStorageSource({
         }): Promise<StorageListResult> {
             if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
             const storageBucketUrl = options?.bucket ?? bucketUrl;
-            const storage = getStorage(firebaseApp, storageBucketUrl);
+            const storage = getStorage(firebaseApp, storageBucketArgument(firebaseApp, storageBucketUrl));
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
             const folderRef = ref(storage, path);
             return await list(folderRef, {
@@ -221,7 +228,7 @@ export function useFirebaseStorageSource({
         async deleteFile(path: string, bucket?: string): Promise<void> {
             if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
             const storageBucketUrl = bucket ?? bucketUrl;
-            const storage = getStorage(firebaseApp, storageBucketUrl);
+            const storage = getStorage(firebaseApp, storageBucketArgument(firebaseApp, storageBucketUrl));
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
             const fileRef = ref(storage, path);
             return deleteObject(fileRef);

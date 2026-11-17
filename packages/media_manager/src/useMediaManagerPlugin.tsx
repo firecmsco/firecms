@@ -6,6 +6,7 @@ import { useMediaManagerController } from "./useMediaManagerController.js";
 import { MediaLibraryCard } from "./components/MediaLibraryCard.js";
 import { MediaLibraryView } from "./components/MediaLibraryView.js";
 import { mediaManagerTranslationsEn } from "./locales/en.js";
+import { MediaPickerProvider } from "./MediaPickerProvider.js";
 
 const DEFAULT_STORAGE_PATH = "media";
 const DEFAULT_COLLECTION_PATH = "media_assets";
@@ -21,6 +22,12 @@ function useMediaManagerConfig(): MediaManagerConfig {
         throw new Error("useMediaManagerConfig must be used within MediaManagerConfigProvider");
     }
     return config;
+}
+
+function MediaPluginProvider({ children, config }: PropsWithChildren<{ config: MediaManagerConfig }>) {
+    return <MediaManagerConfigContext.Provider value={config}>
+        <MediaPickerProvider config={config}>{children}</MediaPickerProvider>
+    </MediaManagerConfigContext.Provider>;
 }
 
 /**
@@ -89,11 +96,8 @@ export function useMediaManagerPlugin(props: MediaManagerPluginProps): FireCMSPl
         key: "media_manager",
         views: [mediaView],
         provider: {
-            Component: ({ children }: PropsWithChildren) => (
-                <MediaManagerConfigContext.Provider value={props}>
-                    {children}
-                </MediaManagerConfigContext.Provider>
-            )
+            Component: MediaPluginProvider,
+            props: { config: props }
         },
         i18n: {
         // Only English is bundled; the rest load when that language is selected.
@@ -107,5 +111,5 @@ export function useMediaManagerPlugin(props: MediaManagerPluginProps): FireCMSPl
             hi: () => import("./locales/hi.js").then((m) => m.mediaManagerTranslationsHi),
             pt: () => import("./locales/pt.js").then((m) => m.mediaManagerTranslationsPt)
         }
-    } satisfies FireCMSPlugin), []);
+    } satisfies FireCMSPlugin), [mediaView, props.storageSource, props.dataSourceDelegate, props.storagePath, props.collectionPath, props.bucket, props.thumbnailSizes, props.thumbnailPath, props.maxFileSize, props.acceptedMimeTypes]);
 }

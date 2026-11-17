@@ -4,6 +4,7 @@ import { useSnackbarController, useStorageSource } from "../../hooks/index.js";
 import { StorageFieldItem } from "../../util/useStorageUploadController.js";
 import { ErrorView } from "../../components/index.js";
 import { cls, paperMixin, Skeleton } from "@firecms/ui";
+import { useMediaPicker } from "../../contexts/MediaPickerContext.js";
 
 export interface StorageUploadItemProps {
     storagePath: string;
@@ -27,6 +28,9 @@ export function StorageUploadProgress({
                                       }: StorageUploadItemProps) {
 
     const storageSource = useStorageSource();
+    const mediaPicker = useMediaPicker();
+    const mediaPickerRef = React.useRef(mediaPicker);
+    mediaPickerRef.current = mediaPicker;
 
     const snackbarController = useSnackbarController();
 
@@ -52,9 +56,17 @@ export function StorageUploadProgress({
                 if (mounted.current) setProgress(p);
             }
         })
-            .then(async ({ path, storageUrl }) => {
+            .then(async ({ path, storageUrl, bucket }) => {
                 console.debug("Upload successful", path);
                 await onFileUploadComplete(path, entry, metadata, storageUrl);
+                if (mediaPickerRef.current) {
+                    try {
+                        await mediaPickerRef.current.registerUpload(file, path, bucket);
+                    } catch (error) {
+                        console.error("Media library registration failed", error);
+                        snackbarController.open({ type: "error", message: "File uploaded, but could not be added to the media library." });
+                    }
+                }
                 if (mounted.current)
                     setLoading(false);
             })

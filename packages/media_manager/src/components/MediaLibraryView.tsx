@@ -81,7 +81,7 @@ export function MediaLibraryView({
                         <div className="flex items-center gap-2 w-full sm:w-auto">
                             <SearchBar
                                 onTextSearch={handleSearch}
-                                placeholder={t("media_search_assets")}
+                                placeholder="Filter loaded files"
                                 className="flex-1 sm:w-64"
                             />
 
@@ -170,6 +170,7 @@ export function MediaLibraryView({
                             ))}
                         </div>
                     )}
+                    {controller.hasMoreAssets && <Button disabled={controller.loading} onClick={() => void controller.loadMoreAssets()}>Load more</Button>}
                 </Container>
             </div>
 

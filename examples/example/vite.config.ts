@@ -27,11 +27,12 @@ export default defineConfig({
         // bundle two copies of @firebase/component — the auth component then registers
         // into one container and getAuth() looks in the other, throwing
         // "Component auth has not been registered yet".
-        dedupe: ["firebase", "@firebase/app", "@firebase/auth", "@firebase/component", "@firebase/util", "@firebase/firestore", "@firebase/storage"],
+        dedupe: ["react-router", "react-router-dom", "firebase", "@firebase/app", "@firebase/auth", "@firebase/component", "@firebase/util", "@firebase/firestore", "@firebase/storage"],
         alias: {
             "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
             "@firecms/ui": path.resolve(__dirname, "../../packages/ui/src"),
             "@firecms/formex": path.resolve(__dirname, "../../packages/formex/src"),
+            "@firecms/media_manager": path.resolve(__dirname, "../../packages/media_manager/src"),
             "@firecms/firebase": path.resolve(__dirname, "../../packages/firebase_firecms/src"),
             "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
             "@firecms/data_import": path.resolve(__dirname, "../../packages/data_import/src"),
