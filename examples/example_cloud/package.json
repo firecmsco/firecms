@@ -22,7 +22,7 @@
     "typeface-rubik": "^1.1.13"
   },
   "devDependencies": {
-    "@originjs/vite-plugin-federation": "^1.4.1",
+    "@module-federation/vite": "^1.23.10",
     "@tailwindcss/typography": "^0.5.19",
     "@types/react": "^19.2.3",
     "@types/react-dom": "^19.2.3",
