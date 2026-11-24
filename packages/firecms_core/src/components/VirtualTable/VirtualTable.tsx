@@ -146,7 +146,16 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
         const currentSort: "asc" | "desc" | undefined = sortBy ? sortBy[1] : undefined;
 
-        const [columns, setColumns] = useState(columnsProp);
+        // Held by value: a caller that rebuilds equal column objects on each
+        // render must not hand every row a new `columns` array, which is one
+        // of the things a row is drawn from (see `areRowRendererPropsEqual`).
+        const columnsPropRef = useRef(columnsProp);
+        if (columnsPropRef.current !== columnsProp && !equal(columnsPropRef.current, columnsProp)) {
+            columnsPropRef.current = columnsProp;
+        }
+        const stableColumnsProp = columnsPropRef.current;
+
+        const [columns, setColumns] = useState(stableColumnsProp);
 
         const tableRef = useRef<HTMLDivElement>(null);
         const lastEndReachedDataLength = useRef<number | undefined>(undefined);
@@ -200,30 +209,13 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, [tableRef, initialScroll]);
 
         useEffect(() => {
-            setColumns(columnsProp);
-        }, [columnsProp]);
+            setColumns(stableColumnsProp);
+        }, [stableColumnsProp]);
 
-        const [_, setForceUpdate] = useState(false);
-        useEffect(() => {
-            // Create a ResizeObserver to detect size changes more aggressively
-            if (tableRef.current) {
-                const resizeObserver = new ResizeObserver(() => {
-                    // Force a re-render when size changes
-                    setForceUpdate(prev => !prev);
-                });
-
-                resizeObserver.observe(tableRef.current);
-
-                return () => {
-                    if (tableRef.current) {
-                        resizeObserver.unobserve(tableRef.current);
-                    }
-                    resizeObserver.disconnect();
-                };
-            }
-            return () => {
-            }
-        }, [tableRef]);
+        // No ResizeObserver of its own: `useMeasure` below already observes the
+        // table and re-renders it when its size really changes. The one that
+        // stood here flipped a state flag on every notification, so each one
+        // re-rendered the whole table even when nothing had changed size.
 
         // Width and height only. `scroll: true` listened to every scroll on
         // the page to keep the box's position current, which the table never
@@ -426,7 +418,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                         height={bounds.height}
                         itemCount={(data?.length ?? 0) + (endAdornment ? 1 : 0)}
                         onScroll={draggingColumnId ? undefined : onScroll}
-                        includeAddColumn={Boolean(AddColumnComponent)}
                         itemSize={rowHeight} />
 
                 </VirtualListContext.Provider>
@@ -457,14 +448,131 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
     },
     equal
 );
+type VirtualTableRowRendererProps = {
+    rowData: any;
+    index: number;
+    style: React.CSSProperties;
+    onRowClick?: VirtualTableContextProps<any>["onRowClick"];
+    columns: VirtualTableColumn[];
+    hoverRow: boolean;
+    rowClassName?: (rowData: any) => string | undefined;
+    rowHeight: number;
+    cellRenderer: VirtualTableContextProps<any>["cellRenderer"];
+    dragActive: boolean;
+    includeAddColumn: boolean;
+};
+
+/**
+ * One row and its cells, drawn again only when something it is drawn from
+ * changed.
+ *
+ * Every input is a prop and every prop is compared, so nothing a row shows can
+ * go stale behind its memo. The comparisons are by reference except for the
+ * row's data, compared by value: new data often arrives as new, equal objects.
+ *
+ * This replaced a deep compare of the row's `children` — every cell element,
+ * each carrying the full `columns` array — which ran for every row on screen
+ * on every scroll frame.
+ */
+const VirtualTableRowRenderer = React.memo(function VirtualTableRowRenderer({
+    rowData,
+    index,
+    style,
+    onRowClick,
+    columns,
+    hoverRow,
+    rowClassName,
+    rowHeight,
+    cellRenderer,
+    dragActive,
+    includeAddColumn
+}: VirtualTableRowRendererProps) {
+    return (
+        <VirtualTableRow
+            rowData={rowData}
+            rowIndex={index}
+            onRowClick={onRowClick}
+            columns={columns}
+            hoverRow={hoverRow}
+            rowClassName={rowClassName}
+            style={{
+                ...style,
+                top: `calc(${style.top}px + 48px)`
+            }}
+            rowHeight={rowHeight}>
+
+            {columns.map((column: VirtualTableColumn, columnIndex: number) => {
+                const cellData = rowData && rowData[column.key];
+                const width = columnWidth(columnIndex, column.width);
+                // While a column is dragged, each cell moves with its header,
+                // through the offset the header writes on the table root.
+                const followsDrag = dragActive && !column.frozen;
+
+                return (
+                    <div
+                        key={`cell_wrapper_${column.key}`}
+                        data-vt-col={column.key}
+                        className={cls(
+                            "flex-shrink-0",
+                            column.frozen && "sticky left-0 z-10 bg-white dark:bg-surface-950"
+                        )}
+                        style={{
+                            minWidth: width,
+                            maxWidth: width,
+                            width,
+                            overflow: `var(${columnClipVar(columnIndex)}, visible)`,
+                            transform: followsDrag ? `translateX(var(${columnShiftVar(columnIndex)}, 0px))` : undefined,
+                            transition: followsDrag ? `var(${columnTransitionVar(columnIndex)}, none)` : undefined
+                        }}
+                    >
+                        <VirtualTableCell
+                            dataKey={column.key}
+                            cellRenderer={cellRenderer}
+                            column={column}
+                            columns={columns}
+                            rowData={rowData}
+                            cellData={cellData}
+                            rowIndex={index}
+                            columnIndex={columnIndex} />
+                    </div>
+                );
+            })}
+
+            {includeAddColumn && <div className={"w-20"} />}
+
+        </VirtualTableRow>
+    );
+}, areRowRendererPropsEqual);
+
+function areRowRendererPropsEqual(a: VirtualTableRowRendererProps, b: VirtualTableRowRendererProps): boolean {
+    return a.index === b.index &&
+        a.columns === b.columns &&
+        a.cellRenderer === b.cellRenderer &&
+        a.onRowClick === b.onRowClick &&
+        a.rowClassName === b.rowClassName &&
+        a.hoverRow === b.hoverRow &&
+        a.rowHeight === b.rowHeight &&
+        a.dragActive === b.dragActive &&
+        a.includeAddColumn === b.includeAddColumn &&
+        shallowEqualStyle(a.style, b.style) &&
+        equal(a.rowData, b.rowData);
+}
+
+/** react-window hands each index the same style object until the item size changes. */
+function shallowEqualStyle(a: React.CSSProperties, b: React.CSSProperties): boolean {
+    if (a === b) return true;
+    const aKeys = Object.keys(a) as (keyof React.CSSProperties)[];
+    if (aKeys.length !== Object.keys(b).length) return false;
+    return aKeys.every((key) => a[key] === b[key]);
+}
+
 function MemoizedList({
     outerRef,
     width,
     height,
     itemCount,
     onScroll,
-    itemSize,
-    includeAddColumn
+    itemSize
 }: {
     outerRef: RefObject<HTMLDivElement | null>;
     width: number;
@@ -476,7 +584,6 @@ function MemoizedList({
         scrollUpdateWasRequested: boolean;
     }) => void;
     itemSize: number;
-    includeAddColumn?: boolean;
 }) {
 
     const Row = useCallback(({
@@ -493,7 +600,8 @@ function MemoizedList({
                 hoverRow,
                 rowClassName,
                 endAdornment,
-                draggingColumnId
+                draggingColumnId,
+                AddColumnComponent
             }) => {
 
                 if (endAdornment && index === (data ?? []).length) {
@@ -508,64 +616,21 @@ function MemoizedList({
                     </div>;
                 }
 
-                const rowData = data && data[index];
-                return (
-                    <VirtualTableRow
-                        key={`row_${index}`}
-                        rowData={rowData}
-                        rowIndex={index}
-                        onRowClick={onRowClick}
-                        columns={columns}
-                        hoverRow={hoverRow}
-                        rowClassName={rowClassName}
-                        style={{
-                            ...style,
-                            top: `calc(${style.top}px + 48px)`
-                        }}
-                        rowHeight={rowHeight}>
-
-                        {columns.map((column: VirtualTableColumn, columnIndex: number) => {
-                            const cellData = rowData && rowData[column.key];
-                            const width = columnWidth(columnIndex, column.width);
-                            // While a column is dragged, each cell moves with
-                            // its header, through the offset the header writes
-                            // on the table root.
-                            const followsDrag = Boolean(draggingColumnId) && !column.frozen;
-
-                            return (
-                                <div
-                                    key={`cell_wrapper_${column.key}`}
-                                    data-vt-col={column.key}
-                                    className={cls(
-                                        "flex-shrink-0",
-                                        column.frozen && "sticky left-0 z-10 bg-white dark:bg-surface-950"
-                                    )}
-                                    style={{
-                                        minWidth: width,
-                                        maxWidth: width,
-                                        width,
-                                        overflow: `var(${columnClipVar(columnIndex)}, visible)`,
-                                        transform: followsDrag ? `translateX(var(${columnShiftVar(columnIndex)}, 0px))` : undefined,
-                                        transition: followsDrag ? `var(${columnTransitionVar(columnIndex)}, none)` : undefined
-                                    }}
-                                >
-                                    <VirtualTableCell
-                                        dataKey={column.key}
-                                        cellRenderer={cellRenderer}
-                                        column={column}
-                                        columns={columns}
-                                        rowData={rowData}
-                                        cellData={cellData}
-                                        rowIndex={index}
-                                        columnIndex={columnIndex} />
-                                </div>
-                            );
-                        })}
-
-                        {includeAddColumn && <div className={"w-20"} />}
-
-                    </VirtualTableRow>
-                );
+                return <VirtualTableRowRenderer
+                    rowData={data ? data[index] : undefined}
+                    index={index}
+                    style={style}
+                    onRowClick={onRowClick}
+                    columns={columns}
+                    hoverRow={hoverRow}
+                    rowClassName={rowClassName}
+                    rowHeight={rowHeight}
+                    cellRenderer={cellRenderer}
+                    dragActive={Boolean(draggingColumnId)}
+                    // Read here rather than from this function's closure: the
+                    // component is created once, and a closure would keep the
+                    // first value for the life of the list.
+                    includeAddColumn={Boolean(AddColumnComponent)} />;
             }}
         </VirtualListContext.Consumer>;
     }, []);

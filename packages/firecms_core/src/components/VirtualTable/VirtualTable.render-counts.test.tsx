@@ -21,6 +21,20 @@ jest.mock("@dnd-kit/sortable", () => {
     };
 });
 
+// Every row element the list hands React: each one is a row React has to
+// compare or draw. Counted around the real component, so its own memo still
+// decides what is drawn inside.
+const rowDraws = jest.fn();
+jest.mock("./VirtualTableRow", () => {
+    const React = jest.requireActual("react");
+    const actual = jest.requireActual("./VirtualTableRow");
+    const VirtualTableRow = (props: Record<string, unknown>) => {
+        rowDraws();
+        return React.createElement(actual.VirtualTableRow, props);
+    };
+    return { ...actual, VirtualTableRow };
+});
+
 // jsdom lays nothing out. The table is 1000 × 500 wherever it is, and its top
 // is whatever the test says the page has scrolled it to.
 let pageTop = 0;
@@ -37,7 +51,13 @@ beforeAll(() => {
     Object.defineProperty(HTMLElement.prototype, "scrollHeight", { configurable: true, get: () => 200_000 });
 });
 
+// Kept so a test can deliver a size notification to every observer.
+const resizeNotifications: Array<() => void> = [];
 global.ResizeObserver = class ResizeObserver {
+    constructor(callback: ResizeObserverCallback) {
+        resizeNotifications.push(() => callback([], this));
+    }
+
     observe() { /* noop */ }
     unobserve() { /* noop */ }
     disconnect() { /* noop */ }
@@ -65,6 +85,7 @@ function setup() {
     const cellRenderer = jest.fn(({ rowData, column }: CellRendererParams<Row>) => <span>{rowData?.[column.key]}</span>);
     let commits = 0;
     const onColumnsOrderChange = () => undefined;
+    resizeNotifications.length = 0;
     const utils = render(
         <div style={{ overflow: "auto", height: 500 }} data-testid="page">
             <Profiler id="table" onRender={() => { commits++; }}>
@@ -76,13 +97,24 @@ function setup() {
             </Profiler>
         </div>
     );
+    // jsdom never reports a size: deliver the first one, which is the table
+    // measuring itself, so every test starts from a table that knows its size.
+    act(() => {
+        resizeNotifications.forEach((notify) => notify());
+    });
     const scroller = utils.container.querySelector("#virtual-table")!.parentElement as HTMLElement;
     const reset = () => {
         sortableCalls.mockClear();
         cellRenderer.mockClear();
+        rowDraws.mockClear();
         commits = 0;
     };
-    const counts = () => ({ sortable: sortableCalls.mock.calls.length, cells: cellRenderer.mock.calls.length, commits });
+    const counts = () => ({
+        sortable: sortableCalls.mock.calls.length,
+        cells: cellRenderer.mock.calls.length,
+        rows: rowDraws.mock.calls.length,
+        commits
+    });
     return { ...utils, scroller, reset, counts };
 }
 
@@ -104,6 +136,20 @@ describe("VirtualTable render counts", () => {
         expect(result.cells).toBeLessThanOrEqual(20 * COLUMN_COUNT + 2 * COLUMN_COUNT);
         // Neither the header nor the body cells join the drag on a scroll.
         expect(result.sortable).toBe(0);
+        // Only the rows the scroll brings in are handed to React: 20 of them,
+        // plus react-window's overscan as it changes direction.
+        expect(result.rows).toBeLessThanOrEqual(30);
+    });
+
+    it("a size notification at the same size does not re-render the table", async () => {
+        const { reset, counts } = setup();
+        reset();
+        await act(async () => {
+            resizeNotifications.forEach((notify) => notify());
+        });
+        const result = counts();
+        console.log("resize notification:", result);
+        expect(result.commits).toBe(0);
     });
 
     it("the page scrolling around the table does not re-render it", async () => {
