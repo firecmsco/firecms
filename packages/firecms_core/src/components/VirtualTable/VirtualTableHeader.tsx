@@ -14,6 +14,7 @@ import {
     IconButton,
     Popover
 } from "@firecms/ui";
+import { columnWidth } from "./columnVars.js";
 
 interface FilterFormProps<T> {
     column: VirtualTableColumn<T>;
@@ -103,8 +104,9 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                     )}
                     style={{
                         left: column.frozen ? 0 : undefined,
-                        minWidth: column.width,
-                        maxWidth: column.width
+                        // The live width while this column's edge is dragged.
+                        minWidth: columnWidth(columnIndex, column.width),
+                        maxWidth: columnWidth(columnIndex, column.width)
                     }}
                     onMouseEnter={() => setOnHover(true)}
                     onMouseMove={() => setOnHover(true)}

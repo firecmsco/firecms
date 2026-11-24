@@ -30,7 +30,8 @@ import {
     useSensor,
     useSensors
 } from "@dnd-kit/core";
-import { arrayMove, horizontalListSortingStrategy, SortableContext, useSortable } from "@dnd-kit/sortable";
+import { arrayMove, horizontalListSortingStrategy, SortableContext } from "@dnd-kit/sortable";
+import { columnClipVar, columnShiftVar, columnTransitionVar, columnWidth } from "./columnVars.js";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
@@ -66,7 +67,20 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
                                     minHeight: "100%",
                                     position: "relative"
                                 }}>
-                                <VirtualTableHeaderRow {...virtualTableProps} />
+                                <VirtualTableHeaderRow
+                                    columns={virtualTableProps.columns}
+                                    currentSort={virtualTableProps.currentSort}
+                                    sortByProperty={virtualTableProps.sortByProperty}
+                                    onColumnSort={virtualTableProps.onColumnSort}
+                                    onFilterUpdate={virtualTableProps.onFilterUpdate}
+                                    filter={virtualTableProps.filter}
+                                    onColumnResizeEnd={virtualTableProps.onColumnResizeEnd}
+                                    createFilterField={virtualTableProps.createFilterField}
+                                    AddColumnComponent={virtualTableProps.AddColumnComponent}
+                                    columnsReorderable={Boolean(virtualTableProps.onColumnsOrderChange)}
+                                    draggingColumnId={virtualTableProps.draggingColumnId}
+                                    headerIconSize={virtualTableProps.headerIconSize}
+                                    rootRef={virtualTableProps.rootRef} />
                                 {!customView && children}
                             </div>
 
@@ -211,21 +225,24 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             }
         }, [tableRef]);
 
+        // Width and height only. `scroll: true` listened to every scroll on
+        // the page to keep the box's position current, which the table never
+        // reads: a page scrolling around a table re-rendered all of it on
+        // every frame, and its own scroll read its box on every event.
         const [measureRef, bounds] = useMeasure({
             debounce: 0,
             polyfill: ResizeObserver,
-            scroll: true,
             // This is important for handling zooming in react-flow
             offsetSize: true
         });
 
-        const onColumnResizeInternal = useCallback((params: OnVirtualTableColumnResizeParams) => {
-            setColumns(prevColumns =>
-                prevColumns.map((column) =>
-                    column.key === params.column.key ? params.column : column
-                )
-            );
-        }, []);
+        // Where the header writes the column custom properties the body reads
+        // during a resize or a column drag (see `columnVars`).
+        const rootRef = useRef<HTMLDivElement | null>(null);
+        const setRootRef = useCallback((element: HTMLDivElement | null) => {
+            rootRef.current = element;
+            measureRef(element);
+        }, [measureRef]);
 
         const onColumnResizeEndInternal = useCallback((params: OnVirtualTableColumnResizeParams) => {
             setColumns(columns.map((column) => column.key === params.column.key ? params.column : column));
@@ -366,8 +383,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             currentSort,
             onRowClick,
             customView,
-            onColumnResize: onColumnResizeInternal,
             onColumnResizeEnd: onColumnResizeEndInternal,
+            rootRef,
             filter: filterRef.current,
             onColumnSort,
             onFilterUpdate: onFilterUpdateInternal,
@@ -383,7 +400,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             } : undefined,
             draggingColumnId,
             headerIconSize,
-        }), [data, rowHeight, cellRenderer, columns, currentSort, onRowClick, customView, onColumnResizeInternal, onColumnResizeEndInternal, filterInput, onColumnSort, onFilterUpdateInternal, sortByProperty, hoverRow, createFilterField, rowClassName, endAdornment, AddColumnComponent, onColumnsOrderChange, draggingColumnId, headerIconSize]);
+        }), [data, rowHeight, cellRenderer, columns, currentSort, onRowClick, customView, onColumnResizeEndInternal, filterInput, onColumnSort, onFilterUpdateInternal, sortByProperty, hoverRow, createFilterField, rowClassName, endAdornment, AddColumnComponent, onColumnsOrderChange, draggingColumnId, headerIconSize]);
 
         // Get sortable column keys (excluding frozen columns)
         const sortableColumnKeys = columns
@@ -392,7 +409,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 
         const tableContent = (
             <div
-                ref={measureRef}
+                ref={setRootRef}
                 style={style}
                 className={cls(
                     "h-full w-full",
@@ -440,61 +457,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
     },
     equal
 );
-// Wrapper that applies sortable transforms to cells
-const SortableCellWrapper = ({
-    columnKey,
-    width,
-    isDragging,
-    isDraggable,
-    frozen,
-    children
-}: {
-    columnKey: string;
-    width: number;
-    isDragging: boolean;
-    isDraggable: boolean;
-    frozen?: boolean;
-    children: React.ReactNode;
-}) => {
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-    } = useSortable({
-        id: columnKey,
-        disabled: !isDraggable || frozen
-    });
-
-    // Remove tabIndex from attributes to avoid capturing focus before cell content
-    const { tabIndex: _tabIndex, ...attrsWithoutTabIndex } = attributes;
-
-    const style = {
-        // Only use translate, ignore any scale transforms
-        transform: transform ? `translateX(${transform.x}px)` : undefined,
-        // Don't transition the dragged item - only other items should animate
-        transition: isDragging ? undefined : transition,
-        minWidth: width,
-        maxWidth: width,
-        width: width,
-    };
-
-    return (
-        <div
-            ref={setNodeRef}
-            style={style}
-            className={cls(
-                "flex-shrink-0",
-                frozen && "sticky left-0 z-10 bg-white dark:bg-surface-950"
-            )}
-            {...attrsWithoutTabIndex}
-        >
-            {children}
-        </div>
-    );
-};
-
 function MemoizedList({
     outerRef,
     width,
@@ -531,8 +493,7 @@ function MemoizedList({
                 hoverRow,
                 rowClassName,
                 endAdornment,
-                draggingColumnId,
-                onColumnsOrderChange
+                draggingColumnId
             }) => {
 
                 if (endAdornment && index === (data ?? []).length) {
@@ -565,17 +526,28 @@ function MemoizedList({
 
                         {columns.map((column: VirtualTableColumn, columnIndex: number) => {
                             const cellData = rowData && rowData[column.key];
-                            const isDragging = draggingColumnId === column.key;
-                            const isDraggable = !column.frozen && !!onColumnsOrderChange;
+                            const width = columnWidth(columnIndex, column.width);
+                            // While a column is dragged, each cell moves with
+                            // its header, through the offset the header writes
+                            // on the table root.
+                            const followsDrag = Boolean(draggingColumnId) && !column.frozen;
 
                             return (
-                                <SortableCellWrapper
+                                <div
                                     key={`cell_wrapper_${column.key}`}
-                                    columnKey={column.key}
-                                    width={column.width}
-                                    isDragging={isDragging}
-                                    isDraggable={isDraggable}
-                                    frozen={column.frozen}
+                                    data-vt-col={column.key}
+                                    className={cls(
+                                        "flex-shrink-0",
+                                        column.frozen && "sticky left-0 z-10 bg-white dark:bg-surface-950"
+                                    )}
+                                    style={{
+                                        minWidth: width,
+                                        maxWidth: width,
+                                        width,
+                                        overflow: `var(${columnClipVar(columnIndex)}, visible)`,
+                                        transform: followsDrag ? `translateX(var(${columnShiftVar(columnIndex)}, 0px))` : undefined,
+                                        transition: followsDrag ? `var(${columnTransitionVar(columnIndex)}, none)` : undefined
+                                    }}
                                 >
                                     <VirtualTableCell
                                         dataKey={column.key}
@@ -586,7 +558,7 @@ function MemoizedList({
                                         cellData={cellData}
                                         rowIndex={index}
                                         columnIndex={columnIndex} />
-                                </SortableCellWrapper>
+                                </div>
                             );
                         })}
 

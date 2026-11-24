@@ -30,8 +30,10 @@ export type VirtualTableContextProps<T extends any> = {
     filter?: VirtualTableFilterValues<any>;
     onRowClick?: (props: OnRowClickParams<any>) => void;
     onColumnSort: (key: string) => any;
-    onColumnResize: (params: OnVirtualTableColumnResizeParams) => void;
+    /** Called once a column's edge is let go; while it moves, only a custom property changes. */
     onColumnResizeEnd: (params: OnVirtualTableColumnResizeParams) => void;
+    /** The table's root element, where the header writes the column custom properties. */
+    rootRef: React.RefObject<HTMLDivElement | null>;
     onFilterUpdate: (column: VirtualTableColumn, filterForProperty?: [VirtualTableWhereFilterOp, any]) => void;
     sortByProperty?: string;
     customView?: React.ReactNode,
