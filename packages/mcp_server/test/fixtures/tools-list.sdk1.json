@@ -1,0 +1,3887 @@
+{
+  "local": [
+    {
+      "name": "firecms_get_current_user",
+      "title": "Current user",
+      "description": "Get the currently authenticated FireCMS user",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "title": "Current user",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_firebase_projects",
+      "title": "List Firebase projects",
+      "description": "List the Google Cloud / Firebase projects the signed-in user can access, and whether each one is ready to be connected to FireCMS Cloud.\n\nEach entry reports:\n- `fireCMSProject`: true if it is already connected to FireCMS Cloud\n- `cloudProjectConfigurationStatus.firebaseEnabled` / `firestoreEnabled` / `apisEnabled` / `authEnabled`: what connecting requires\n\nConnecting needs Firebase, Firestore and Firebase Authentication enabled.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "title": "List Firebase projects",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_project_setup_status",
+      "title": "Check project setup",
+      "description": "Get the detailed FireCMS readiness status of a single Google Cloud project: whether Firebase, Firestore, Storage, Auth and the required APIs are enabled, and so what is still missing before it can be connected.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Google Cloud / Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Check project setup",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_firestore_locations",
+      "title": "List Firestore locations",
+      "description": "List the locations available for a new Firestore database, as location IDs such as 'eur3' or 'us-central'.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "title": "List Firestore locations",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "enable_project_apis",
+      "title": "Enable required APIs",
+      "description": "Enable the Google Cloud APIs that FireCMS requires on a project (reported as `apisEnabled` in its setup status). Safe to run more than once.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Google Cloud / Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Enable required APIs",
+        "readOnlyHint": false,
+        "destructiveHint": false
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "enable_firestore",
+      "title": "Create Firestore database",
+      "description": "Create the default Firestore database in a Google Cloud project, in the given location. The location is permanent and cannot be changed later.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Google Cloud / Firebase project ID"
+          },
+          "locationId": {
+            "type": "string",
+            "description": "Firestore location, e.g. 'eur3' or 'us-central'. Permanent."
+          }
+        },
+        "required": [
+          "projectId",
+          "locationId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Create Firestore database",
+        "readOnlyHint": false,
+        "destructiveHint": false
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "connect_project_to_firecms",
+      "title": "Connect a Firebase project",
+      "description": "Connect an existing Firebase project to FireCMS Cloud.\n\nIt creates a delegated service account in the project with the permissions FireCMS needs, registers the signed-in user as an admin, creates the FireCMS project on the free plan, and by default adds FireCMS's access rule to the project's Firestore and Storage security rules.\n\nFirebase, Firestore and Firebase Authentication must already be enabled on the project. Authentication cannot be enabled through any API: it is switched on once in the Firebase console. Fails if the project is already connected.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID to connect"
+          },
+          "creationType": {
+            "type": "string",
+            "enum": [
+              "existing",
+              "new"
+            ],
+            "description": "'existing' (default) for a project that already has data; 'new' for a freshly created one"
+          },
+          "applySecurityRules": {
+            "type": "boolean",
+            "description": "Add FireCMS's Firestore and Storage access rule as part of connecting (default true). The CMS cannot open any collection without it."
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Connect a Firebase project",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "apply_firestore_security_rules",
+      "title": "Apply FireCMS security rules",
+      "description": "Add FireCMS's access rule to a project's Firestore and Storage security rules. Requires admin.\n\nFireCMS Cloud reads the customer's Firestore from the browser using the signed-in user's own token, so it needs a rule granting access to users carrying the `fireCMSUser` claim:\n    match /{document=**} { allow read, write: if request.auth.token.fireCMSUser; }\n\nWithout it the CMS shows \"Missing Firestore Security Rules\" and no collection opens, although this server keeps working: it reads through the backend's service account, which bypasses security rules.\n\nThe rule is injected into the existing ruleset rather than replacing it, and a project that already has it is left alone, so it is safe to run again. Connecting a project applies it already; this repairs projects connected earlier, or where that step failed.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Apply FireCMS security rules",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "create_firecms_webapp",
+      "title": "Create FireCMS web app",
+      "description": "Create the FireCMS web app inside the client's Firebase project, or reuse the one already there. Connecting a project normally does this; this repairs a project where that step failed. Requires admin.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Create FireCMS web app",
+        "readOnlyHint": false,
+        "destructiveHint": false
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_projects",
+      "title": "List projects",
+      "description": "List all FireCMS Cloud projects accessible by the authenticated user",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "title": "List projects",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_root_collections",
+      "title": "List root collections",
+      "description": "List all Firestore root-level collections in a FireCMS project — the paths that can be turned into CMS collections. Read live from Firestore, so collections created moments ago are included.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID, if not '(default)'"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List root collections",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_subcollections",
+      "title": "List subcollections",
+      "description": "List the subcollections of a specific document, with their full paths: nested data that can be turned into CMS collections.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          },
+          "parentDocumentPath": {
+            "type": "string",
+            "description": "Full path of the parent document, e.g. 'users/abc123'"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID, if not '(default)'"
+          }
+        },
+        "required": [
+          "projectId",
+          "parentDocumentPath"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List subcollections",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_users",
+      "title": "List users",
+      "description": "List all users that have access to a FireCMS project, including their roles (admin, editor, viewer)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List users",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "add_user",
+      "title": "Invite a user",
+      "description": "Invite a new user to a FireCMS project. Sends an invitation email. Admin-only. If the email already belongs to a user of the project, their roles are replaced by these.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address of the user to invite"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "admin",
+                "editor",
+                "viewer"
+              ]
+            },
+            "description": "Roles to assign"
+          }
+        },
+        "required": [
+          "projectId",
+          "email",
+          "roles"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Invite a user",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "update_user_roles",
+      "title": "Change user roles",
+      "description": "Update the roles of an existing user in a FireCMS project. Admin-only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The user ID to update"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "admin",
+                "editor",
+                "viewer"
+              ]
+            },
+            "description": "New roles"
+          }
+        },
+        "required": [
+          "projectId",
+          "userId",
+          "roles"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Change user roles",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "remove_user",
+      "title": "Remove a user",
+      "description": "Remove a user from a FireCMS project, revoking their access. Admin-only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The user ID to remove"
+          }
+        },
+        "required": [
+          "projectId",
+          "userId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Remove a user",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_databases",
+      "title": "List Firestore databases",
+      "description": "List the Firestore databases of a project. Only needed for projects using more than the '(default)' database — the resulting database IDs can be passed to the other introspection and document tools.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List Firestore databases",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "preview_inferred_schema",
+      "title": "Preview inferred schema",
+      "description": "Read a sample of real documents from a Firestore path and infer a FireCMS collection schema from them, without saving anything. Works for any path, subcollections included.\n\nInference is structural only: it derives data types, enum candidates and validation from the sampled values. The result is a complete collection schema that can be edited and saved as it is.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "path": {
+            "type": "string",
+            "description": "Firestore collection path, e.g. 'products' or 'users/{userId}/orders'"
+          },
+          "sampleSize": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 200,
+            "description": "How many documents to sample (default 30, max 200). More samples give better enum and optionality detection."
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID, if not '(default)'"
+          }
+        },
+        "required": [
+          "projectId",
+          "path"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Preview inferred schema",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "infer_collections_from_data",
+      "title": "Create collections from data",
+      "description": "Infer collections from the existing Firestore data at the given paths, and save them to the project. Requires admin.\n\nFor each path the backend samples documents, infers the property types, then uses an LLM to pick display names, a singular name, an icon, a navigation group and field widgets. Paths already mapped to a collection, and paths with no documents, are skipped.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "paths": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "description": "Firestore collection path, e.g. 'products'"
+                },
+                "databaseId": {
+                  "type": "string",
+                  "description": "Firestore database ID, if not '(default)'"
+                }
+              },
+              "required": [
+                "path"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "description": "The collection paths to infer and save"
+          }
+        },
+        "required": [
+          "projectId",
+          "paths"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Create collections from data",
+        "readOnlyHint": false,
+        "destructiveHint": false
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "setup_all_collections",
+      "title": "Set up all collections",
+      "description": "Discover every Firestore root collection in the project that is not yet mapped to a collection, infer a collection schema for each (display names and widgets picked by an LLM), and save them all. Requires admin.\n\nCovers every database of the project. Collections that already exist are left alone, so it is safe to run again later to pick up new Firestore collections. Can take a while on large projects.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID, if not '(default)'"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Set up all collections",
+        "readOnlyHint": false,
+        "destructiveHint": false
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_project_config",
+      "title": "Get project settings",
+      "description": "Get the full configuration for a FireCMS project, including:\n- Project name, logo, and brand colors (primary/secondary)\n- Subscription plan and trial status\n- Feature toggles (text search, entity history, App Check)\n- Default locale settings\n- Customization revision info",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Get project settings",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "update_project_name",
+      "title": "Rename project",
+      "description": "Update the display name of a FireCMS project.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "New project name"
+          }
+        },
+        "required": [
+          "projectId",
+          "name"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Rename project",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "update_project_colors",
+      "title": "Change brand colors",
+      "description": "Update the primary and/or secondary brand colors for the CMS UI. Colors should be hex values (e.g., '#0070F4').",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "primaryColor": {
+            "type": "string",
+            "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$",
+            "description": "Primary color hex, #rgb or #rrggbb (e.g., '#0070F4')"
+          },
+          "secondaryColor": {
+            "type": "string",
+            "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$",
+            "description": "Secondary color hex, #rgb or #rrggbb (e.g., '#FF5B79')"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Change brand colors",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "update_default_locale",
+      "title": "Change default locale",
+      "description": "Change the default locale for the CMS (affects date formatting, etc.).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "locale": {
+            "type": "string",
+            "description": "FireCMS locale for dates (e.g., 'en', 'es', 'de', 'fr', 'it', 'enUS', 'ptBR'); 'en-US' and 'en_US' are read as 'enUS'"
+          }
+        },
+        "required": [
+          "projectId",
+          "locale"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Change default locale",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "toggle_text_search",
+      "title": "Turn text search on or off",
+      "description": "Enable or disable the local text search feature for a project.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "true to enable, false to disable"
+          }
+        },
+        "required": [
+          "projectId",
+          "enabled"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Turn text search on or off",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "toggle_entity_history",
+      "title": "Turn entity history on or off",
+      "description": "Enable or disable entity history tracking (audit log of document changes) for a project.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "true to enable, false to disable"
+          }
+        },
+        "required": [
+          "projectId",
+          "enabled"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Turn entity history on or off",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_collection_schemas",
+      "title": "List collections",
+      "description": "List all persisted collection schemas for a FireCMS project. Returns the collection \nconfigurations (name, path, properties, etc.) that define how data is displayed and edited in the CMS.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List collections",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_collection_schema",
+      "title": "Get a collection",
+      "description": "Get the full schema definition for a specific collection, including all properties, \nvalidation rules, display configuration, and subcollection definitions.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "Collection ID (usually same as the Firestore path, e.g., 'products')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Get a collection",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "save_collection_schema",
+      "title": "Save a collection",
+      "description": "Create or fully replace a collection schema. This defines how a Firestore collection \nis displayed and edited in FireCMS. Requires at minimum: id, path, and name. \n\nExample schema:\n{\n  \"id\": \"products\",\n  \"path\": \"products\",\n  \"name\": \"Products\",\n  \"singularName\": \"Product\",\n  \"icon\": \"ShoppingCart\",\n  \"description\": \"Product catalog\",\n  \"group\": \"Shop\",\n  \"properties\": {\n    \"name\": { \"dataType\": \"string\", \"name\": \"Name\", \"validation\": { \"required\": true } },\n    \"price\": { \"dataType\": \"number\", \"name\": \"Price\", \"validation\": { \"required\": true, \"min\": 0 } },\n    \"status\": { \"dataType\": \"string\", \"name\": \"Status\", \"enumValues\": [\n      { \"id\": \"draft\", \"label\": \"Draft\" },\n      { \"id\": \"published\", \"label\": \"Published\" }\n    ]}\n  },\n  \"propertiesOrder\": [\"name\", \"price\", \"status\"]\n}",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "Collection ID (e.g., 'products')"
+          },
+          "schema": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Firestore collection path"
+              },
+              "name": {
+                "type": "string",
+                "description": "Display name for the collection"
+              },
+              "singularName": {
+                "type": "string",
+                "description": "Singular name (e.g., 'Product')"
+              },
+              "description": {
+                "type": "string",
+                "description": "Collection description"
+              },
+              "icon": {
+                "type": "string",
+                "description": "Material icon name (e.g., 'ShoppingCart')"
+              },
+              "group": {
+                "type": "string",
+                "description": "Navigation group name"
+              },
+              "properties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "dataType": {
+                      "type": "string",
+                      "enum": [
+                        "string",
+                        "number",
+                        "boolean",
+                        "date",
+                        "map",
+                        "array",
+                        "geopoint",
+                        "reference"
+                      ],
+                      "description": "The data type of this property"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Display name for the property"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Description shown as a tooltip"
+                    },
+                    "validation": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "description": "Validation rules (e.g., { required: true, min: 0, max: 100 })"
+                    },
+                    "enumValues": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Enum value ID"
+                          },
+                          "label": {
+                            "type": "string",
+                            "description": "Display label"
+                          },
+                          "color": {
+                            "type": "string",
+                            "description": "Color for the enum chip"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "label"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "description": "Enum values for string/number fields (renders as select/chips)"
+                    },
+                    "multiline": {
+                      "type": "boolean",
+                      "description": "For strings: render as textarea"
+                    },
+                    "markdown": {
+                      "type": "boolean",
+                      "description": "For strings: render as markdown editor"
+                    },
+                    "url": {
+                      "anyOf": [
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "image",
+                            "video",
+                            "audio"
+                          ]
+                        }
+                      ],
+                      "description": "For strings: treat as URL, optionally specify media type"
+                    },
+                    "email": {
+                      "type": "boolean",
+                      "description": "For strings: validate as email"
+                    },
+                    "storage": {
+                      "type": "object",
+                      "properties": {
+                        "storagePath": {
+                          "type": "string",
+                          "description": "Firebase Storage path"
+                        },
+                        "acceptedFiles": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Accepted MIME types"
+                        },
+                        "maxSize": {
+                          "type": "number",
+                          "description": "Max file size in bytes"
+                        }
+                      },
+                      "required": [
+                        "storagePath"
+                      ],
+                      "additionalProperties": false,
+                      "description": "For strings: file upload configuration"
+                    },
+                    "of": {
+                      "description": "For arrays: the property definition of array items"
+                    },
+                    "properties": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "description": "For maps: nested property definitions"
+                    },
+                    "path": {
+                      "type": "string",
+                      "description": "For references: target collection path"
+                    },
+                    "previewProperties": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "For references: properties to show in preview"
+                    },
+                    "disabled": {
+                      "type": "boolean",
+                      "description": "If true, field is read-only in the form"
+                    },
+                    "columnWidth": {
+                      "type": "number",
+                      "description": "Column width in pixels for table view"
+                    },
+                    "hideFromCollection": {
+                      "type": "boolean",
+                      "description": "If true, hide from the table view"
+                    }
+                  },
+                  "required": [
+                    "dataType"
+                  ],
+                  "additionalProperties": true
+                },
+                "description": "Property definitions keyed by field name"
+              },
+              "propertiesOrder": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Display order of properties"
+              },
+              "defaultSize": {
+                "type": "string",
+                "enum": [
+                  "xs",
+                  "s",
+                  "m",
+                  "l",
+                  "xl"
+                ],
+                "description": "Default row size in table"
+              },
+              "initialSort": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "asc",
+                      "desc"
+                    ]
+                  }
+                ],
+                "description": "Default sort [field, direction]"
+              }
+            },
+            "required": [
+              "path",
+              "name",
+              "properties"
+            ],
+            "additionalProperties": true,
+            "description": "Complete collection schema definition"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId",
+          "schema"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Save a collection",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "update_collection_schema",
+      "title": "Update a collection",
+      "description": "Partially update an existing collection schema. Only the top-level fields given are changed (merged with the existing schema): for example the name, group, display settings or properties.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "Collection ID to update"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Fields to update (merged with existing schema)"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId",
+          "data"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Update a collection",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "delete_collection_schema",
+      "title": "Delete a collection",
+      "description": "Delete a collection schema from FireCMS. This removes the collection configuration \nfrom the CMS — it does NOT delete the underlying Firestore data. The collection will simply \nno longer appear in the FireCMS UI.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "Collection ID to delete"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Delete a collection",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "save_property",
+      "title": "Save a property",
+      "description": "Add or update a single property in a collection schema, leaving the other properties as they are. A new property is added at the end of the display order.\n\nExample property:\n{\n  \"dataType\": \"string\",\n  \"name\": \"Description\",\n  \"description\": \"Product description\",\n  \"multiline\": true,\n  \"validation\": { \"required\": true, \"max\": 500 }\n}",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "Collection ID"
+          },
+          "propertyKey": {
+            "type": "string",
+            "description": "Property field key (e.g., 'description', 'price')"
+          },
+          "property": {
+            "type": "object",
+            "properties": {
+              "dataType": {
+                "type": "string",
+                "enum": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "date",
+                  "map",
+                  "array",
+                  "geopoint",
+                  "reference"
+                ],
+                "description": "The data type of this property"
+              },
+              "name": {
+                "type": "string",
+                "description": "Display name for the property"
+              },
+              "description": {
+                "type": "string",
+                "description": "Description shown as a tooltip"
+              },
+              "validation": {
+                "type": "object",
+                "additionalProperties": {},
+                "description": "Validation rules (e.g., { required: true, min: 0, max: 100 })"
+              },
+              "enumValues": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Enum value ID"
+                    },
+                    "label": {
+                      "type": "string",
+                      "description": "Display label"
+                    },
+                    "color": {
+                      "type": "string",
+                      "description": "Color for the enum chip"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "label"
+                  ],
+                  "additionalProperties": false
+                },
+                "description": "Enum values for string/number fields (renders as select/chips)"
+              },
+              "multiline": {
+                "type": "boolean",
+                "description": "For strings: render as textarea"
+              },
+              "markdown": {
+                "type": "boolean",
+                "description": "For strings: render as markdown editor"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "image",
+                      "video",
+                      "audio"
+                    ]
+                  }
+                ],
+                "description": "For strings: treat as URL, optionally specify media type"
+              },
+              "email": {
+                "type": "boolean",
+                "description": "For strings: validate as email"
+              },
+              "storage": {
+                "type": "object",
+                "properties": {
+                  "storagePath": {
+                    "type": "string",
+                    "description": "Firebase Storage path"
+                  },
+                  "acceptedFiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Accepted MIME types"
+                  },
+                  "maxSize": {
+                    "type": "number",
+                    "description": "Max file size in bytes"
+                  }
+                },
+                "required": [
+                  "storagePath"
+                ],
+                "additionalProperties": false,
+                "description": "For strings: file upload configuration"
+              },
+              "of": {
+                "description": "For arrays: the property definition of array items"
+              },
+              "properties": {
+                "type": "object",
+                "additionalProperties": {},
+                "description": "For maps: nested property definitions"
+              },
+              "path": {
+                "type": "string",
+                "description": "For references: target collection path"
+              },
+              "previewProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "For references: properties to show in preview"
+              },
+              "disabled": {
+                "type": "boolean",
+                "description": "If true, field is read-only in the form"
+              },
+              "columnWidth": {
+                "type": "number",
+                "description": "Column width in pixels for table view"
+              },
+              "hideFromCollection": {
+                "type": "boolean",
+                "description": "If true, hide from the table view"
+              }
+            },
+            "required": [
+              "dataType"
+            ],
+            "additionalProperties": true,
+            "description": "Property definition"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Dot-separated path of an existing map property to put this property inside (e.g., 'address' for address.street, 'meta.address' for a map within a map)"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId",
+          "propertyKey",
+          "property"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Save a property",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "delete_property",
+      "title": "Delete a property",
+      "description": "Remove a property from a collection schema. This removes the field definition from \nthe CMS configuration — it does NOT delete the field from existing Firestore documents.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "Collection ID"
+          },
+          "propertyKey": {
+            "type": "string",
+            "description": "Property key to remove"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Dot-separated path of the map property the property is inside (e.g., 'address' for address.street)"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId",
+          "propertyKey"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Delete a property",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "generate_collection",
+      "title": "Generate a collection with AI",
+      "description": "Generate a new FireCMS collection schema using AI. Provide a natural language description \nof the collection you want (e.g., \"A blog with posts that have title, body, author, tags, \nand a featured image\"). Returns a complete FireCMS collection configuration.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Natural language description of the collection to generate"
+          },
+          "existingCollections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "description": "Optional existing collection schemas for context"
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Generate a collection with AI",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "modify_collection",
+      "title": "Modify a collection with AI",
+      "description": "Modify an existing FireCMS collection schema using AI. Describe the changes you want \n(e.g., \"Add a priority enum with low/medium/high\" or \"Make title required with max 100 chars\").\nReturns the updated schema and a list of operations performed.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Description of the modifications"
+          },
+          "existingCollection": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "The current collection schema to modify"
+          },
+          "existingCollections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "description": "Optional list of all collection schemas for context"
+          }
+        },
+        "required": [
+          "prompt",
+          "existingCollection"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Modify a collection with AI",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_documents",
+      "title": "List documents",
+      "description": "List documents from a Firestore collection, with optional filters, ordering and a limit.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path (e.g., 'products', 'users', 'blog/posts')"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Max number of documents to return (default: 20)"
+          },
+          "orderBy": {
+            "type": "string",
+            "description": "Field to order by"
+          },
+          "orderDirection": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "description": "Sort direction"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "description": "Field path to filter on"
+                },
+                "op": {
+                  "type": "string",
+                  "enum": [
+                    "==",
+                    "!=",
+                    "<",
+                    "<=",
+                    ">",
+                    ">=",
+                    "array-contains",
+                    "in",
+                    "array-contains-any",
+                    "not-in"
+                  ],
+                  "description": "Firestore filter operator"
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "array"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  ],
+                  "description": "Value to compare against. Dates, references and geopoints take the form documents are returned in: { _seconds, _nanoseconds }, { _ref: 'collection/docId' }, { _lat, _long }"
+                }
+              },
+              "required": [
+                "field",
+                "op",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Optional filters to apply"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List documents",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_document",
+      "title": "Get a document",
+      "description": "Get a specific document by its collection path and ID. Returns all fields of the document.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path (e.g., 'products', 'users')"
+          },
+          "documentId": {
+            "type": "string",
+            "description": "Document ID"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath",
+          "documentId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Get a document",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "create_document",
+      "title": "Create a document",
+      "description": "Create a new document in a Firestore collection. Provide the field values as a JSON object.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path (e.g., 'products')"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Document fields as a JSON object"
+          },
+          "documentId": {
+            "type": "string",
+            "description": "Optional document ID. If not provided, Firestore generates one. If a document with this ID exists, it is replaced."
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath",
+          "data"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Create a document",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "update_document",
+      "title": "Update a document",
+      "description": "Update fields of an existing document. Only the specified fields are modified (partial update / merge).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path (e.g., 'products')"
+          },
+          "documentId": {
+            "type": "string",
+            "description": "Document ID to update"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Fields to update as a JSON object"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath",
+          "documentId",
+          "data"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Update a document",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "delete_document",
+      "title": "Delete a document",
+      "description": "Delete a document from Firestore. This action is permanent.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path (e.g., 'products')"
+          },
+          "documentId": {
+            "type": "string",
+            "description": "Document ID to delete"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath",
+          "documentId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Delete a document",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "count_documents",
+      "title": "Count documents",
+      "description": "Count the total number of documents in a Firestore collection.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path (e.g., 'products')"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Count documents",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "export_collection",
+      "title": "Export a collection",
+      "description": "Export documents from a Firestore collection as JSON. Useful for data backups,\nanalysis, or migration. For large collections, use the limit parameter.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path to export (e.g., 'products')"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Max documents to export (default: 100, max: 500)"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Export a collection",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "import_documents",
+      "title": "Import documents",
+      "description": "Bulk import documents into a Firestore collection, for seeding data, migrations or restoring a backup. Each document can specify an ID; without one, Firestore generates it. By default a document with an existing ID is overwritten; with merge: true its fields are merged instead. At most 500 documents per call.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Target collection path (e.g., 'products')"
+          },
+          "documents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Optional document ID"
+                },
+                "data": {
+                  "type": "object",
+                  "additionalProperties": {},
+                  "description": "Document fields"
+                }
+              },
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Array of documents to import (max 500)"
+          },
+          "merge": {
+            "type": "boolean",
+            "description": "If true, merge with existing documents instead of overwriting (default: false)"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath",
+          "documents"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Import documents",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "upload_storage_file",
+      "title": "Upload a file to Firebase Storage",
+      "description": "Upload a file (such as an image for a newsletter or CMS entry) to the project's Firebase Storage bucket and get back a public download URL.\nProvide either base64Data (raw base64 or a data: URI) or a public sourceUrl to fetch and store.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "path": {
+            "type": "string",
+            "description": "Destination path inside the bucket, e.g. 'mail/noviembre-2026/hero.jpg'"
+          },
+          "base64Data": {
+            "type": "string",
+            "description": "Base64-encoded file contents (or data: URI). Required if sourceUrl is omitted."
+          },
+          "sourceUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public HTTP(S) URL to fetch and upload. Required if base64Data is omitted."
+          },
+          "contentType": {
+            "type": "string",
+            "description": "MIME type, e.g. 'image/jpeg'. Inferred from path or response header if omitted."
+          },
+          "bucketName": {
+            "type": "string",
+            "description": "Optional explicit bucket name; defaults to the project's default Firebase Storage bucket."
+          }
+        },
+        "required": [
+          "projectId",
+          "path"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Upload a file to Firebase Storage",
+        "readOnlyHint": false,
+        "destructiveHint": false
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_storage_files",
+      "title": "List files in Firebase Storage",
+      "description": "List files stored in the project's Firebase Storage bucket under an optional prefix (e.g. 'mail/noviembre-2026/'), including their download URLs when available.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "prefix": {
+            "type": "string",
+            "description": "Optional folder prefix, e.g. 'mail/noviembre-2026/'"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Max files to return (default: 50, max: 200)"
+          },
+          "bucketName": {
+            "type": "string",
+            "description": "Optional explicit bucket name"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List files in Firebase Storage",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "firecms_login",
+      "title": "Sign in to FireCMS",
+      "description": "Sign in to FireCMS Cloud. Opens a browser window for Google OAuth authentication. Required before using any other tools.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "title": "Sign in to FireCMS",
+        "readOnlyHint": false,
+        "destructiveHint": false
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "firecms_logout",
+      "title": "Sign out of FireCMS",
+      "description": "Sign out of FireCMS Cloud. Revokes the current session.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "title": "Sign out of FireCMS",
+        "readOnlyHint": false,
+        "destructiveHint": false
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    }
+  ],
+  "hosted": [
+    {
+      "name": "firecms_get_current_user",
+      "title": "Current user",
+      "description": "Get the currently authenticated FireCMS user",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "title": "Current user",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "connect_project_to_firecms",
+      "title": "Connect a Firebase project",
+      "description": "Get the link to connect a Firebase project to FireCMS Cloud.\n\nConnecting creates a service account in the user's Google Cloud project, which takes their own Google Cloud permissions. This server holds none, so the step happens in the FireCMS Cloud web app and takes about a minute; this tool returns the link to it. Once connected, the project is listed with the user's other FireCMS projects and can be managed from here.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project to connect, if the user named one"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Connect a Firebase project",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "apply_firestore_security_rules",
+      "title": "Apply FireCMS security rules",
+      "description": "Add FireCMS's access rule to a project's Firestore and Storage security rules. Requires admin.\n\nFireCMS Cloud reads the customer's Firestore from the browser using the signed-in user's own token, so it needs a rule granting access to users carrying the `fireCMSUser` claim:\n    match /{document=**} { allow read, write: if request.auth.token.fireCMSUser; }\n\nWithout it the CMS shows \"Missing Firestore Security Rules\" and no collection opens, although this server keeps working: it reads through the backend's service account, which bypasses security rules.\n\nThe rule is injected into the existing ruleset rather than replacing it, and a project that already has it is left alone, so it is safe to run again. Connecting a project applies it already; this repairs projects connected earlier, or where that step failed.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Apply FireCMS security rules",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "create_firecms_webapp",
+      "title": "Create FireCMS web app",
+      "description": "Create the FireCMS web app inside the client's Firebase project, or reuse the one already there. Connecting a project normally does this; this repairs a project where that step failed. Requires admin.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Create FireCMS web app",
+        "readOnlyHint": false,
+        "destructiveHint": false
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_projects",
+      "title": "List projects",
+      "description": "List all FireCMS Cloud projects accessible by the authenticated user",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "title": "List projects",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_root_collections",
+      "title": "List root collections",
+      "description": "List all Firestore root-level collections in a FireCMS project — the paths that can be turned into CMS collections. Read live from Firestore, so collections created moments ago are included.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID, if not '(default)'"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List root collections",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_subcollections",
+      "title": "List subcollections",
+      "description": "List the subcollections of a specific document, with their full paths: nested data that can be turned into CMS collections.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          },
+          "parentDocumentPath": {
+            "type": "string",
+            "description": "Full path of the parent document, e.g. 'users/abc123'"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID, if not '(default)'"
+          }
+        },
+        "required": [
+          "projectId",
+          "parentDocumentPath"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List subcollections",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_users",
+      "title": "List users",
+      "description": "List all users that have access to a FireCMS project, including their roles (admin, editor, viewer)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List users",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "add_user",
+      "title": "Invite a user",
+      "description": "Invite a new user to a FireCMS project. Sends an invitation email. Admin-only. If the email already belongs to a user of the project, their roles are replaced by these.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address of the user to invite"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "admin",
+                "editor",
+                "viewer"
+              ]
+            },
+            "description": "Roles to assign"
+          }
+        },
+        "required": [
+          "projectId",
+          "email",
+          "roles"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Invite a user",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "update_user_roles",
+      "title": "Change user roles",
+      "description": "Update the roles of an existing user in a FireCMS project. Admin-only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The user ID to update"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "admin",
+                "editor",
+                "viewer"
+              ]
+            },
+            "description": "New roles"
+          }
+        },
+        "required": [
+          "projectId",
+          "userId",
+          "roles"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Change user roles",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "remove_user",
+      "title": "Remove a user",
+      "description": "Remove a user from a FireCMS project, revoking their access. Admin-only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Firebase project ID"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The user ID to remove"
+          }
+        },
+        "required": [
+          "projectId",
+          "userId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Remove a user",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_databases",
+      "title": "List Firestore databases",
+      "description": "List the Firestore databases of a project. Only needed for projects using more than the '(default)' database — the resulting database IDs can be passed to the other introspection and document tools.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List Firestore databases",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "preview_inferred_schema",
+      "title": "Preview inferred schema",
+      "description": "Read a sample of real documents from a Firestore path and infer a FireCMS collection schema from them, without saving anything. Works for any path, subcollections included.\n\nInference is structural only: it derives data types, enum candidates and validation from the sampled values. The result is a complete collection schema that can be edited and saved as it is.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "path": {
+            "type": "string",
+            "description": "Firestore collection path, e.g. 'products' or 'users/{userId}/orders'"
+          },
+          "sampleSize": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 200,
+            "description": "How many documents to sample (default 30, max 200). More samples give better enum and optionality detection."
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID, if not '(default)'"
+          }
+        },
+        "required": [
+          "projectId",
+          "path"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Preview inferred schema",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "infer_collections_from_data",
+      "title": "Create collections from data",
+      "description": "Infer collections from the existing Firestore data at the given paths, and save them to the project. Requires admin.\n\nFor each path the backend samples documents, infers the property types, then uses an LLM to pick display names, a singular name, an icon, a navigation group and field widgets. Paths already mapped to a collection, and paths with no documents, are skipped.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "paths": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "description": "Firestore collection path, e.g. 'products'"
+                },
+                "databaseId": {
+                  "type": "string",
+                  "description": "Firestore database ID, if not '(default)'"
+                }
+              },
+              "required": [
+                "path"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "description": "The collection paths to infer and save"
+          }
+        },
+        "required": [
+          "projectId",
+          "paths"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Create collections from data",
+        "readOnlyHint": false,
+        "destructiveHint": false
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "setup_all_collections",
+      "title": "Set up all collections",
+      "description": "Discover every Firestore root collection in the project that is not yet mapped to a collection, infer a collection schema for each (display names and widgets picked by an LLM), and save them all. Requires admin.\n\nCovers every database of the project. Collections that already exist are left alone, so it is safe to run again later to pick up new Firestore collections. Can take a while on large projects.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID, if not '(default)'"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Set up all collections",
+        "readOnlyHint": false,
+        "destructiveHint": false
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_project_config",
+      "title": "Get project settings",
+      "description": "Get the full configuration for a FireCMS project, including:\n- Project name, logo, and brand colors (primary/secondary)\n- Subscription plan and trial status\n- Feature toggles (text search, entity history, App Check)\n- Default locale settings\n- Customization revision info",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Get project settings",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "update_project_name",
+      "title": "Rename project",
+      "description": "Update the display name of a FireCMS project.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "New project name"
+          }
+        },
+        "required": [
+          "projectId",
+          "name"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Rename project",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "update_project_colors",
+      "title": "Change brand colors",
+      "description": "Update the primary and/or secondary brand colors for the CMS UI. Colors should be hex values (e.g., '#0070F4').",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "primaryColor": {
+            "type": "string",
+            "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$",
+            "description": "Primary color hex, #rgb or #rrggbb (e.g., '#0070F4')"
+          },
+          "secondaryColor": {
+            "type": "string",
+            "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$",
+            "description": "Secondary color hex, #rgb or #rrggbb (e.g., '#FF5B79')"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Change brand colors",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "update_default_locale",
+      "title": "Change default locale",
+      "description": "Change the default locale for the CMS (affects date formatting, etc.).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "locale": {
+            "type": "string",
+            "description": "FireCMS locale for dates (e.g., 'en', 'es', 'de', 'fr', 'it', 'enUS', 'ptBR'); 'en-US' and 'en_US' are read as 'enUS'"
+          }
+        },
+        "required": [
+          "projectId",
+          "locale"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Change default locale",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "toggle_text_search",
+      "title": "Turn text search on or off",
+      "description": "Enable or disable the local text search feature for a project.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "true to enable, false to disable"
+          }
+        },
+        "required": [
+          "projectId",
+          "enabled"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Turn text search on or off",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "toggle_entity_history",
+      "title": "Turn entity history on or off",
+      "description": "Enable or disable entity history tracking (audit log of document changes) for a project.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "true to enable, false to disable"
+          }
+        },
+        "required": [
+          "projectId",
+          "enabled"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Turn entity history on or off",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_collection_schemas",
+      "title": "List collections",
+      "description": "List all persisted collection schemas for a FireCMS project. Returns the collection \nconfigurations (name, path, properties, etc.) that define how data is displayed and edited in the CMS.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List collections",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_collection_schema",
+      "title": "Get a collection",
+      "description": "Get the full schema definition for a specific collection, including all properties, \nvalidation rules, display configuration, and subcollection definitions.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "Collection ID (usually same as the Firestore path, e.g., 'products')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Get a collection",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "save_collection_schema",
+      "title": "Save a collection",
+      "description": "Create or fully replace a collection schema. This defines how a Firestore collection \nis displayed and edited in FireCMS. Requires at minimum: id, path, and name. \n\nExample schema:\n{\n  \"id\": \"products\",\n  \"path\": \"products\",\n  \"name\": \"Products\",\n  \"singularName\": \"Product\",\n  \"icon\": \"ShoppingCart\",\n  \"description\": \"Product catalog\",\n  \"group\": \"Shop\",\n  \"properties\": {\n    \"name\": { \"dataType\": \"string\", \"name\": \"Name\", \"validation\": { \"required\": true } },\n    \"price\": { \"dataType\": \"number\", \"name\": \"Price\", \"validation\": { \"required\": true, \"min\": 0 } },\n    \"status\": { \"dataType\": \"string\", \"name\": \"Status\", \"enumValues\": [\n      { \"id\": \"draft\", \"label\": \"Draft\" },\n      { \"id\": \"published\", \"label\": \"Published\" }\n    ]}\n  },\n  \"propertiesOrder\": [\"name\", \"price\", \"status\"]\n}",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "Collection ID (e.g., 'products')"
+          },
+          "schema": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Firestore collection path"
+              },
+              "name": {
+                "type": "string",
+                "description": "Display name for the collection"
+              },
+              "singularName": {
+                "type": "string",
+                "description": "Singular name (e.g., 'Product')"
+              },
+              "description": {
+                "type": "string",
+                "description": "Collection description"
+              },
+              "icon": {
+                "type": "string",
+                "description": "Material icon name (e.g., 'ShoppingCart')"
+              },
+              "group": {
+                "type": "string",
+                "description": "Navigation group name"
+              },
+              "properties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "dataType": {
+                      "type": "string",
+                      "enum": [
+                        "string",
+                        "number",
+                        "boolean",
+                        "date",
+                        "map",
+                        "array",
+                        "geopoint",
+                        "reference"
+                      ],
+                      "description": "The data type of this property"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Display name for the property"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Description shown as a tooltip"
+                    },
+                    "validation": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "description": "Validation rules (e.g., { required: true, min: 0, max: 100 })"
+                    },
+                    "enumValues": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Enum value ID"
+                          },
+                          "label": {
+                            "type": "string",
+                            "description": "Display label"
+                          },
+                          "color": {
+                            "type": "string",
+                            "description": "Color for the enum chip"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "label"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "description": "Enum values for string/number fields (renders as select/chips)"
+                    },
+                    "multiline": {
+                      "type": "boolean",
+                      "description": "For strings: render as textarea"
+                    },
+                    "markdown": {
+                      "type": "boolean",
+                      "description": "For strings: render as markdown editor"
+                    },
+                    "url": {
+                      "anyOf": [
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "image",
+                            "video",
+                            "audio"
+                          ]
+                        }
+                      ],
+                      "description": "For strings: treat as URL, optionally specify media type"
+                    },
+                    "email": {
+                      "type": "boolean",
+                      "description": "For strings: validate as email"
+                    },
+                    "storage": {
+                      "type": "object",
+                      "properties": {
+                        "storagePath": {
+                          "type": "string",
+                          "description": "Firebase Storage path"
+                        },
+                        "acceptedFiles": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Accepted MIME types"
+                        },
+                        "maxSize": {
+                          "type": "number",
+                          "description": "Max file size in bytes"
+                        }
+                      },
+                      "required": [
+                        "storagePath"
+                      ],
+                      "additionalProperties": false,
+                      "description": "For strings: file upload configuration"
+                    },
+                    "of": {
+                      "description": "For arrays: the property definition of array items"
+                    },
+                    "properties": {
+                      "type": "object",
+                      "additionalProperties": {},
+                      "description": "For maps: nested property definitions"
+                    },
+                    "path": {
+                      "type": "string",
+                      "description": "For references: target collection path"
+                    },
+                    "previewProperties": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "For references: properties to show in preview"
+                    },
+                    "disabled": {
+                      "type": "boolean",
+                      "description": "If true, field is read-only in the form"
+                    },
+                    "columnWidth": {
+                      "type": "number",
+                      "description": "Column width in pixels for table view"
+                    },
+                    "hideFromCollection": {
+                      "type": "boolean",
+                      "description": "If true, hide from the table view"
+                    }
+                  },
+                  "required": [
+                    "dataType"
+                  ],
+                  "additionalProperties": true
+                },
+                "description": "Property definitions keyed by field name"
+              },
+              "propertiesOrder": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Display order of properties"
+              },
+              "defaultSize": {
+                "type": "string",
+                "enum": [
+                  "xs",
+                  "s",
+                  "m",
+                  "l",
+                  "xl"
+                ],
+                "description": "Default row size in table"
+              },
+              "initialSort": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "asc",
+                      "desc"
+                    ]
+                  }
+                ],
+                "description": "Default sort [field, direction]"
+              }
+            },
+            "required": [
+              "path",
+              "name",
+              "properties"
+            ],
+            "additionalProperties": true,
+            "description": "Complete collection schema definition"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId",
+          "schema"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Save a collection",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "update_collection_schema",
+      "title": "Update a collection",
+      "description": "Partially update an existing collection schema. Only the top-level fields given are changed (merged with the existing schema): for example the name, group, display settings or properties.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "Collection ID to update"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Fields to update (merged with existing schema)"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId",
+          "data"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Update a collection",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "delete_collection_schema",
+      "title": "Delete a collection",
+      "description": "Delete a collection schema from FireCMS. This removes the collection configuration \nfrom the CMS — it does NOT delete the underlying Firestore data. The collection will simply \nno longer appear in the FireCMS UI.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "Collection ID to delete"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Delete a collection",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "save_property",
+      "title": "Save a property",
+      "description": "Add or update a single property in a collection schema, leaving the other properties as they are. A new property is added at the end of the display order.\n\nExample property:\n{\n  \"dataType\": \"string\",\n  \"name\": \"Description\",\n  \"description\": \"Product description\",\n  \"multiline\": true,\n  \"validation\": { \"required\": true, \"max\": 500 }\n}",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "Collection ID"
+          },
+          "propertyKey": {
+            "type": "string",
+            "description": "Property field key (e.g., 'description', 'price')"
+          },
+          "property": {
+            "type": "object",
+            "properties": {
+              "dataType": {
+                "type": "string",
+                "enum": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "date",
+                  "map",
+                  "array",
+                  "geopoint",
+                  "reference"
+                ],
+                "description": "The data type of this property"
+              },
+              "name": {
+                "type": "string",
+                "description": "Display name for the property"
+              },
+              "description": {
+                "type": "string",
+                "description": "Description shown as a tooltip"
+              },
+              "validation": {
+                "type": "object",
+                "additionalProperties": {},
+                "description": "Validation rules (e.g., { required: true, min: 0, max: 100 })"
+              },
+              "enumValues": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Enum value ID"
+                    },
+                    "label": {
+                      "type": "string",
+                      "description": "Display label"
+                    },
+                    "color": {
+                      "type": "string",
+                      "description": "Color for the enum chip"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "label"
+                  ],
+                  "additionalProperties": false
+                },
+                "description": "Enum values for string/number fields (renders as select/chips)"
+              },
+              "multiline": {
+                "type": "boolean",
+                "description": "For strings: render as textarea"
+              },
+              "markdown": {
+                "type": "boolean",
+                "description": "For strings: render as markdown editor"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "image",
+                      "video",
+                      "audio"
+                    ]
+                  }
+                ],
+                "description": "For strings: treat as URL, optionally specify media type"
+              },
+              "email": {
+                "type": "boolean",
+                "description": "For strings: validate as email"
+              },
+              "storage": {
+                "type": "object",
+                "properties": {
+                  "storagePath": {
+                    "type": "string",
+                    "description": "Firebase Storage path"
+                  },
+                  "acceptedFiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Accepted MIME types"
+                  },
+                  "maxSize": {
+                    "type": "number",
+                    "description": "Max file size in bytes"
+                  }
+                },
+                "required": [
+                  "storagePath"
+                ],
+                "additionalProperties": false,
+                "description": "For strings: file upload configuration"
+              },
+              "of": {
+                "description": "For arrays: the property definition of array items"
+              },
+              "properties": {
+                "type": "object",
+                "additionalProperties": {},
+                "description": "For maps: nested property definitions"
+              },
+              "path": {
+                "type": "string",
+                "description": "For references: target collection path"
+              },
+              "previewProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "For references: properties to show in preview"
+              },
+              "disabled": {
+                "type": "boolean",
+                "description": "If true, field is read-only in the form"
+              },
+              "columnWidth": {
+                "type": "number",
+                "description": "Column width in pixels for table view"
+              },
+              "hideFromCollection": {
+                "type": "boolean",
+                "description": "If true, hide from the table view"
+              }
+            },
+            "required": [
+              "dataType"
+            ],
+            "additionalProperties": true,
+            "description": "Property definition"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Dot-separated path of an existing map property to put this property inside (e.g., 'address' for address.street, 'meta.address' for a map within a map)"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId",
+          "propertyKey",
+          "property"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Save a property",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "delete_property",
+      "title": "Delete a property",
+      "description": "Remove a property from a collection schema. This removes the field definition from \nthe CMS configuration — it does NOT delete the field from existing Firestore documents.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "Collection ID"
+          },
+          "propertyKey": {
+            "type": "string",
+            "description": "Property key to remove"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Dot-separated path of the map property the property is inside (e.g., 'address' for address.street)"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId",
+          "propertyKey"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Delete a property",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "generate_collection",
+      "title": "Generate a collection with AI",
+      "description": "Generate a new FireCMS collection schema using AI. Provide a natural language description \nof the collection you want (e.g., \"A blog with posts that have title, body, author, tags, \nand a featured image\"). Returns a complete FireCMS collection configuration.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Natural language description of the collection to generate"
+          },
+          "existingCollections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "description": "Optional existing collection schemas for context"
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Generate a collection with AI",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "modify_collection",
+      "title": "Modify a collection with AI",
+      "description": "Modify an existing FireCMS collection schema using AI. Describe the changes you want \n(e.g., \"Add a priority enum with low/medium/high\" or \"Make title required with max 100 chars\").\nReturns the updated schema and a list of operations performed.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Description of the modifications"
+          },
+          "existingCollection": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "The current collection schema to modify"
+          },
+          "existingCollections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            },
+            "description": "Optional list of all collection schemas for context"
+          }
+        },
+        "required": [
+          "prompt",
+          "existingCollection"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Modify a collection with AI",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_documents",
+      "title": "List documents",
+      "description": "List documents from a Firestore collection, with optional filters, ordering and a limit.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path (e.g., 'products', 'users', 'blog/posts')"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Max number of documents to return (default: 20)"
+          },
+          "orderBy": {
+            "type": "string",
+            "description": "Field to order by"
+          },
+          "orderDirection": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "description": "Sort direction"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "description": "Field path to filter on"
+                },
+                "op": {
+                  "type": "string",
+                  "enum": [
+                    "==",
+                    "!=",
+                    "<",
+                    "<=",
+                    ">",
+                    ">=",
+                    "array-contains",
+                    "in",
+                    "array-contains-any",
+                    "not-in"
+                  ],
+                  "description": "Firestore filter operator"
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "array"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  ],
+                  "description": "Value to compare against. Dates, references and geopoints take the form documents are returned in: { _seconds, _nanoseconds }, { _ref: 'collection/docId' }, { _lat, _long }"
+                }
+              },
+              "required": [
+                "field",
+                "op",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Optional filters to apply"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List documents",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_document",
+      "title": "Get a document",
+      "description": "Get a specific document by its collection path and ID. Returns all fields of the document.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path (e.g., 'products', 'users')"
+          },
+          "documentId": {
+            "type": "string",
+            "description": "Document ID"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath",
+          "documentId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Get a document",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "create_document",
+      "title": "Create a document",
+      "description": "Create a new document in a Firestore collection. Provide the field values as a JSON object.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path (e.g., 'products')"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Document fields as a JSON object"
+          },
+          "documentId": {
+            "type": "string",
+            "description": "Optional document ID. If not provided, Firestore generates one. If a document with this ID exists, it is replaced."
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath",
+          "data"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Create a document",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "update_document",
+      "title": "Update a document",
+      "description": "Update fields of an existing document. Only the specified fields are modified (partial update / merge).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path (e.g., 'products')"
+          },
+          "documentId": {
+            "type": "string",
+            "description": "Document ID to update"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Fields to update as a JSON object"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath",
+          "documentId",
+          "data"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Update a document",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "delete_document",
+      "title": "Delete a document",
+      "description": "Delete a document from Firestore. This action is permanent.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path (e.g., 'products')"
+          },
+          "documentId": {
+            "type": "string",
+            "description": "Document ID to delete"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath",
+          "documentId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Delete a document",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "count_documents",
+      "title": "Count documents",
+      "description": "Count the total number of documents in a Firestore collection.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path (e.g., 'products')"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Count documents",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "export_collection",
+      "title": "Export a collection",
+      "description": "Export documents from a Firestore collection as JSON. Useful for data backups,\nanalysis, or migration. For large collections, use the limit parameter.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Collection path to export (e.g., 'products')"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Max documents to export (default: 100, max: 500)"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Export a collection",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "import_documents",
+      "title": "Import documents",
+      "description": "Bulk import documents into a Firestore collection, for seeding data, migrations or restoring a backup. Each document can specify an ID; without one, Firestore generates it. By default a document with an existing ID is overwritten; with merge: true its fields are merged instead. At most 500 documents per call.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "collectionPath": {
+            "type": "string",
+            "description": "Target collection path (e.g., 'products')"
+          },
+          "documents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Optional document ID"
+                },
+                "data": {
+                  "type": "object",
+                  "additionalProperties": {},
+                  "description": "Document fields"
+                }
+              },
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Array of documents to import (max 500)"
+          },
+          "merge": {
+            "type": "boolean",
+            "description": "If true, merge with existing documents instead of overwriting (default: false)"
+          },
+          "databaseId": {
+            "type": "string",
+            "description": "Firestore database ID (default: '(default)')"
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionPath",
+          "documents"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Import documents",
+        "readOnlyHint": false,
+        "destructiveHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "upload_storage_file",
+      "title": "Upload a file to Firebase Storage",
+      "description": "Upload a file (such as an image for a newsletter or CMS entry) to the project's Firebase Storage bucket and get back a public download URL.\nProvide either base64Data (raw base64 or a data: URI) or a public sourceUrl to fetch and store.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "path": {
+            "type": "string",
+            "description": "Destination path inside the bucket, e.g. 'mail/noviembre-2026/hero.jpg'"
+          },
+          "base64Data": {
+            "type": "string",
+            "description": "Base64-encoded file contents (or data: URI). Required if sourceUrl is omitted."
+          },
+          "sourceUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public HTTP(S) URL to fetch and upload. Required if base64Data is omitted."
+          },
+          "contentType": {
+            "type": "string",
+            "description": "MIME type, e.g. 'image/jpeg'. Inferred from path or response header if omitted."
+          },
+          "bucketName": {
+            "type": "string",
+            "description": "Optional explicit bucket name; defaults to the project's default Firebase Storage bucket."
+          }
+        },
+        "required": [
+          "projectId",
+          "path"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Upload a file to Firebase Storage",
+        "readOnlyHint": false,
+        "destructiveHint": false
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_storage_files",
+      "title": "List files in Firebase Storage",
+      "description": "List files stored in the project's Firebase Storage bucket under an optional prefix (e.g. 'mail/noviembre-2026/'), including their download URLs when available.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Firebase project ID"
+          },
+          "prefix": {
+            "type": "string",
+            "description": "Optional folder prefix, e.g. 'mail/noviembre-2026/'"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Max files to return (default: 50, max: 200)"
+          },
+          "bucketName": {
+            "type": "string",
+            "description": "Optional explicit bucket name"
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "List files in Firebase Storage",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    }
+  ]
+}

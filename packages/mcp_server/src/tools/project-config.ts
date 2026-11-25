@@ -1,4 +1,5 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
+import { registerTool } from "../tool-schema.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
 import { describeError } from "./errors.js";
@@ -61,7 +62,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
 
     // ─── 1. Get project configuration ──────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "get_project_config",
         {
             title: "Get project settings",
@@ -97,7 +98,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
 
     // ─── 2. Update project name ────────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "update_project_name",
         {
             title: "Rename project",
@@ -129,7 +130,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
 
     // ─── 3. Update brand colors ────────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "update_project_colors",
         {
             title: "Change brand colors",
@@ -168,7 +169,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
 
     // ─── 4. Update default locale ──────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "update_default_locale",
         {
             title: "Change default locale",
@@ -200,7 +201,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
 
     // ─── 5. Toggle text search ─────────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "toggle_text_search",
         {
             title: "Turn text search on or off",
@@ -232,7 +233,7 @@ export function registerProjectConfigTools(server: McpServer, api: FireCMSApiCli
 
     // ─── 6. Toggle entity history ──────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "toggle_entity_history",
         {
             title: "Turn entity history on or off",

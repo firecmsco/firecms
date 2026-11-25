@@ -1,6 +1,6 @@
 {
   "name": "@firecms/mcp-server",
-  "version": "3.4.0",
+  "version": "3.5.4",
   "publishConfig": {
     "access": "public"
   },
@@ -39,18 +39,21 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@firecms/agent-skills": "workspace:^",
     "@firecms/cli": "workspace:^3.4.0",
     "@firecms/schema_inference": "workspace:^3.4.0",
-    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@modelcontextprotocol/server": "2.4.0",
     "axios": "^1.16.1",
-    "zod": "^3.25.0"
+    "zod": "^3.25.0",
+    "zod-to-json-schema": "^3.25.1"
   },
   "devDependencies": {
+    "@modelcontextprotocol/client": "2.4.0",
     "@types/node": "^26.1.1",
     "typescript": "^5.7.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "keywords": [
     "firecms",

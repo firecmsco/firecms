@@ -5,9 +5,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
+import { InMemoryTransport } from "@modelcontextprotocol/server";
 
 import { handleHostedMcpRequest } from "../dist/hosted.js";
 import { createFireCMSMcpServer } from "../dist/server.js";
@@ -255,7 +254,7 @@ test("the hosted entry point never loads the CLI's login flow or the local token
 
 test("a tool that fails passes on the backend's explanation, not just the HTTP status", async () => {
     const { registerUserTools } = await import("../dist/tools/users.js");
-    const { McpServer } = await import("@modelcontextprotocol/sdk/server/mcp.js");
+    const { McpServer } = await import("@modelcontextprotocol/server");
     const refused = Object.assign(new Error("Request failed with status code 401"), {
         response: { status: 401, data: { message: "You can't add yourself to the users", code: "cant-add-yourself-to-users" } },
     });
@@ -364,7 +363,8 @@ test("by default the reason goes to stderr as a structured warning", async (t) =
     assert.equal(lines.length, 1);
     const entry = JSON.parse(lines[0]);
     assert.equal(entry.severity, "WARNING");
-    assert.match(entry.message, /^Hosted MCP request refused: Parse error/);
+    // SDK 1.x called this a "Parse error"; SDK 2 names what is wrong with the body.
+    assert.match(entry.message, /^Hosted MCP request refused: .*not a valid JSON-RPC message/);
     assert.doesNotMatch(lines[0], /do-not-log/, "credentials are never logged");
 });
 

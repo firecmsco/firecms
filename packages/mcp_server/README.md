@@ -196,6 +196,21 @@ Every tool declares a `title` and a `readOnlyHint`, plus a `destructiveHint` whe
 | `firecms://projects/{id}/schemas` | All collection schemas (full config tree) |
 | `firecms://projects/{id}/config` | Project configuration snapshot |
 
+## Skills
+
+Both the local and the hosted server serve the FireCMS [Agent Skills](https://agentskills.io) over MCP, through the skills extension (`io.modelcontextprotocol/skills`). The skills come from [`@firecms/agent-skills`](../agent_skills) (the UI kit, collections, custom views, the design language, and more), and an agent that reads skills from MCP servers (Claude Code, Claude) picks them up with no extra setup: they are listed with `skills/list` and read as `skill://<name>/SKILL.md` resources, each file with a SHA-256 digest the client checks.
+
+Clients only ask for skills from servers that speak protocol revision 2026-07-28. Both servers do (MCP TypeScript SDK v2), and still answer 2025-era clients at the same command or URL, with the same tools.
+
+The skills are read once, when the server starts (local) or on the first request (hosted). If they cannot be read, the server starts without the skills capability and every tool works as before. From code:
+
+```ts
+import { createFireCMSMcpServer, loadFireCMSSkills } from "@firecms/mcp-server";
+
+const skills = await loadFireCMSSkills();       // or loadFireCMSSkills("/path/to/skills")
+const server = createFireCMSMcpServer({ skills });
+```
+
 ## Example Workflows
 
 ### Bring an existing Firebase project into FireCMS
@@ -233,7 +248,7 @@ Every tool declares a `title` and a `readOnlyHint`, plus a `destructiveHint` whe
 Nothing reads credentials from process-wide state. Every API call goes through a `FireCMSSession` (`session.ts`) — the user's email, a Firebase ID token on `firecms-backend`, and a Google access token when there is one — passed to `createFireCMSMcpServer()`:
 
 - **Local** (`cli.ts`): `localSession` reads the CLI's tokens file and exchanges the Google ID token for a backend token (below). The login/logout tools are registered by the CLI only.
-- **Hosted** (`hosted.ts`): the backend resolves each request's OAuth bearer token to a user and passes a session that mints that user's backend ID token. There is no Google token, so the Google Cloud tools are replaced by a `connect_project_to_firecms` that links to the web app. Every request gets its own server and transport (stateless Streamable HTTP), so nothing of one person's session outlives their request. `hosted.ts` never imports the CLI's login flow; a test walks its import graph to keep it that way.
+- **Hosted** (`hosted.ts`): the backend resolves each request's OAuth bearer token to a user and passes a session that mints that user's backend ID token. There is no Google token, so the Google Cloud tools are replaced by a `connect_project_to_firecms` that links to the web app. Every request gets its own server and transport (stateless serving: the SDK's per-request handler for 2026-07-28 requests, stateless Streamable HTTP for 2025-era ones), so nothing of one person's session outlives their request. `hosted.ts` never imports the CLI's login flow; a test walks its import graph to keep it that way.
 
 ### Authentication
 

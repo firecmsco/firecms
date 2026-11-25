@@ -1,4 +1,5 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
+import { registerTool } from "../tool-schema.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
 import { describeError } from "./errors.js";
@@ -10,7 +11,7 @@ import { describeError } from "./errors.js";
  */
 export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
 
-    server.registerTool(
+    registerTool(server,
         "list_users",
         {
             title: "List users",
@@ -30,7 +31,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
         }
     );
 
-    server.registerTool(
+    registerTool(server,
         "add_user",
         {
             title: "Invite a user",
@@ -57,7 +58,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
         }
     );
 
-    server.registerTool(
+    registerTool(server,
         "update_user_roles",
         {
             title: "Change user roles",
@@ -82,7 +83,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
         }
     );
 
-    server.registerTool(
+    registerTool(server,
         "remove_user",
         {
             title: "Remove a user",

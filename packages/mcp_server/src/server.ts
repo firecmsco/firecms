@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/server";
+import type { SkillCatalog } from "@modelcontextprotocol/server/ext/skills";
 import { FireCMSApiClient } from "./api-client.js";
 import { DEFAULT_APP_URL } from "./config.js";
 import { FireCMSServerMode, FireCMSSession } from "./session.js";
@@ -16,6 +17,7 @@ import { registerImportTools } from "./tools/import.js";
 import { registerProjectConfigTools } from "./tools/project-config.js";
 import { registerOnboardingTools } from "./tools/onboarding.js";
 import { registerIntrospectionTools } from "./tools/introspection.js";
+import { registerStorageTools } from "./tools/storage.js";
 import { registerProjectResources } from "./resources/project.js";
 
 /**
@@ -58,6 +60,11 @@ export interface FireCMSMcpServerOptions {
     apiUrl?: string;
     /** The FireCMS Cloud web app, where hosted users connect new projects. */
     appUrl?: string;
+    /**
+     * Agent skills to serve over the MCP skills extension (`io.modelcontextprotocol/skills`),
+     * usually from `loadFireCMSSkills()`. Without them the server has no skills capability.
+     */
+    skills?: SkillCatalog;
 }
 
 export function createFireCMSMcpServer({
@@ -65,6 +72,7 @@ export function createFireCMSMcpServer({
     mode = "local",
     apiUrl,
     appUrl = DEFAULT_APP_URL,
+    skills,
 }: FireCMSMcpServerOptions): McpServer {
     const server = new McpServer({
         name: "FireCMS Cloud",
@@ -110,8 +118,15 @@ export function createFireCMSMcpServer({
     // Data import (admin-only)
     registerImportTools(server, api);
 
+    // Firebase Storage (upload & list assets)
+    registerStorageTools(server, api);
+
     // Resources (read-only contextual data)
     registerProjectResources(server, api);
+
+    // Agent skills, as `skill://` resources and the skills/* methods. Last, so the
+    // extension's resource template joins the project resources above.
+    skills?.attach(server);
 
     return server;
 }

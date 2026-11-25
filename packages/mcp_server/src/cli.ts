@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { createFireCMSMcpServer } from "./index.js";
+import { serveStdio } from "@modelcontextprotocol/server/stdio";
+import { createFireCMSMcpServer, loadFireCMSSkills } from "./index.js";
 import { getCurrentUserEmail } from "./auth.js";
 
 /**
@@ -75,9 +75,14 @@ Claude Desktop config (claude_desktop_config.json):
     // Must happen before anything else can log.
     redirectConsoleToStderr();
 
-    const server = createFireCMSMcpServer();
-    const transport = new StdioServerTransport();
-    await server.connect(transport);
+    // The skills are read once; every server instance serves the same catalog.
+    // `serveStdio` decides the protocol era from the client's opening message
+    // (2026-07-28 `server/discover`, or a 2025 `initialize`) and builds the server
+    // for it from this factory.
+    const skills = await loadFireCMSSkills();
+    serveStdio(() => createFireCMSMcpServer({ skills }), {
+        onerror: (error) => console.error(`[firecms-mcp] ${error.message}`),
+    });
 
     // Log to stderr (stdout is reserved for MCP protocol)
     const email = getCurrentUserEmail();

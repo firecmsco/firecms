@@ -1,4 +1,5 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
+import { registerTool } from "../tool-schema.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
 
@@ -76,7 +77,7 @@ export function registerOnboardingTools(
  * name, answered with the link to connect the project in FireCMS Cloud.
  */
 function registerConnectInWebAppTool(server: McpServer, appUrl: string) {
-    server.registerTool(
+    registerTool(server,
         "connect_project_to_firecms",
         {
             title: "Connect a Firebase project",
@@ -143,7 +144,7 @@ function registerGoogleCloudTools(server: McpServer, api: FireCMSApiClient) {
 
     // ─── 2. Status of a single project ─────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "get_project_setup_status",
         {
             title: "Check project setup",
@@ -194,7 +195,7 @@ function registerGoogleCloudTools(server: McpServer, api: FireCMSApiClient) {
         }
     );
 
-    server.registerTool(
+    registerTool(server,
         "enable_project_apis",
         {
             title: "Enable required APIs",
@@ -223,7 +224,7 @@ function registerGoogleCloudTools(server: McpServer, api: FireCMSApiClient) {
         }
     );
 
-    server.registerTool(
+    registerTool(server,
         "enable_firestore",
         {
             title: "Create Firestore database",
@@ -255,7 +256,7 @@ function registerGoogleCloudTools(server: McpServer, api: FireCMSApiClient) {
 
     // ─── 4. Connect ────────────────────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "connect_project_to_firecms",
         {
             title: "Connect a Firebase project",
@@ -347,7 +348,7 @@ function registerGoogleCloudTools(server: McpServer, api: FireCMSApiClient) {
  */
 function registerProjectRepairTools(server: McpServer, api: FireCMSApiClient) {
 
-    server.registerTool(
+    registerTool(server,
         "apply_firestore_security_rules",
         {
             title: "Apply FireCMS security rules",
@@ -393,7 +394,7 @@ function registerProjectRepairTools(server: McpServer, api: FireCMSApiClient) {
         }
     );
 
-    server.registerTool(
+    registerTool(server,
         "create_firecms_webapp",
         {
             title: "Create FireCMS web app",

@@ -1,4 +1,5 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
+import { registerTool } from "../tool-schema.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
 import { describeError } from "./errors.js";
@@ -11,7 +12,7 @@ export function registerDocumentTools(server: McpServer, api: FireCMSApiClient) 
 
     // ─── 1. Read documents (list/query) ────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "list_documents",
         {
             title: "List documents",
@@ -63,7 +64,7 @@ export function registerDocumentTools(server: McpServer, api: FireCMSApiClient) 
 
     // ─── 2. Get single document ────────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "get_document",
         {
             title: "Get a document",
@@ -93,7 +94,7 @@ export function registerDocumentTools(server: McpServer, api: FireCMSApiClient) 
 
     // ─── 3. Create document ────────────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "create_document",
         {
             title: "Create a document",
@@ -129,7 +130,7 @@ export function registerDocumentTools(server: McpServer, api: FireCMSApiClient) 
 
     // ─── 4. Update document ────────────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "update_document",
         {
             title: "Update a document",
@@ -163,7 +164,7 @@ export function registerDocumentTools(server: McpServer, api: FireCMSApiClient) 
 
     // ─── 5. Delete document ────────────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "delete_document",
         {
             title: "Delete a document",
@@ -193,7 +194,7 @@ export function registerDocumentTools(server: McpServer, api: FireCMSApiClient) 
 
     // ─── 6. Count documents ────────────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "count_documents",
         {
             title: "Count documents",

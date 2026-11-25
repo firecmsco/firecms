@@ -1,4 +1,5 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
+import { registerTool } from "../tool-schema.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
 import { describeError } from "./errors.js";
@@ -46,7 +47,7 @@ export function registerCollectionSchemaTools(server: McpServer, api: FireCMSApi
 
     // ─── 1. List all collection schemas ────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "list_collection_schemas",
         {
             title: "List collections",
@@ -78,7 +79,7 @@ configurations (name, path, properties, etc.) that define how data is displayed 
 
     // ─── 2. Get a single collection schema ─────────────────
 
-    server.registerTool(
+    registerTool(server,
         "get_collection_schema",
         {
             title: "Get a collection",
@@ -111,7 +112,7 @@ validation rules, display configuration, and subcollection definitions.`,
 
     // ─── 3. Save (create/replace) a collection schema ──────
 
-    server.registerTool(
+    registerTool(server,
         "save_collection_schema",
         {
             title: "Save a collection",
@@ -177,7 +178,7 @@ Example schema:
 
     // ─── 4. Update (partial) a collection schema ───────────
 
-    server.registerTool(
+    registerTool(server,
         "update_collection_schema",
         {
             title: "Update a collection",
@@ -211,7 +212,7 @@ Example schema:
 
     // ─── 5. Delete a collection schema ─────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "delete_collection_schema",
         {
             title: "Delete a collection",
@@ -245,7 +246,7 @@ no longer appear in the FireCMS UI.`,
 
     // ─── 6. Save (add/update) a single property ────────────
 
-    server.registerTool(
+    registerTool(server,
         "save_property",
         {
             title: "Save a property",
@@ -290,7 +291,7 @@ no longer appear in the FireCMS UI.`,
 
     // ─── 7. Delete a property ──────────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "delete_property",
         {
             title: "Delete a property",

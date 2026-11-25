@@ -653,6 +653,74 @@ export class FireCMSApiClient {
         });
     }
 
+    // ─── Firebase Storage ───────────────────────────────────
+
+    async uploadStorageFile(projectId: string, body: {
+        path: string;
+        base64Data?: string;
+        sourceUrl?: string;
+        contentType?: string;
+        bucketName?: string;
+    }): Promise<{
+        path: string;
+        bucket: string;
+        contentType: string;
+        size: number;
+        downloadUrl: string;
+    }> {
+        type UploadResult = {
+            path: string;
+            bucket: string;
+            contentType: string;
+            size: number;
+            downloadUrl: string;
+        };
+        const response = await this.request<{ data?: UploadResult } & UploadResult>({
+            method: "POST",
+            url: `/projects/${projectId}/storage/upload`,
+            data: body,
+        });
+        return response.data ?? response;
+    }
+
+    async listStorageFiles(projectId: string, body?: {
+        prefix?: string;
+        limit?: number;
+        bucketName?: string;
+    }): Promise<{
+        bucket: string;
+        prefix: string;
+        count: number;
+        files: Array<{
+            path: string;
+            bucket: string;
+            contentType: string | null;
+            size: number | null;
+            updated: string | null;
+            downloadUrl: string | null;
+        }>;
+    }> {
+        type ListResult = {
+            bucket: string;
+            prefix: string;
+            count: number;
+            files: Array<{
+                path: string;
+                bucket: string;
+                contentType: string | null;
+                size: number | null;
+                updated: string | null;
+                downloadUrl: string | null;
+            }>;
+        };
+        const response = await this.request<{ data?: ListResult } & ListResult>({
+            method: "POST",
+            url: `/projects/${projectId}/storage/list`,
+            data: body ?? {},
+        });
+        return response.data ?? response;
+    }
+
     /**
      * Generate a random Firestore-style document ID.
      */

@@ -1,4 +1,5 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
+import { registerTool } from "../tool-schema.js";
 import { z } from "zod";
 import {
     buildInferredCollectionFromData,
@@ -55,7 +56,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
 
     // ─── 1. Databases ──────────────────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "list_databases",
         {
             title: "List Firestore databases",
@@ -86,7 +87,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
 
     // ─── 2. Non-destructive schema preview ─────────────────
 
-    server.registerTool(
+    registerTool(server,
         "preview_inferred_schema",
         {
             title: "Preview inferred schema",
@@ -155,7 +156,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
 
     // ─── 3. Server-side inference for chosen paths ─────────
 
-    server.registerTool(
+    registerTool(server,
         "infer_collections_from_data",
         {
             title: "Create collections from data",
@@ -250,7 +251,7 @@ export function registerIntrospectionTools(server: McpServer, api: FireCMSApiCli
 
     // ─── 4. Do the whole project ───────────────────────────
 
-    server.registerTool(
+    registerTool(server,
         "setup_all_collections",
         {
             title: "Set up all collections",

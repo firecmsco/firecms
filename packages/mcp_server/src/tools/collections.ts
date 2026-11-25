@@ -1,4 +1,5 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
+import { registerTool } from "../tool-schema.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
 import { describeError } from "./errors.js";
@@ -8,7 +9,7 @@ import { describeError } from "./errors.js";
  */
 export function registerCollectionTools(server: McpServer, api: FireCMSApiClient) {
 
-    server.registerTool(
+    registerTool(server,
         "generate_collection",
         {
             title: "Generate a collection with AI",
@@ -31,7 +32,7 @@ and a featured image"). Returns a complete FireCMS collection configuration.`,
         }
     );
 
-    server.registerTool(
+    registerTool(server,
         "modify_collection",
         {
             title: "Modify a collection with AI",

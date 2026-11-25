@@ -1,4 +1,5 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
+import { registerTool } from "../tool-schema.js";
 import { z } from "zod";
 import { FireCMSApiClient } from "../api-client.js";
 import { describeError } from "./errors.js";
@@ -30,7 +31,7 @@ export function registerProjectTools(server: McpServer, api: FireCMSApiClient) {
         }
     );
 
-    server.registerTool(
+    registerTool(server,
         "get_root_collections",
         {
             title: "List root collections",
@@ -65,7 +66,7 @@ export function registerProjectTools(server: McpServer, api: FireCMSApiClient) {
         }
     );
 
-    server.registerTool(
+    registerTool(server,
         "list_subcollections",
         {
             title: "List subcollections",
