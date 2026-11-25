@@ -29,7 +29,8 @@
   "dependencies": {
     "@firecms/core": "workspace:^3.4.0",
     "@firecms/formex": "workspace:^3.4.0",
-    "@firecms/ui": "workspace:^3.4.0"
+    "@firecms/ui": "workspace:^3.4.0",
+    "compressorjs": "^1.2.1"
   },
   "peerDependencies": {
     "react": ">=18.3.1 || >=19.0.0",

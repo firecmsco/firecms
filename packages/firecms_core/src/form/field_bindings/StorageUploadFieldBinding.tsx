@@ -44,6 +44,8 @@ import {
 } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue.js";
 import { useTranslation } from "../../hooks/useTranslation.js";
+import { useMediaPicker } from "../../contexts/MediaPickerContext.js";
+import { mergeMediaSelection } from "../../util/media_picker.js";
 
 const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = fieldBackgroundDisabledMixin;
@@ -74,6 +76,8 @@ export function StorageUploadFieldBinding({
         throw new Error("StorageUploadFieldBinding: Entity id is null");
 
     const storageSource = useStorageSource(context.collection);
+    const mediaPicker = useMediaPicker();
+    const snackbar = useSnackbarController();
     const disabled = isReadOnly(property) || !!property.disabled || isSubmitting || context.disabled;
 
     const {
@@ -147,6 +151,33 @@ export function StorageUploadFieldBinding({
                 storagePathBuilder={storagePathBuilder}
                 storage={storage}
                 multipleFilesSupported={multipleFilesSupported} />
+
+            {mediaPicker && !disabled && (
+                <button type="button" className="mt-2 px-3 py-2 rounded border" onClick={() => mediaPicker.open({
+                    multiple: multipleFilesSupported,
+                    acceptedFiles: storage.acceptedFiles,
+                    onSelect: async (assets) => {
+                        try {
+                            const selected = await Promise.all(assets.map(async (asset) => {
+                                let result: string | null = asset.storagePath;
+                                if (storage.storeUrl) result = (await storageSource.getDownloadURL(asset.storagePath, asset.bucket)).url;
+                                else if (storage.includeBucketUrl && asset.bucket) result = `gs://${asset.bucket}/${asset.storagePath}`;
+                                else if (asset.bucket) {
+                                    const defaultFile = await storageSource.getDownloadURL(asset.storagePath);
+                                    if (defaultFile.metadata?.bucket !== asset.bucket)
+                                        throw new Error("This field cannot store a file from a different storage bucket");
+                                }
+                                if (result && storage.postProcess) result = await storage.postProcess(result);
+                                if (!result) throw new Error("Could not resolve the selected file");
+                                return result;
+                            }));
+                            setValue(mergeMediaSelection(value, selected, multipleFilesSupported));
+                        } catch (error) {
+                            snackbar.open({ type: "error", message: `Could not select file: ${String(error)}` });
+                        }
+                    }
+                })}>Choose from library</button>
+            )}
 
             <FieldHelperText includeDescription={includeDescription}
                 showError={showError}

@@ -29,3 +29,9 @@ yarn dev
 This project implements both vite, and react-scripts for testing purposes. Users
 of the library will only need one of them, most likely `react-scripts`. Vite is
 used for development and is a huge time saver.
+The example enables the Media Manager plugin. Uploading a file through a
+storage field adds an entry to `media_assets`; choose an existing entry using
+the field's “Choose from library” button. Files uploaded outside FireCMS and
+files uploaded before this plugin was enabled are not indexed automatically.
+Removing a file from a record does not delete the shared storage object.
+

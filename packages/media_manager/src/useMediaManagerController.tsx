@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { DataSourceDelegate, StorageSource } from "@firecms/core";
 import { MediaAsset, MediaManagerController, ThumbnailSize } from "./types/index.js";
 import Compressor from "compressorjs";
+import { loadMediaPreviews } from "./media_previews.js";
 
 export interface UseMediaManagerControllerProps {
     storageSource: StorageSource;
@@ -35,6 +36,8 @@ export function useMediaManagerController({
     const [assets, setAssets] = useState<MediaAsset[]>([]);
     const [selectedAsset, setSelectedAsset] = useState<MediaAsset | undefined>();
     const [searchQuery, setSearchQuery] = useState("");
+    const [cursor, setCursor] = useState<string>();
+    const [hasMoreAssets, setHasMoreAssets] = useState(false);
 
     // Helper to fetch download URL for an asset
     const fetchDownloadURL = useCallback(async (asset: Omit<MediaAsset, "downloadURL">): Promise<MediaAsset> => {
@@ -51,27 +54,29 @@ export function useMediaManagerController({
     }, [storageSource]);
 
     // Fetch assets from the database
-    const refreshAssets = useCallback(async () => {
+    const fetchAssetsPage = useCallback(async (after?: string) => {
         setLoading(true);
         setError(undefined);
         try {
             console.log("Fetching media assets from:", collectionPath);
             const entities = await dataSourceDelegate.fetchCollection<Record<string, any>>({
                 path: collectionPath,
-                orderBy: "createdAt",
-                order: "desc"
+                orderBy: "__name__",
+                order: "asc",
+                limit: 40,
+                ...(after ? { startAfter: after } : {})
             });
 
             console.log("Fetched entities:", entities.length);
 
             if (entities.length === 0) {
-                setAssets([]);
+                if (!after) setAssets([]);
+                setHasMoreAssets(false);
                 return;
             }
 
             // Convert entities to assets and fetch download URLs
-            const loadedAssets: MediaAsset[] = await Promise.all(
-                entities.map(async (entity) => {
+            const loadedAssets: MediaAsset[] = entities.map((entity) => {
                     const values = entity.values;
                     const baseAsset: Omit<MediaAsset, "downloadURL"> = {
                         id: entity.id,
@@ -93,16 +98,17 @@ export function useMediaManagerController({
                             : (values.updatedAt?.toDate ? values.updatedAt.toDate() : new Date(values.updatedAt))
                     };
 
-                    // Fetch download URL for images
-                    if (baseAsset.mimeType?.startsWith("image/") || baseAsset.mimeType?.startsWith("video/")) {
-                        return await fetchDownloadURL(baseAsset);
-                    }
                     return { ...baseAsset, downloadURL: undefined };
-                })
-            );
+                });
 
             console.log("Loaded assets with URLs:", loadedAssets.length);
-            setAssets(loadedAssets);
+            setAssets(previous => after ? [...previous, ...loadedAssets] : loadedAssets);
+            void loadMediaPreviews(loadedAssets, async asset => {
+                if (!asset.mimeType?.startsWith("image/") && !asset.mimeType?.startsWith("video/")) return undefined;
+                return (await fetchDownloadURL(asset)).downloadURL;
+            }, (id, url) => setAssets(previous => previous.map(asset => asset.id === id ? { ...asset, downloadURL: url } : asset)));
+            setCursor(entities[entities.length - 1]?.id);
+            setHasMoreAssets(entities.length === 40);
         } catch (err) {
             console.error("Error fetching media assets:", err);
             setError(err instanceof Error ? err : new Error(String(err)));
@@ -110,6 +116,9 @@ export function useMediaManagerController({
             setLoading(false);
         }
     }, [dataSourceDelegate, collectionPath, fetchDownloadURL]);
+
+    const refreshAssets = useCallback(() => fetchAssetsPage(), [fetchAssetsPage]);
+    const loadMoreAssets = useCallback(() => fetchAssetsPage(cursor), [fetchAssetsPage, cursor]);
 
     // Initial load
     useEffect(() => {
@@ -126,7 +135,7 @@ export function useMediaManagerController({
         // Upload to storage
         const uploadResult = await storageSource.uploadFile({
             file,
-            fileName: file.name,
+            fileName: `${crypto.randomUUID()}_${file.name}`,
             path: storagePath,
             bucket
         });
@@ -341,13 +350,15 @@ export function useMediaManagerController({
         loading,
         error,
         assets: filteredAssets,
-        totalCount: assets.length,
+        totalCount: undefined,
         selectedAsset,
         selectAsset,
         uploadFile,
         deleteAsset,
         updateAsset,
         refreshAssets,
+        loadMoreAssets,
+        hasMoreAssets,
         searchAssets,
         storagePath,
         collectionPath

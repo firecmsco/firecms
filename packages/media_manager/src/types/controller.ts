@@ -60,6 +60,8 @@ export interface MediaManagerController {
      * Refresh the assets list from the database
      */
     refreshAssets: () => Promise<void>;
+    loadMoreAssets: () => Promise<void>;
+    hasMoreAssets: boolean;
 
     /**
      * Search assets by text
