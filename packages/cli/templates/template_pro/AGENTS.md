@@ -17,6 +17,20 @@ user management, import/export and entity history.
 - `npm run build`: production build, then a type check.
 - `npm run deploy`: build and deploy to Firebase Hosting.
 
+## UI
+
+Build every screen from `@firecms/ui`: `Button`, `TextField`, `Select`,
+`Dialog`, `Typography`, `Paper`, Material icons such as `AddIcon`. These are
+the components FireCMS itself is made of, so custom views match the rest of
+the app in light and dark mode. Don't add MUI, lucide or another UI library,
+and use the `surface-*` and `primary` color tokens with `dark:` pairs instead
+of hex colors.
+
+The FireCMS skills `firecms-ui-components` and `firecms-design-language`
+document the kit and the page layouts. Agents that read skills over MCP get
+them from the FireCMS MCP server (`npx -y @firecms/mcp-server`); otherwise
+install them with `npx skills add firecmsco/firecms`.
+
 ## Docs
 
 - All docs in one file: https://firecms.co/llms.txt

@@ -1,0 +1,35 @@
+{
+  "name": "@firecms/agent-skills",
+  "version": "3.5.4",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Agent Skills for FireCMS: the UI kit, collections, custom views and FireCMS Cloud, for AI coding agents",
+  "keywords": [
+    "firecms",
+    "agent-skills",
+    "ai",
+    "agents",
+    "claude",
+    "mcp",
+    "firebase",
+    "cms"
+  ],
+  "license": "MIT",
+  "author": "FireCMS",
+  "type": "module",
+  "homepage": "https://firecms.co",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firecmsco/firecms.git",
+    "directory": "packages/agent_skills"
+  },
+  "files": [
+    "skills/"
+  ],
+  "exports": {
+    ".": "./package.json",
+    "./package.json": "./package.json",
+    "./skills/*": "./skills/*"
+  }
+}

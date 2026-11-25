@@ -15,6 +15,7 @@
     "packages/entity_history",
     "packages/firebase_firecms",
     "packages/cli",
+    "packages/agent_skills",
     "packages/mcp_server",
     "packages/create_firecms_app",
     "packages/collection_editor_firebase",

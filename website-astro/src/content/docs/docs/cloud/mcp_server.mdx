@@ -213,6 +213,30 @@ Clients that support MCP resources can also read these directly:
 | `firecms://projects/{id}/schemas` | All collection schemas (full config tree) |
 | `firecms://projects/{id}/config` | Project configuration snapshot |
 
+## Skills
+
+The server also hands your agent the **FireCMS skills**: instructions it loads when the task
+calls for them, so the code it writes uses FireCMS the way FireCMS is meant to be used. Most
+importantly, custom views come out built from the `@firecms/ui` kit and laid out like the rest
+of the app, instead of hand-styled markup.
+
+| Skill | What it teaches |
+|-------|-----------------|
+| `firecms-ui-components` | Every `@firecms/ui` component, its props, theme tokens and icons |
+| `firecms-design-language` | How FireCMS screens are composed, with skeletons for common views |
+| `firecms-basics` | Editions, project layout, commands, where the docs are |
+| `firecms-collections` | Collections and properties of every data type |
+| `firecms-custom-views` | Custom views, entity views and custom fields |
+| `firecms-cloud` | FireCMS Cloud projects and this MCP server |
+
+Clients that read skills over MCP (Claude Code, Claude) pick them up on their own once the
+server is connected; in Claude Code they appear as `<server name>:firecms-ui-components` and so
+on. Nothing to install. For other agents, add them to your project as files:
+
+```bash
+npx skills add firecmsco/firecms
+```
+
 ## Run the server locally
 
 The same server is published as [`@firecms/mcp-server`](https://www.npmjs.com/package/@firecms/mcp-server)
